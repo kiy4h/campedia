@@ -1,0 +1,2 @@
+C:/Users/mp2k5/Documents/GitHub/provis-kel4-tugas3/android/app/.cxx/Debug/5l6u1u22/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/mp2k5/Documents/GitHub/provis-kel4-tugas3/android/app/.cxx/Debug/5l6u1u22/x86_64/CMakeFiles/rebuild_cache.dir
