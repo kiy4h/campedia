@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'detailItem.dart';
+import '../components/navbar.dart';
 
 void main() {
   runApp(const MyApp());
