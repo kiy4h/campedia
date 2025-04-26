@@ -1,42 +1,63 @@
 import 'package:flutter/material.dart';
+import '../pages/home.dart';
+import '../pages/category.dart';
+import '../pages/shoping.dart';
+import '../pages/favorite.dart';
+import '../pages/profile.dart';
 
-Widget buildBottomNavBar() {
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
+Widget buildBottomNavBar({
+  required BuildContext context,
+  required int currentIndex,
+}) {
+  return Container(
+    height: 70,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+      ),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.05),
+          blurRadius: 10,
+          offset: const Offset(0, -5),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: Offset(0, -5),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(Icons.home, true),
-          _buildNavItem(Icons.swap_horiz, false),
-          _buildNavItem(Icons.shopping_cart_outlined, false, hasNotification: true),
-          _buildNavItem(Icons.favorite_border, false),
-          _buildProfileNavItem(),
-        ],
-      ),
-    );
-  }
+      ],
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _buildNavItem(context, Icons.home, 0, currentIndex),
+        _buildNavItem(context, Icons.swap_horiz, 1, currentIndex),
+        _buildNavItem(context, Icons.shopping_cart_outlined, 2, currentIndex, hasNotification: true),
+        _buildNavItem(context, Icons.favorite_border, 3, currentIndex),
+        _buildProfileNavItem(context, 4, currentIndex),
+      ],
+    ),
+  );
+}
 
-  Widget _buildNavItem(IconData icon, bool isSelected, {bool hasNotification = false}) {
-    return Stack(
+Widget _buildNavItem(
+    BuildContext context,
+    IconData icon,
+    int index,
+    int currentIndex, {
+    bool hasNotification = false,
+}) {
+  bool isSelected = currentIndex == index;
+  return GestureDetector(
+    onTap: () {
+      if (currentIndex != index) {
+        _navigateToPage(context, index);
+      }
+    },
+    child: Stack(
       children: [
         Container(
-          padding: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: isSelected ? Color(0xFFEAEAEA) : Colors.transparent,
+            color: isSelected ? const Color(0xFFEAEAEA) : Colors.transparent,
             shape: BoxShape.circle,
           ),
           child: Icon(
@@ -52,27 +73,64 @@ Widget buildBottomNavBar() {
             child: Container(
               width: 8,
               height: 8,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.amber,
                 shape: BoxShape.circle,
               ),
             ),
           ),
       ],
-    );
-  }
+    ),
+  );
+}
 
-  Widget _buildProfileNavItem() {
-    return Container(
+Widget _buildProfileNavItem(BuildContext context, int index, int currentIndex) {
+  bool isSelected = currentIndex == index;
+  return GestureDetector(
+    onTap: () {
+      if (currentIndex != index) {
+        _navigateToPage(context, index);
+      }
+    },
+    child: Container(
       width: 40,
       height: 40,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.grey.shade300),
-        image: DecorationImage(
+        border: Border.all(
+          color: isSelected ? Colors.black87 : Colors.grey.shade300,
+          width: 2,
+        ),
+        image: const DecorationImage(
           image: AssetImage('assets/profile_placeholder.jpg'),
           fit: BoxFit.cover,
         ),
       ),
-    );
+    ),
+  );
+}
+
+void _navigateToPage(BuildContext context, int index) {
+  switch (index) {
+    case 0:
+      // Navigator.pushReplacementNamed(context, '/home');
+      Navigator.push(context,MaterialPageRoute(builder: (context) => HomePage()),);
+      break;
+    case 1:
+      // Navigator.pushReplacementNamed(context, '/category');
+      Navigator.push(context,MaterialPageRoute(builder: (context) => CategoryPage()),);
+      break;
+    case 2:
+      // Navigator.pushReplacementNamed(context, '/shopping');
+      Navigator.push(context,MaterialPageRoute(builder: (context) => Shoping()),);
+      break;
+    case 3:
+      // Navigator.pushReplacementNamed(context, '/favorite');
+      Navigator.push(context,MaterialPageRoute(builder: (context) => FavoritePage()),);
+      break;
+    case 4:
+      // Navigator.pushReplacementNamed(context, '/profile');
+      Navigator.push(context,MaterialPageRoute(builder: (context) => ProfilePage()),);
+      break;
   }
+}

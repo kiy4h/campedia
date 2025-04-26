@@ -103,7 +103,10 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: buildBottomNavBar(),
+      bottomNavigationBar: buildBottomNavBar(
+        context: context,
+        currentIndex: 0,
+      ),
     );
   }
 

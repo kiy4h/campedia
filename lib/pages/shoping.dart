@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../components/navbar.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -117,7 +116,7 @@ class _ShopingState extends State<Shoping> {
                   key: Key(item.name + index.toString()),
                   background: Container(color: Colors.white),
                   secondaryBackground: Container(
-                    color: const Color(0xFF5D6D3E), // Dark olive green color
+                    color: const Color(0xFF5D6D3E),
                     alignment: Alignment.centerRight,
                     padding: const EdgeInsets.only(right: 20),
                     child: const Icon(
@@ -291,66 +290,13 @@ class _ShopingState extends State<Shoping> {
               },
             ),
           ),
-          // Bottom Navigation Bar
-          Container(
-            height: 60,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 5,
-                  spreadRadius: 1,
-                  offset: const Offset(0, -1),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.home_outlined),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () {},
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.amber,
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.shopping_cart_outlined,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.favorite_border),
-                  onPressed: () {},
-                ),
-                const CircleAvatar(
-                  backgroundImage: NetworkImage('https://via.placeholder.com/150'),
-                  radius: 15,
-                ),
-              ],
-            ),
-          ),
-          // Bottom indicator
-          Container(
-            width: 50,
-            height: 5,
-            margin: const EdgeInsets.only(top: 10, bottom: 10),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
+          // HAPUS bagian bottom bar manual yaa
+          // Ini sudah dihapus sesuai request kamu
         ],
+      ),
+      bottomNavigationBar: buildBottomNavBar(
+        context: context,
+        currentIndex: 2,
       ),
     );
   }
