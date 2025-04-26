@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'onboarding4.dart';
+import 'register.dart';
+import 'signin.dart';
 
 void main() {
-  runApp(Onboarding3());
+  runApp(Onboarding4());
 }
 
-class Onboarding3 extends StatelessWidget {
+class Onboarding4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,27 +35,26 @@ class OnboardingScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'images/tenda_bg.png',
+                      'images/onboarding3image.png',
                       height: 250,
                     ),
                     SizedBox(height: 30),
                     Text(
-                      'Quality camping gear for every adventure',
+                      'Efficient, In-Store Pickup for Your Camping Rentals',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  
-                    SizedBox(height: 16),
+                    SizedBox(height: 12),
                     Text(
-                      'Planning your next camping trip? We\'ve got the gear you need — tents, cook sets, lights, and more!',
-                      textAlign: TextAlign.center,
+                      'Simply reserve online and pick up your equipment at our store at your convenience.',
                       style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[700],
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
+                    SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -62,8 +62,8 @@ class OnboardingScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   buildDot(false),
-                  buildDot(true),
                   buildDot(false),
+                  buildDot(true),
                 ],
               ),
               SizedBox(height: 20),
@@ -74,7 +74,7 @@ class OnboardingScreen extends StatelessWidget {
                     // Aksi saat tombol ditekan
                     print('NEXT button pressed!');
                     // Contoh navigasi:
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Onboarding4()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Register()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF4A5A2A),
@@ -84,7 +84,35 @@ class OnboardingScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                   child: const Text(
-                    'NEXT',
+                    'CREATE AN ACCOUNT',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white, // Tambahan: pastikan teksnya kontras
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Aksi saat tombol ditekan
+                    print('NEXT button pressed!');
+                    // Contoh navigasi:
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF4A5A2A),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: const Text(
+                    'LOGIN',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white, // Tambahan: pastikan teksnya kontras
@@ -94,7 +122,6 @@ class OnboardingScreen extends StatelessWidget {
                 ),
               ),
 
-              
             ],
           ),
 
