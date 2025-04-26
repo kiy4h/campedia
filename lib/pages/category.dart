@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tugas3provis/pages/itemCategory.dart';
 
 void main() {
   runApp(CategoryPage());
@@ -105,57 +106,64 @@ class CategoriesPage extends StatelessWidget {
         ),
         itemCount: categories.length,
         itemBuilder: (context, index) {
-          return _buildCategoryCard(categories[index]);
+          return _buildCategoryCard(categories[index], context);
         },
       ),
     );
   }
 
-  Widget _buildCategoryCard(Map<String, dynamic> category) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Saya mengimplementasikan beberapa contoh icon SVG custom.
-          // Dalam kasus nyata, Anda perlu menggunakan gambar icon yang sebenarnya.
-          Container(
-            width: 60,
-            height: 60,
-            child: _getCategoryIcon(category["name"]),
-          ),
-          SizedBox(height: 10),
-          Text(
-            category["name"],
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF5D7052),
+  Widget _buildCategoryCard(Map<String, dynamic> category, context) {
+    return GestureDetector(
+      onTap: () {
+        // Handle category tap
+        print("Tapped on ${category["name"]}");
+        // Bisa juga Navigate ke halaman kategori, dll
+        Navigator.push(context,MaterialPageRoute(builder: (context) => ItemCategory()),);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: Offset(0, 2),
             ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 5),
-          Text(
-            "${category["items"]} Items",
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey,
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              child: _getCategoryIcon(category["name"]),
             ),
-          ),
-        ],
+            SizedBox(height: 10),
+            Text(
+              category["name"],
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF5D7052),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 5),
+            Text(
+              "${category["items"]} Items",
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
+
 
   Widget _getCategoryIcon(String categoryName) {
     // Implementasi sederhana untuk icon kategori

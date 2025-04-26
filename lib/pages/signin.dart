@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas3provis/pages/home.dart';
 import 'forgotPassword.dart';
-import 'home.dart';
 
 void main() {
   runApp(const MaterialApp(
