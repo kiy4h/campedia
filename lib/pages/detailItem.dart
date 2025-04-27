@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../components/navbar.dart';
+import '../components/appBar.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -377,53 +380,16 @@ class _DetailItemState extends State<DetailItem> with SingleTickerProviderStateM
                     ),
                   ),
                   
-                  // Bottom Navigation
-                  Container(
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 5,
-                          spreadRadius: 1,
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.home_outlined),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.arrow_back),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.shopping_cart_outlined,
-                            color: Colors.amber,
-                          ),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.favorite_border),
-                          onPressed: () {},
-                        ),
-                        const CircleAvatar(
-                          backgroundImage: NetworkImage('https://via.placeholder.com/150'),
-                          radius: 15,
-                        ),
-                      ],
-                    ),
-                  ),
+                  
                 ],
               ),
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: buildBottomNavBar(
+        context: context,
+        currentIndex: 1,
       ),
     );
   }

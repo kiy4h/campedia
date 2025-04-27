@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/onboarding.dart';
+import 'pages/shoping.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Onboarding Page',
-      home: Onboarding(),
+      home: Shoping(),
     );
   }
 }

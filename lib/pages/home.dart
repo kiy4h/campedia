@@ -126,7 +126,7 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Rafatul Islam',
+              'Izzuddin Azzam',
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,

@@ -70,7 +70,10 @@ class CategoriesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(context),
+      appBar: buildAppBar(
+        context: context,
+        currentIndex: 1,
+      ),
       body: _buildBody(),
       bottomNavigationBar: buildBottomNavBar(
         context: context,
@@ -221,6 +224,113 @@ class CategoriesPage extends StatelessWidget {
   }
 
  
+}
+
+// Function to build AppBar
+PreferredSizeWidget buildAppBar({
+  required BuildContext context,
+  required int currentIndex,
+}) {
+  String title = '';
+  List<Widget> actions = [];
+
+  // Tentukan judul dan aksi berdasarkan currentIndex
+  switch (currentIndex) {
+    case 0:
+      title = 'Home';
+      actions = [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.search, color: Colors.black),
+        ),
+      ];
+      break;
+    case 1:
+      title = 'Category';
+      actions = [
+        TextButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Order placed!')),
+            );
+          },
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.amber,
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          child: const Text('Place Order'),
+        ),
+      ];
+      break;
+    case 2:
+      title = 'Shopping Cart';
+      actions = [
+        TextButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Order placed!')),
+            );
+          },
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.amber,
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          child: const Text('Place Order'),
+        ),
+      ];
+      break;
+    case 3:
+      title = 'Favorite';
+      actions = [
+        TextButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Order placed!')),
+            );
+          },
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.amber,
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          child: const Text('Place Order'),
+        ),
+      ];
+      break;
+    case 4:
+      title = 'Profile';
+      actions = [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.settings, color: Colors.black),
+        ),
+      ];
+      break;
+    default:
+      title = 'App';
+  }
+
+  return AppBar(
+    backgroundColor: Colors.white,
+    elevation: 0,
+    title: Text(
+      title,
+      style: const TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+        fontSize: 20,
+      ),
+    ),
+    actions: actions,
+  );
 }
 
 // Custom Painters untuk icon kategori

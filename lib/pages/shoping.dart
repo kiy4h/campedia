@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../components/navbar.dart';
+import '../components/appBar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -79,31 +80,11 @@ class _ShopingState extends State<Shoping> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          'Item details',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {},
-            child: const Text(
-              'Place Order',
-              style: TextStyle(
-                color: Colors.amber,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-          ),
-        ],
+      appBar: buildAppBar(
+        context: context,
+        currentIndex: 2,
       ),
+
       body: Column(
         children: [
           const Divider(height: 1),
@@ -300,4 +281,114 @@ class _ShopingState extends State<Shoping> {
       ),
     );
   }
+}
+
+
+
+// Function to build AppBar
+PreferredSizeWidget buildAppBar({
+  required BuildContext context,
+  required int currentIndex,
+}) {
+  String title = '';
+  List<Widget> actions = [];
+
+  // Tentukan judul dan aksi berdasarkan currentIndex
+  switch (currentIndex) {
+    case 0:
+      title = 'Home';
+      actions = [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.search, color: Colors.black),
+        ),
+      ];
+      break;
+    case 1:
+      title = 'Category';
+      actions = [
+        TextButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Order placed!')),
+            );
+          },
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.amber,
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          child: const Text('Place Order'),
+        ),
+      ];
+      break;
+    case 2:
+      title = 'Shopping Cart';
+      actions = [
+        TextButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Order placed!')),
+            );
+          },
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.amber,
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          child: const Text('Place Order'),
+        ),
+      ];
+      break;
+    case 3:
+      title = 'Favorite';
+      actions = [
+        TextButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Order placed!')),
+            );
+          },
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.amber,
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          child: const Text('Place Order'),
+        ),
+      ];
+      break;
+    case 4:
+      title = 'Profile';
+      actions = [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.settings, color: Colors.black),
+        ),
+      ];
+      break;
+    default:
+      title = 'App';
+  }
+
+
+  return AppBar(
+    backgroundColor: Colors.white,
+    elevation: 0,
+    title: Text(
+      title,
+      style: const TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+        fontSize: 20,
+      ),
+    ),
+    actions: actions,
+  );
 }

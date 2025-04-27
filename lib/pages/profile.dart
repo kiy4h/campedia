@@ -17,35 +17,12 @@ class _ProfilePageState extends State<ProfilePage> {
   final String location = 'Bandung, Indonesia';
   final String website = 'github.com/vinasalima';
 
-  void _openSettings() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SettingsPage(),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.green[800],
-        elevation: 0,
-        title: const Text(
-          'Profile',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings, color: Colors.white),
-            onPressed: _openSettings,
-          ),
-        ],
+      appBar: buildAppBar(
+        context: context,
+        currentIndex: 4, // sesuai navbar tombol "Profile"
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -286,7 +263,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-
 // Settings Page
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -296,189 +272,127 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool darkMode = false;
-  bool notifications = true;
-  bool locationServices = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Settings',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        title: const Text('Settings'),
       ),
-      body: ListView(
-        children: [
-          const SizedBox(height: 16),
-          // Account Settings Section
-          _buildSectionHeader('Account Settings'),
-          _buildSettingsItem(
-            'Edit Profile',
-            Icons.person,
-            onTap: () {
-              // Navigate to edit profile
-            },
-          ),
-          _buildSettingsItem(
-            'Change Password',
-            Icons.lock,
-            onTap: () {
-              // Navigate to change password
-            },
-          ),
-          _buildSettingsItem(
-            'Privacy',
-            Icons.visibility,
-            onTap: () {
-              // Navigate to privacy settings
-            },
-          ),
-          // App Settings Section
-          _buildSectionHeader('App Settings'),
-          _buildSwitchItem(
-            'Dark Mode',
-            Icons.dark_mode,
-            darkMode,
-            (value) {
-              setState(() {
-                darkMode = value;
-              });
-            },
-          ),
-          _buildSwitchItem(
-            'Notifications',
-            Icons.notifications,
-            notifications,
-            (value) {
-              setState(() {
-                notifications = value;
-              });
-            },
-          ),
-          _buildSwitchItem(
-            'Location Services',
-            Icons.location_on,
-            locationServices,
-            (value) {
-              setState(() {
-                locationServices = value;
-              });
-            },
-          ),
-          // More Options Section
-          _buildSectionHeader('More'),
-          _buildSettingsItem(
-            'Help & Support',
-            Icons.help,
-            onTap: () {
-              // Navigate to help
-            },
-          ),
-          _buildSettingsItem(
-            'About',
-            Icons.info,
-            onTap: () {
-              // Navigate to about
-            },
-          ),
-          _buildSettingsItem(
-            'Log Out',
-            Icons.logout,
-            textColor: Colors.red,
-            onTap: () {
-              // Handle logout
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Log Out'),
-                  content: const Text('Are you sure you want to log out?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        // Perform logout action
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Log Out', style: TextStyle(color: Colors.red)),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-          const SizedBox(height: 24),
-        ],
-      ),
+      body: const Center(child: Text('Settings Page')),
     );
+  }
+}
+
+// Function to build AppBar
+PreferredSizeWidget buildAppBar({
+  required BuildContext context,
+  required int currentIndex,
+}) {
+  String title = '';
+  List<Widget> actions = [];
+
+  // Tentukan judul dan aksi berdasarkan currentIndex
+  switch (currentIndex) {
+    case 0:
+      title = 'Home';
+      actions = [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.search, color: Colors.black),
+        ),
+      ];
+      break;
+    case 1:
+      title = 'Category';
+      actions = [
+        TextButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Order placed!')),
+            );
+          },
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.amber,
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          child: const Text('Place Order'),
+        ),
+      ];
+      break;
+    case 2:
+      title = 'Shopping Cart';
+      actions = [
+        TextButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Order placed!')),
+            );
+          },
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.amber,
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          child: const Text('Place Order'),
+        ),
+      ];
+      break;
+    case 3:
+      title = 'Favorite';
+      actions = [
+        TextButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Order placed!')),
+            );
+          },
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.amber,
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          child: const Text('Place Order'),
+        ),
+      ];
+      break;
+    case 4:
+      title = 'Profile';
+      actions = [
+        IconButton(
+          icon: const Icon(Icons.settings, color: Colors.white),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SettingsPage(),
+              ),
+            );
+          },
+        ),
+      ];
+      break;
+    default:
+      title = 'App';
   }
 
-  Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Colors.blue.shade800,
-        ),
+  return AppBar(
+    backgroundColor: Colors.white,
+    elevation: 0,
+    title: Text(
+      title,
+      style: const TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+        fontSize: 20,
       ),
-    );
-  }
-
-  Widget _buildSettingsItem(
-    String title,
-    IconData icon, {
-    required Function() onTap,
-    Color? textColor,
-  }) {
-    return ListTile(
-      leading: Icon(icon, color: Colors.blue),
-      title: Text(
-        title,
-        style: TextStyle(
-          fontWeight: FontWeight.w500,
-          color: textColor ?? Colors.black87,
-        ),
-      ),
-      trailing: const Icon(Icons.chevron_right),
-      onTap: onTap,
-    );
-  }
-
-  Widget _buildSwitchItem(
-    String title,
-    IconData icon,
-    bool value,
-    Function(bool) onChanged,
-  ) {
-    return ListTile(
-      leading: Icon(icon, color: Colors.blue),
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-      trailing: Switch(
-        value: value,
-        onChanged: onChanged,
-        activeColor: Colors.blue,
-      ),
-    );
-  }
+    ),
+    actions: actions,
+  );
 }
