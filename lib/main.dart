@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Intro/splashscreen.dart';
 import 'pages/shoping.dart';
 
 void main() {
@@ -6,15 +7,18 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Campedia',
+      theme: ThemeData(
+        primaryColor: const Color(0xFF4A5A2A),
+        scaffoldBackgroundColor: Colors.white,
+      ),
+      home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
-      title: 'Onboarding Page',
-      home: Shoping(),
     );
   }
 }
-

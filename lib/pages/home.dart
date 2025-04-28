@@ -26,50 +26,54 @@ class HomePage extends StatelessWidget {
   final List<Map<String, dynamic>> trendingItems = [
     {
       "name": "Tenda",
-      "image": 'assets/tenda.jpg',
+      "image": 'images/assets_ItemDetails/tenda1.png',
       "price": 6.7,
       "rating": 4.3,
       "color": Color(0xFFFF9800),
     },
     {
       "name": "Kompor",
-      "image": 'assets/kompor.jpg',
+      "image": 'images/assets_ItemDetails/kompor1.png',
       "price": 6.7,
       "rating": 4.3,
       "color": Color(0xFFE53935),
     },
     {
       "name": "Sepatu",
-      "image": 'assets/sepatu.jpg',
+      "image": 'images/assets_ItemDetails/sepatu1.png',
       "price": 6.7,
       "rating": 4.3,
       "color": Color(0xFF8D6E63),
     },
     {
       "name": "Tas Leather",
-      "image": 'assets/tas.jpg',
+      "image": 'images/assets_ItemDetails/tas1.png',
       "price": 6.7,
       "rating": 4.3,
       "color": Color(0xFF795548),
     },
   ];
 
-  final List<Map<String, dynamic>> categories = [
-    {"icon": Icons.outdoor_grill, "name": "Kompor"},
-    {"icon": Icons.cabin, "name": "Tenda"},
-    {"icon": Icons.hiking, "name": "Sepatu"},
-    {"icon": Icons.backpack, "name": "Backpack"},
+  final List<Map<String, String>> categories = [
+    {"icon": "images/assets_Categories/cat_Kompor.png",   "name": "Kompor"},
+    {"icon": "images/assets_Categories/cat_Tenda.png",    "name": "Tenda"},
+    {"icon": "images/assets_Categories/cat_Sepatu.png",   "name": "Sepatu"},
+    {"icon": "images/assets_Categories/cat_Tas.png",      "name": "Tas"},
+    {"icon": "images/assets_Categories/cat_Senter.png",    "name": "Senter"},
+    {"icon": "images/assets_Categories/cat_Jaket.png",  "name": "Jaket"},
+    {"icon": "images/assets_Categories/cat_KeamananNavigasi.png",     "name": "Keamanan"},
+    {"icon": "images/assets_Categories/cat_FasilitasTambahan.png", "name": "Lainnya"},
   ];
 
   final List<Map<String, dynamic>> featuredSlides = [
     {
-      "title": "Recomended\nGear Trip",
-      "image": "assets/gunung1.jpg",
+      "title": "Recommended\nGear Trip",
+      "image": "images/assets_Home/gunung1.png",
       "color": Colors.black.withOpacity(0.6),
     },
     {
       "title": "Fresh Trending\nGear",
-      "image": "assets/gunung2.jpg",
+      "image": "images/assets_Home/gunung2.png",
       "color": Colors.black.withOpacity(0.6),
     },
   ];
@@ -81,23 +85,14 @@ class HomePage extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           children: [
-            // Header
             _buildHeader(),
             SizedBox(height: 20),
-
-            // Featured Slider
             _buildFeaturedSlider(),
             SizedBox(height: 24),
-
-            // Categories
             _buildCategoriesSection(),
             SizedBox(height: 24),
-
-            // Trending Deals
             _buildTrendingDealsSection(),
             SizedBox(height: 24),
-
-            // More Button
             _buildMoreButton(context),
             SizedBox(height: 20),
           ],
@@ -218,6 +213,7 @@ class HomePage extends StatelessWidget {
 
   Widget _buildCategoriesSection() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -234,19 +230,24 @@ class HomePage extends StatelessWidget {
           ],
         ),
         SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: categories.map((category) {
-            return _buildCategoryItem(category);
-          }).toList(),
+        SizedBox(
+          height: 100,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              return _buildCategoryItem(categories[index]);
+            },
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildCategoryItem(Map<String, dynamic> category) {
+  Widget _buildCategoryItem(Map<String, String> category) {
     return Container(
       width: 80,
+      margin: EdgeInsets.only(right: 16),
       child: Column(
         children: [
           Container(
@@ -263,15 +264,17 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
-            child: Icon(
-              category["icon"],
-              color: Color(0xFFFFD54F),
-              size: 28,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Image.asset(
+                category["icon"]!,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
           SizedBox(height: 8),
           Text(
-            category["name"],
+            category["name"]!,
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,
@@ -330,7 +333,6 @@ class HomePage extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Background image with overlay
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: Stack(
@@ -358,15 +360,12 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-          
-          // Content
           Padding(
             padding: EdgeInsets.all(12),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Favorite icon
                 Align(
                   alignment: Alignment.topRight,
                   child: Icon(
@@ -375,8 +374,6 @@ class HomePage extends StatelessWidget {
                     size: 24,
                   ),
                 ),
-                
-                // Product info at bottom
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -429,38 +426,31 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildMoreButton(context) {
-  return GestureDetector(
-    onTap: () {
-      // Aksi saat tombol More diklik
-      print('Tombol More diklik!');
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CategoryPage()),
-      );
-      // Contoh: Navigasi ke halaman baru atau munculkan pop-up
-    },
-    child: Container(
-      height: 56,
-      decoration: BoxDecoration(
-        color: Color(0xFF5D7052),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Center(
-        child: Text(
-          'More',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+  Widget _buildMoreButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CategoryPage()),
+        );
+      },
+      child: Container(
+        height: 56,
+        decoration: BoxDecoration(
+          color: Color(0xFF5D7052),
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Center(
+          child: Text(
+            'More',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
-
-}
-
-
-  

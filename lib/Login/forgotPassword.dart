@@ -30,7 +30,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   height: 250,
                   width: double.infinity,
                   child: Image.asset(
-                    'images/alam_bg.png', // Boleh pakai gambar yang sama
+                    'images/assets_SignUp/alam_bg.png', // Boleh pakai gambar yang sama
                     fit: BoxFit.cover,
                   ),
                 ),

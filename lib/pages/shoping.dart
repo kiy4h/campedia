@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../components/navbar.dart';
-import '../paymen/checkout.dart';
+import '../components/appBar.dart';
+import '../payment/checkout.dart';
 
 void main() {
   runApp(const MyApp());
@@ -52,28 +53,28 @@ class _ShopingState extends State<Shoping> {
       type: 'TENDA',
       price: 7.2,
       quantity: 3,
-      imageUrl: 'https://via.placeholder.com/100',
+      imageUrl: 'images/assets_ItemDetails/tenda_bg1.png',
     ),
     Item(
       name: 'Tenda Dome',
       type: 'TENDA',
       price: 6.3,
       quantity: 1,
-      imageUrl: 'https://via.placeholder.com/100',
+      imageUrl: 'images/assets_ItemDetails/tenda_bg2.png',
     ),
     Item(
       name: 'Tenda Dome',
       type: 'TENDA',
       price: 11.4,
       quantity: 2,
-      imageUrl: 'https://via.placeholder.com/100',
+      imageUrl: 'images/assets_ItemDetails/tenda_bg3.png',
     ),
     Item(
       name: 'Tenda Dome',
       type: 'TENDA',
       price: 2.7,
       quantity: 1,
-      imageUrl: 'https://via.placeholder.com/100',
+      imageUrl: 'images/assets_ItemDetails/tenda_bg4.png',
     ),
   ];
 
@@ -134,7 +135,7 @@ class _ShopingState extends State<Shoping> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
                                 image: DecorationImage(
-                                  image: NetworkImage(item.imageUrl),
+                                  image: AssetImage(item.imageUrl),
                                   fit: BoxFit.cover,
                                 ),
                               ),

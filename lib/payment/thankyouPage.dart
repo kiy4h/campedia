@@ -41,7 +41,7 @@ class ThankYouPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Image.asset(
-                'assets/images/pendaki.png', // Ganti path sesuai gambar kamu
+                'images/assets_OnBoarding0/onboarding4image.png', // Ganti path sesuai gambar kamu
                 height: 250,
                 fit: BoxFit.contain,
               ),

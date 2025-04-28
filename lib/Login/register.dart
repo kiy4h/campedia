@@ -30,7 +30,7 @@ class _RegisterState extends State<Register> {
                   height: 300,
                   width: double.infinity,
                   child: Image.asset(
-                    'images/alam_bg.png', // ganti sesuai gambar kamu
+                    'images/assets_SignUp/alam_bg.png', // ganti sesuai gambar kamu
                     fit: BoxFit.cover,
                   ),
                 ),
