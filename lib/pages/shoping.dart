@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../components/navbar.dart';
-import '../components/appBar.dart';
 import '../paymen/checkout.dart';
 
 void main() {

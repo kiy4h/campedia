@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'pages/onboarding.dart';
 import 'pages/shoping.dart';
 
 void main() {
