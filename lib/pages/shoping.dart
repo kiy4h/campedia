@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../components/navbar.dart';
 import '../components/appBar.dart';
+import '../paymen/checkout.dart';
 
 void main() {
   runApp(const MyApp());
@@ -329,21 +330,233 @@ PreferredSizeWidget buildAppBar({
       actions = [
         TextButton(
           onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Order placed!')),
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                DateTime? startDate;
+                DateTime? endDate;
+                bool isExpanded = false; // untuk kontrol lihat selengkapnya
+
+                return StatefulBuilder(
+                  builder: (context, setState) {
+                    return AlertDialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      title: Center(
+                        child: Text(
+                          'Konfirmasi Akhir',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                      content: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Bagian Detail Penyewaan
+                            Text(
+                              'Detail Penyewaan',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+
+                            // Scrollable List
+                            Container(
+                              constraints: BoxConstraints(
+                                maxHeight: isExpanded ? double.infinity : 150,
+                              ),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Tenda Dome (x2)\nRp50.000 x 2 x 3 Hari = Rp300.000\n'),
+                                    Text('Tenda Besar (x1)\nRp80.000 x 1 x 3 Hari = Rp240.000\n'),
+                                    Text('Sleeping Bag (x3)\nRp20.000 x 3 x 3 Hari = Rp180.000\n'),
+                                    Text('Matras (x2)\nRp15.000 x 2 x 3 Hari = Rp90.000\n'),
+                                    Text('Kompor Camping (x1)\nRp30.000 x 1 x 3 Hari = Rp90.000\n'),
+                                    Text('Nestle Gas (x1)\nRp20.000 x 1 x 3 Hari = Rp60.000\n'),
+                                    Text('Kursi Lipat (x2)\nRp25.000 x 2 x 3 Hari = Rp150.000\n'),
+                                    Text('Meja Lipat (x1)\nRp40.000 x 1 x 3 Hari = Rp120.000\n'),
+                                    // Tambahin item lain kalau mau
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                            // Tombol Lihat Selengkapnya
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    isExpanded = !isExpanded;
+                                  });
+                                },
+                                child: Text(isExpanded ? 'Tutup' : 'Lihat Selengkapnya'),
+                              ),
+                            ),
+
+                            SizedBox(height: 16),
+
+                            // Bagian Durasi Sewa
+                            Text(
+                              'Durasi Sewa',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                // Tanggal Mulai
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      DateTime? picked = await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime(2000),
+                                        lastDate: DateTime(2100),
+                                      );
+                                      if (picked != null) {
+                                        setState(() {
+                                          startDate = picked;
+                                        });
+                                      }
+                                    },
+                                    child: AbsorbPointer(
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                          hintText: startDate == null
+                                              ? 'DD/MM/YYYY'
+                                              : '${startDate!.day.toString().padLeft(2, '0')}/${startDate!.month.toString().padLeft(2, '0')}/${startDate!.year}',
+                                          border: OutlineInputBorder(),
+                                          contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8),
+                                  child: Icon(Icons.arrow_forward),
+                                ),
+                                // Tanggal Selesai
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      DateTime? picked = await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime(2000),
+                                        lastDate: DateTime(2100),
+                                      );
+                                      if (picked != null) {
+                                        setState(() {
+                                          endDate = picked;
+                                        });
+                                      }
+                                    },
+                                    child: AbsorbPointer(
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                          hintText: endDate == null
+                                              ? 'DD/MM/YYYY'
+                                              : '${endDate!.day.toString().padLeft(2, '0')}/${endDate!.month.toString().padLeft(2, '0')}/${endDate!.year}',
+                                          border: OutlineInputBorder(),
+                                          contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 16),
+
+                            // Bagian Total Bayar
+                            Text(
+                              'Total Bayar',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              'Rp360.000',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                      actions: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.grey[300],
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: Text(
+                                  'KEMBALI',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Checkout(), // <-- Ganti ini ke page tujuanmu
+                                    ),
+                                  );
+                                },
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.green[700],
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: Text(
+                                  'BAYAR SEKARANG',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
             );
           },
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.amber,
-            textStyle: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
-          ),
           child: const Text('Place Order'),
         ),
       ];
       break;
+
+
+
     case 3:
       title = 'Favorite';
       actions = [
