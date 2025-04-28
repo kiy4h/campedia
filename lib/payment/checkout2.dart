@@ -161,48 +161,76 @@ class _Checkout2State extends State<Checkout2> {
     );
   }
 
-  // Card Selection
+  // Card & QRIS Selection
   Widget buildCardSelection() {
-    return Row(
-      children: [
-        Expanded(
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              Container(
-                height: 120,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Colors.amber[700],
-                  image: const DecorationImage(
-                    image: AssetImage('assets/credit_card_gold.png'),
-                    fit: BoxFit.cover,
+    if (selectedPayment == 'Credit Card') {
+      return Row(
+        children: [
+          Expanded(
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                Container(
+                  height: 120,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    image: const DecorationImage(
+                      image: AssetImage('images/assets_PaymentMethods/kartuKredit1.png'),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-              const Positioned(
-                bottom: 8,
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: 12,
-                  child: Icon(Icons.check, size: 16, color: Color(0xFF627D2C)),
+                const Positioned(
+                  bottom: 8,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 12,
+                    child: Icon(Icons.check, size: 16, color: Color(0xFF627D2C)),
+                  ),
                 ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Container(
+              height: 120,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                image: const DecorationImage(
+                  image: AssetImage('images/assets_PaymentMethods/kartuKredit2.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    } else {
+      // QRIS Payment view
+      return Center(
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
               ),
             ],
           ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Container(
-            height: 120,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.grey[300],
-            ),
+          child: Image.asset(
+            'images/assets_PaymentMethods/contohQRIS.png',
+            width: 200,
+            height: 200,
+            fit: BoxFit.contain,
           ),
         ),
-      ],
-    );
+      );
+    }
   }
 
   // Text Field
@@ -317,3 +345,10 @@ class _Checkout2State extends State<Checkout2> {
     );
   }
 }
+
+// Pastikan assets di pubspec.yaml:
+// flutter:
+//   assets:
+//     - images/assets_PaymentMethods/kartuKredit1.png
+//     - images/assets_PaymentMethods/kartuKredit2.png
+//     - images/assets_PaymentMethods/qris_big.png

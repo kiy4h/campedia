@@ -3,19 +3,19 @@ import 'detailItem.dart';
 import '../components/navbar.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ItemCategoryApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class ItemCategoryApp extends StatelessWidget {
+  const ItemCategoryApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: const Color(0xFFA0B25E),
+        primaryColor: const Color(0xFFA0B25E),
+        scaffoldBackgroundColor: const Color(0xFFF8F8F8),
       ),
       home: const ItemCategory(),
     );
@@ -33,7 +33,7 @@ class ItemCategory extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {},
+          onPressed: () => Navigator.pop(context),
         ),
         actions: [
           IconButton(
@@ -101,16 +101,15 @@ class ItemCategory extends StatelessWidget {
                 ),
                 itemCount: 12,
                 itemBuilder: (context, index) {
-                  // Alternate between different tent images and heart icon colors
                   final isLiked = index == 3 || index == 6;
-                  final tentType = index % 4;
-                  
+                  final tentType = index % 8;
+
                   return GestureDetector(
                     onTap: () {
-                      // Aksi ketika card di-tap
-                      print('Tenda diklik!');
-                      // Bisa juga Navigate ke halaman detail
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => DetailItem()) );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const DetailItem()),
+                      );
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -168,6 +167,7 @@ class ItemCategory extends StatelessWidget {
                                             color: Colors.amber,
                                             size: 16,
                                           ),
+                                          SizedBox(width: 4),
                                           Text(
                                             '4.3',
                                             style: TextStyle(
@@ -186,13 +186,10 @@ class ItemCategory extends StatelessWidget {
                       ),
                     ),
                   );
-
                 },
               ),
             ),
           ),
-          
-          
         ],
       ),
       bottomNavigationBar: buildBottomNavBar(
@@ -202,20 +199,27 @@ class ItemCategory extends StatelessWidget {
     );
   }
 
+  /// Mapping jenis tenda ke asset image di folder images/assets_ItemDetails
   String _getTentImage(int type) {
-    // In a real app, you would use actual image assets
-    // For this example, we'll return placeholder image names
     switch (type) {
       case 0:
-        return 'assets/tent_orange.jpg';
+        return 'images/assets_ItemDetails/tenda_bg1.png';
       case 1:
-        return 'assets/tent_black.jpg';
+        return 'images/assets_ItemDetails/tenda_bg2.png';
       case 2:
-        return 'assets/tent_green.jpg';
+        return 'images/assets_ItemDetails/tenda_bg3.png';
       case 3:
-        return 'assets/tent_teepee.jpg';
+        return 'images/assets_ItemDetails/tenda_bg4.png';
+      case 4:
+        return 'images/assets_ItemDetails/tenda_bg5.png';
+      case 5:
+        return 'images/assets_ItemDetails/tenda_bg6.png';
+      case 6:
+        return 'images/assets_ItemDetails/tenda_bg7.png';
+      case 7:
+        return 'images/assets_ItemDetails/tenda_bg8.png';
       default:
-        return 'assets/tent_default.jpg';
+        return 'images/assets_ItemDetails/tenda_bg9.png';
     }
   }
 }

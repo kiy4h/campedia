@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'register.dart';
-import 'signin.dart';
+import '../Login/register.dart';
+import '../Login/signin.dart';
 import 'onboarding.dart';
 
 // Separate Splash Screen
@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             // Logo image
             Image.asset(
-              'images/logoCampedia.png',
+              'images/assets_OnBoarding0/logoCampedia.png',
               width: 200,
               height: 200,
               fit: BoxFit.contain,

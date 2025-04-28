@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'register.dart';
-import 'signin.dart';
+import '../Login/register.dart';
+import '../Login/signin.dart';
 
 // Onboarding Screen with Carousel
 class OnboardingScreen extends StatefulWidget {
@@ -19,7 +19,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   // Onboarding pages (excluding splash screen)
   final List<OnboardingPage> _pages = [
     OnboardingPage(
-      image: 'images/kompas_bg.png',
+      image: 'images/assets_OnBoarding0/kompas_bg.png',
       title: 'Welcome to Campedia',
       subtitle: 'Your Ultimate Camping Companion',
       description:
@@ -27,7 +27,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       backgroundColor: Colors.white,
     ),
     OnboardingPage(
-      image: 'images/tenda_bg.png',
+      image: 'images/assets_OnBoarding0/tenda_bg.png',
       title: 'Quality camping gear for every adventure',
       subtitle: '',
       description:
@@ -35,7 +35,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       backgroundColor: Colors.white,
     ),
     OnboardingPage(
-      image: 'images/onboarding3image.png',
+      image: 'images/assets_OnBoarding0/onboarding4image.png',
       title: 'Efficient, In-Store Pickup for Your Camping Rentals',
       subtitle:
           'Simply reserve online and pick up your equipment at our store at your convenience.',

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/splashscreen.dart';
+import 'Intro/splashscreen.dart';
 import 'pages/shoping.dart';
 
 void main() {
