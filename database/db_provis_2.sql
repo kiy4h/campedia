@@ -11,7 +11,7 @@
  Target Server Version : 100432 (10.4.32-MariaDB)
  File Encoding         : 65001
 
- Date: 28/04/2025 20:17:47
+ Date: 28/04/2025 20:33:38
 */
 
 SET NAMES utf8mb4;
@@ -129,6 +129,24 @@ CREATE TABLE `keranjang`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for review
+-- ----------------------------
+DROP TABLE IF EXISTS `review`;
+CREATE TABLE `review`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `rating` int NOT NULL COMMENT '1-5',
+  `ulasan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `user_id` int NULL DEFAULT NULL,
+  `barang_id` int NOT NULL,
+  `waktu_pembuatan` timestamp NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idfk_review_1`(`user_id` ASC) USING BTREE,
+  INDEX `idfk_review_2`(`barang_id` ASC) USING BTREE,
+  CONSTRAINT `idfk_review_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `idfk_review_2` FOREIGN KEY (`barang_id`) REFERENCES `barang` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for transaksi
 -- ----------------------------
 DROP TABLE IF EXISTS `transaksi`;
@@ -137,10 +155,13 @@ CREATE TABLE `transaksi`  (
   `tanggal_pembayaran` date NOT NULL,
   `metode_pembayaran` enum('Qris','Transfer') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `total_biaya` int NOT NULL,
-  `status_pembayaran` enum('Belum Dibayar','Sudah Dibayar') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Belum Dibayar',
-  `status_pengembalian` enum('Belum Dikembalikan','Sudah Dikembalikan') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Belum Dikembalikan',
+  `status_transaksi` enum('Belum Dibayar','Belum Diambil','Belum Dikembalikan','Sudah Dikembalikan') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Belum Dibayar',
+  `biaya_denda` int NULL DEFAULT NULL,
+  `tanggal_pengembalian_aktual` date NULL DEFAULT NULL,
   `keranjang_id` int NOT NULL,
   `user_id` int NOT NULL,
+  `waktu_pembuatan` datetime NOT NULL,
+  `waktu_update` datetime NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idfk_transaksi_1`(`keranjang_id` ASC) USING BTREE,
   INDEX `idfk_transaksi_2`(`user_id` ASC) USING BTREE,
@@ -154,8 +175,10 @@ CREATE TABLE `transaksi`  (
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
   `id` int NOT NULL AUTO_INCREMENT,
+  `nama` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `alamat` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `npwp` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `no_hp` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `gambar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `tanggal_daftar` date NOT NULL,
