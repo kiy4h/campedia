@@ -10,12 +10,12 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final String profileImageUrl = 'https://via.placeholder.com/150'; 
-  final String userName = 'Vina Salima Mujahidah';
+  final String userName = 'Ahmad Izzuddin Azzam';
   final String userBio = 'Penyewa Alat Kemah dan Pengelola Peralatan Outdoor.';
-  final String userEmail = 'vina@example.com';
+  final String userEmail = 'Azzam@example.com';
   final String userPhone = '+62 812 3456 7890';
   final String location = 'Bandung, Indonesia';
-  final String website = 'github.com/vinasalima';
+  final String website = 'github.com/Ajzam';
 
   @override
   Widget build(BuildContext context) {
