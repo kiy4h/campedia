@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'termAndCondition.dart';
+import 'package:flutter/gestures.dart';
+import '../Intro/onboarding.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -16,6 +19,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   bool _obscurePassword = true;
+  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +34,7 @@ class _RegisterState extends State<Register> {
                   height: 300,
                   width: double.infinity,
                   child: Image.asset(
-                    'images/assets_SignUp/alam_bg.png', // ganti sesuai gambar kamu
+                    'images/assets_SignUp/alam_bg.png',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -47,7 +51,7 @@ class _RegisterState extends State<Register> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Create your account',
                       style: TextStyle(
                         fontSize: 24,
@@ -115,28 +119,60 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    RichText(
-                      text: TextSpan(
-                        text: 'By tapping Sign up you accept all ',
-                        style: const TextStyle(color: Colors.black54),
-                        children: [
-                          TextSpan(
-                            text: 'terms',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Checkbox(
+                          value: isChecked,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isChecked = value ?? false;
+                            });
+                          },
+                        ),
+                        Expanded(
+                          child: RichText(
+                            text: TextSpan(
+                              text: 'By tapping Sign up you accept all ',
+                              style: const TextStyle(color: Colors.black54),
+                              children: [
+                                TextSpan(
+                                  text: 'terms',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const TermsConditionPage()),
+                                      );
+                                    },
+                                ),
+                                const TextSpan(text: ' and '),
+                                TextSpan(
+                                  text: 'conditions',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const TermsConditionPage()),
+                                      );
+                                    },
+                                ),
+                              ],
                             ),
                           ),
-                          TextSpan(text: ' and '),
-                          TextSpan(
-                            text: 'condition',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+
+                      ],
                     ),
                     const SizedBox(height: 24),
                     SizedBox(
@@ -149,14 +185,34 @@ class _RegisterState extends State<Register> {
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
-                        onPressed: () {},
-                        child: const Text(
-                          'CREATE AN ACCOUNT',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                        onPressed: isChecked
+                            ? () {
+                                // Logika lanjut saat checkbox dicentang
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Account created successfully!')),
+                                );
+                              }
+                            : null, // Tombol nonaktif jika belum diceklis
+                        child: GestureDetector(
+                          onTap: () {
+                            // Aksi saat teks ditekan
+                            print('NEXT button pressed!');
+                            // Contoh navigasi:
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+                            );
+                          },
+                          child: const Text(
+                            'CREATE AN ACCOUNT',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Color.fromARGB(255, 222, 223, 222),
+                            ),
                           ),
                         ),
+
                       ),
                     ),
                   ],

@@ -142,6 +142,7 @@ class _SignInState extends State<SignIn> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
+                            color: Color.fromARGB(255, 206, 203, 203),
                           ),
                         ),
                       ),

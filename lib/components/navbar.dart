@@ -4,9 +4,10 @@ import '../pages/category.dart';
 import '../pages/shoping.dart';
 import '../pages/favorite.dart';
 import '../pages/profile.dart';
+import '../pages/allListItem.dart';
 
-Widget buildBottomNavBar({
-  required BuildContext context,
+Widget buildBottomNavBar(
+  BuildContext context, {
   required int currentIndex,
 }) {
   return Container(
@@ -39,11 +40,11 @@ Widget buildBottomNavBar({
 }
 
 Widget _buildNavItem(
-    BuildContext context,
-    IconData icon,
-    int index,
-    int currentIndex, {
-    bool hasNotification = false,
+  BuildContext context,
+  IconData icon,
+  int index,
+  int currentIndex, {
+  bool hasNotification = false,
 }) {
   bool isSelected = currentIndex == index;
   return GestureDetector(
@@ -113,24 +114,19 @@ Widget _buildProfileNavItem(BuildContext context, int index, int currentIndex) {
 void _navigateToPage(BuildContext context, int index) {
   switch (index) {
     case 0:
-      // Navigator.pushReplacementNamed(context, '/home');
-      Navigator.push(context,MaterialPageRoute(builder: (context) => HomePage()),);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
       break;
     case 1:
-      // Navigator.pushReplacementNamed(context, '/category');
-      Navigator.push(context,MaterialPageRoute(builder: (context) => CategoryPage()),);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => AllItemList()));
       break;
     case 2:
-      // Navigator.pushReplacementNamed(context, '/shopping');
-      Navigator.push(context,MaterialPageRoute(builder: (context) => Shoping()),);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Shoping()));
       break;
     case 3:
-      // Navigator.pushReplacementNamed(context, '/favorite');
-      Navigator.push(context,MaterialPageRoute(builder: (context) => FavoritePage()),);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => FavoritePage()));
       break;
     case 4:
-      // Navigator.pushReplacementNamed(context, '/profile');
-      Navigator.push(context,MaterialPageRoute(builder: (context) => ProfilePage()),);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
       break;
   }
 }

@@ -118,7 +118,7 @@ class _FavoritePageState extends State<FavoritePage> {
         ],
       ),
       bottomNavigationBar: buildBottomNavBar(
-        context: context,
+        context,
         currentIndex: 3, // sesuai navbar tombol "Love"
       ),
     );

@@ -29,7 +29,7 @@ class _Checkout2State extends State<Checkout2> {
         child: Column(
           children: [
             buildStepIndicator(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 24), 
             buildPaymentOptions(),
             const SizedBox(height: 24),
             Expanded(

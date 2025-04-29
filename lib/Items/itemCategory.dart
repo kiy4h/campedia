@@ -22,8 +22,116 @@ class ItemCategoryApp extends StatelessWidget {
   }
 }
 
-class ItemCategory extends StatelessWidget {
+class ItemCategory extends StatefulWidget {
   const ItemCategory({Key? key}) : super(key: key);
+
+  @override
+  _ItemCategoryState createState() => _ItemCategoryState();
+}
+
+class _ItemCategoryState extends State<ItemCategory> {
+  // Filter variables
+  double minPrice = 0;
+  double maxPrice = 500000;
+  double minRating = 0;
+  double maxRating = 5;
+
+  // Data barang
+  final List<Map<String, dynamic>> allItems = [
+    {"name": "Tenda Camping", "price": 300000, "image": "images/assets_ItemDetails/tenda_bg1.png", "rating": 4.5},
+    {"name": "Kompor Portable", "price": 150000, "image": "images/assets_ItemDetails/tenda_bg2.png", "rating": 4.3},
+    {"name": "Sepatu Gunung", "price": 250000, "image": "images/assets_ItemDetails/tenda_bg3.png", "rating": 4.7},
+    {"name": "Tas Gunung", "price": 350000, "image": "images/assets_ItemDetails/tenda_bg4.png", "rating": 4.0},
+    {"name": "Senter LED", "price": 120000, "image": "images/assets_ItemDetails/tenda_bg5.png", "rating": 4.8},
+    {"name": "Jaket Gunung", "price": 400000, "image": "images/assets_ItemDetails/tenda_bg6.png", "rating": 4.2},
+  ];
+
+  // Daftar barang yang difilter
+  late List<Map<String, dynamic>> filteredItems;
+
+  @override
+  void initState() {
+    super.initState();
+    filteredItems = List.from(allItems); // Initialize filtered items
+  }
+
+  // Fungsi untuk memfilter barang berdasarkan harga dan rating
+  void _applyFilter() {
+    setState(() {
+      filteredItems = allItems.where((item) {
+        return item['price'] >= minPrice &&
+            item['price'] <= maxPrice &&
+            item['rating'] >= minRating &&
+            item['rating'] <= maxRating;
+      }).toList();
+    });
+  }
+
+  // Dialog filter
+  void _showFilterDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Filter'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Price Range'),
+                RangeSlider(
+                  values: RangeValues(minPrice, maxPrice),
+                  min: 0,
+                  max: 500000,
+                  onChanged: (values) {
+                    setState(() {
+                      minPrice = values.start;
+                      maxPrice = values.end;
+                    });
+                  },
+                ),
+                const SizedBox(height: 20),
+                const Text('Rating Range'),
+                RangeSlider(
+                  values: RangeValues(minRating, maxRating),
+                  min: 0,
+                  max: 5,
+                  onChanged: (values) {
+                    setState(() {
+                      minRating = values.start;
+                      maxRating = values.end;
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                _applyFilter();
+                Navigator.pop(context);
+              },
+              child: const Text('Apply'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  minPrice = 0;
+                  maxPrice = 500000;
+                  minRating = 0;
+                  maxRating = 5;
+                });
+                _applyFilter();
+                Navigator.pop(context);
+              },
+              child: const Text('Reset'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +146,11 @@ class ItemCategory extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.sort, color: Colors.black),
-            onPressed: () {},
+            onPressed: _showFilterDialog,
           ),
           IconButton(
             icon: const Icon(Icons.filter_list, color: Colors.black),
-            onPressed: () {},
+            onPressed: _showFilterDialog,
           ),
         ],
       ),
@@ -99,11 +207,10 @@ class ItemCategory extends StatelessWidget {
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                 ),
-                itemCount: 12,
+                itemCount: filteredItems.length,
                 itemBuilder: (context, index) {
+                  final item = filteredItems[index];
                   final isLiked = index == 3 || index == 6;
-                  final tentType = index % 8;
-
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -115,7 +222,7 @@ class ItemCategory extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
-                          image: AssetImage(_getTentImage(tentType)),
+                          image: AssetImage(item['image']),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -139,12 +246,12 @@ class ItemCategory extends StatelessWidget {
                                 vertical: 5,
                                 horizontal: 10,
                               ),
-                              child: const Column(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Tenda',
-                                    style: TextStyle(
+                                    item['name'],
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
@@ -154,23 +261,23 @@ class ItemCategory extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        '\$8.7',
-                                        style: TextStyle(
+                                        '\$${item['price']}',
+                                        style: const TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       Row(
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.star,
                                             color: Colors.amber,
                                             size: 16,
                                           ),
-                                          SizedBox(width: 4),
+                                          const SizedBox(width: 4),
                                           Text(
-                                            '4.3',
-                                            style: TextStyle(
+                                            '${item['rating']}',
+                                            style: const TextStyle(
                                               color: Colors.white,
                                             ),
                                           ),
@@ -193,33 +300,9 @@ class ItemCategory extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: buildBottomNavBar(
-        context: context,
+        context,
         currentIndex: 1,
       ),
     );
-  }
-
-  /// Mapping jenis tenda ke asset image di folder images/assets_ItemDetails
-  String _getTentImage(int type) {
-    switch (type) {
-      case 0:
-        return 'images/assets_ItemDetails/tenda_bg1.png';
-      case 1:
-        return 'images/assets_ItemDetails/tenda_bg2.png';
-      case 2:
-        return 'images/assets_ItemDetails/tenda_bg3.png';
-      case 3:
-        return 'images/assets_ItemDetails/tenda_bg4.png';
-      case 4:
-        return 'images/assets_ItemDetails/tenda_bg5.png';
-      case 5:
-        return 'images/assets_ItemDetails/tenda_bg6.png';
-      case 6:
-        return 'images/assets_ItemDetails/tenda_bg7.png';
-      case 7:
-        return 'images/assets_ItemDetails/tenda_bg8.png';
-      default:
-        return 'images/assets_ItemDetails/tenda_bg9.png';
-    }
   }
 }

@@ -91,17 +91,32 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           ),
                         ),
                         onPressed: () {
-                          // Di sini kamu bisa implementasi logic kirim email reset password
+                          // Implementasi logika kirim email reset password
+                          // Setelah logika selesai, tampilkan snackbar
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Reset link has been sent to your email!'),
+                              backgroundColor: Color.fromARGB(255, 163, 165, 163),
+                            ),
+                          );
+
+                          // Setelah snackbar selesai ditampilkan, navigasi kembali ke halaman OnboardScreen
+                          Future.delayed(const Duration(seconds: 2), () {
+                            Navigator.popUntil(context, (route) => route.isFirst);
+                          });
                         },
+
                         child: const Text(
                           'SEND RESET LINK',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
+                            color: Color.fromARGB(255, 235, 233, 233),
                           ),
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 16),
                     Center(
                       child: TextButton(

@@ -277,7 +277,7 @@ class _ShopingState extends State<Shoping> {
         ],
       ),
       bottomNavigationBar: buildBottomNavBar(
-        context: context,
+        context,
         currentIndex: 2,
       ),
     );

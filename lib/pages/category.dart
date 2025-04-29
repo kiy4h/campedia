@@ -54,7 +54,12 @@ class CategoriesPage extends StatelessWidget {
           },
         ),
       ),
-      bottomNavigationBar: buildBottomNavBar(context: context, currentIndex: 1),
+      bottomNavigationBar: buildBottomNavBar(
+        context,
+        currentIndex: 1,
+      ),
+
+
     );
   }
 
