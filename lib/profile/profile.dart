@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tugas3provis/components/navbar.dart';
-import 'package:tugas3provis/pages/notification.dart';
+import 'package:tugas3provis/profile/notification.dart';
 import 'historyPenyewaan.dart';
 
 void main() {

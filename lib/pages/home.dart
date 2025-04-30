@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tugas3provis/pages/allListItem.dart';
-import 'category.dart';
+import 'package:tugas3provis/Items/allListItem.dart';
+import '../Items/category.dart';
 import 'recommendedGearTrip.dart';
 import '../components/navbar.dart';
 import 'trendingGear.dart';
-import 'notification.dart';
+import '../profile/notification.dart';
 
 void main() {
   runApp(CampingApp());

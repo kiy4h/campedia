@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../pages/home.dart';
-import '../pages/category.dart';
-import '../pages/shoping.dart';
+import '../Items/category.dart';
+import '../shopPage/shoping.dart';
 import '../pages/favorite.dart';
-import '../pages/profile.dart';
-import '../pages/allListItem.dart';
+import '../profile/profile.dart';
+import '../Items/allListItem.dart';
 
 Widget buildBottomNavBar(
   BuildContext context, {

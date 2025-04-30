@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'Intro/splashscreen.dart';
-import 'pages/shoping.dart';
+import 'shopPage/shoping.dart';
 import 'payment/bayarDenda.dart';
+import 'Items/detailItem.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
       ),
       // home: const Shoping(),
       // home: const SplashScreen(),
-      home: DetailDendaPage(),
+      // home: DetailDendaPage(),
+      // home: const DetailItem(),
       debugShowCheckedModeBanner: false,
     );
   }
