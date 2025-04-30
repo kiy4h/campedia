@@ -17,67 +17,130 @@ class NotificationPage extends StatelessWidget {
       "subtitle": "Pesananmu telah dikonfirmasi.",
       "time": "3 hari lalu",
     },
+    {
+      "title": "Bayar Denda Terlambat",
+      "subtitle": "Kamu dikenakan denda Rp10.000 karena terlambat mengembalikan perlengkapan.",
+      "time": "5 jam lalu",
+    },
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notifikasi"),
-        backgroundColor: Color(0xFF2E7D32),
-        foregroundColor: Colors.white,
+        title: const Text(
+          "Notifications",
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.white,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
-      body: ListView.separated(
-        padding: EdgeInsets.all(16),
+      backgroundColor: const Color(0xFFF6F6F6),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
         itemCount: notifications.length,
-        separatorBuilder: (_, __) => SizedBox(height: 12),
         itemBuilder: (context, index) {
           final item = notifications[index];
-          return Container(
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 6,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(Icons.notifications, color: Color(0xFF2E7D32), size: 28),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Column(
+          return GestureDetector(
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Kamu membuka: ${item['title']}")),
+              );
+            },
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 16),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        item["title"]!,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.black87,
+                      // Different icon for penalty notification
+                      Icon(
+                        item["title"] == "Bayar Denda Terlambat"
+                            ? Icons.money_off
+                            : Icons.notifications_none,
+                        size: 28,
+                        color: item["title"] == "Bayar Denda Terlambat"
+                            ? Colors.red
+                            : Colors.green,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item["title"]!,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              item["subtitle"]!,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              item["time"]!,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        item["subtitle"]!,
-                        style: TextStyle(color: Colors.black54),
-                      ),
-                      SizedBox(height: 6),
-                      Text(
-                        item["time"]!,
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ],
                   ),
-                ),
-              ],
+                  // Show the "Bayar Denda Sekarang" button only for penalty notifications
+                  if (item["title"] == "Bayar Denda Terlambat")
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16), // Add some space above the button
+                      child: Align(
+                        alignment: Alignment.centerRight, // Align to the right
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Add the logic for paying the fine here
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Bayar denda Rp10.000")),
+                            );
+                          },
+                          child: const Text("Bayar Denda Sekarang"),
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white, backgroundColor: Colors.red, // Text color
+                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
           );
         },

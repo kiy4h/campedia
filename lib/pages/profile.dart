@@ -1,370 +1,255 @@
 import 'package:flutter/material.dart';
-import '../components/navbar.dart';
-import 'settingProfile.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:tugas3provis/components/navbar.dart';
+import 'package:tugas3provis/pages/notification.dart';
+import 'historyPenyewaan.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
-
-  @override
-  State createState() => _ProfilePageState();
+void main() {
+  runApp(CampingApp());
 }
 
-class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin {
-  final String profileImageUrl = 'https://via.placeholder.com/150';
-  final String userName = 'Ahmad Izzuddin Azzam';
-  final String userBio = 'Penyewa Alat Kemah dan Pengelola Peralatan Outdoor.';
-  final String userEmail = 'Azzam@example.com';
-  final String userPhone = '+62 812 3456 7890';
-  final String location = 'Bandung, Indonesia';
-  
-  late TabController _tabController;
-  
+class CampingApp extends StatelessWidget {
   @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        primaryColor: Color(0xFF2E7D32),
+        scaffoldBackgroundColor: Color(0xFFF8F8F8),
+        textTheme: GoogleFonts.poppinsTextTheme(),
+      ),
+      home: ProfilePage(),
+      debugShowCheckedModeBanner: false,
+    );
   }
-  
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
+}
 
+class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          // Header Profile
-          _buildProfileHeader(),
-          
-          // Tab Bar
-          TabBar(
-            controller: _tabController,
-            labelColor: Colors.green.shade800,
-            unselectedLabelColor: Colors.grey,
-            indicatorColor: Colors.green.shade800,
-            tabs: const [
-              Tab(text: 'Info'),
-              Tab(text: 'Aktivitas'),
-            ],
-          ),
-          
-          // Tab Content
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildInfoTab(),
-                _buildActivityTab(),
-              ],
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: buildBottomNavBar(context, currentIndex: 5),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const SettingsPage()),
-          );
-        },
-        backgroundColor: Colors.green.shade800,
-        child: const Icon(Icons.edit, color: Colors.white),
-      ),
-    );
-  }
-  
-  Widget _buildProfileHeader() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Colors.green.shade800, Colors.green.shade600],
-        ),
-      ),
-      child: Column(
-        children: [
-          // Profile Image
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 4),
-            ),
-            child: CircleAvatar(
-              radius: 50,
-              backgroundImage: NetworkImage(profileImageUrl),
-            ),
-          ),
-          const SizedBox(height: 16),
-          
-          // Name
-          Text(
-            userName,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 8),
-          
-          // Bio
-          Text(
-            userBio,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-  
-  Widget _buildInfoTab() {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        _buildInfoCard(),
-        const SizedBox(height: 16),
-        _buildRentalHistorySection(),
-        const SizedBox(height: 16),
-        _buildStatsCard(),
-      ],
-    );
-  }
-  
-  Widget _buildInfoCard() {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: SafeArea(
+        child: ListView(
+          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           children: [
-            Text(
-              'Informasi Kontak',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.green.shade800,
-              ),
-            ),
-            const Divider(height: 24),
-            _buildContactItem(Icons.email, userEmail),
-            const SizedBox(height: 12),
-            _buildContactItem(Icons.phone, userPhone),
-            const SizedBox(height: 12),
-            _buildContactItem(Icons.location_on, location),
+            _buildHeader(context),
+            SizedBox(height: 20),
+            _buildProfileDetails(context),
+            SizedBox(height: 24),
+            _buildHistorySection(context),
+            SizedBox(height: 24),
+            _buildSettingsButton(context),
+            SizedBox(height: 20),
           ],
         ),
       ),
-    );
-  }
-  
-  Widget _buildContactItem(IconData icon, String text) {
-    return Row(
-      children: [
-        Icon(icon, color: Colors.green.shade800, size: 20),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            text,
-            style: const TextStyle(fontSize: 15),
-          ),
-        ),
-      ],
-    );
-  }
-  
-  Widget _buildStatsCard() {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Statistik',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.green.shade800,
-              ),
-            ),
-            const Divider(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildStatItem('32', 'Peralatan'),
-                _buildStatItem('128', 'Penyewaan'),
-                _buildStatItem('96%', 'Rating'),
-              ],
-            ),
-          ],
-        ),
+      bottomNavigationBar: buildBottomNavBar(
+        context,
+        currentIndex: 3, // Bisa disesuaikan jika profil ada di index ke-3
       ),
     );
   }
-  
-  Widget _buildStatItem(String value, String label) {
+
+  Widget _buildHeader(context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          value,
+          'Hello,',
+          style: TextStyle(
+            color: Colors.grey.shade600,
+            fontSize: 14,
+          ),
+        ),
+        SizedBox(height: 5),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 30, // Ukuran foto profil
+                  backgroundImage: AssetImage('assets/profile_pic.jpg'), // Ganti dengan gambar yang sesuai
+                ),
+                SizedBox(width: 12),
+                Text(
+                  'Izzuddin Azzam', // Nama pengguna
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+            GestureDetector(
+              onTap: () {
+                // Arahkan ke halaman edit profil
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage()));
+              },
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Icon(Icons.edit, size: 24, color: Colors.black87),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProfileDetails(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Profile Details',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.green.shade800,
+            color: Colors.black87,
           ),
         ),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey.shade600,
-          ),
-        ),
-      ],
-    );
-  }
-  
-  Widget _buildRentalHistorySection() {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Riwayat Penyewaan',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.green.shade800,
+        SizedBox(height: 16),
+        Container(
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 8,
+                offset: Offset(0, 2),
               ),
-            ),
-            const Divider(height: 24),
-            _buildRentalItem('Tenda 4 Orang', '12 April 2023'),
-            _buildRentalItem('Sleeping Bag', '25 Maret 2023'),
-            _buildRentalItem('Matras Camping', '15 Februari 2023'),
-          ],
-        ),
-      ),
-    );
-  }
-  
-  Widget _buildRentalItem(String itemName, String rentalDate) {
-    return Row(
-      children: [
-        Icon(Icons.event, color: Colors.green.shade800, size: 20),
-        const SizedBox(width: 12),
-        Expanded(
+            ],
+          ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                itemName,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
-              Text(
-                rentalDate,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
-              ),
+              _buildProfileRow('Email:', 'izzuddin@example.com'),
+              SizedBox(height: 12),
+              _buildProfileRow('Phone:', '+62 812 3456 7890'),
+              SizedBox(height: 12),
+              _buildProfileRow('Location:', 'Jakarta, Indonesia'),
             ],
           ),
         ),
       ],
     );
   }
-  
-  Widget _buildActivityTab() {
-    return ListView(
-      padding: const EdgeInsets.all(16),
+
+  Widget _buildProfileRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildActivityItem(
-          'Menambah alat baru: Tenda 4 Orang',
-          '2 hari yang lalu',
-          Icons.add_circle,
-          Colors.blue,
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
         ),
-        _buildActivityItem(
-          'Melakukan peminjaman alat kemah',
-          '1 minggu yang lalu',
-          Icons.campaign,
-          Colors.green,
-        ),
-        _buildActivityItem(
-          'Mengupdate harga sewa',
-          '2 minggu yang lalu',
-          Icons.edit,
-          Colors.orange,
+        Text(
+          value,
+          style: TextStyle(
+            color: Colors.black54,
+          ),
         ),
       ],
     );
   }
-  
-  Widget _buildActivityItem(String title, String time, IconData icon, Color color) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                icon,
-                color: color,
-                size: 20,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                  ),
-                  Text(
-                    time,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade600,
-                    ),
-                  ),
-                ],
+
+  Widget _buildHistorySection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'History',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        SizedBox(height: 16),
+        _buildHistoryRow('Purchase History:', '3 Items'),
+        SizedBox(height: 12),
+        _buildHistoryRow('Rental History:', '2 Rentals'),
+        SizedBox(height: 12),
+        _buildHistoryRow('Payment Status:', 'Paid'),
+        SizedBox(height: 16),
+        GestureDetector(
+          onTap: () {
+            // Arahkan ke halaman riwayat pembelian lengkap
+            Navigator.push(context, MaterialPageRoute(builder: (context) => PurchaseHistoryPage()));
+          },
+          child: Container(
+            alignment: Alignment.centerRight,
+            child: Text(
+              'See All',
+              style: TextStyle(
+                color: Colors.blue,
+                fontWeight: FontWeight.bold,
               ),
             ),
-          ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHistoryRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            color: Colors.black54,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSettingsButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // Arahkan ke halaman pengaturan jika diperlukan
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
+      },
+      child: Container(
+        height: 56,
+        decoration: BoxDecoration(
+          color: Color(0xFF5D7052),
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Center(
+          child: Text(
+            'Edit Profile',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
     );

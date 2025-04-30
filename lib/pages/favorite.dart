@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import '../components/navbar.dart';
+
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({Key? key}) : super(key: key);
@@ -47,8 +49,30 @@ class _FavoritePageState extends State<FavoritePage> {
             child: ListView.builder(
               itemCount: favoriteItems.length,
               itemBuilder: (context, index) {
-                final item = favoriteItems[index];
-                return Container(
+              final item = favoriteItems[index];
+              return Slidable(
+                key: ValueKey(item.name),
+                endActionPane: ActionPane(
+                  motion: const DrawerMotion(), // kamu bisa coba juga ScrollMotion()
+                  extentRatio: 0.25,
+                  children: [
+                    SlidableAction(
+                      onPressed: (context) {
+                        setState(() {
+                          favoriteItems.removeAt(index);
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('${item.name} dihapus dari favorit')),
+                        );
+                      },
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      icon: Icons.delete,
+                      label: 'Hapus',
+                    ),
+                  ],
+                ),
+                child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -97,22 +121,16 @@ class _FavoritePageState extends State<FavoritePage> {
                           ],
                         ),
                       ),
-                      // Favorite Icon
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            favoriteItems.removeAt(index);
-                          });
-                        },
-                        icon: const Icon(
-                          Icons.favorite,
-                          color: Colors.amber,
-                        ),
+                      const Icon(
+                        Icons.favorite,
+                        color: Colors.amber,
                       ),
                     ],
                   ),
-                );
-              },
+                ),
+              );
+            }
+
             ),
           ),
         ],
@@ -186,23 +204,6 @@ PreferredSizeWidget buildAppBar({
       break;
     case 3:
       title = 'Favorite';
-      actions = [
-        TextButton(
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Order placed!')),
-            );
-          },
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.amber,
-            textStyle: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
-          ),
-          child: const Text('Place Order'),
-        ),
-      ];
       break;
     case 4:
       title = 'Profile';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tugas3provis/pages/allListItem.dart';
 import 'category.dart';
 import 'recommendedGearTrip.dart';
 import '../components/navbar.dart';
@@ -95,7 +96,7 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 20),
             _buildFeaturedSlider(context),
             SizedBox(height: 24),
-            _buildCategoriesSection(),
+            _buildCategoriesSection(context),
             SizedBox(height: 24),
             _buildTrendingDealsSection(),
             SizedBox(height: 24),
@@ -247,7 +248,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoriesSection() {
+  Widget _buildCategoriesSection(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -257,22 +258,31 @@ class HomePage extends StatelessWidget {
             Text(
               'Categories',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),
             ),
-            Icon(Icons.arrow_forward, size: 22),
+            IconButton(
+              icon: const Icon(Icons.arrow_forward, size: 22),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CategoryPage()), // Ganti dengan page kamu
+                );
+              },
+            ),
+
           ],
         ),
         SizedBox(height: 16),
         SizedBox(
-          height: 100,
+          height: 150,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: categories.length,
             itemBuilder: (context, index) {
-              return _buildCategoryItem(categories[index]);
+              return _buildCategoryItem(categories[index], context);
             },
           ),
         ),
@@ -280,50 +290,62 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryItem(Map<String, String> category) {
-    return Container(
-      width: 80,
-      margin: EdgeInsets.only(right: 16),
-      child: Column(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 8,
-                  offset: Offset(0, 2),
+  Widget _buildCategoryItem(Map<String, String> category, context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CategoryPage(),
+          ),
+        );
+      },
+      child: Container(
+        width: 100, // Dulu: 80
+        margin: const EdgeInsets.only(right: 16),
+        child: Column(
+          children: [
+            Container(
+              width: 80, // Dulu: 60
+              height: 80, // Dulu: 60
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18), // Dulu: 15
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(14), // Dulu: 12
+                child: Image.asset(
+                  category["icon"]!,
+                  fit: BoxFit.contain,
                 ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Image.asset(
-                category["icon"]!,
-                fit: BoxFit.contain,
               ),
             ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            category["name"]!,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: Colors.black87,
+            const SizedBox(height: 10), // Dulu: 8
+            Text(
+              category["name"]!,
+              style: const TextStyle(
+                fontSize: 13, // Dulu: 12
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+
+
 
   Widget _buildTrendingItem(Map<String, dynamic> item) {
   return Container(
@@ -442,7 +464,7 @@ class HomePage extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CategoryPage()),
+          MaterialPageRoute(builder: (context) => AllItemList()),
         );
       },
       child: Container(

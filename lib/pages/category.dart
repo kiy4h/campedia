@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tugas3provis/Items/itemCategory.dart';
 import '../components/navbar.dart';
+import 'allListItem.dart';
 
 void main() {
   runApp(CategoryPage());
@@ -31,7 +32,7 @@ class CategoriesPage extends StatelessWidget {
     {"name": "Tas Gunung", "icon": "images/assets_Categories/cat_Tas.png", "items": 27},
     {"name": "Senter", "icon": "images/assets_Categories/cat_Senter.png", "items": 87},
     {"name": "Jaket Gunung", "icon": "images/assets_Categories/cat_Jaket.png", "items": 87},
-    {"name": "Keamanan dan Navigasi", "icon": "images/assets_Categories/cat_KeamananNavigasi.png", "items": 87},
+    {"name": "Alat Pendukung", "icon": "images/assets_Categories/cat_KeamananNavigasi.png", "items": 87},
     {"name": "Fasilitas Tambahan", "icon": "images/assets_Categories/cat_FasilitasTambahan.png", "items": 120},
   ];
 
@@ -68,7 +69,7 @@ class CategoriesPage extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => ItemCategory()),
+          MaterialPageRoute(builder: (_) => AllItemList()),
         );
       },
       child: Container(
@@ -139,16 +140,7 @@ PreferredSizeWidget buildAppBar({
     case 1:
       title = 'Category';
       actions = [
-        TextButton(
-          onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Order placed!')),
-          ),
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.amber,
-            textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-          child: Text('Place Order'),
-        ),
+        
       ];
       break;
     case 2:
