@@ -39,7 +39,12 @@ class _SignInState extends State<SignIn> {
                 Positioned(
                   top: 16,
                   left: 16,
-                  child: Icon(Icons.arrow_back, color: Colors.white),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(Icons.arrow_back, color: Colors.white),
+                  ),
                 ),
               ],
             ),
