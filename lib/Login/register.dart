@@ -38,10 +38,16 @@ class _RegisterState extends State<Register> {
                     fit: BoxFit.cover,
                   ),
                 ),
+                               
                 Positioned(
                   top: 16,
                   left: 16,
-                  child: Icon(Icons.arrow_back, color: Colors.white),
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Kembali ke halaman sebelumnya
+                    },
+                    icon: Icon(Icons.arrow_back, color: Colors.white),
+                  )
                 ),
               ],
             ),
