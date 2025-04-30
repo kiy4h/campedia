@@ -435,7 +435,6 @@ class HomePage extends StatelessWidget {
               color: Colors.black87,
             ),
           ),
-          Icon(Icons.arrow_forward, size: 22),
         ],
       ),
       SizedBox(height: 16),
