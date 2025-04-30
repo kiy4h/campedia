@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'termAndCondition.dart';
 import 'package:flutter/gestures.dart';
 import '../Intro/onboarding.dart';
+import 'congratulationsPopup.dart'; // Import popup
 
 void main() {
   runApp(const MaterialApp(
@@ -20,6 +21,13 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   bool _obscurePassword = true;
   bool isChecked = false;
+  final TextEditingController _firstNameController = TextEditingController();
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,16 +46,15 @@ class _RegisterState extends State<Register> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                               
                 Positioned(
                   top: 16,
                   left: 16,
                   child: IconButton(
                     onPressed: () {
-                      Navigator.pop(context); // Kembali ke halaman sebelumnya
+                      Navigator.pop(context);
                     },
-                    icon: Icon(Icons.arrow_back, color: Colors.white),
-                  )
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  ),
                 ),
               ],
             ),
@@ -59,16 +66,14 @@ class _RegisterState extends State<Register> {
                   children: [
                     const Text(
                       'Create your account',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 24),
                     Row(
                       children: [
                         Expanded(
                           child: TextField(
+                            controller: _firstNameController,
                             decoration: InputDecoration(
                               hintText: 'First Name',
                               border: OutlineInputBorder(
@@ -113,9 +118,7 @@ class _RegisterState extends State<Register> {
                         ),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                         suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                          ),
+                          icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
                           onPressed: () {
                             setState(() {
                               _obscurePassword = !_obscurePassword;
@@ -177,7 +180,6 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
                         ),
-
                       ],
                     ),
                     const SizedBox(height: 24),
@@ -193,32 +195,22 @@ class _RegisterState extends State<Register> {
                         ),
                         onPressed: isChecked
                             ? () {
-                                // Logika lanjut saat checkbox dicentang
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Account created successfully!')),
+                                showCongratulationsPopup(
+                                  context,
+                                  _firstNameController.text.isNotEmpty
+                                      ? _firstNameController.text
+                                      : "User",
                                 );
                               }
-                            : null, // Tombol nonaktif jika belum diceklis
-                        child: GestureDetector(
-                          onTap: () {
-                            // Aksi saat teks ditekan
-                            print('NEXT button pressed!');
-                            // Contoh navigasi:
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const OnboardingScreen()),
-                            );
-                          },
-                          child: const Text(
-                            'CREATE AN ACCOUNT',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 222, 223, 222),
-                            ),
+                            : null,
+                        child: const Text(
+                          'CREATE AN ACCOUNT',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Color.fromARGB(255, 222, 223, 222),
                           ),
                         ),
-
                       ),
                     ),
                   ],
@@ -230,4 +222,21 @@ class _RegisterState extends State<Register> {
       ),
     );
   }
+}
+
+// Cara menampilkan popup
+void showCongratulationsPopup(BuildContext context, String name) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return CongratulationsPopup(
+        name: name,
+        onSignIn: () {
+          Navigator.of(context).pop();
+          // Tambahkan navigasi ke halaman sign in di sini
+        },
+      );
+    },
+  );
 }

@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
       ),
       // home: const Shoping(),
-      // home: const SplashScreen(),
+      home: const SplashScreen(),
       // home: DetailDendaPage(),
       // home: const DetailItem(),
       debugShowCheckedModeBanner: false,
