@@ -7,101 +7,212 @@ class ThankYouPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF8F9F4),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Close Button and Title
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Icon(Icons.close, color: Colors.green),
+            // Title without Close Button
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    offset: const Offset(0, 2),
+                    blurRadius: 4,
                   ),
-                  const Spacer(),
-                  const Text(
-                    "Thank You",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const Spacer(flex: 2),
                 ],
               ),
-            ),
-
-            const SizedBox(height: 16),
-
-            // Image
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Image.asset(
-                'images/assets_OnBoarding0/onboarding4image.png', // Ganti path sesuai gambar kamu
-                height: 250,
-                fit: BoxFit.contain,
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            // Title
-            const Text(
-              "Pick Up Your Equipment",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-
-            const SizedBox(height: 12),
-
-            // Description
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.0),
-              child: Text(
-                "Pastikan untuk memeriksa daftar peralatan agar semuanya lengkap dan dalam kondisi baik.",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black54,
+              child: const Center(
+                child: Text(
+                  "Pesanan Berhasil!",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF627D2C),
+                  ),
                 ),
-                textAlign: TextAlign.center,
               ),
             ),
 
-            const Spacer(),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    // Success Icon
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFE8F0DD),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.check_circle,
+                        color: Color(0xFF627D2C),
+                        size: 50,
+                      ),
+                    ),
+                    
+                    // Thank You Message
+                    Column(
+                      children: const [
+                        Text(
+                          "Terima Kasih!",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF627D2C),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        
+                        SizedBox(height: 8),
+                        
+                        Text(
+                          "Pesanan Anda telah dikonfirmasi",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xFF8A8A8A),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    
+                    // Order Info
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                "Order ID",
+                                style: TextStyle(
+                                  color: Color(0xFF8A8A8A),
+                                ),
+                              ),
+                              Text(
+                                "#PLT2505-001",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Divider(height: 24),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                "Tanggal",
+                                style: TextStyle(
+                                  color: Color(0xFF8A8A8A),
+                                ),
+                              ),
+                              Text(
+                                "1 Mei 2025",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                
+                    // Image with proper sizing
+                    AspectRatio(
+                      aspectRatio: 16/9,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.asset(
+                            'images/assets_OnBoarding0/onboarding4image.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+          
+                    // Condensed text description
+                    const Text(
+                      "Pastikan untuk memeriksa daftar peralatan saat pengambilan.",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF666666),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
 
             // Track Your Order Button
-            Padding(
-              padding: const EdgeInsets.all(24.0),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    offset: const Offset(0, -2),
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
               child: SizedBox(
                 width: double.infinity,
+                height: 54,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    backgroundColor: const Color(0xFF627D2C),
+                    elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
                   onPressed: () {
                     // Aksi ketika tombol diklik
-                    print("Track Your Order button clicked!");
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Step1Page()),
                     );
                   },
                   child: const Text(
-                    "TRACK YOUR ORDER",
+                    "LACAK PESANAN ANDA",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
                       color: Colors.white,
                     ),
                   ),

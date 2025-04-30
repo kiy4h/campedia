@@ -27,9 +27,11 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
 
   bool saveConfirmation = false;
 
-  String? selectedCountry;
+  String? selectedCity;
+  String? selectedBooth;
 
-  final List<String> countries = ['Indonesia', 'Malaysia', 'Singapore', 'Other'];
+  final List<String> cities = ['Bandung', 'Bekasi', 'Jakarta', 'Bogor'];
+  final List<String> booths = ['Gegerkalong1', 'Lembang2', 'Tangkuban3', 'Cimindi4'];
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,9 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -60,33 +64,19 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
               const SizedBox(height: 16),
               buildTextField('Address', maxLines: 2),
               const SizedBox(height: 16),
-              buildTextField('NPWP'),
+              buildTextField('NIK'),
               const SizedBox(height: 16),
               Row(
                 children: [
-                  Expanded(child: buildTextField('Zip Code')),
+                  Expanded(child: buildTextField('ZIP Code')),
                   const SizedBox(width: 16),
-                  Expanded(child: buildTextField('City')),
+                  Expanded(child: buildCityDropdown()),
                 ],
               ),
               const SizedBox(height: 16),
-              buildDropdownField(),
+              buildBoothDropdown(),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  Checkbox(
-                    value: saveConfirmation,
-                    onChanged: (value) {
-                      setState(() {
-                        saveConfirmation = value!;
-                      });
-                    },
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                    activeColor: const Color(0xFF627D2C),
-                  ),
-                  const Text('Save Rent Confirmation'),
-                ],
-              ),
+              buildTextField('Message', maxLines: 6),
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
@@ -98,7 +88,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Checkout2(), // GANTI sesuai halaman tujuanmu
+                          builder: (context) => Checkout2(),
                         ),
                       );
                     }
@@ -120,7 +110,6 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                   ),
                 ),
               ),
-
             ],
           ),
         ),
@@ -206,11 +195,11 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
     );
   }
 
-  Widget buildDropdownField() {
+  Widget buildCityDropdown() {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        hintText: 'Choose your country',
+        hintText: 'Choose your city',
         hintStyle: const TextStyle(color: Colors.grey),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
@@ -221,20 +210,55 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
           borderSide: const BorderSide(color: Color(0xFF627D2C)),
         ),
       ),
-      items: countries.map((country) {
+      items: cities.map((city) {
         return DropdownMenuItem(
-          value: country,
-          child: Text(country),
+          value: city,
+          child: Text(city),
         );
       }).toList(),
       onChanged: (value) {
         setState(() {
-          selectedCountry = value;
+          selectedCity = value;
         });
       },
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Please select your country';
+          return 'Please select your city';
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget buildBoothDropdown() {
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        hintText: 'Choose Branch Booth',
+        hintStyle: const TextStyle(color: Colors.grey),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: const BorderSide(color: Color(0xFFBCCB9F)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: const BorderSide(color: Color(0xFF627D2C)),
+        ),
+      ),
+      items: booths.map((booth) {
+        return DropdownMenuItem(
+          value: booth,
+          child: Text(booth),
+        );
+      }).toList(),
+      onChanged: (value) {
+        setState(() {
+          selectedBooth = value;
+        });
+      },
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please select your booth';
         }
         return null;
       },
