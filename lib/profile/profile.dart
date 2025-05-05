@@ -48,7 +48,7 @@ class ProfilePage extends StatelessWidget {
       ),
       bottomNavigationBar: buildBottomNavBar(
         context,
-        currentIndex: 3, // Bisa disesuaikan jika profil ada di index ke-3
+        currentIndex: 4, // Bisa disesuaikan jika profil ada di index ke-3
       ),
     );
   }
