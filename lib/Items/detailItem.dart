@@ -28,7 +28,7 @@ class DetailItem extends StatefulWidget {
 class _DetailItemState extends State<DetailItem> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late PageController _pageController;
-  int _quantity = 3;
+  int _quantity = 1;
   bool _isFavorite = true;
   int _currentImage = 0;
 
