@@ -106,30 +106,61 @@ class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Navigasi Halaman'),
-          centerTitle: true,
         ),
-        body: Column(
-          children: [
-            // The notification directly beneath the AppBar
-            Container(
-              color: Color(0xFF4E5C38), // Background color for the notification
-              padding: EdgeInsets.all(12),
-              child: Text(
-                'Press "R" to return to the Splash Screen.',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+        body: CustomScrollView(
+          slivers: [
+            // Move the notification information into the main content area below the AppBar
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Card displaying the notification message
+                    Card(
+                      elevation: 8,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      color: Color(0xFF4E5C38),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Tekan "Ctrl + R" atau refresh untuk kembali ke Splash Screen dan memulai ulang aplikasi.',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    const Text(
+                      "Kelompok 4",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const Text(
+                      "Abdurrahman Al Ghifari (2300456)\nAhmad Izzuddin Azzam (2300492)\nMuhammad Alvinza (2304879)\nMuhammad Igin Adigholib (2301125)\nZakiyah Hasanah (2305274)",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                  ],
                 ),
-                textAlign: TextAlign.center,
               ),
             ),
-            Expanded(
-              child: ListView.separated(
-                padding: EdgeInsets.all(16.0),
-                itemCount: pages.length,
-                separatorBuilder: (_, __) => SizedBox(height: 10),
-                itemBuilder: (context, index) {
+            // The rest of the page content
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
                   return Card(
                     elevation: 2,
                     shape: RoundedRectangleBorder(
@@ -152,6 +183,7 @@ class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
                     ),
                   );
                 },
+                childCount: pages.length,
               ),
             ),
           ],
