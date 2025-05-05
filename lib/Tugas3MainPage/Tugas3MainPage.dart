@@ -11,7 +11,7 @@ import '../Login/signin.dart';
 import '../pages/favorite.dart';
 import '../pages/home.dart';
 import '../pages/recommendedGearTrip.dart';
-import '../pages/trendingGear.dart';
+// import '../pages/trendingGear.dart';
 import '../payment/checkout.dart';
 import '../payment/checkout2.dart';
 import '../payment/thankyouPage.dart';
@@ -74,7 +74,7 @@ class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
     {'title': 'Home', 'page': HomePage()},
     {'title': 'Notification', 'page': NotificationPage()},
     {'title': 'Recommended Trip', 'page': RecommendedGearTripPage()},
-    {'title': 'Fresh Trending Gear', 'page': TrendingGearPage()},
+    // {'title': 'Fresh Trending Gear', 'page': TrendingGearPage()},
     {'title': 'Categories', 'page': CategoriesPage()},
     {'title': 'All Item Page', 'page': AllItemList()},
     {'title': 'Favorite', 'page': FavoritePage()},
