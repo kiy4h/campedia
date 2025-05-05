@@ -15,7 +15,7 @@ class AllItemList extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: const Color(0xFFA0B25E),
+        primaryColor: const Color(0xFF445018),
         scaffoldBackgroundColor: const Color(0xFFF8F8F8),
       ),
       home: ItemCategory(),
@@ -92,8 +92,8 @@ class _ItemCategoryState extends State<ItemCategory> {
   List<String> selectedLocations = [];
   List<String> selectedBrands = [];
 
-  TextEditingController minPriceController = TextEditingController();
-  TextEditingController maxPriceController = TextEditingController();
+  TextEditingController minPriceController = TextEditingController(text: "0");
+  TextEditingController maxPriceController = TextEditingController(text: "1000000");
 
   @override
   Widget build(BuildContext context) {
@@ -156,24 +156,35 @@ class _ItemCategoryState extends State<ItemCategory> {
                       itemCount: categories.length,
                       separatorBuilder: (_, __) => const SizedBox(width: 10),
                       itemBuilder: (context, index) {
-                        return Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: selectedCategories.contains(categories[index])
-                                ? const Color(0xFFA0B25E)
-                                : Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            border:
-                                Border.all(color: const Color(0xFFA0B25E)),
-                          ),
-                          child: Text(
-                            categories[index],
-                            style: TextStyle(
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (selectedCategories.contains(categories[index])) {
+                                selectedCategories.remove(categories[index]);
+                              } else {
+                                selectedCategories.add(categories[index]);
+                              }
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
                               color: selectedCategories.contains(categories[index])
-                                  ? Colors.white
-                                  : const Color(0xFFA0B25E),
-                              fontWeight: FontWeight.bold,
+                                  ? const Color(0xFFA0B25E)
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              border:
+                                  Border.all(color: const Color(0xFFA0B25E)),
+                            ),
+                            child: Text(
+                              categories[index],
+                              style: TextStyle(
+                                color: selectedCategories.contains(categories[index])
+                                    ? Colors.white
+                                    : const Color(0xFFA0B25E),
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         );
@@ -183,7 +194,7 @@ class _ItemCategoryState extends State<ItemCategory> {
                   const SizedBox(width: 10),
                   GestureDetector(
                     onTap: () {
-                      _showFilterBottomSheet(context);
+                      _showSortBottomSheet(context);
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -241,30 +252,433 @@ class _ItemCategoryState extends State<ItemCategory> {
     );
   }
 
-  void _showFilterBottomSheet(BuildContext context) {
+  void _showSortBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (BuildContext context) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.85,
-          minChildSize: 0.5,
-          maxChildSize: 0.95,
-          builder: (context, scrollController) {
-            return FilterBottomSheet(
-              scrollController: scrollController,
-              selectedCategories: selectedCategories,
-              selectedRatings: selectedRatings,
-              selectedLocations: selectedLocations,
-              selectedBrands: selectedBrands,
-              priceRange: priceRange,
-              minPriceController: minPriceController,
-              maxPriceController: maxPriceController,
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Container(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Urutkan Berdasarkan',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.close),
+                      ),
+                    ],
+                  ),
+                  const Divider(),
+                  _buildSortOption(context, 'Terbaru', Icons.access_time),
+                  _buildSortOption(context, 'Harga Tertinggi', Icons.arrow_upward),
+                  _buildSortOption(context, 'Harga Terendah', Icons.arrow_downward),
+                  _buildSortOption(context, 'Rating Tertinggi', Icons.star),
+                  _buildSortOption(context, 'Paling Populer', Icons.favorite),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFA0B25E),
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        'Terapkan',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             );
           },
         );
       },
+    );
+  }
+
+  Widget _buildSortOption(BuildContext context, String title, IconData icon) {
+    return InkWell(
+      onTap: () {
+        // Implementasi logika sort
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          children: [
+            Icon(icon, color: const Color(0xFFA0B25E)),
+            const SizedBox(width: 15),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showFilterBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.85,
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Filter',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.close),
+                      ),
+                    ],
+                  ),
+                  const Divider(),
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        // Categories
+                        _buildFilterSection(
+                          context,
+                          "Kategori",
+                          ["Tenda", "Alat Masak", "Sepatu", "Tas", "Aksesoris", "Pakaian"],
+                          selectedCategories,
+                          (category, isSelected) {
+                            setModalState(() {
+                              if (isSelected) {
+                                selectedCategories.remove(category);
+                              } else {
+                                selectedCategories.add(category);
+                              }
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 15),
+                        
+                        // Price Range
+                        const Text(
+                          "Rentang Harga",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: minPriceController,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  labelText: "Min",
+                                  prefixText: "Rp. ",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                onChanged: (value) {
+                                  double minValue = double.tryParse(value) ?? 0;
+                                  setModalState(() {
+                                    priceRange = RangeValues(
+                                      minValue,
+                                      priceRange.end,
+                                    );
+                                  });
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: TextField(
+                                controller: maxPriceController,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  labelText: "Max",
+                                  prefixText: "Rp. ",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                onChanged: (value) {
+                                  double maxValue = double.tryParse(value) ?? 1000000;
+                                  setModalState(() {
+                                    priceRange = RangeValues(
+                                      priceRange.start,
+                                      maxValue,
+                                    );
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        RangeSlider(
+                          values: priceRange,
+                          min: 0,
+                          max: 1000000,
+                          divisions: 10,
+                          activeColor: const Color(0xFFA0B25E),
+                          labels: RangeLabels(
+                            "Rp.${priceRange.start.round()}",
+                            "Rp.${priceRange.end.round()}",
+                          ),
+                          onChanged: (values) {
+                            setModalState(() {
+                              priceRange = values;
+                              minPriceController.text = values.start.round().toString();
+                              maxPriceController.text = values.end.round().toString();
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 15),
+                        
+                        // Rating
+                        const Text(
+                          "Rating",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: List.generate(5, (index) {
+                            final rating = index + 1;
+                            final isSelected = selectedRatings.contains(rating);
+                            return InkWell(
+                              onTap: () {
+                                setModalState(() {
+                                  if (isSelected) {
+                                    selectedRatings.remove(rating);
+                                  } else {
+                                    selectedRatings.add(rating);
+                                  }
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                decoration: BoxDecoration(
+                                  color: isSelected ? const Color(0xFFA0B25E) : Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(color: const Color(0xFFA0B25E)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.star,
+                                      color: isSelected ? Colors.white : Colors.amber,
+                                      size: 16,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      "$rating",
+                                      style: TextStyle(
+                                        color: isSelected ? Colors.white : Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                        const SizedBox(height: 15),
+                        
+                        // Lokasi
+                        _buildFilterSection(
+                          context,
+                          "Lokasi",
+                          ["Jakarta", "Bandung", "Surabaya", "Yogyakarta", "Bali", "Medan"],
+                          selectedLocations,
+                          (location, isSelected) {
+                            setModalState(() {
+                              if (isSelected) {
+                                selectedLocations.remove(location);
+                              } else {
+                                selectedLocations.add(location);
+                              }
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 15),
+                        
+                        // Brand
+                        _buildFilterSection(
+                          context,
+                          "Brand",
+                          ["Eiger", "Consina", "Rei", "Avtech", "Osprey", "Deuter"],
+                          selectedBrands,
+                          (brand, isSelected) {
+                            setModalState(() {
+                              if (isSelected) {
+                                selectedBrands.remove(brand);
+                              } else {
+                                selectedBrands.add(brand);
+                              }
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () {
+                              setModalState(() {
+                                selectedCategories.clear();
+                                selectedRatings.clear();
+                                selectedLocations.clear();
+                                selectedBrands.clear();
+                                priceRange = const RangeValues(0, 1000000);
+                                minPriceController.text = "0";
+                                maxPriceController.text = "1000000";
+                              });
+                            },
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(color: Color(0xFFA0B25E)),
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: const Text(
+                              'Reset',
+                              style: TextStyle(
+                                color: Color(0xFFA0B25E),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Terapkan filter
+                              Navigator.pop(context);
+                              // Refresh state
+                              setState(() {});
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFA0B25E),
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: const Text(
+                              'Terapkan',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildFilterSection(
+    BuildContext context,
+    String title,
+    List<String> items,
+    List<String> selectedItems,
+    Function(String, bool) onToggle,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: items.map((item) {
+            final isSelected = selectedItems.contains(item);
+            return GestureDetector(
+              onTap: () => onToggle(item, isSelected),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: isSelected ? const Color(0xFFA0B25E) : Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: const Color.fromARGB(255, 69, 79, 31)),
+                ),
+                child: Text(
+                  item,
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : const Color.fromARGB(255, 67, 77, 29),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 
@@ -352,111 +766,6 @@ class _ItemCategoryState extends State<ItemCategory> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class FilterBottomSheet extends StatelessWidget {
-  final ScrollController scrollController;
-  final List<String> selectedCategories;
-  final List<int> selectedRatings;
-  final List<String> selectedLocations;
-  final List<String> selectedBrands;
-  final RangeValues priceRange;
-  final TextEditingController minPriceController;
-  final TextEditingController maxPriceController;
-
-  const FilterBottomSheet({
-    Key? key,
-    required this.scrollController,
-    required this.selectedCategories,
-    required this.selectedRatings,
-    required this.selectedLocations,
-    required this.selectedBrands,
-    required this.priceRange,
-    required this.minPriceController,
-    required this.maxPriceController,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      controller: scrollController,
-      children: [
-        // Categories
-        FilterSection(
-          title: "Categories",
-          items: ["Tenda", "Alat Masak", "Sepatu", "Tas", "Aksesoris", "Pakaian"],
-          selectedItems: selectedCategories,
-          onSelected: (item) {
-            selectedCategories.add(item);
-          },
-        ),
-        // Price
-        FilterSection(
-          title: "Price",
-          items: [
-            'Rp. 100.000 - Rp. 500.000',
-            'Rp. 500.000 - Rp. 1.000.000',
-            'Rp. 1.000.000 - Rp. 2.000.000',
-          ],
-          selectedItems: [],
-          onSelected: (item) {
-            // Handle Price Filter
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class FilterSection extends StatelessWidget {
-  final String title;
-  final List<String> items;
-  final List<String> selectedItems;
-  final ValueChanged<String> onSelected;
-
-  const FilterSection({
-    Key? key,
-    required this.title,
-    required this.items,
-    required this.selectedItems,
-    required this.onSelected,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 10,
-            children: items.map((item) {
-              final isSelected = selectedItems.contains(item);
-              return GestureDetector(
-                onTap: () {
-                  if (isSelected) {
-                    selectedItems.remove(item);
-                  } else {
-                    onSelected(item);
-                  }
-                },
-                child: Chip(
-                  label: Text(item),
-                  backgroundColor: isSelected ? const Color(0xFFA0B25E) : Colors.grey[300],
-                  labelStyle: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black,
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        ],
       ),
     );
   }
