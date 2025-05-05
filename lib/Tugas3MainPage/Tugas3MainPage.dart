@@ -240,7 +240,7 @@ class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
                         child: Text(
                           'Tekan "Ctrl + R" atau refresh untuk kembali ke Splash Screen dan memulai ulang aplikasi.',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
@@ -252,7 +252,7 @@ class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
                     const Text(
                       "Kelompok 4",
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 26,
                         fontWeight: FontWeight.bold,
                         // color is primary color
                         color: Color(0xFF4E5C38),
@@ -261,11 +261,11 @@ class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
                     const Text(
                       "Abdurrahman Al Ghifari (2300456)\nAhmad Izzuddin Azzam (2300492)\nMuhammad Alvinza (2304879)\nMuhammad Igin Adigholib (2301125)\nZakiyah Hasanah (2305274)",
                       style: TextStyle(
-                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
                         color: Colors.black87,
                       ),
                     ),
-                    const SizedBox(height: 12),
                   ],
                 ),
               ),
