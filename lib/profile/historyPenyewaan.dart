@@ -8,6 +8,8 @@ void main() {
 }
 
 class CampingApp extends StatelessWidget {
+  const CampingApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,6 +25,8 @@ class CampingApp extends StatelessWidget {
 }
 
 class PurchaseHistoryPage extends StatelessWidget {
+  const PurchaseHistoryPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

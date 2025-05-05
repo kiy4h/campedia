@@ -10,7 +10,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class Item {
 }
 
 class Shoping extends StatefulWidget {
-  const Shoping({Key? key}) : super(key: key);
+  const Shoping({super.key});
 
   @override
   State<Shoping> createState() => _ShopingState();
@@ -219,7 +219,7 @@ class _ShopingState extends State<Shoping> {
                               ),
                             ),
                           ),
-                          content: Container(
+                          content: SizedBox(
                             width: double.maxFinite,
                             child: SingleChildScrollView(
                               child: Column(
@@ -666,13 +666,13 @@ class SlidableDeleteItem extends StatefulWidget {
   final String Function(double) formatToRupiah;
 
   const SlidableDeleteItem({
-    Key? key,
+    super.key,
     required this.item,
     required this.isExpanded,
     required this.onExpand,
     required this.onDelete,
     required this.formatToRupiah,
-  }) : super(key: key);
+  });
 
   @override
   State<SlidableDeleteItem> createState() => _SlidableDeleteItemState();
@@ -681,7 +681,7 @@ class SlidableDeleteItem extends StatefulWidget {
 class _SlidableDeleteItemState extends State<SlidableDeleteItem> {
   // For tracking manual drag
   double _dragDistance = 0;
-  double _dragThreshold = 120; // Distance to consider a successful drag
+  final double _dragThreshold = 120; // Distance to consider a successful drag
   bool _isDraggingLeft = false; // Track drag direction
 
   @override

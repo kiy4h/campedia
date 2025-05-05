@@ -23,45 +23,56 @@ class AllItemList extends StatelessWidget {
   }
 }
 
-class ItemCategory extends StatelessWidget {
+class ItemCategory extends StatefulWidget {
   ItemCategory({Key? key}) : super(key: key);
 
+  @override
+  _ItemCategoryState createState() => _ItemCategoryState();
+}
+
+class _ItemCategoryState extends State<ItemCategory> {
   final List<Map<String, dynamic>> trendingItems = [
     {
       "name": "Tenda Camping",
       "price": 300000,
       "image": "images/assets_ItemDetails/tenda_bg1.png",
-      "rating": 4.5
+      "rating": 4.5,
+      "isFavorite": false
     },
     {
       "name": "Kompor Portable",
       "price": 150000,
       "image": "images/assets_ItemDetails/tenda_bg2.png",
-      "rating": 4.3
+      "rating": 4.3,
+      "isFavorite": false
     },
     {
       "name": "Sepatu Gunung",
       "price": 250000,
       "image": "images/assets_ItemDetails/tenda_bg3.png",
-      "rating": 4.7
+      "rating": 4.7,
+      "isFavorite": false
     },
     {
       "name": "Tas Gunung",
       "price": 350000,
       "image": "images/assets_ItemDetails/tenda_bg4.png",
-      "rating": 4.0
+      "rating": 4.0,
+      "isFavorite": false
     },
     {
       "name": "Senter LED",
       "price": 120000,
       "image": "images/assets_ItemDetails/tenda_bg5.png",
-      "rating": 4.8
+      "rating": 4.8,
+      "isFavorite": false
     },
     {
       "name": "Jaket Gunung",
       "price": 400000,
       "image": "images/assets_ItemDetails/tenda_bg6.png",
-      "rating": 4.2
+      "rating": 4.2,
+      "isFavorite": false
     },
   ];
 
@@ -75,13 +86,20 @@ class ItemCategory extends StatelessWidget {
     "Pakaian"
   ];
 
+  List<String> selectedCategories = [];
+  RangeValues priceRange = const RangeValues(0, 1000000);
+  List<int> selectedRatings = [];
+  List<String> selectedLocations = [];
+  List<String> selectedBrands = [];
+
+  TextEditingController minPriceController = TextEditingController();
+  TextEditingController maxPriceController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          
-          // Judul halaman + Search bar
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
@@ -122,14 +140,9 @@ class ItemCategory extends StatelessWidget {
               ),
             ),
           ),
-
-
-
           SliverToBoxAdapter(
             child: SizedBox(height: 8),
           ),
-
-          // Kategori dan tombol
           SliverToBoxAdapter(
             child: Container(
               margin: const EdgeInsets.only(bottom: 10),
@@ -137,7 +150,6 @@ class ItemCategory extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  // Bubble kategori scrollable
                   Expanded(
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
@@ -148,7 +160,7 @@ class ItemCategory extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 8),
                           decoration: BoxDecoration(
-                            color: index == 0
+                            color: selectedCategories.contains(categories[index])
                                 ? const Color(0xFFA0B25E)
                                 : Colors.white,
                             borderRadius: BorderRadius.circular(20),
@@ -158,7 +170,7 @@ class ItemCategory extends StatelessWidget {
                           child: Text(
                             categories[index],
                             style: TextStyle(
-                              color: index == 0
+                              color: selectedCategories.contains(categories[index])
                                   ? Colors.white
                                   : const Color(0xFFA0B25E),
                               fontWeight: FontWeight.bold,
@@ -168,13 +180,9 @@ class ItemCategory extends StatelessWidget {
                       },
                     ),
                   ),
-
                   const SizedBox(width: 10),
-
-                  // Tombol Sort
                   GestureDetector(
                     onTap: () {
-                      // TODO: Implementasi aksi sort
                       _showFilterBottomSheet(context);
                     },
                     child: Container(
@@ -189,10 +197,7 @@ class ItemCategory extends StatelessWidget {
                           size: 18, color: Color(0xFFA0B25E)),
                     ),
                   ),
-
                   const SizedBox(width: 10),
-
-                  // Tombol Filter
                   GestureDetector(
                     onTap: () {
                       _showFilterBottomSheet(context);
@@ -213,14 +218,12 @@ class ItemCategory extends StatelessWidget {
               ),
             ),
           ),
-
-          // Grid produk
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             sliver: SliverGrid(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  return _buildTrendingItem(trendingItems[index], context);
+                  return _buildTrendingItem(trendingItems[index], context, index);
                 },
                 childCount: trendingItems.length,
               ),
@@ -251,6 +254,13 @@ class ItemCategory extends StatelessWidget {
           builder: (context, scrollController) {
             return FilterBottomSheet(
               scrollController: scrollController,
+              selectedCategories: selectedCategories,
+              selectedRatings: selectedRatings,
+              selectedLocations: selectedLocations,
+              selectedBrands: selectedBrands,
+              priceRange: priceRange,
+              minPriceController: minPriceController,
+              maxPriceController: maxPriceController,
             );
           },
         );
@@ -258,7 +268,7 @@ class ItemCategory extends StatelessWidget {
     );
   }
 
-  Widget _buildTrendingItem(Map<String, dynamic> item, BuildContext context) {
+  Widget _buildTrendingItem(Map<String, dynamic> item, BuildContext context, int index) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -276,13 +286,20 @@ class ItemCategory extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            const Positioned(
+            Positioned(
               top: 10,
               right: 10,
-              child: Icon(
-                Icons.favorite,
-                color: Colors.white,
-                size: 28,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    trendingItems[index]['isFavorite'] = !trendingItems[index]['isFavorite'];
+                  });
+                },
+                child: Icon(
+                  trendingItems[index]['isFavorite'] ? Icons.favorite : Icons.favorite_border,
+                  color: Colors.red,
+                  size: 28,
+                ),
               ),
             ),
             Positioned(
@@ -310,29 +327,22 @@ class ItemCategory extends StatelessWidget {
                         fontSize: 16,
                       ),
                     ),
+                    const SizedBox(height: 5),
+                    Text(
+                      'Rp. ${item['price']}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        const Icon(Icons.star, size: 16, color: Colors.amber),
+                        const SizedBox(width: 5),
                         Text(
-                          'Rp${item['price']}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                              size: 16,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${item['rating']}',
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ],
+                          item['rating'].toString(),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ],
                     ),
@@ -347,295 +357,107 @@ class ItemCategory extends StatelessWidget {
   }
 }
 
-// Filter Bottom Sheet class to be added to your file
-class FilterBottomSheet extends StatefulWidget {
+class FilterBottomSheet extends StatelessWidget {
   final ScrollController scrollController;
+  final List<String> selectedCategories;
+  final List<int> selectedRatings;
+  final List<String> selectedLocations;
+  final List<String> selectedBrands;
+  final RangeValues priceRange;
+  final TextEditingController minPriceController;
+  final TextEditingController maxPriceController;
 
   const FilterBottomSheet({
     Key? key,
     required this.scrollController,
+    required this.selectedCategories,
+    required this.selectedRatings,
+    required this.selectedLocations,
+    required this.selectedBrands,
+    required this.priceRange,
+    required this.minPriceController,
+    required this.maxPriceController,
   }) : super(key: key);
 
   @override
-  State<FilterBottomSheet> createState() => _FilterBottomSheetState();
+  Widget build(BuildContext context) {
+    return ListView(
+      controller: scrollController,
+      children: [
+        // Categories
+        FilterSection(
+          title: "Categories",
+          items: ["Tenda", "Alat Masak", "Sepatu", "Tas", "Aksesoris", "Pakaian"],
+          selectedItems: selectedCategories,
+          onSelected: (item) {
+            selectedCategories.add(item);
+          },
+        ),
+        // Price
+        FilterSection(
+          title: "Price",
+          items: [
+            'Rp. 100.000 - Rp. 500.000',
+            'Rp. 500.000 - Rp. 1.000.000',
+            'Rp. 1.000.000 - Rp. 2.000.000',
+          ],
+          selectedItems: [],
+          onSelected: (item) {
+            // Handle Price Filter
+          },
+        ),
+      ],
+    );
+  }
 }
 
-class _FilterBottomSheetState extends State<FilterBottomSheet> {
-  // Selected filter states
-  String? selectedCategory;
-  RangeValues priceRange = const RangeValues(0, 1000000);
-  int? selectedRating;
-  String? selectedLocation;
-  String? selectedBrand;
+class FilterSection extends StatelessWidget {
+  final String title;
+  final List<String> items;
+  final List<String> selectedItems;
+  final ValueChanged<String> onSelected;
 
-  // Filter options based on the image
-  final List<String> categories = ['Tenda', 'Sleeping Bag', 'Alat Masak', 'Kompor Portable'];
-  final List<int> ratings = [5, 4, 3];
-  final List<String> locations = ['Terdekat dari saya', '5km', '10km', '20km'];
-  final List<String> brands = ['Consina', 'Eiger', 'Rei Adventure', 'Avtech'];
+  const FilterSection({
+    Key? key,
+    required this.title,
+    required this.items,
+    required this.selectedItems,
+    required this.onSelected,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-      ),
-      child: ListView(
-        controller: widget.scrollController,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Filter title
-          const Padding(
-            padding: EdgeInsets.only(bottom: 20.0),
-            child: Text(
-              'Filter',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-
-          // Category section
-          _buildSectionTitle('Kategori Barang', showViewAll: true),
-          const SizedBox(height: 12),
-          _buildCategoryFilter(),
-          const SizedBox(height: 24),
-
-          // Price section
-          _buildSectionTitle('Harga'),
-          const SizedBox(height: 12),
-          _buildPriceFilter(),
-          const SizedBox(height: 24),
-
-          // Rating section
-          _buildSectionTitle('Rating'),
-          const SizedBox(height: 12),
-          _buildRatingFilter(),
-          const SizedBox(height: 24),
-
-          // Location section
-          _buildSectionTitle('Lokasi'),
-          const SizedBox(height: 12),
-          _buildLocationFilter(),
-          const SizedBox(height: 24),
-
-          // Brand section
-          _buildSectionTitle('Brand', showViewAll: true),
-          const SizedBox(height: 12),
-          _buildBrandFilter(),
-          const SizedBox(height: 32),
-
-          // Apply button
-          ElevatedButton(
-            onPressed: () {
-              // Apply the filters and close the bottom sheet
-              Navigator.pop(context);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFA0B25E),
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: const Text(
-              'Terapkan Filter',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 10,
+            children: items.map((item) {
+              final isSelected = selectedItems.contains(item);
+              return GestureDetector(
+                onTap: () {
+                  if (isSelected) {
+                    selectedItems.remove(item);
+                  } else {
+                    onSelected(item);
+                  }
+                },
+                child: Chip(
+                  label: Text(item),
+                  backgroundColor: isSelected ? const Color(0xFFA0B25E) : Colors.grey[300],
+                  labelStyle: TextStyle(
+                    color: isSelected ? Colors.white : Colors.black,
+                  ),
+                ),
+              );
+            }).toList(),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildSectionTitle(String title, {bool showViewAll = false}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        if (showViewAll)
-          TextButton(
-            onPressed: () {},
-            child: const Text(
-              'Lihat Semua',
-              style: TextStyle(
-                color: Color(0xFFA0B25E),
-                fontSize: 14,
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildCategoryFilter() {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: categories.map((category) {
-        final isSelected = selectedCategory == category;
-        return FilterChip(
-          label: Text(category),
-          labelStyle: TextStyle(
-            color: isSelected ? Colors.white : Colors.black,
-            fontSize: 14,
-          ),
-          backgroundColor: isSelected ? const Color(0xFFA0B25E) : const Color(0xFFE0E0E0),
-          selectedColor: const Color(0xFFA0B25E),
-          selected: isSelected,
-          onSelected: (selected) {
-            setState(() {
-              selectedCategory = selected ? category : null;
-            });
-          },
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildPriceFilter() {
-    return Row(
-      children: [
-        Expanded(
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Colors.grey),
-              ),
-              hintText: 'Rp. Terendah',
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            ),
-            keyboardType: TextInputType.number,
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Colors.grey),
-              ),
-              hintText: 'Rp. Tertinggi',
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            ),
-            keyboardType: TextInputType.number,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildRatingFilter() {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: [
-        _buildRatingChip('Bintang 5', 5),
-        _buildRatingChip('Bintang 4 ke atas', 4),
-        _buildRatingChip('Bintang 3 ke atas', 3),
-      ],
-    );
-  }
-
-  Widget _buildRatingChip(String label, int value) {
-    final isSelected = selectedRating == value;
-    return FilterChip(
-      label: Text(label),
-      labelStyle: TextStyle(
-        color: isSelected ? Colors.white : Colors.black,
-        fontSize: 14,
-      ),
-      backgroundColor: isSelected ? const Color(0xFFA0B25E) : const Color(0xFFE0E0E0),
-      selectedColor: const Color(0xFFA0B25E),
-      selected: isSelected,
-      onSelected: (selected) {
-        setState(() {
-          selectedRating = selected ? value : null;
-        });
-      },
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-    );
-  }
-
-  Widget _buildLocationFilter() {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: locations.map((location) {
-        final isSelected = selectedLocation == location;
-        return FilterChip(
-          label: Text(location),
-          labelStyle: TextStyle(
-            color: isSelected ? Colors.white : Colors.black,
-            fontSize: 14,
-          ),
-          backgroundColor: isSelected ? const Color(0xFFA0B25E) : const Color(0xFFE0E0E0),
-          selectedColor: const Color(0xFFA0B25E),
-          selected: isSelected,
-          onSelected: (selected) {
-            setState(() {
-              selectedLocation = selected ? location : null;
-            });
-          },
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildBrandFilter() {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: brands.map((brand) {
-        final isSelected = selectedBrand == brand;
-        return FilterChip(
-          label: Text(brand),
-          labelStyle: TextStyle(
-            color: isSelected ? Colors.white : Colors.black,
-            fontSize: 14,
-          ),
-          backgroundColor: isSelected ? const Color(0xFFA0B25E) : const Color(0xFFE0E0E0),
-          selectedColor: const Color(0xFFA0B25E),
-          selected: isSelected,
-          onSelected: (selected) {
-            setState(() {
-              selectedBrand = selected ? brand : null;
-            });
-          },
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-        );
-      }).toList(),
     );
   }
 }

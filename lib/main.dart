@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'Intro/splashscreen.dart';
-import 'shopPage/shoping.dart';
-import 'payment/thankyouPage.dart';
-import 'Items/detailItem.dart';
-import 'progress/step1.dart';
+import 'package:tugas3provis/Tugas3MainPage/Tugas3MainPage.dart';
+// import 'Intro/splashscreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +21,8 @@ class MyApp extends StatelessWidget {
       // home: const SplashScreen(),
       // home: DetailDendaPage(),
       // home: const DetailItem(),
-      home: const Step1Page(),
+      home: Tugas3ProvisPage(),
+      // home: const Step1Page(),
       debugShowCheckedModeBanner: false,
     );
   }

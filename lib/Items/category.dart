@@ -9,6 +9,8 @@ void main() {
 }
 
 class CategoryPage extends StatelessWidget {
+  const CategoryPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -35,6 +37,8 @@ class CategoriesPage extends StatelessWidget {
     {"name": "Alat Pendukung", "icon": "images/assets_Categories/cat_KeamananNavigasi.png", "items": 87},
     {"name": "Fasilitas Tambahan", "icon": "images/assets_Categories/cat_FasilitasTambahan.png", "items": 120},
   ];
+
+  CategoriesPage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,7 @@ import 'step1.dart';
 import 'review.dart';  // Tambahkan import ReviewPage
 
 class Step3Page extends StatelessWidget {
-  const Step3Page({Key? key}) : super(key: key);
+  const Step3Page({super.key});
 
   @override
   Widget build(BuildContext context) {

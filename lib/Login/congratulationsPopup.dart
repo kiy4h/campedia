@@ -7,10 +7,10 @@ class CongratulationsPopup extends StatefulWidget {
   final VoidCallback onSignIn;
 
   const CongratulationsPopup({
-    Key? key,
+    super.key,
     required this.name,
     required this.onSignIn,
-  }) : super(key: key);
+  });
 
   @override
   State<CongratulationsPopup> createState() => _CongratulationsPopupState();
@@ -159,7 +159,7 @@ class _CongratulationsPopupState extends State<CongratulationsPopup> with Single
 class ConfettiOverlay extends StatelessWidget {
   final AnimationController controller;
 
-  const ConfettiOverlay({Key? key, required this.controller}) : super(key: key);
+  const ConfettiOverlay({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -271,7 +271,7 @@ void showCongratulationsPopup(BuildContext context, String name) {
 
 // Example usage (for reference)
 class DemoPage extends StatelessWidget {
-  const DemoPage({Key? key}) : super(key: key);
+  const DemoPage({super.key});
 
   @override
   Widget build(BuildContext context) {

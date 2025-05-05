@@ -24,6 +24,8 @@ class NotificationPage extends StatelessWidget {
     },
   ];
 
+  NotificationPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,7 +130,6 @@ class NotificationPage extends StatelessWidget {
                               SnackBar(content: Text("Bayar denda Rp10.000")),
                             );
                           },
-                          child: const Text("Bayar Denda Sekarang"),
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Colors.white, backgroundColor: Colors.red, // Text color
                             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
@@ -136,6 +137,7 @@ class NotificationPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
+                          child: const Text("Bayar Denda Sekarang"),
                         ),
                       ),
                     ),

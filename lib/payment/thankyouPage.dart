@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../progress/step1.dart';
 
 class ThankYouPage extends StatelessWidget {
-  const ThankYouPage({Key? key}) : super(key: key);
+  const ThankYouPage({super.key});
 
   @override
   Widget build(BuildContext context) {

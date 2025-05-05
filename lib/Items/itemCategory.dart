@@ -7,7 +7,7 @@ void main() {
 }
 
 class ItemCategoryApp extends StatelessWidget {
-  const ItemCategoryApp({Key? key}) : super(key: key);
+  const ItemCategoryApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class ItemCategoryApp extends StatelessWidget {
 }
 
 class ItemCategory extends StatefulWidget {
-  const ItemCategory({Key? key}) : super(key: key);
+  const ItemCategory({super.key});
 
   @override
   _ItemCategoryState createState() => _ItemCategoryState();

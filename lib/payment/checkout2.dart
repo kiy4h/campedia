@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'thankyouPage.dart'; // pastikan nama file kamu kecil semua
 
 class Checkout2 extends StatefulWidget {
+  const Checkout2({super.key});
+
   @override
   _Checkout2State createState() => _Checkout2State();
 }

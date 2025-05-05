@@ -4,7 +4,7 @@ import '../components/navbar.dart';
 
 
 class FavoritePage extends StatefulWidget {
-  const FavoritePage({Key? key}) : super(key: key);
+  const FavoritePage({super.key});
 
   @override
   State<FavoritePage> createState() => _FavoritePageState();

@@ -18,6 +18,8 @@ class Checkout extends StatelessWidget {
 }
 
 class ShippingAddressPage extends StatefulWidget {
+  const ShippingAddressPage({super.key});
+
   @override
   _ShippingAddressPageState createState() => _ShippingAddressPageState();
 }

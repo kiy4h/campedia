@@ -3,7 +3,7 @@ import 'dart:async';
 import 'step3.dart';
 
 class Step2Page extends StatefulWidget {
-  const Step2Page({Key? key}) : super(key: key);
+  const Step2Page({super.key});
 
   @override
   State<Step2Page> createState() => _Step2PageState();

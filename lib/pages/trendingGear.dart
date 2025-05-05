@@ -309,7 +309,7 @@ class _TrendingGearPageState extends State<TrendingGearPage> {
                       const SizedBox(height: 16),
                       
                       // Testimoni items
-                      ...gear.testimonials.map((testimonial) => _buildTestimonialItem(testimonial)).toList(),
+                      ...gear.testimonials.map((testimonial) => _buildTestimonialItem(testimonial)),
                       
                       // Tombol tutup di bagian bawah
                       const SizedBox(height: 24),

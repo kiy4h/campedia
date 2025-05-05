@@ -87,11 +87,12 @@ class _RecommendedGearTripPageState extends State<RecommendedGearTripPage> {
       if (!mounted) return;
       
       setState(() {
-        filteredDestinations = hardcodedDestinations
-            .where((destination) =>
-                destination.name.toLowerCase().indexOf(query.toLowerCase()) >= 0 ||
-                destination.location.toLowerCase().indexOf(query.toLowerCase()) >= 0)
-            .toList();
+      filteredDestinations = hardcodedDestinations
+        .where((destination) =>
+            destination.name.toLowerCase().indexOf(query.toLowerCase()) != -1 ||
+            destination.location.toLowerCase().indexOf(query.toLowerCase()) != -1)
+        .toList();
+
         isLoading = false;
       });
     } catch (e) {
@@ -440,7 +441,7 @@ class _RecommendedGearTripPageState extends State<RecommendedGearTripPage> {
                                                   ],
                                                 ),
                                               );
-                                            }).toList(),
+                                            }),
                                           ],
                                         ),
                                       ),

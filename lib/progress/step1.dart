@@ -4,7 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'step2.dart';
 
 class Step1Page extends StatelessWidget {
-  const Step1Page({Key? key}) : super(key: key);
+  const Step1Page({super.key});
 
   @override
   Widget build(BuildContext context) {

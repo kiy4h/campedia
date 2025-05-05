@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 
 class PickupTrackingPage extends StatefulWidget {
-  const PickupTrackingPage({Key? key}) : super(key: key);
+  const PickupTrackingPage({super.key});
 
   @override
   _PickupTrackingPageState createState() => _PickupTrackingPageState();
