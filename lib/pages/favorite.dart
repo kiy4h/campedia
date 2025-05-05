@@ -97,7 +97,7 @@ class _ItemCategoryState extends State<ItemCategory> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Barang-Barang Favorit',
+                    'Barang-Barang Favorit Kamu',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
