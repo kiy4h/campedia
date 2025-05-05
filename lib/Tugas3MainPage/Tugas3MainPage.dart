@@ -110,6 +110,20 @@ class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
         ),
         body: Column(
           children: [
+            // The notification directly beneath the AppBar
+            Container(
+              color: Color(0xFF4E5C38), // Background color for the notification
+              padding: EdgeInsets.all(12),
+              child: Text(
+                'Press "R" to return to the Splash Screen.',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
             Expanded(
               child: ListView.separated(
                 padding: EdgeInsets.all(16.0),
@@ -138,14 +152,6 @@ class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
                     ),
                   );
                 },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Press "R" to return to the Splash Screen.',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                textAlign: TextAlign.center,
               ),
             ),
           ],
