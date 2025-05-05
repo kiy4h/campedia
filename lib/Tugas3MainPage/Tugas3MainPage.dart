@@ -23,6 +23,9 @@ import '../progress/step1.dart';
 import '../progress/step2.dart';
 import '../progress/step3.dart';
 import '../shopPage/shoping.dart';
+import '../profile/historyPenyewaan.dart';
+import '../profile/historyPenyewaanDetailBarang.dart'; // Halaman detail transaksi
+import '../progress/reviewItem.dart';
 
 void main() {
   runApp(MyApp());
@@ -198,6 +201,26 @@ class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
           'title': 'Review dari User',
           'description': 'User feedback and rating page',
           'page': ReviewPage()
+        },
+      ]
+    },
+    {
+      'title': 'Transaction History',
+      'pages': [
+        {
+          'title': 'History Penyewaan',
+          'description': 'List of all rental transactions',
+          'page': ModernTransactionPage()
+        },
+        {
+          'title': 'Detail Barang Penyewaan',
+          'description': 'Detailed view of rented items',
+          'page': TransactionDetailPage()
+        },
+        {
+          'title': 'Review Barang',
+          'description': 'User review page for rented items',
+          'page': ProductReviewPage()
         },
       ]
     },
