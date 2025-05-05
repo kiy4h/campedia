@@ -1,48 +1,28 @@
 import 'package:flutter/material.dart';
-import 'historyPenyewaanDetailBarang.dart'; // Halaman detail transaksi
-import '../progress/step1.dart';
-import 'historyPenyewaanDetailBarang.dart'; // Halaman review
+import '../progress/reviewItem.dart';
 
-class ModernTransactionPage extends StatelessWidget {
-  final List<Map<String, dynamic>> transactions = [
+class TransactionDetailPage extends StatelessWidget {
+    final List<Map<String, dynamic>> transactions = [
     {
-      'id': 'TX001',
+      'title': 'Tenda Camping Eiger',
       'date': '4 Mei 2025',
-      'status': 'Belum Bayar',
-      'items': [
-        {
-          'title': 'Tenda Camping Eiger',
-          'image': 'assets/images/assets_ItemDetails/tenda_bg6.png',
-        },
-        {
-          'title': 'Sleeping Bag',
-          'image': 'assets/images/assets_ItemDetails/jaket1.png',
-        }
-      ]
+      'image': '../../images/assets_ItemDetails/tenda_bg6.png',
+      'status': 'Belum direview'
     },
     {
-      'id': 'TX002',
+      'title': 'Carrier 40L Eiger',
       'date': '28 Apr 2025',
-      'status': 'Sudah Dikembalikan',
-      'items': [
-        {
-          'title': 'Carrier 40L Eiger',
-          'image': 'assets/images/assets_ItemDetails/jaket1.png',
-        },
-      ]
+      'image': '../../images/assets_ItemDetails/jaket1.png',
+      'status': 'Belum direview'
     },
     {
-      'id': 'TX003',
+      'title': 'Sepatu Hiking Merrell',
       'date': '13 Apr 2025',
-      'status': 'Selesai',
-      'items': [
-        {
-          'title': 'Sepatu Hiking Merrell',
-          'image': 'assets/images/assets_ItemDetails/tas2.png',
-        },
-      ]
+      'image': '../../images/assets_ItemDetails/tas2.png',
+      'status': 'Selesai'
     },
   ];
+
 
   Color getStatusColor(String status) {
     switch (status) {
@@ -52,12 +32,21 @@ class ModernTransactionPage extends StatelessWidget {
         return Colors.blue;
       case 'Diproses':
         return Colors.orange;
-      case 'Belum Bayar':
-        return Colors.red;
-      case 'Sudah Dikembalikan':
-        return Colors.green;
       default:
         return Colors.grey;
+    }
+  }
+
+  Icon getTransactionIcon(String type) {
+    switch (type) {
+      case 'BPJS':
+        return const Icon(Icons.local_hospital, size: 20);
+      case 'Pulsa':
+        return const Icon(Icons.phone_android, size: 20);
+      case 'Belanja':
+        return const Icon(Icons.shopping_bag, size: 20);
+      default:
+        return const Icon(Icons.receipt_long, size: 20);
     }
   }
 
@@ -147,64 +136,59 @@ class ModernTransactionPage extends StatelessWidget {
     );
   }
 
-  Widget buildTransactionCard(Map<String, dynamic> item, BuildContext context) {
-    return InkWell(
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('ID: ${item['id']}', style: const TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 4),
-            Text('Tanggal: ${item['date']}'),
-            const SizedBox(height: 4),
-            Text('Status: ${item['status']}', style: TextStyle(color: getStatusColor(item['status']))),
-            const SizedBox(height: 4),
-            Text('Jumlah Barang: ${item['items'].length}'),
-            const SizedBox(height: 8),
-            // Tombol berdasarkan status
-            if (item['status'] == 'Sudah Dikembalikan')
-              ElevatedButton(
+  Widget buildTransactionCard(Map<String, dynamic> item,context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Gambar barang (gunakan placeholder jika tidak ada)
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.network(
+              item['image'] ?? 'https://via.placeholder.com/300x150.png?text=Gambar+Barang',
+              height: 150,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(height: 12),
+          // Nama Barang
+          Text(item['title'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          const SizedBox(height: 4),
+          // Tanggal Pemesanan
+          Text('Dipesan pada ${item['date']}', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+          const SizedBox(height: 12),
+
+          // Tombol sesuai status
+          if (item['status'] == 'Belum direview')
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton(
                 onPressed: () {
                   // Navigasi ke halaman review
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => TransactionDetailPage(), // Ganti dengan halaman review
-                    ),
+                    MaterialPageRoute(builder: (context) => ProductReviewPage()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  backgroundColor: Colors.blueAccent,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
-                child: const Text('Review Sekarang'),
-              )
-            else if (item['status'] == 'Belum Bayar')
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const Step1Page(),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                ),
-                child: const Text('Ambil Sekarang'),
+                child: const Text("Review Barang"),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
+
 }
