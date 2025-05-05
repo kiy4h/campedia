@@ -62,7 +62,10 @@ class ProfilePage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: buildBottomNavBar(context, currentIndex: 3),
+      bottomNavigationBar: buildBottomNavBar(
+        context,
+        currentIndex: 4, // Bisa disesuaikan jika profil ada di index ke-3
+      ),
     );
   }
 
