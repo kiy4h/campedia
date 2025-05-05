@@ -65,31 +65,143 @@ class Tugas3ProvisPage extends StatefulWidget {
 }
 
 class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
-  final List<Map<String, dynamic>> pages = [
-    {'title': 'Splash Screen | Opening App', 'page': SplashScreen()},
-    {'title': 'Onboarding', 'page': OnboardingScreen()},
-    {'title': 'Login', 'page': SignIn()},
-    {'title': 'Register', 'page': Register()},
-    {'title': 'Forgot Password', 'page': ForgotPassword()},
-    {'title': 'Home', 'page': HomePage()},
-    {'title': 'Notification', 'page': NotificationPage()},
-    {'title': 'Recommended Trip', 'page': RecommendedGearTripPage()},
-    // {'title': 'Fresh Trending Gear', 'page': TrendingGearPage()},
-    {'title': 'Categories', 'page': CategoriesPage()},
-    {'title': 'All Item Page', 'page': AllItemList()},
-    {'title': 'Favorite', 'page': FavoritePage()},
-    {'title': 'Profile', 'page': ProfilePage()},
-    {'title': 'Edit Profile', 'page': SettingsPage()},
-    {'title': 'Shopping', 'page': Shoping()},
-    {'title': 'Checkout', 'page': Checkout()},
-    {'title': 'Checkout 2', 'page': Checkout2()},
-    {'title': 'Thank You', 'page': ThankYouPage()},
-    {'title': 'Pengambilan Barang 1', 'page': Step1Page()},
-    {'title': 'Pengambilan Barang 2', 'page': Step2Page()},
-    {'title': 'Pengambilan Barang 3', 'page': Step3Page()},
-    {'title': 'Review dari User', 'page': ReviewPage()},
+  final List<Map<String, dynamic>> pageSections = [
+    {
+      'title': 'App Introduction',
+      'pages': [
+        {
+          'title': 'Splash Screen',
+          'description': 'Opening screen when app launches',
+          'page': SplashScreen()
+        },
+        {
+          'title': 'Onboarding',
+          'description': 'Introduction screens for first-time users',
+          'page': OnboardingScreen()
+        },
+      ]
+    },
+    {
+      'title': 'Authentication',
+      'pages': [
+        {
+          'title': 'Login',
+          'description': 'User sign in page',
+          'page': SignIn()
+        },
+        {
+          'title': 'Register',
+          'description': 'Create a new account',
+          'page': Register()
+        },
+        {
+          'title': 'Forgot Password',
+          'description': 'Password recovery page',
+          'page': ForgotPassword()
+        },
+      ]
+    },
+    {
+      'title': 'Main App Pages',
+      'pages': [
+        {
+          'title': 'Home',
+          'description': 'Main dashboard with featured content',
+          'page': HomePage()
+        },
+        {
+          'title': 'Notification',
+          'description': 'User notifications center',
+          'page': NotificationPage()
+        },
+        {
+          'title': 'Recommended Trip',
+          'description': 'Gear recommendations for trips',
+          'page': RecommendedGearTripPage()
+        },
+        {
+          'title': 'Categories',
+          'description': 'Browse gear by category',
+          'page': CategoriesPage()
+        },
+        {
+          'title': 'All Item Page',
+          'description': 'Complete list of available items',
+          'page': AllItemList()
+        },
+        {
+          'title': 'Favorite',
+          'description': 'User saved favorites',
+          'page': FavoritePage()
+        },
+      ]
+    },
+    {
+      'title': 'User Profile',
+      'pages': [
+        {
+          'title': 'Profile',
+          'description': 'User profile page',
+          'page': ProfilePage()
+        },
+        {
+          'title': 'Edit Profile',
+          'description': 'Profile settings and editing',
+          'page': SettingsPage()
+        },
+      ]
+    },
+    {
+      'title': 'Shopping & Checkout',
+      'pages': [
+        {
+          'title': 'Shopping',
+          'description': 'Product browsing and selection',
+          'page': Shoping()
+        },
+        {
+          'title': 'Checkout',
+          'description': 'First step of payment process',
+          'page': Checkout()
+        },
+        {
+          'title': 'Checkout 2',
+          'description': 'Second step of payment process',
+          'page': Checkout2()
+        },
+        {
+          'title': 'Thank You',
+          'description': 'Order confirmation page',
+          'page': ThankYouPage()
+        },
+      ]
+    },
+    {
+      'title': 'Order Progress',
+      'pages': [
+        {
+          'title': 'Pengambilan Barang 1',
+          'description': 'Step 1 of item pickup process',
+          'page': Step1Page()
+        },
+        {
+          'title': 'Pengambilan Barang 2',
+          'description': 'Step 2 of item pickup process',
+          'page': Step2Page()
+        },
+        {
+          'title': 'Pengambilan Barang 3',
+          'description': 'Step 3 of item pickup process',
+          'page': Step3Page()
+        },
+        {
+          'title': 'Review dari User',
+          'description': 'User feedback and rating page',
+          'page': ReviewPage()
+        },
+      ]
+    },
   ];
-
   @override
   Widget build(BuildContext context) {
     return RawKeyboardListener(
@@ -109,7 +221,7 @@ class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
         ),
         body: CustomScrollView(
           slivers: [
-            // Move the notification information into the main content area below the AppBar
+            // Notification and group information
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -140,9 +252,10 @@ class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
                     const Text(
                       "Kelompok 4",
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        // color is primary color
+                        color: Color(0xFF4E5C38),
                       ),
                     ),
                     const Text(
@@ -157,33 +270,67 @@ class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
                 ),
               ),
             ),
-            // The rest of the page content
+
+            // Page sections with grouped navigation
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  return Card(
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ListTile(
-                      title: Text(
-                        pages[index]['title'],
-                        style: TextStyle(fontWeight: FontWeight.w500),
+                  final section = pageSections[index];
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 16.0,
+                          top: 16.0,
+                          bottom: 8.0,
+                        ),
+                        child: Text(
+                          section['title'],
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
                       ),
-                      trailing: Icon(Icons.arrow_forward_ios),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => pages[index]['page'],
+                      ...section['pages'].map((page) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12.0,
+                            vertical: 4.0,
+                          ),
+                          child: Card(
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: ListTile(
+                              title: Text(
+                                page['title'],
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                              ),
+                              subtitle: Text(
+                                page['description'],
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => page['page'],
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         );
-                      },
-                    ),
+                      }).toList(),
+                    ],
                   );
                 },
-                childCount: pages.length,
+                childCount: pageSections.length,
               ),
             ),
           ],
