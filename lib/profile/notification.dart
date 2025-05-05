@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tugas3provis/payment/checkout2.dart';
+import '../payment/checkout.dart';
 
 class NotificationPage extends StatelessWidget {
   final List<Map<String, String>> notifications = [
@@ -126,8 +128,11 @@ class NotificationPage extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             // Add the logic for paying the fine here
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Bayar denda Rp10.000")),
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Checkout2(), // Replace with your payment page
+                              ),
                             );
                           },
                           style: ElevatedButton.styleFrom(
