@@ -247,7 +247,7 @@ class _DetailItemState extends State<DetailItem> with SingleTickerProviderStateM
           ),
         ],
       ),
-      bottomNavigationBar: buildBottomNavBar(context, currentIndex: 1),
+      bottomNavigationBar: buildBottomNavBar(context, currentIndex: 5),
 
     );
   }
