@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // for RawKeyboardListener
+
 import '../Intro/onboarding.dart';
 import '../Intro/splashscreen.dart';
 import '../Items/allListItem.dart';
@@ -55,68 +57,105 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Tugas3ProvisPage extends StatelessWidget {
+class Tugas3ProvisPage extends StatefulWidget {
   Tugas3ProvisPage({super.key});
-  
+
+  @override
+  _Tugas3ProvisPageState createState() => _Tugas3ProvisPageState();
+}
+
+class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
+  final List<Map<String, dynamic>> pages = [
+    {'title': 'Splash Screen | Opening App', 'page': SplashScreen()},
+    {'title': 'Onboarding', 'page': OnboardingScreen()},
+    {'title': 'Login', 'page': SignIn()},
+    {'title': 'Register', 'page': Register()},
+    {'title': 'Forgot Password', 'page': ForgotPassword()},
+    {'title': 'Home', 'page': HomePage()},
+    {'title': 'Notification', 'page': NotificationPage()},
+    {'title': 'Recommended Trip', 'page': RecommendedGearTripPage()},
+    {'title': 'Fresh Trending Gear', 'page': TrendingGearPage()},
+    {'title': 'Categories', 'page': CategoriesPage()},
+    {'title': 'All Item Page', 'page': AllItemList()},
+    {'title': 'Favorite', 'page': FavoritePage()},
+    {'title': 'Profile', 'page': ProfilePage()},
+    {'title': 'Edit Profile', 'page': SettingsPage()},
+    {'title': 'Shopping', 'page': Shoping()},
+    {'title': 'Checkout', 'page': Checkout()},
+    {'title': 'Checkout 2', 'page': Checkout2()},
+    {'title': 'Thank You', 'page': ThankYouPage()},
+    {'title': 'Pengambilan Barang 1', 'page': Step1Page()},
+    {'title': 'Pengambilan Barang 2', 'page': Step2Page()},
+    {'title': 'Pengambilan Barang 3', 'page': Step3Page()},
+    {'title': 'Review dari User', 'page': ReviewPage()},
+  ];
+
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> pages = [
-      {'title': 'Splash Screen | Opening App', 'page': SplashScreen()},
-      {'title': 'Onboarding', 'page': OnboardingScreen()},
-      {'title': 'Login', 'page': SignIn()},
-      {'title': 'Register', 'page': Register()},
-      {'title': 'Forgot Password', 'page': ForgotPassword()},
-      {'title': 'Home', 'page': HomePage()},
-      {'title': 'Notification', 'page': NotificationPage()},
-      {'title': 'Recommended Trip', 'page': RecommendedGearTripPage()},
-      {'title': 'Fresh Trending Gear', 'page': TrendingGearPage()},
-      {'title': 'Categories', 'page': CategoriesPage()},
-      {'title': 'All Item Page', 'page': AllItemList()},
-      {'title': 'Favorite', 'page': FavoritePage()},
-      {'title': 'Profile', 'page': ProfilePage()},
-      {'title': 'Edit Profile', 'page': SettingsPage()},
-      {'title': 'Shopping', 'page': Shoping()},
-      {'title': 'Checkout', 'page': Checkout()},
-      {'title': 'Checkout 2', 'page': Checkout2()},
-      {'title': 'Thank You', 'page': ThankYouPage()},
-      {'title': 'Pengambilan Barang 1', 'page': Step1Page()},
-      {'title': 'Pengambilan Barang 2', 'page': Step2Page()},
-      {'title': 'Pengambilan Barang 3', 'page': Step3Page()},
-      {'title': 'Review dari User', 'page': ReviewPage()},
-    ];
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Navigasi Halaman'),
-        centerTitle: true,
-      ),
-      body: ListView.separated(
-        padding: EdgeInsets.all(16.0),
-        itemCount: pages.length,
-        separatorBuilder: (_, __) => SizedBox(height: 10),
-        itemBuilder: (context, index) {
-          return Card(
-            elevation: 2,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: ListTile(
-              title: Text(
-                pages[index]['title'],
-                style: TextStyle(fontWeight: FontWeight.w500),
-              ),
-              trailing: Icon(Icons.arrow_forward_ios),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => pages[index]['page'],
-                  ),
-                );
-              },
-            ),
+    return RawKeyboardListener(
+      focusNode: FocusNode(),
+      onKey: (RawKeyEvent event) {
+        if (event.logicalKey == LogicalKeyboardKey.keyR) {
+          // When 'R' key is pressed, navigate to the first screen (Splash Screen)
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => SplashScreen()),
           );
-        },
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Navigasi Halaman'),
+          centerTitle: true,
+        ),
+        body: Column(
+          children: [
+            // The notification directly beneath the AppBar
+            Container(
+              color: Color(0xFF4E5C38), // Background color for the notification
+              padding: EdgeInsets.all(12),
+              child: Text(
+                'Press "R" to return to the Splash Screen.',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Expanded(
+              child: ListView.separated(
+                padding: EdgeInsets.all(16.0),
+                itemCount: pages.length,
+                separatorBuilder: (_, __) => SizedBox(height: 10),
+                itemBuilder: (context, index) {
+                  return Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ListTile(
+                      title: Text(
+                        pages[index]['title'],
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                      trailing: Icon(Icons.arrow_forward_ios),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => pages[index]['page'],
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
