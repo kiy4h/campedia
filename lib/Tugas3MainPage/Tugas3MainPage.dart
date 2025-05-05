@@ -220,7 +220,10 @@ class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
         {
           'title': 'Review Barang',
           'description': 'User review page for rented items',
-          'page': ProductReviewPage()
+          'page': ProductReviewPage(
+            productImage: '../../images/assets_ItemDetails/kompor1.png',
+            productName: 'Kompor Portable',
+          )
         },
       ]
     },

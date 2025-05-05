@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../progress/reviewItem.dart';
 
 class TransactionDetailPage extends StatelessWidget {
-    final List<Map<String, dynamic>> transactions = [
+  final List<Map<String, dynamic>> transactions = [
     {
       'title': 'Tenda Camping Eiger',
       'date': '4 Mei 2025',
@@ -22,7 +22,6 @@ class TransactionDetailPage extends StatelessWidget {
       'status': 'Selesai'
     },
   ];
-
 
   Color getStatusColor(String status) {
     switch (status) {
@@ -99,44 +98,15 @@ class TransactionDetailPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.green[50],
-              border: Border.all(color: Colors.green.shade200),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: RichText(
-              text: const TextSpan(
-                style: TextStyle(color: Colors.black),
-                children: [
-                  TextSpan(
-                    text: 'Informasi Waktu Proses Pesanan\n',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
-                    text:
-                        'Sehubungan dengan libur Hari Buruh pada 1 Mei 2025, batas waktu konfirmasi pengiriman pesanan diperpanjang. Cek informasi selengkapnya ',
-                  ),
-                  TextSpan(
-                    text: 'di sini',
-                    style: TextStyle(
-                      color: Colors.green,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          ...transactions.map((item) => buildTransactionCard(item, context)).toList(),
+          ...transactions
+              .map((item) => buildTransactionCard(item, context))
+              .toList(),
         ],
       ),
     );
   }
 
-  Widget buildTransactionCard(Map<String, dynamic> item,context) {
+  Widget buildTransactionCard(Map<String, dynamic> item, context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(12),
@@ -152,7 +122,8 @@ class TransactionDetailPage extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-              item['image'] ?? 'https://via.placeholder.com/300x150.png?text=Gambar+Barang',
+              item['image'] ??
+                  'https://via.placeholder.com/300x150.png?text=Gambar+Barang',
               height: 150,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -160,10 +131,13 @@ class TransactionDetailPage extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           // Nama Barang
-          Text(item['title'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          Text(item['title'],
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
           const SizedBox(height: 4),
           // Tanggal Pemesanan
-          Text('Dipesan pada ${item['date']}', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+          Text('Dipesan pada ${item['date']}',
+              style: TextStyle(color: Colors.grey[600], fontSize: 13)),
           const SizedBox(height: 12),
 
           // Tombol sesuai status
@@ -175,13 +149,18 @@ class TransactionDetailPage extends StatelessWidget {
                   // Navigasi ke halaman review
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ProductReviewPage()),
+                    MaterialPageRoute(
+                        builder: (context) => ProductReviewPage(
+                              productImage: item['image'],
+                              productName: item['title'],
+                            )),
                   );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
                 ),
                 child: const Text("Review Barang"),
               ),
@@ -190,5 +169,4 @@ class TransactionDetailPage extends StatelessWidget {
       ),
     );
   }
-
 }

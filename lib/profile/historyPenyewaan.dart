@@ -110,38 +110,9 @@ class ModernTransactionPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.green[50],
-              border: Border.all(color: Colors.green.shade200),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: RichText(
-              text: const TextSpan(
-                style: TextStyle(color: Colors.black),
-                children: [
-                  TextSpan(
-                    text: 'Informasi Waktu Proses Pesanan\n',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
-                    text:
-                        'Sehubungan dengan libur Hari Buruh pada 1 Mei 2025, batas waktu konfirmasi pengiriman pesanan diperpanjang. Cek informasi selengkapnya ',
-                  ),
-                  TextSpan(
-                    text: 'di sini',
-                    style: TextStyle(
-                      color: Colors.green,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          ...transactions.map((item) => buildTransactionCard(item, context)).toList(),
+          ...transactions
+              .map((item) => buildTransactionCard(item, context))
+              .toList(),
         ],
       ),
     );
@@ -160,11 +131,13 @@ class ModernTransactionPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ID: ${item['id']}', style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text('ID: ${item['id']}',
+                style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 4),
             Text('Tanggal: ${item['date']}'),
             const SizedBox(height: 4),
-            Text('Status: ${item['status']}', style: TextStyle(color: getStatusColor(item['status']))),
+            Text('Status: ${item['status']}',
+                style: TextStyle(color: getStatusColor(item['status']))),
             const SizedBox(height: 4),
             Text('Jumlah Barang: ${item['items'].length}'),
             const SizedBox(height: 8),
@@ -176,13 +149,15 @@ class ModernTransactionPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => TransactionDetailPage(), // Ganti dengan halaman review
+                      builder: (_) =>
+                          TransactionDetailPage(), // Ganti dengan halaman review
                     ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
                 ),
                 child: const Text('Review Sekarang'),
               )
@@ -198,7 +173,8 @@ class ModernTransactionPage extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
                 ),
                 child: const Text('Ambil Sekarang'),
               ),
