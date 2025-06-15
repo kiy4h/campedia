@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tugas3provis/Tugas3MainPage/Tugas3MainPage.dart';
+import 'package:tugas3provis/providers/auth_provider.dart';
+import 'package:tugas3provis/providers/barang_provider.dart';
 // import 'Intro/splashscreen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => BarangProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
