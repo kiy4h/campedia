@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tugas3provis/Tugas3MainPage/Tugas3MainPage.dart';
+import 'package:tugas3provis/pages/Tugas3MainPage.dart';
 import 'package:tugas3provis/providers/auth_provider.dart';
 import 'package:tugas3provis/providers/barang_provider.dart';
 import 'package:tugas3provis/providers/cart_provider.dart';
