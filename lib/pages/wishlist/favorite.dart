@@ -1,3 +1,12 @@
+/**
+ * File         : favorite.dart
+ * Dibuat oleh  : Izzuddin Azzam
+ * Tanggal      : 15-06-2025
+ * Deskripsi    : File ini berisi implementasi halaman favorit/wishlist yang menampilkan
+ *                daftar barang yang telah ditandai sebagai favorit oleh pengguna
+ * Dependencies : flutter/material.dart, font_awesome_flutter, detailItem, navbar
+ */
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../detail_items/detailItem.dart';
@@ -7,22 +16,44 @@ void main() {
   runApp(const FavoritePage());
 }
 
+/** Widget FavoritePage
+ * 
+ * Deskripsi:
+ * - Widget root untuk halaman favorit/wishlist
+ * - Menjadi entry point ketika halaman favorit diakses langsung
+ * - Merupakan StatelessWidget karena hanya berfungsi sebagai container dan tidak menyimpan state
+ */
 class FavoritePage extends StatelessWidget {
   const FavoritePage({Key? key}) : super(key: key);
 
   @override
+  /* Fungsi ini membangun widget root untuk halaman favorit
+   * 
+   * Parameter:
+   * - context: Konteks build dari framework Flutter
+   * 
+   * Return: Widget MaterialApp yang menampilkan halaman daftar favorit
+   */
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,        // Sembunyikan banner debug
       theme: ThemeData(
-        primaryColor: const Color(0xFFA0B25E),
-        scaffoldBackgroundColor: const Color(0xFFF8F8F8),
+        primaryColor: const Color(0xFFA0B25E),  // Warna primer hijau muda
+        scaffoldBackgroundColor: const Color(0xFFF8F8F8), // Background abu-abu muda
       ),
-      home: ItemCategory(),
+      home: ItemCategory(),                     // Menampilkan halaman kategori item favorit
     );
   }
 }
 
+/** Widget ItemCategory
+ * 
+ * Deskripsi:
+ * - Widget utama yang menampilkan daftar barang favorit pengguna
+ * - Menampilkan barang beserta informasi harga, rating, dan tombol aksi
+ * - Merupakan StatefulWidget karena perlu mengelola state seperti daftar favorit
+ *   dan aksi penghapusan favorit
+ */
 class ItemCategory extends StatefulWidget {
   ItemCategory({Key? key}) : super(key: key);
 
@@ -30,14 +61,21 @@ class ItemCategory extends StatefulWidget {
   _ItemCategoryState createState() => _ItemCategoryState();
 }
 
+/** State untuk widget ItemCategory
+ * 
+ * Deskripsi:
+ * - Mengelola state dan data untuk halaman daftar barang favorit
+ * - Menyimpan data dummy barang-barang favorit
+ */
 class _ItemCategoryState extends State<ItemCategory> {
+  // Daftar barang favorit (dummy data)
   final List<Map<String, dynamic>> trendingItems = [
     {
-      "name": "Tenda Camping",
-      "price": 300000,
-      "image": "images/assets_ItemDetails/tenda_bg1.png",
-      "rating": 4.5,
-      "isFavorite": true
+      "name": "Tenda Camping",               // Nama barang
+      "price": 300000,                       // Harga barang
+      "image": "images/assets_ItemDetails/tenda_bg1.png", // Path gambar
+      "rating": 4.5,                         // Rating barang
+      "isFavorite": true                     // Status favorit
     },
     {
       "name": "Kompor Portable",

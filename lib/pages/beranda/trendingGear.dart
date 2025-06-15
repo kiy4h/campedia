@@ -1,5 +1,17 @@
+/*
+* File : trendingGear.dart
+* Deskripsi : File yang berisi class model dan widget untuk menampilkan peralatan camping trending
+* Dependencies : 
+*   - flutter/material.dart: untuk komponen UI
+*/
+
 import 'package:flutter/material.dart';
 
+/*
+* Class : TrendingGear
+* Deskripsi : Model data untuk menyimpan informasi peralatan camping yang sedang trending
+* Bagian Layar : Model data, tidak langsung ditampilkan
+*/
 class TrendingGear {
   final String name;
   final String imagePath;
@@ -18,6 +30,11 @@ class TrendingGear {
   });
 }
 
+/*
+* Class : Testimonial
+* Deskripsi : Model data untuk menyimpan informasi testimonial pengguna terhadap peralatan
+* Bagian Layar : Model data, tidak langsung ditampilkan
+*/
 class Testimonial {
   final String userName;
   final String userImage;
@@ -34,6 +51,11 @@ class Testimonial {
   });
 }
 
+/*
+* Class : TrendingGearPage
+* Deskripsi : Widget halaman yang menampilkan daftar peralatan camping trending
+* Bagian Layar : Halaman peralatan trending
+*/
 class TrendingGearPage extends StatefulWidget {
   const TrendingGearPage({super.key});
 
@@ -41,9 +63,19 @@ class TrendingGearPage extends StatefulWidget {
   State<TrendingGearPage> createState() => _TrendingGearPageState();
 }
 
+/*
+* Class : _TrendingGearPageState
+* Deskripsi : State untuk widget TrendingGearPage
+* Bagian Layar : Mengelola state dan tampilan daftar peralatan trending
+*/
 class _TrendingGearPageState extends State<TrendingGearPage> {
   List<TrendingGear> trendingGears = [];
-
+  /*
+  * Method : initState
+  * Deskripsi : Inisialisasi state dengan data peralatan trending
+  * Parameter : -
+  * Return : void
+  */
   @override
   void initState() {
     super.initState();
@@ -132,7 +164,12 @@ class _TrendingGearPageState extends State<TrendingGearPage> {
       ),
     ];
   }
-
+  /*
+  * Method : _showGearDetails
+  * Deskripsi : Menampilkan detail peralatan dalam modal bottom sheet
+  * Parameter : gear - TrendingGear objek yang berisi informasi peralatan
+  * Return : void
+  */
   void _showGearDetails(TrendingGear gear) {
     showModalBottomSheet(
       context: context,

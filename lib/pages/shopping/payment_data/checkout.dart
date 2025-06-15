@@ -1,3 +1,12 @@
+/**
+ * File         : checkout.dart
+ * Dibuat oleh  : Izzuddin Azzam
+ * Tanggal      : 15-06-2025
+ * Deskripsi    : File ini berisi implementasi halaman checkout tahap pertama
+ *                untuk memasukkan data alamat pengiriman
+ * Dependencies : flutter/material.dart, halaman checkout2
+ */
+
 import 'package:flutter/material.dart';
 import 'checkout2.dart';
 
@@ -5,18 +14,39 @@ void main() {
   runApp(const Checkout());
 }
 
+/** Widget Checkout
+ * 
+ * Deskripsi:
+ * - Widget root untuk halaman checkout
+ * - Menjadi entry point ketika aplikasi dijalankan langsung
+ * - Merupakan StatelessWidget karena hanya berfungsi sebagai container dan tidak menyimpan state
+ */
 class Checkout extends StatelessWidget {
   const Checkout({super.key});
 
   @override
+  /* Fungsi ini membangun widget root untuk halaman checkout
+   * 
+   * Parameter:
+   * - context: Konteks build dari framework Flutter
+   * 
+   * Return: Widget MaterialApp yang menampilkan halaman alamat pengiriman
+   */
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ShippingAddressPage(),
-      debugShowCheckedModeBanner: false,
+      home: ShippingAddressPage(),             // Menampilkan halaman alamat pengiriman
+      debugShowCheckedModeBanner: false,        // Sembunyikan banner debug
     );
   }
 }
 
+/** Widget ShippingAddressPage
+ * 
+ * Deskripsi:
+ * - Widget yang menampilkan halaman formulir alamat pengiriman
+ * - Bagian dari alur checkout untuk memasukkan data alamat
+ * - Merupakan StatefulWidget karena perlu mengelola input form dan validasi
+ */
 class ShippingAddressPage extends StatefulWidget {
   const ShippingAddressPage({super.key});
 
@@ -24,16 +54,24 @@ class ShippingAddressPage extends StatefulWidget {
   _ShippingAddressPageState createState() => _ShippingAddressPageState();
 }
 
+/** State untuk widget ShippingAddressPage
+ * 
+ * Deskripsi:
+ * - Mengelola state dan data untuk halaman alamat pengiriman
+ * - Menangani validasi form dan pilihan kota dan booth
+ */
 class _ShippingAddressPageState extends State<ShippingAddressPage> {
-  final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();  // Key untuk validasi form
 
-  bool saveConfirmation = false;
+  bool saveConfirmation = false;            // Status konfirmasi simpan alamat
 
-  String? selectedCity;
-  String? selectedBooth;
+  // Variabel untuk menyimpan pilihan dropdown
+  String? selectedCity;                     // Kota yang dipilih
+  String? selectedBooth;                    // Booth yang dipilih
 
-  final List<String> cities = ['Bandung', 'Bekasi', 'Jakarta', 'Bogor'];
-  final List<String> booths = ['Gegerkalong1', 'Lembang2', 'Tangkuban3', 'Cimindi4'];
+  // Data untuk pilihan dropdown
+  final List<String> cities = ['Bandung', 'Bekasi', 'Jakarta', 'Bogor'];  // Daftar kota
+  final List<String> booths = ['Gegerkalong1', 'Lembang2', 'Tangkuban3', 'Cimindi4'];  // Daftar booth
 
   @override
   Widget build(BuildContext context) {

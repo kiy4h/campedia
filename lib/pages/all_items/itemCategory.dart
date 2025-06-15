@@ -1,3 +1,11 @@
+/*
+* File : itemCategory.dart
+* Deskripsi : Halaman yang menampilkan daftar item berdasarkan kategori dengan fitur filter
+* Dependencies : 
+*   - detailItem.dart: untuk navigasi ke halaman detail item
+*   - navbar.dart: untuk komponen navigasi
+*/
+
 import 'package:flutter/material.dart';
 import '../detail_items/detailItem.dart';
 import '../components/navbar.dart';
@@ -6,9 +14,19 @@ void main() {
   runApp(const ItemCategoryApp());
 }
 
+/*
+* Class : ItemCategoryApp
+* Deskripsi : Widget aplikasi utama untuk halaman kategori item
+* Bagian Layar : Root aplikasi untuk halaman kategori item
+*/
 class ItemCategoryApp extends StatelessWidget {
   const ItemCategoryApp({super.key});
-
+  /*
+  * Method : build
+  * Deskripsi : Membangun widget aplikasi untuk kategori item
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget MaterialApp yang berisi ItemCategory
+  */
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,6 +40,11 @@ class ItemCategoryApp extends StatelessWidget {
   }
 }
 
+/*
+* Class : ItemCategory
+* Deskripsi : Widget halaman kategori item, merupakan StatefulWidget
+* Bagian Layar : Halaman utama kategori item dengan fitur filter
+*/
 class ItemCategory extends StatefulWidget {
   const ItemCategory({super.key});
 
@@ -29,6 +52,11 @@ class ItemCategory extends StatefulWidget {
   _ItemCategoryState createState() => _ItemCategoryState();
 }
 
+/*
+* Class : _ItemCategoryState
+* Deskripsi : State untuk widget ItemCategory
+* Bagian Layar : Mengelola state dan tampilan halaman kategori item
+*/
 class _ItemCategoryState extends State<ItemCategory> {
   // Filter variables
   double minPrice = 0;
@@ -48,14 +76,24 @@ class _ItemCategoryState extends State<ItemCategory> {
 
   // Daftar barang yang difilter
   late List<Map<String, dynamic>> filteredItems;
-
+  /*
+  * Method : initState
+  * Deskripsi : Inisialisasi state awal
+  * Parameter : -
+  * Return : void
+  */
   @override
   void initState() {
     super.initState();
     filteredItems = List.from(allItems); // Initialize filtered items
   }
 
-  // Fungsi untuk memfilter barang berdasarkan harga dan rating
+  /*
+  * Method : _applyFilter
+  * Deskripsi : Memfilter item berdasarkan harga dan rating yang dipilih
+  * Parameter : -
+  * Return : void
+  */
   void _applyFilter() {
     setState(() {
       filteredItems = allItems.where((item) {
@@ -66,8 +104,12 @@ class _ItemCategoryState extends State<ItemCategory> {
       }).toList();
     });
   }
-
-  // Dialog filter
+  /*
+  * Method : _showFilterDialog
+  * Deskripsi : Menampilkan dialog untuk memfilter item berdasarkan harga dan rating
+  * Parameter : -
+  * Return : void
+  */
   void _showFilterDialog() {
     showDialog(
       context: context,
@@ -132,7 +174,12 @@ class _ItemCategoryState extends State<ItemCategory> {
       },
     );
   }
-
+  /*
+  * Method : build
+  * Deskripsi : Membangun UI untuk halaman kategori item
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget Scaffold berisi konten halaman kategori item
+  */
   @override
   Widget build(BuildContext context) {
     return Scaffold(

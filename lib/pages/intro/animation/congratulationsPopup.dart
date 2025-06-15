@@ -1,7 +1,20 @@
+/*
+* File : congratulationsPopup.dart
+* Deskripsi : Dialog popup animasi konfetti untuk menampilkan ucapan selamat setelah pengguna berhasil membuat akun
+* Dependencies : 
+*   - dart:math: untuk fungsi matematika pada animasi konfetti
+*   - signin.dart: untuk navigasi ke halaman signin
+*/
+
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import '../account/signin.dart';
 
+/*
+* Class : CongratulationsPopup
+* Deskripsi : Widget popup ucapan selamat dengan animasi konfetti, merupakan StatefulWidget
+* Bagian Layar : Dialog popup setelah registrasi berhasil
+*/
 class CongratulationsPopup extends StatefulWidget {
   final String name;
   final VoidCallback onSignIn;
@@ -16,9 +29,20 @@ class CongratulationsPopup extends StatefulWidget {
   State<CongratulationsPopup> createState() => _CongratulationsPopupState();
 }
 
+/*
+* Class : _CongratulationsPopupState
+* Deskripsi : State untuk widget CongratulationsPopup dengan SingleTickerProviderStateMixin untuk animasi
+* Bagian Layar : Mengatur state dan animasi popup ucapan selamat
+*/
 class _CongratulationsPopupState extends State<CongratulationsPopup> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
+  /*
+  * Method : initState
+  * Deskripsi : Inisialisasi state awal dan controller animasi
+  * Parameter : -
+  * Return : void
+  */
   @override
   void initState() {
     super.initState();
@@ -27,13 +51,23 @@ class _CongratulationsPopupState extends State<CongratulationsPopup> with Single
       vsync: this,
     )..repeat();
   }
-
+  /*
+  * Method : dispose
+  * Deskripsi : Membersihkan resource controller animasi saat widget dihapus
+  * Parameter : -
+  * Return : void
+  */
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
-
+  /*
+  * Method : build
+  * Deskripsi : Membangun UI dialog ucapan selamat dengan animasi konfetti
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget Dialog transparan dengan konten ucapan selamat
+  */
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -155,12 +189,21 @@ class _CongratulationsPopupState extends State<CongratulationsPopup> with Single
   }
 }
 
-// Confetti widget
+/*
+* Class : ConfettiOverlay
+* Deskripsi : Widget untuk menampilkan animasi konfetti, merupakan StatelessWidget
+* Bagian Layar : Lapisan animasi konfetti pada popup
+*/
 class ConfettiOverlay extends StatelessWidget {
   final AnimationController controller;
 
   const ConfettiOverlay({super.key, required this.controller});
-
+  /*
+  * Method : build
+  * Deskripsi : Membangun widget AnimatedBuilder untuk animasi konfetti
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget AnimatedBuilder dengan CustomPaint untuk animasi konfetti
+  */
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -175,12 +218,23 @@ class ConfettiOverlay extends StatelessWidget {
   }
 }
 
-// Confetti custom painter
+/*
+* Class : ConfettiPainter
+* Deskripsi : CustomPainter untuk menggambar animasi konfetti
+* Bagian Layar : Rendering visual animasi konfetti
+*/
 class ConfettiPainter extends CustomPainter {
   final Animation<double> animation;
   
   ConfettiPainter({required this.animation}) : super(repaint: animation);
-  
+    /*
+  * Method : paint
+  * Deskripsi : Melakukan rendering animasi konfetti pada canvas
+  * Parameter : 
+  *   - canvas - Canvas untuk melukis animasi
+  *   - size - Size dimensi area yang tersedia untuk melukis
+  * Return : void
+  */
   @override
   void paint(Canvas canvas, Size size) {
     final confettiCount = 50;

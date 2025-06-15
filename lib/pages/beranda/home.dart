@@ -1,3 +1,12 @@
+/**
+ * File         : home.dart
+ * Dibuat oleh  : Izzuddin Azzam
+ * Tanggal      : 15-06-2025
+ * Deskripsi    : File ini berisi implementasi halaman beranda (home) aplikasi Campedia
+ *                yang menampilkan barang-barang rekomendasi dan kategori barang
+ * Dependencies : flutter/material.dart, intl, google_fonts, provider
+ */
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,30 +26,61 @@ void main() {
   runApp(CampingApp());
 }
 
+/** Widget CampingApp
+ * 
+ * Deskripsi:
+ * - Widget utama yang mengatur tema dan styling untuk aplikasi Campedia
+ * - Menjadi root MaterialApp untuk halaman beranda
+ * - Merupakan StatelessWidget karena hanya berfungsi sebagai container dan tidak menyimpan state
+ */
 class CampingApp extends StatelessWidget {
   const CampingApp({super.key});
 
   @override
+  /* Fungsi ini membangun widget root untuk aplikasi
+   * 
+   * Parameter:
+   * - context: Konteks build dari framework Flutter
+   * 
+   * Return: Widget MaterialApp yang merupakan root dari aplikasi
+   */
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primaryColor: Color(0xFF2E7D32),
-        scaffoldBackgroundColor: Color(0xFFF8F8F8),
-        textTheme: GoogleFonts.poppinsTextTheme(),
+        primaryColor: Color(0xFF2E7D32),        // Warna primer hijau
+        scaffoldBackgroundColor: Color(0xFFF8F8F8),  // Background abu-abu muda
+        textTheme: GoogleFonts.poppinsTextTheme(),   // Font Poppins
       ),
-      home: HomePage(),
-      debugShowCheckedModeBanner: false,
+      home: HomePage(),                          // Menampilkan halaman HomePage
+      debugShowCheckedModeBanner: false,         // Sembunyikan banner debug
     );
   }
 }
 
+/** Widget HomePage
+ * 
+ * Deskripsi:
+ * - Widget utama yang menampilkan halaman beranda aplikasi
+ * - Menampilkan fitur-fitur utama seperti barang rekomendasi dan kategori barang
+ * - Merupakan StatefulWidget karena perlu mengelola state seperti loading data dari API
+ */
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
+/** State untuk widget HomePage
+ * 
+ * Deskripsi:
+ * - Mengelola state dan data untuk halaman beranda
+ * - Memuat data barang dari API saat halaman dibuka
+ */
 class _HomePageState extends State<HomePage> {
   @override
+  /* Fungsi ini dijalankan saat widget pertama kali dibuat
+   *
+   * Menjalankan _loadData() setelah build pertama selesai menggunakan addPostFrameCallback
+   */
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -48,10 +88,15 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  /* Fungsi ini memuat data barang dari API
+   *
+   * Menggunakan provider untuk mendapatkan data barang dan status autentikasi
+   */
   void _loadData() {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final barangProvider = Provider.of<BarangProvider>(context, listen: false);
 
+    // Jika pengguna sudah login, ambil data barang beranda
     if (authProvider.isAuthenticated) {
       barangProvider.fetchBarangBeranda(authProvider.user!.userId);
     }

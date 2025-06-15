@@ -1,9 +1,17 @@
+/**
+ * File         : onboarding.dart
+ * Dibuat oleh  : Izzuddin Azzam
+ * Tanggal      : 15-06-2025
+ * Deskripsi    : File ini berisi implementasi layar onboarding yang menampilkan carousel fitur-fitur aplikasi
+ *                dan tombol untuk registrasi atau masuk
+ * Dependencies : dart:async, flutter/material.dart, halaman register dan signin
+ */
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../account/register.dart';
 import '../account/signin.dart';
 
-// Onboarding Screen with Carousel
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -16,7 +24,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentPage = 0;
   Timer? _timer;
 
-  // Onboarding pages (excluding splash screen)
   final List<OnboardingPage> _pages = [
     OnboardingPage(
       image: 'images/assets_OnBoarding0/kompas_bg.png',
@@ -47,8 +54,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   void initState() {
     super.initState();
-
-    // Start auto-slide timer
     _startAutoSlide();
   }
 
@@ -57,7 +62,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       if (_currentPage < _pages.length - 1) {
         _currentPage++;
       } else {
-        _currentPage = 0; // Loop back to first page
+        _currentPage = 0;
       }
 
       if (_pageController.hasClients) {
@@ -89,7 +94,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Carousel content - takes most of the screen for easy swiping
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
@@ -100,20 +104,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 },
               ),
             ),
-
-            // Pagination dots - show for onboarding pages
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
-                  _pages.length, // Show dots for each onboarding page
+                  _pages.length,
                   (index) => _buildDot(index == _currentPage),
                 ),
               ),
             ),
-
-            // Action buttons
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
@@ -123,9 +123,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Register()));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Register(),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF4A5A2A),
@@ -149,8 +151,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => SignIn()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SignIn(),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF4A5A2A),
@@ -217,15 +223,12 @@ class OnboardingPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Image
               Image.asset(
                 image,
                 height: 250,
                 fit: BoxFit.contain,
               ),
               const SizedBox(height: 30),
-
-              // Title
               Text(
                 title,
                 style: const TextStyle(
@@ -234,7 +237,6 @@ class OnboardingPage extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-
               if (subtitle.isNotEmpty)
                 Column(
                   children: [
@@ -249,7 +251,6 @@ class OnboardingPage extends StatelessWidget {
                     ),
                   ],
                 ),
-
               if (description.isNotEmpty)
                 Column(
                   children: [

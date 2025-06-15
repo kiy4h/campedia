@@ -1,7 +1,20 @@
+/*
+* File : notification.dart
+* Deskripsi : Halaman yang menampilkan daftar notifikasi pengguna
+* Dependencies : 
+*   - checkout2.dart: untuk navigasi ke halaman pembayaran denda
+*   - checkout.dart: untuk navigasi ke halaman pembayaran
+*/
+
 import 'package:flutter/material.dart';
 import 'package:tugas3provis/pages/shopping/payment_data/checkout2.dart';
 import '../shopping/payment_data/checkout.dart';
 
+/*
+* Class : NotificationPage
+* Deskripsi : Widget yang menampilkan daftar notifikasi untuk pengguna
+* Bagian Layar : Halaman notifikasi
+*/
 class NotificationPage extends StatelessWidget {
   final List<Map<String, String>> notifications = [
     {
@@ -27,7 +40,12 @@ class NotificationPage extends StatelessWidget {
   ];
 
   NotificationPage({super.key});
-
+  /*
+  * Method : build
+  * Deskripsi : Membangun tampilan halaman notifikasi
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget Scaffold berisi daftar notifikasi
+  */
   @override
   Widget build(BuildContext context) {
     return Scaffold(

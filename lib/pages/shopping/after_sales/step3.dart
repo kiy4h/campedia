@@ -1,11 +1,30 @@
+/*
+* File : step3.dart
+* Deskripsi : Halaman langkah ketiga untuk proses pengembalian barang dengan konfirmasi pengembalian
+* Dependencies : 
+*   - flutter_map: untuk tampilan peta (tidak digunakan langsung dalam file ini)
+*   - step1.dart: untuk referensi navigasi
+*   - review.dart: untuk navigasi ke halaman ulasan
+*/
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'step1.dart';
 import 'review.dart';  // Tambahkan import ReviewPage
 
+/*
+* Class : Step3Page
+* Deskripsi : Widget halaman pengembalian barang (langkah 3), merupakan StatelessWidget
+* Bagian Layar : Halaman konfirmasi pengembalian barang dengan tampilan status pengembalian
+*/
 class Step3Page extends StatelessWidget {
   const Step3Page({super.key});
-
+  /*
+  * Method : build
+  * Deskripsi : Membangun UI untuk halaman konfirmasi pengembalian barang
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget Scaffold berisi konfirmasi pengembalian dan stepper
+  */
   @override
   Widget build(BuildContext context) {
     return Scaffold(

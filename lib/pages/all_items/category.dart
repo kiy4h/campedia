@@ -1,3 +1,13 @@
+/*
+* File : category.dart
+* Deskripsi : Halaman yang menampilkan daftar kategori produk dalam tampilan grid
+* Dependencies : 
+*   - google_fonts: untuk styling text dengan font Poppins
+*   - itemCategory.dart: untuk navigasi ke halaman kategori item
+*   - navbar.dart: untuk komponen navigasi
+*   - allListItem.dart: untuk navigasi ke halaman daftar semua item
+*/
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tugas3provis/pages/all_items/itemCategory.dart';
@@ -8,9 +18,19 @@ void main() {
   runApp(CategoryPage());
 }
 
+/*
+* Class : CategoryPage
+* Deskripsi : Widget utama untuk halaman kategori, merupakan StatelessWidget
+* Bagian Layar : Keseluruhan layar kategori
+*/
 class CategoryPage extends StatelessWidget {
   const CategoryPage({super.key});
-
+  /*
+  * Method : build
+  * Deskripsi : Membangun widget utama untuk aplikasi kategori
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget MaterialApp yang berisi CategoriesPage
+  */
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,6 +45,11 @@ class CategoryPage extends StatelessWidget {
   }
 }
 
+/*
+* Class : CategoriesPage
+* Deskripsi : Widget yang berisi implementasi halaman kategori dengan daftar grid
+* Bagian Layar : Konten halaman kategori yang menampilkan grid kategori produk
+*/
 class CategoriesPage extends StatelessWidget {
   // Daftar kategori dengan path asset untuk icon
   final List<Map<String, dynamic>> categories = [
@@ -39,7 +64,12 @@ class CategoriesPage extends StatelessWidget {
   ];
 
   CategoriesPage({super.key});
-
+  /*
+  * Method : build
+  * Deskripsi : Membangun tampilan Scaffold untuk halaman kategori
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget Scaffold yang berisi konten halaman kategori
+  */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +97,14 @@ class CategoriesPage extends StatelessWidget {
 
     );
   }
-
+  /*
+  * Method : _buildCategoryCard
+  * Deskripsi : Membuat card untuk setiap kategori produk
+  * Parameter : 
+  *   - category - Map berisi informasi kategori (nama, icon, jumlah item)
+  *   - context - BuildContext untuk navigasi
+  * Return : Widget berupa card kategori yang dapat diklik
+  */
   Widget _buildCategoryCard(Map<String, dynamic> category, BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -126,7 +163,14 @@ class CategoriesPage extends StatelessWidget {
   }
 }
 
-// Fungsi untuk membangun AppBar dengan navigasi bottom
+/*
+* Function : buildAppBar
+* Deskripsi : Fungsi untuk membangun AppBar dengan navigasi bottom yang disesuaikan berdasarkan indeks halaman
+* Parameter : 
+*   - context - BuildContext untuk akses ke fitur framework
+*   - currentIndex - int yang menunjukkan indeks halaman saat ini
+* Return : PreferredSizeWidget berupa AppBar yang sesuai dengan halaman
+*/
 PreferredSizeWidget buildAppBar({
   required BuildContext context,
   required int currentIndex,

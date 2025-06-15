@@ -1,11 +1,30 @@
+/*
+* File : step1.dart
+* Deskripsi : Halaman langkah pertama untuk proses pengambilan barang dengan tampilan peta dan stepper
+* Dependencies : 
+*   - flutter_map: untuk menampilkan peta lokasi
+*   - latlong2: untuk koordinat lokasi pada peta
+*   - step2.dart: untuk navigasi ke langkah berikutnya
+*/
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'step2.dart';
 
+/*
+* Class : Step1Page
+* Deskripsi : Widget halaman pengambilan barang (langkah 1), merupakan StatelessWidget
+* Bagian Layar : Halaman pengambilan barang dengan tampilan peta dan stepper
+*/
 class Step1Page extends StatelessWidget {
   const Step1Page({super.key});
-
+  /*
+  * Method : build
+  * Deskripsi : Membangun UI untuk halaman pengambilan barang
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget Scaffold berisi peta dan langkah-langkah pengambilan barang
+  */
   @override
   Widget build(BuildContext context) {
     final LatLng jakartaLocation = LatLng(-6.2088, 106.8456);

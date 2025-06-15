@@ -1,3 +1,13 @@
+/*
+* File : profile.dart
+* Deskripsi : Halaman profil pengguna yang menampilkan informasi akun dan riwayat
+* Dependencies : 
+*   - google_fonts: untuk styling text dengan font Poppins
+*   - navbar.dart: untuk komponen navigasi
+*   - notification.dart: untuk navigasi ke halaman notifikasi
+*   - historyPenyewaan.dart: untuk navigasi ke halaman riwayat penyewaan
+*/
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tugas3provis/pages/components/navbar.dart';
@@ -8,9 +18,19 @@ void main() {
   runApp(CampingApp());
 }
 
+/*
+* Class : CampingApp
+* Deskripsi : Widget aplikasi utama untuk halaman profil
+* Bagian Layar : Root aplikasi untuk halaman profil
+*/
 class CampingApp extends StatelessWidget {
   const CampingApp({super.key});
-
+  /*
+  * Method : build
+  * Deskripsi : Membangun widget MaterialApp untuk halaman profil
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget MaterialApp yang berisi ProfilePage
+  */
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,9 +45,20 @@ class CampingApp extends StatelessWidget {
   }
 }
 
+/*
+* Class : ProfilePage
+* Deskripsi : Widget halaman profil pengguna, merupakan StatelessWidget
+* Bagian Layar : Halaman profil pengguna
+*/
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
+  /*
+  * Method : build
+  * Deskripsi : Membangun tampilan UI untuk halaman profil
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget Scaffold berisi konten halaman profil
+  */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,6 +100,12 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  /*
+  * Method : _buildHeader
+  * Deskripsi : Membuat bagian header profil dengan foto dan nama pengguna
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget Row yang berisi header profil
+  */
   Widget _buildHeader(context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -107,6 +144,12 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  /*
+  * Method : _buildProfileDetails
+  * Deskripsi : Membuat bagian detail informasi akun pengguna
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget Column berisi informasi akun
+  */
   Widget _buildProfileDetails(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,6 +168,14 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  /*
+  * Method : _buildProfileRow
+  * Deskripsi : Membuat baris untuk menampilkan label dan nilai informasi profil
+  * Parameter : 
+  *   - label - String label untuk informasi profil
+  *   - value - String nilai informasi profil
+  * Return : Widget Padding berisi Row untuk satu baris informasi
+  */
   Widget _buildProfileRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -138,6 +189,12 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  /*
+  * Method : _buildHistorySection
+  * Deskripsi : Membuat bagian riwayat aktivitas pengguna
+  * Parameter : context - BuildContext untuk navigasi ke halaman riwayat
+  * Return : Widget Column berisi informasi riwayat
+  */
   Widget _buildHistorySection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,6 +222,14 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  /*
+  * Method : _buildHistoryRow
+  * Deskripsi : Membuat baris untuk menampilkan label dan nilai informasi riwayat
+  * Parameter : 
+  *   - label - String label untuk informasi riwayat
+  *   - value - String nilai informasi riwayat
+  * Return : Widget Padding berisi Row untuk satu baris riwayat
+  */
   Widget _buildHistoryRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -178,6 +243,12 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  /*
+  * Method : _buildCard
+  * Deskripsi : Membuat widget card dengan shadow untuk menampung konten
+  * Parameter : children - List<Widget> daftar widget yang akan ditampilkan dalam card
+  * Return : Widget Container berupa card dengan styling
+  */
   Widget _buildCard(List<Widget> children) {
     return Container(
       padding: EdgeInsets.all(16),
@@ -196,6 +267,12 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  /*
+  * Method : _buildSettingsButton
+  * Deskripsi : Membuat tombol untuk mengedit profil
+  * Parameter : context - BuildContext untuk navigasi
+  * Return : Widget ElevatedButton untuk navigasi ke halaman edit profil
+  */
   Widget _buildSettingsButton(BuildContext context) {
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(

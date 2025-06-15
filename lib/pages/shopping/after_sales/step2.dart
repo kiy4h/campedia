@@ -1,7 +1,20 @@
+/*
+* File : step2.dart
+* Deskripsi : Halaman langkah kedua untuk proses pengambilan barang dengan tampilan countdown timer
+* Dependencies : 
+*   - dart:async: untuk Timer countdown
+*   - step3.dart: untuk navigasi ke langkah berikutnya
+*/
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'step3.dart';
 
+/*
+* Class : Step2Page
+* Deskripsi : Widget halaman penggunaan barang (langkah 2), merupakan StatefulWidget
+* Bagian Layar : Halaman penggunaan barang dengan tampilan countdown timer
+*/
 class Step2Page extends StatefulWidget {
   const Step2Page({super.key});
 
@@ -9,6 +22,11 @@ class Step2Page extends StatefulWidget {
   State<Step2Page> createState() => _Step2PageState();
 }
 
+/*
+* Class : _Step2PageState
+* Deskripsi : State untuk widget Step2Page dengan pengelolaan countdown timer
+* Bagian Layar : Mengelola state dan tampilan halaman penggunaan barang
+*/
 class _Step2PageState extends State<Step2Page> {
   // Timer untuk 2 hari (48 jam)
   late DateTime endTime;
@@ -17,7 +35,12 @@ class _Step2PageState extends State<Step2Page> {
   int hours = 0;
   int minutes = 0;
   int seconds = 0;
-
+  /*
+  * Method : initState
+  * Deskripsi : Inisialisasi timer dan waktu akhir penggunaan
+  * Parameter : -
+  * Return : void
+  */
   @override
   void initState() {
     super.initState();
@@ -30,13 +53,23 @@ class _Step2PageState extends State<Step2Page> {
       _calculateTimeLeft();
     });
   }
-
+  /*
+  * Method : dispose
+  * Deskripsi : Membersihkan resource timer saat widget dihapus
+  * Parameter : -
+  * Return : void
+  */
   @override
   void dispose() {
     _timer.cancel();
     super.dispose();
   }
-
+  /*
+  * Method : _calculateTimeLeft
+  * Deskripsi : Menghitung waktu tersisa pada countdown timer
+  * Parameter : -
+  * Return : void
+  */
   void _calculateTimeLeft() {
     final now = DateTime.now();
     final difference = endTime.difference(now);
@@ -58,7 +91,12 @@ class _Step2PageState extends State<Step2Page> {
       });
     }
   }
-
+  /*
+  * Method : build
+  * Deskripsi : Membangun UI untuk halaman penggunaan barang dengan timer countdown
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget Scaffold berisi timer countdown dan informasi penggunaan
+  */
   @override
   Widget build(BuildContext context) {
     return Scaffold(

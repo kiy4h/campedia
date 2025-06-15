@@ -1,8 +1,18 @@
+/*
+* File : review.dart
+* Deskripsi : Halaman untuk memberikan ulasan setelah pengguna mengembalikan barang sewaan
+* Dependencies : 
+*   - home.dart: untuk navigasi kembali ke halaman beranda
+*/
+
 import 'package:flutter/material.dart';
 import '../../beranda/home.dart'; 
 
-
-
+/*
+* Class : ReviewPage
+* Deskripsi : Widget halaman ulasan, merupakan StatefulWidget
+* Bagian Layar : Halaman pemberian rating dan ulasan setelah pengembalian barang
+*/
 class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key});
 
@@ -10,10 +20,21 @@ class ReviewPage extends StatefulWidget {
   _ReviewPageState createState() => _ReviewPageState();
 }
 
+/*
+* Class : _ReviewPageState
+* Deskripsi : State untuk widget ReviewPage
+* Bagian Layar : Mengelola state dan tampilan halaman ulasan
+*/
 class _ReviewPageState extends State<ReviewPage> {
   double _rating = 5.0;
   final TextEditingController _controller = TextEditingController();
 
+  /*
+  * Method : _buildStar
+  * Deskripsi : Membangun widget bintang untuk rating
+  * Parameter : index - int posisi bintang (0-4)
+  * Return : Widget IconButton bintang sesuai nilai rating
+  */
   Widget _buildStar(int index) {
     IconData icon;
     if (_rating >= index + 1) {
@@ -36,13 +57,23 @@ class _ReviewPageState extends State<ReviewPage> {
       ),
     );
   }
-
+  /*
+  * Method : dispose
+  * Deskripsi : Membersihkan controller text field saat widget dihapus
+  * Parameter : -
+  * Return : void
+  */
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
-
+  /*
+  * Method : build
+  * Deskripsi : Membangun UI untuk halaman ulasan
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget Scaffold berisi form ulasan dengan rating dan komentar
+  */
   @override
   Widget build(BuildContext context) {
     return Scaffold(

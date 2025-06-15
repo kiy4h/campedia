@@ -1,6 +1,16 @@
+/*
+* File : shoping.dart
+* Deskripsi : Halaman keranjang belanja yang menampilkan item yang akan dibeli
+* Dependencies : 
+*   - navbar.dart: untuk komponen navigasi
+*   - appBar.dart: untuk komponen app bar
+*   - checkout.dart: untuk navigasi ke halaman checkout
+*   - intl: untuk format angka ke format Rupiah
+*/
+
 import 'package:flutter/material.dart';
 import '../../components/navbar.dart';
-import '../../../components/appBar.dart';
+import '../../components/appBar.dart';
 import '../payment_data/checkout.dart';
 import 'package:intl/intl.dart';
 
@@ -9,9 +19,19 @@ void main() {
   runApp(const MyApp());
 }
 
+/*
+* Class : MyApp
+* Deskripsi : Widget root aplikasi untuk halaman shopping cart
+* Bagian Layar : Root aplikasi
+*/
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
+  /*
+  * Method : build
+  * Deskripsi : Membangun widget MaterialApp yang berisi Shoping widget
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget MaterialApp yang berisi halaman shopping cart
+  */
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,6 +45,11 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/*
+* Class : Item
+* Deskripsi : Model data untuk menyimpan informasi item dalam keranjang belanja
+* Bagian Layar : Model data, tidak langsung ditampilkan
+*/
 class Item {
   final String name;
   final String type;
@@ -41,6 +66,11 @@ class Item {
   });
 }
 
+/*
+* Class : Shoping
+* Deskripsi : Widget halaman keranjang belanja, merupakan StatefulWidget
+* Bagian Layar : Halaman keranjang belanja
+*/
 class Shoping extends StatefulWidget {
   const Shoping({super.key});
 
@@ -48,6 +78,11 @@ class Shoping extends StatefulWidget {
   State<Shoping> createState() => _ShopingState();
 }
 
+/*
+* Class : _ShopingState
+* Deskripsi : State untuk widget Shoping
+* Bagian Layar : Mengelola state dan tampilan halaman keranjang belanja
+*/
 class _ShopingState extends State<Shoping> {
   List<Item> items = [
     Item(
@@ -79,20 +114,34 @@ class _ShopingState extends State<Shoping> {
       imageUrl: 'images/assets_ItemDetails/tenda_bg4.png',
     ),
   ];
-
   // Track which item is currently expanded
   int? expandedItemIndex;
 
-  // Calculate total price for all items
+  /*
+  * Method : totalPrice (getter)
+  * Deskripsi : Menghitung total harga semua item dalam keranjang
+  * Parameter : -
+  * Return : double nilai total harga
+  */
   double get totalPrice {
     return items.fold(0, (sum, item) => sum + (item.price * item.quantity));
   }
 
-  // Format price to Rupiah
+  /*
+  * Method : formatToRupiah
+  * Deskripsi : Memformat angka menjadi format mata uang Rupiah
+  * Parameter : price - double nilai harga yang akan diformat
+  * Return : String hasil format dalam Rupiah
+  */
   String formatToRupiah(double price) {
     return 'Rp${price.toStringAsFixed(2).replaceAll('.', ',').replaceAll(RegExp(r'\B(?=(\d{3})+(?!\d))'), '.')}';
   }
-
+  /*
+  * Method : build
+  * Deskripsi : Membangun UI untuk halaman keranjang belanja
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget Scaffold berisi daftar item dalam keranjang
+  */
   @override
   Widget build(BuildContext context) {
     return Scaffold(

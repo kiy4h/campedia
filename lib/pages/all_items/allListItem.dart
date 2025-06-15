@@ -1,3 +1,12 @@
+/**
+ * File         : allListItem.dart
+ * Dibuat oleh  : Izzuddin Azzam
+ * Tanggal      : 15-06-2025
+ * Deskripsi    : File ini berisi implementasi halaman daftar semua barang camping yang tersedia untuk disewa
+ *                dengan fitur filter berdasarkan kategori, harga, dan rating.
+ * Dependencies : flutter/material.dart, font_awesome_flutter, provider, intl
+ */
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -13,133 +22,212 @@ void main() {
   runApp(const AllItemList());
 }
 
+/** Widget AllItemList
+ * 
+ * Deskripsi:
+ * - Widget utama yang mengatur root dari halaman daftar semua barang
+ * - Menyediakan konfigurasi tema dan styling untuk halaman
+ * - Merupakan StatelessWidget karena hanya berfungsi sebagai container dan tidak menyimpan state
+ */
 class AllItemList extends StatelessWidget {
   const AllItemList({Key? key}) : super(key: key);
 
   @override
+  /* Fungsi ini membangun widget root untuk aplikasi
+   * 
+   * Parameter:
+   * - context: Konteks build dari framework Flutter
+   * 
+   * Return: Widget MaterialApp yang merupakan root dari aplikasi
+   */
   Widget build(BuildContext context) {
     return MaterialApp(
+      // Menyembunyikan banner debug di kanan atas aplikasi
       debugShowCheckedModeBanner: false,
+      
+      // Konfigurasi tema aplikasi dengan warna utama hijau
       theme: ThemeData(
-        primaryColor: const Color(0xFF445018),
-        scaffoldBackgroundColor: const Color(0xFFF8F8F8),
+        primaryColor: const Color(0xFF445018), // Warna primer hijau gelap
+        scaffoldBackgroundColor: const Color(0xFFF8F8F8), // Background abu-abu muda
       ),
+      
+      // Menampilkan halaman kategori item sebagai halaman utama
       home: ItemCategory(),
     );
   }
 }
 
+/** Widget ItemCategory
+ * 
+ * Deskripsi:
+ * - Widget utama yang menampilkan daftar barang dan opsi filter
+ * - Bagian dari halaman katalog barang camping
+ * - Merupakan StatefulWidget karena perlu menyimpan dan memperbarui status seperti
+ *   kategori terpilih, filter harga, dan data barang
+ */
 class ItemCategory extends StatefulWidget {
   ItemCategory({Key? key}) : super(key: key);
 
   @override
+  /* Fungsi ini membuat state yang digunakan oleh widget ini
+   * 
+   * Return: Instance dari _ItemCategoryState
+   */
   _ItemCategoryState createState() => _ItemCategoryState();
 }
 
-class _ItemCategoryState extends State<ItemCategory> {
-  List<Barang> allItems = [];
-  List<Barang> filteredItems = [];
-  bool _isLoading = false;
-  String? _error;
+/** State untuk widget ItemCategory
+ * 
+ * Deskripsi:
+ * - Menyimpan semua data dan status yang berubah untuk halaman daftar barang
+ * - Mengelola proses pengambilan data, pemfilteran, dan UI interaktif
+ */
+class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyimpan data barang
+  List<Barang> allItems = [];      // Semua barang dari API
+  List<Barang> filteredItems = []; // Barang yang sudah difilter
+  bool _isLoading = false;         // Status loading
+  String? _error;                  // Pesan error jika ada
 
+  // Daftar kategori barang yang tersedia
   final List<String> categories = [
-    "All",
-    "Tenda",
-    "Alat Masak",
-    "Sepatu",
-    "Tas",
-    "Aksesoris",
-    "Pakaian"
+    "All",         // Semua kategori
+    "Tenda",       // Kategori 1
+    "Alat Masak",  // Kategori 2
+    "Sepatu",      // Kategori 3
+    "Tas",         // Kategori 4
+    "Aksesoris",   // Kategori 5
+    "Pakaian"      // Kategori 6
   ];
 
-  List<String> selectedCategories = [];
-  RangeValues priceRange = const RangeValues(0, 1000000);
-  List<int> selectedRatings = [];
-  List<String> selectedLocations = [];
-  List<String> selectedBrands = [];
+  // Variabel untuk menyimpan status filter
+  List<String> selectedCategories = [];                           // Kategori yang dipilih
+  RangeValues priceRange = const RangeValues(0, 1000000);         // Rentang harga
+  List<int> selectedRatings = [];                                 // Rating yang dipilih
+  List<String> selectedLocations = [];                            // Lokasi yang dipilih
+  List<String> selectedBrands = [];                               // Brand yang dipilih
 
-  TextEditingController minPriceController = TextEditingController(text: "0");
-  TextEditingController maxPriceController = TextEditingController(text: "1000000");
+  // Controller untuk input rentang harga
+  TextEditingController minPriceController = TextEditingController(text: "0");        // Harga minimum
+  TextEditingController maxPriceController = TextEditingController(text: "1000000");  // Harga maksimum
 
   @override
+  /* Fungsi ini dijalankan saat widget pertama kali dibuat
+   * 
+   * Melakukan inisialisasi state awal dan memuat data barang dari API
+   */
   void initState() {
     super.initState();
-    _loadAllItems();
+    _loadAllItems(); // Memuat semua data barang
   }
-
   @override
+  /* Fungsi ini dijalankan saat widget dihapus dari widget tree
+   * 
+   * Melakukan pembersihan resource dengan membuang controller yang tidak digunakan lagi
+   * untuk mencegah memory leak
+   */
   void dispose() {
-    minPriceController.dispose();
-    maxPriceController.dispose();
+    minPriceController.dispose();  // Membuang controller harga minimum
+    maxPriceController.dispose();  // Membuang controller harga maksimum
     super.dispose();
   }
 
+  /* Fungsi ini mengambil data barang dari API melalui provider
+   * 
+   * Menggunakan AuthProvider untuk mendapatkan ID pengguna dan
+   * BarangProvider untuk mendapatkan daftar barang
+   */
   Future<void> _loadAllItems() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final barangProvider = Provider.of<BarangProvider>(context, listen: false);
 
+    // Cek apakah pengguna sudah login
     if (authProvider.isAuthenticated) {
+      // Ubah state untuk menunjukkan loading
       setState(() {
         _isLoading = true;
         _error = null;
       });
 
+      // Ambil data dari API
       await barangProvider.fetchAllBarang(authProvider.user!.userId);
 
+      // Update state dengan data yang didapat
       setState(() {
         _isLoading = false;
-        allItems = List.from(barangProvider.allBarang);
-        filteredItems = List.from(allItems);
-        _error = barangProvider.error;
+        allItems = List.from(barangProvider.allBarang);    // Salin semua barang
+        filteredItems = List.from(allItems);               // Tampilkan semua barang
+        _error = barangProvider.error;                     // Catat error jika ada
       });
     }
   }
 
+  /* Fungsi ini menerapkan semua filter yang dipilih pengguna
+   * 
+   * Filter berdasarkan kategori, rentang harga, dan rating
+   */
   void _applyFilters() {
     setState(() {
-      filteredItems = allItems.where((item) {
-        // Category filter
+      // Filter barang berdasarkan kriteria yang dipilih
+      filteredItems = allItems.where((item) {        // Filter berdasarkan kategori
         bool categoryMatch = selectedCategories.isEmpty || 
                             selectedCategories.contains("All") ||
                             _getCategoryName(item.kategoriId).any((cat) => selectedCategories.contains(cat));
 
-        // Price filter
+        // Filter berdasarkan harga
         bool priceMatch = item.hargaPerhari >= priceRange.start.round() &&
                          item.hargaPerhari <= priceRange.end.round();
 
-        // Rating filter
+        // Filter berdasarkan rating
         bool ratingMatch = selectedRatings.isEmpty ||
                           selectedRatings.any((rating) => item.meanReview >= rating && item.meanReview < rating + 1);
 
+        // Barang harus memenuhi semua kriteria filter
         return categoryMatch && priceMatch && ratingMatch;
       }).toList();
     });
   }
 
+  /* Fungsi ini mengubah ID kategori menjadi nama kategori
+   * 
+   * Parameter:
+   * - categoryId: ID kategori barang
+   * 
+   * Return: List string yang berisi nama kategori
+   */
   List<String> _getCategoryName(int categoryId) {
-    // Map category IDs to category names - you can adjust this based on your API
+    // Pemetaan ID kategori ke nama kategori
     Map<int, String> categoryMap = {
-      1: "Tenda",
-      2: "Alat Masak", 
-      3: "Sepatu",
-      4: "Tas",
-      5: "Aksesoris",
-      6: "Pakaian",
+      1: "Tenda",       // Kategori 1: Tenda
+      2: "Alat Masak",  // Kategori 2: Alat Masak 
+      3: "Sepatu",      // Kategori 3: Sepatu
+      4: "Tas",         // Kategori 4: Tas
+      5: "Aksesoris",   // Kategori 5: Aksesoris
+      6: "Pakaian",     // Kategori 6: Pakaian
     };
+    // Kembalikan nama kategori dalam bentuk list, atau "Other" jika ID tidak ditemukan
     return [categoryMap[categoryId] ?? "Other"];
   }
-
   @override
+  /* Fungsi ini membangun UI untuk halaman daftar item
+   * 
+   * Parameter:
+   * - context: Konteks build dari framework Flutter
+   * 
+   * Return: Widget Scaffold dengan struktur halaman daftar item
+   */
   Widget build(BuildContext context) {
     return Scaffold(
+      // Menggunakan CustomScrollView untuk membuat layout scrollable yang lebih kompleks
       body: CustomScrollView(
         slivers: [
+          // Header area dengan judul dan kotak pencarian
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Judul halaman
                   const Text(
                     'Jelajahi Katalog Barang',
                     style: TextStyle(
@@ -718,7 +806,17 @@ class _ItemCategoryState extends State<ItemCategory> {
       },
     );
   }
-
+  /* Fungsi ini membangun bagian filter dengan judul dan pilihan filter
+   * 
+   * Parameter:
+   * - context: Konteks build dari Flutter
+   * - title: Judul bagian filter
+   * - items: Daftar pilihan filter yang tersedia
+   * - selectedItems: Daftar pilihan filter yang sudah dipilih
+   * - onToggle: Fungsi callback saat pilihan filter dipilih/dibatalkan
+   * 
+   * Return: Widget Column yang berisi bagian filter
+   */
   Widget _buildFilterSection(
     BuildContext context,
     String title,
@@ -729,21 +827,28 @@ class _ItemCategoryState extends State<ItemCategory> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Judul bagian filter
         Text(
           title,
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 10),
+        
+        // Daftar pilihan filter yang bisa wrap ke baris baru
         Wrap(
-          spacing: 10,
-          runSpacing: 10,
+          spacing: 10,      // Jarak horizontal antar pilihan
+          runSpacing: 10,   // Jarak vertikal antar baris
           children: items.map((item) {
+            // Cek apakah item ini sedang dipilih
             final isSelected = selectedItems.contains(item);
+            
+            // Buat widget pilihan filter
             return GestureDetector(
-              onTap: () => onToggle(item, isSelected),
+              onTap: () => onToggle(item, isSelected),  // Panggil onToggle saat diklik
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
+                  // Warna berbeda untuk item yang dipilih dan tidak dipilih
                   color: isSelected ? const Color(0xFFA0B25E) : Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: const Color.fromARGB(255, 69, 79, 31)),
@@ -751,6 +856,7 @@ class _ItemCategoryState extends State<ItemCategory> {
                 child: Text(
                   item,
                   style: TextStyle(
+                    // Warna teks berbeda untuk item yang dipilih dan tidak dipilih
                     color: isSelected ? Colors.white : const Color.fromARGB(255, 67, 77, 29),
                     fontWeight: FontWeight.w500,
                   ),
@@ -761,12 +867,22 @@ class _ItemCategoryState extends State<ItemCategory> {
         ),
       ],
     );
-  }
+  }  /* Fungsi ini membangun widget item barang yang ditampilkan dalam grid
+   * 
+   * Parameter:
+   * - barang: Objek Barang yang berisi data barang
+   * - context: Konteks build dari Flutter
+   * - index: Indeks barang dalam list
+   * 
+   * Return: Widget berisi tampilan kartu barang
+   */
   Widget _buildBarangItem(Barang barang, BuildContext context, int index) {
+    // Mendapatkan provider yang diperlukan
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final wishlistProvider = Provider.of<WishlistProvider>(context, listen: false);
     
     return GestureDetector(
+      // Navigasi ke halaman detail barang saat diklik
       onTap: () {
         Navigator.push(
           context,
@@ -919,17 +1035,21 @@ class _ItemCategoryState extends State<ItemCategory> {
       ),
     );
   }
-
+  /* Fungsi ini membuat placeholder gambar untuk item yang tidak memiliki foto
+   * 
+   * Return: Widget container dengan icon placeholder
+   */
   Widget _buildPlaceholderImage() {
     return Container(
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(
+        // Membuat container dengan sudut melengkung atas
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(10),
           topRight: Radius.circular(10),
         ),
-        color: Colors.grey[200],
+        color: Colors.grey[200],  // Warna abu-abu muda
       ),
       child: Icon(
         Icons.image,

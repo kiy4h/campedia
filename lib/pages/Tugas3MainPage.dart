@@ -1,3 +1,11 @@
+/*
+* File : Tugas3MainPage.dart
+* Deskripsi : Halaman navigasi utama yang berisi daftar semua halaman dalam aplikasi untuk memudahkan navigasi saat pengembangan
+* Dependencies : 
+*   - flutter/services.dart: untuk RawKeyboardListener
+*   - Semua halaman dalam aplikasi yang dapat dinavigasi
+*/
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // for RawKeyboardListener
 
@@ -31,9 +39,19 @@ void main() {
   runApp(MyApp());
 }
 
+/*
+* Class : MyApp
+* Deskripsi : Widget root aplikasi untuk halaman navigasi
+* Bagian Layar : Root aplikasi navigasi
+*/
 class MyApp extends StatelessWidget {
   MyApp({super.key});
-
+  /*
+  * Method : build
+  * Deskripsi : Membangun widget MaterialApp dengan tema dan warna kustom
+  * Parameter : context - BuildContext untuk akses ke fitur framework
+  * Return : Widget MaterialApp dengan tema yang dikonfigurasi
+  */
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -60,6 +78,11 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/*
+* Class : Tugas3ProvisPage
+* Deskripsi : Widget halaman navigasi utama, merupakan StatefulWidget
+* Bagian Layar : Halaman navigasi dengan daftar semua halaman aplikasi
+*/
 class Tugas3ProvisPage extends StatefulWidget {
   Tugas3ProvisPage({super.key});
 
@@ -67,6 +90,11 @@ class Tugas3ProvisPage extends StatefulWidget {
   _Tugas3ProvisPageState createState() => _Tugas3ProvisPageState();
 }
 
+/*
+* Class : _Tugas3ProvisPageState
+* Deskripsi : State untuk widget Tugas3ProvisPage
+* Bagian Layar : Mengelola state dan tampilan daftar navigasi halaman
+*/
 class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
   final List<Map<String, dynamic>> pageSections = [
     {

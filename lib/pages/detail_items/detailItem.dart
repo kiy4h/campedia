@@ -1,23 +1,54 @@
+/**
+ * File         : detailItem.dart
+ * Dibuat oleh  : Izzuddin Azzam
+ * Tanggal      : 15-06-2025
+ * Deskripsi    : File ini berisi implementasi halaman detail barang yang menampilkan
+ *                informasi lengkap tentang suatu barang, seperti gambar, deskripsi, dan harga
+ * Dependencies : flutter/material.dart, navbar component
+ */
+
 import 'package:flutter/material.dart';
 import '../components/navbar.dart';
 
 void main() => runApp(const MyApp());
 
+/** Widget MyApp
+ * 
+ * Deskripsi:
+ * - Widget root untuk aplikasi ketika file dijalankan langsung (bukan sebagai bagian dari aplikasi utama)
+ * - Menyediakan tema dan pengaturan dasar untuk halaman DetailItem
+ * - Merupakan StatelessWidget karena hanya berfungsi sebagai container dan tidak menyimpan state
+ */
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
+  /* Fungsi ini membangun widget root untuk aplikasi
+   * 
+   * Parameter:
+   * - context: Konteks build dari framework Flutter
+   * 
+   * Return: Widget MaterialApp yang merupakan root dari aplikasi
+   */
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,         // Sembunyikan banner debug
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xFFFFF8E1),
+        scaffoldBackgroundColor: const Color(0xFFFFF8E1),  // Background krem muda
       ),
-      home: const DetailItem(),
+      home: const DetailItem(),                  // Menampilkan halaman DetailItem
     );
   }
 }
 
+/** Widget DetailItem
+ * 
+ * Deskripsi:
+ * - Widget utama yang menampilkan detail lengkap sebuah barang
+ * - Menampilkan carousel gambar, deskripsi, dan opsi pembelian barang
+ * - Merupakan StatefulWidget karena perlu mengelola state seperti jumlah barang,
+ *   halaman carousel, dan status favorit
+ */
 class DetailItem extends StatefulWidget {
   const DetailItem({super.key});
 
@@ -25,14 +56,20 @@ class DetailItem extends StatefulWidget {
   State<DetailItem> createState() => _DetailItemState();
 }
 
+/** State untuk widget DetailItem
+ * 
+ * Deskripsi:
+ * - Mengelola state dan data untuk halaman detail barang
+ * - Menggunakan SingleTickerProviderStateMixin untuk animasi TabController
+ */
 class _DetailItemState extends State<DetailItem> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  late PageController _pageController;
-  int _quantity = 1;
-  bool _isFavorite = true;
-  int _currentImage = 0;
+  late TabController _tabController;   // Controller untuk tab deskripsi dan review
+  late PageController _pageController;  // Controller untuk carousel gambar
+  int _quantity = 1;                    // Jumlah barang yang akan dibeli
+  bool _isFavorite = true;              // Status favorit barang
+  int _currentImage = 0;                // Indeks gambar saat ini dalam carousel
 
-  // Paths to asset images for tents
+  // Paths ke aset gambar tenda
   final List<String> _images = [
     'images/assets_OnBoarding0/tenda_bg.png',
     'images/assets_ItemDetails/tenda_bg2.png',
@@ -40,16 +77,25 @@ class _DetailItemState extends State<DetailItem> with SingleTickerProviderStateM
   ];
 
   @override
+  /* Fungsi ini dijalankan saat widget pertama kali dibuat
+   *
+   * Menginisialisasi controller untuk tab dan page view
+   */
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
-    _pageController = PageController(initialPage: _currentImage);
+    _tabController = TabController(length: 3, vsync: this);  // Controller untuk 3 tab
+    _pageController = PageController(initialPage: _currentImage);  // Controller untuk carousel gambar
   }
 
   @override
+  /* Fungsi ini dijalankan saat widget dihapus dari widget tree
+   *
+   * Membersihkan resource dengan membuang controller
+   * untuk mencegah memory leak
+   */
   void dispose() {
-    _tabController.dispose();
-    _pageController.dispose();
+    _tabController.dispose();  // Membuang TabController
+    _pageController.dispose(); // Membuang PageController
     super.dispose();
   }
 
