@@ -1,9 +1,9 @@
 /*
 * File : itemCategory.dart
-* Deskripsi : Halaman yang menampilkan daftar item berdasarkan kategori dengan fitur filter
-* Dependencies : 
-*   - detailItem.dart: untuk navigasi ke halaman detail item
-*   - navbar.dart: untuk komponen navigasi
+* Deskripsi : File ini berisi halaman yang menampilkan daftar produk dalam kategori tertentu dengan fitur filter harga dan rating
+* Ketergantungan (Dependencies) : 
+*   - detailItem.dart: digunakan untuk berpindah ke halaman detail produk saat item diklik
+*   - navbar.dart: digunakan untuk menampilkan navigasi bawah pada halaman
 */
 
 import 'package:flutter/material.dart';
@@ -16,16 +16,18 @@ void main() {
 
 /*
 * Class : ItemCategoryApp
-* Deskripsi : Widget aplikasi utama untuk halaman kategori item
-* Bagian Layar : Root aplikasi untuk halaman kategori item
+* Deskripsi : Kelas ini adalah widget utama yang berfungsi sebagai pembungkus aplikasi untuk halaman kategori item
+* Jenis Widget : StatelessWidget karena tidak memerlukan perubahan status internal
+* Bagian Layar : Mengatur keseluruhan tema dan pengaturan aplikasi untuk halaman kategori item
 */
 class ItemCategoryApp extends StatelessWidget {
-  const ItemCategoryApp({super.key});
-  /*
+  const ItemCategoryApp({super.key});  /*
   * Method : build
-  * Deskripsi : Membangun widget aplikasi untuk kategori item
-  * Parameter : context - BuildContext untuk akses ke fitur framework
-  * Return : Widget MaterialApp yang berisi ItemCategory
+  * Deskripsi : Metode ini mengatur tampilan dasar aplikasi dengan tema dan warna untuk halaman kategori item
+  * Parameter : 
+  *   - context: menyediakan informasi dasar tentang lokasi widget dalam struktur aplikasi
+  * Nilai yang dihasilkan : 
+  *   - Menghasilkan widget MaterialApp dengan pengaturan tema dan ItemCategory sebagai halaman utama
   */
   @override
   Widget build(BuildContext context) {
@@ -42,8 +44,9 @@ class ItemCategoryApp extends StatelessWidget {
 
 /*
 * Class : ItemCategory
-* Deskripsi : Widget halaman kategori item, merupakan StatefulWidget
-* Bagian Layar : Halaman utama kategori item dengan fitur filter
+* Deskripsi : Kelas ini adalah widget halaman utama yang menampilkan daftar produk dalam kategori tenda dengan fitur filter
+* Jenis Widget : StatefulWidget karena perlu menyimpan dan mengubah status filter harga dan rating
+* Bagian Layar : Widget ini menampilkan seluruh konten halaman kategori item termasuk pencarian, filter, dan grid produk
 */
 class ItemCategory extends StatefulWidget {
   const ItemCategory({super.key});
@@ -54,8 +57,9 @@ class ItemCategory extends StatefulWidget {
 
 /*
 * Class : _ItemCategoryState
-* Deskripsi : State untuk widget ItemCategory
-* Bagian Layar : Mengelola state dan tampilan halaman kategori item
+* Deskripsi : Kelas ini mengatur status dan logika untuk halaman kategori item, termasuk filter dan tampilan produk
+* Jenis Widget : State dari StatefulWidget yang mengelola status filter harga dan rating
+* Bagian Layar : Mengimplementasikan logika filter dan tampilan untuk item-item dalam kategori
 */
 class _ItemCategoryState extends State<ItemCategory> {
   // Filter variables
@@ -75,24 +79,26 @@ class _ItemCategoryState extends State<ItemCategory> {
   ];
 
   // Daftar barang yang difilter
-  late List<Map<String, dynamic>> filteredItems;
-  /*
+  late List<Map<String, dynamic>> filteredItems;  /*
   * Method : initState
-  * Deskripsi : Inisialisasi state awal
-  * Parameter : -
-  * Return : void
+  * Deskripsi : Metode ini melakukan inisialisasi daftar item yang difilter saat halaman pertama kali dibuat
+  * Parameter : 
+  *   - (Tidak ada parameter)
+  * Nilai yang dihasilkan : 
+  *   - (Tidak mengembalikan nilai) Hanya mengatur nilai awal filteredItems dari daftar allItems 
   */
   @override
   void initState() {
     super.initState();
     filteredItems = List.from(allItems); // Initialize filtered items
   }
-
   /*
   * Method : _applyFilter
-  * Deskripsi : Memfilter item berdasarkan harga dan rating yang dipilih
-  * Parameter : -
-  * Return : void
+  * Deskripsi : Metode ini menerapkan filter pada daftar item berdasarkan rentang harga dan rating yang telah dipilih pengguna
+  * Parameter : 
+  *   - (Tidak ada parameter)
+  * Nilai yang dihasilkan : 
+  *   - (Tidak mengembalikan nilai) Memperbarui daftar filteredItems sesuai kriteria filter
   */
   void _applyFilter() {
     setState(() {
@@ -103,12 +109,13 @@ class _ItemCategoryState extends State<ItemCategory> {
             item['rating'] <= maxRating;
       }).toList();
     });
-  }
-  /*
+  }  /*
   * Method : _showFilterDialog
-  * Deskripsi : Menampilkan dialog untuk memfilter item berdasarkan harga dan rating
-  * Parameter : -
-  * Return : void
+  * Deskripsi : Metode ini menampilkan jendela popup dengan slider untuk memilih rentang harga dan rating produk
+  * Parameter : 
+  *   - (Tidak ada parameter)
+  * Nilai yang dihasilkan : 
+  *   - (Tidak mengembalikan nilai) Menampilkan dialog dengan slider filter dan tombol Apply/Reset
   */
   void _showFilterDialog() {
     showDialog(
@@ -173,12 +180,13 @@ class _ItemCategoryState extends State<ItemCategory> {
         );
       },
     );
-  }
-  /*
+  }  /*
   * Method : build
-  * Deskripsi : Membangun UI untuk halaman kategori item
-  * Parameter : context - BuildContext untuk akses ke fitur framework
-  * Return : Widget Scaffold berisi konten halaman kategori item
+  * Deskripsi : Metode ini membuat seluruh tampilan halaman kategori termasuk AppBar, judul kategori, kotak pencarian, dan grid item
+  * Parameter : 
+  *   - context: digunakan untuk navigasi dan akses ke tema aplikasi
+  * Nilai yang dihasilkan : 
+  *   - Menghasilkan widget Scaffold lengkap dengan daftar item dalam bentuk grid yang sudah difilter
   */
   @override
   Widget build(BuildContext context) {

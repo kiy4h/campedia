@@ -1,9 +1,9 @@
 /*
 * File : notification.dart
-* Deskripsi : Halaman yang menampilkan daftar notifikasi pengguna
-* Dependencies : 
-*   - checkout2.dart: untuk navigasi ke halaman pembayaran denda
-*   - checkout.dart: untuk navigasi ke halaman pembayaran
+* Deskripsi : File ini berisi halaman yang menampilkan berbagai notifikasi sistem seperti promo, ketersediaan barang, dan informasi pembayaran denda
+* Ketergantungan (Dependencies) : 
+*   - checkout2.dart: digunakan untuk berpindah ke halaman pembayaran denda ketika tombol diklik
+*   - checkout.dart: digunakan untuk berpindah ke halaman pembayaran biasa (tidak digunakan secara langsung)
 */
 
 import 'package:flutter/material.dart';
@@ -12,8 +12,9 @@ import '../shopping/payment_data/checkout.dart';
 
 /*
 * Class : NotificationPage
-* Deskripsi : Widget yang menampilkan daftar notifikasi untuk pengguna
-* Bagian Layar : Halaman notifikasi
+* Deskripsi : Kelas ini menampilkan daftar notifikasi dengan ikon, judul, deskripsi, dan waktu penerimaan
+* Jenis Widget : StatelessWidget karena hanya menampilkan daftar notifikasi statis tanpa perubahan status
+* Bagian Layar : Menampilkan seluruh halaman notifikasi dengan kartu-kartu notifikasi yang dapat diklik
 */
 class NotificationPage extends StatelessWidget {
   final List<Map<String, String>> notifications = [
@@ -39,12 +40,13 @@ class NotificationPage extends StatelessWidget {
     },
   ];
 
-  NotificationPage({super.key});
-  /*
+  NotificationPage({super.key});  /*
   * Method : build
-  * Deskripsi : Membangun tampilan halaman notifikasi
-  * Parameter : context - BuildContext untuk akses ke fitur framework
-  * Return : Widget Scaffold berisi daftar notifikasi
+  * Deskripsi : Metode ini membuat tampilan halaman notifikasi dengan daftar notifikasi yang dapat di-scroll
+  * Parameter : 
+  *   - context: digunakan untuk mengakses tema aplikasi dan menampilkan pesan snackbar saat notifikasi diklik
+  * Nilai yang dihasilkan : 
+  *   - Menghasilkan widget Scaffold dengan AppBar dan daftar notifikasi dalam bentuk ListView
   */
   @override
   Widget build(BuildContext context) {

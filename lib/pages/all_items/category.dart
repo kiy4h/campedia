@@ -1,11 +1,11 @@
 /*
 * File : category.dart
-* Deskripsi : Halaman yang menampilkan daftar kategori produk dalam tampilan grid
-* Dependencies : 
-*   - google_fonts: untuk styling text dengan font Poppins
-*   - itemCategory.dart: untuk navigasi ke halaman kategori item
-*   - navbar.dart: untuk komponen navigasi
-*   - allListItem.dart: untuk navigasi ke halaman daftar semua item
+* Deskripsi : File ini berisi halaman yang menampilkan berbagai kategori produk camping dalam bentuk grid dengan gambar dan jumlah item
+* Ketergantungan (Dependencies) : 
+*   - google_fonts: digunakan untuk mengatur font Poppins pada tampilan teks
+*   - itemCategory.dart: digunakan untuk berpindah ke halaman kategori item tertentu
+*   - navbar.dart: digunakan untuk menampilkan navigasi bawah layar
+*   - allListItem.dart: digunakan untuk berpindah ke daftar seluruh item
 */
 
 import 'package:flutter/material.dart';
@@ -20,16 +20,18 @@ void main() {
 
 /*
 * Class : CategoryPage
-* Deskripsi : Widget utama untuk halaman kategori, merupakan StatelessWidget
-* Bagian Layar : Keseluruhan layar kategori
+* Deskripsi : Kelas ini adalah widget utama yang menampung seluruh halaman kategori produk dengan tampilan MaterialApp
+* Jenis Widget : StatelessWidget karena tidak perlu menyimpan status perubahan
+* Bagian Layar : Widget ini mengatur seluruh halaman kategori termasuk tema dan pengaturan umum
 */
 class CategoryPage extends StatelessWidget {
-  const CategoryPage({super.key});
-  /*
+  const CategoryPage({super.key});  /*
   * Method : build
-  * Deskripsi : Membangun widget utama untuk aplikasi kategori
-  * Parameter : context - BuildContext untuk akses ke fitur framework
-  * Return : Widget MaterialApp yang berisi CategoriesPage
+  * Deskripsi : Metode ini membuat tampilan utama aplikasi kategori produk dengan tema dan warna yang telah ditentukan
+  * Parameter : 
+  *   - context: menyediakan informasi tentang lokasi widget dalam struktur widget dan akses ke fitur-fitur Flutter
+  * Nilai yang dihasilkan : 
+  *   - Menghasilkan widget MaterialApp yang menampung CategoriesPage sebagai halaman utama
   */
   @override
   Widget build(BuildContext context) {
@@ -47,8 +49,9 @@ class CategoryPage extends StatelessWidget {
 
 /*
 * Class : CategoriesPage
-* Deskripsi : Widget yang berisi implementasi halaman kategori dengan daftar grid
-* Bagian Layar : Konten halaman kategori yang menampilkan grid kategori produk
+* Deskripsi : Kelas ini mengatur tampilan utama daftar kategori produk yang ditampilkan dalam bentuk grid
+* Jenis Widget : StatelessWidget karena tampilan kategori statis dan tidak ada perubahan status internal
+* Bagian Layar : Menampilkan grid kartu kategori dengan gambar dan jumlah item di setiap kategori
 */
 class CategoriesPage extends StatelessWidget {
   // Daftar kategori dengan path asset untuk icon
@@ -63,12 +66,13 @@ class CategoriesPage extends StatelessWidget {
     {"name": "Fasilitas Tambahan", "icon": "images/assets_Categories/cat_FasilitasTambahan.png", "items": 120},
   ];
 
-  CategoriesPage({super.key});
-  /*
+  CategoriesPage({super.key});  /*
   * Method : build
-  * Deskripsi : Membangun tampilan Scaffold untuk halaman kategori
-  * Parameter : context - BuildContext untuk akses ke fitur framework
-  * Return : Widget Scaffold yang berisi konten halaman kategori
+  * Deskripsi : Metode ini menciptakan tampilan dasar halaman dengan AppBar di atas, daftar grid kategori di tengah, dan navigasi di bawah
+  * Parameter : 
+  *   - context: digunakan untuk mengakses informasi tentang lokasi widget dan navigasi antar halaman
+  * Nilai yang dihasilkan : 
+  *   - Menghasilkan widget Scaffold lengkap dengan AppBar, grid kategori, dan navigation bar bawah
   */
   @override
   Widget build(BuildContext context) {
@@ -96,14 +100,14 @@ class CategoriesPage extends StatelessWidget {
 
 
     );
-  }
-  /*
+  }  /*
   * Method : _buildCategoryCard
-  * Deskripsi : Membuat card untuk setiap kategori produk
+  * Deskripsi : Metode ini membuat kartu kategori yang dapat diklik dengan gambar, nama dan jumlah item di setiap kategori
   * Parameter : 
-  *   - category - Map berisi informasi kategori (nama, icon, jumlah item)
-  *   - context - BuildContext untuk navigasi
-  * Return : Widget berupa card kategori yang dapat diklik
+  *   - category: kumpulan data (Map) yang berisi nama kategori, gambar ikon, dan jumlah item
+  *   - context: diperlukan untuk navigasi ke halaman daftar item saat kategori diklik
+  * Nilai yang dihasilkan : 
+  *   - Menghasilkan widget GestureDetector berbentuk kartu dengan bayangan (shadow) yang bisa diklik
   */
   Widget _buildCategoryCard(Map<String, dynamic> category, BuildContext context) {
     return GestureDetector(
@@ -165,11 +169,12 @@ class CategoriesPage extends StatelessWidget {
 
 /*
 * Function : buildAppBar
-* Deskripsi : Fungsi untuk membangun AppBar dengan navigasi bottom yang disesuaikan berdasarkan indeks halaman
+* Deskripsi : Fungsi ini membuat AppBar yang berbeda untuk setiap halaman berdasarkan indeks yang diberikan
 * Parameter : 
-*   - context - BuildContext untuk akses ke fitur framework
-*   - currentIndex - int yang menunjukkan indeks halaman saat ini
-* Return : PreferredSizeWidget berupa AppBar yang sesuai dengan halaman
+*   - context: digunakan untuk menampilkan pesan snackbar dan mengakses fitur lain pada halaman
+*   - currentIndex: angka yang menentukan halaman aktif saat ini (0:Home, 1:Category, 2:Shopping Cart, dst)
+* Nilai yang dihasilkan : 
+*   - Menghasilkan AppBar yang sudah disesuaikan dengan judul dan tombol-tombol yang sesuai untuk halaman tertentu
 */
 PreferredSizeWidget buildAppBar({
   required BuildContext context,

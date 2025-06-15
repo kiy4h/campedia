@@ -1,16 +1,17 @@
 /*
 * File : trendingGear.dart
-* Deskripsi : File yang berisi class model dan widget untuk menampilkan peralatan camping trending
-* Dependencies : 
-*   - flutter/material.dart: untuk komponen UI
+* Deskripsi : File ini berisi model data dan komponen UI untuk menampilkan peralatan camping yang sedang populer dengan testimoni pengguna
+* Ketergantungan (Dependencies) : 
+*   - flutter/material.dart: digunakan untuk membuat seluruh antarmuka pengguna dan komponen visual
 */
 
 import 'package:flutter/material.dart';
 
 /*
 * Class : TrendingGear
-* Deskripsi : Model data untuk menyimpan informasi peralatan camping yang sedang trending
-* Bagian Layar : Model data, tidak langsung ditampilkan
+* Deskripsi : Kelas ini adalah model data yang menyimpan informasi detail tentang setiap peralatan camping populer
+* Jenis Widget : Bukan widget, melainkan kelas model data yang menyimpan properti peralatan
+* Bagian Layar : Tidak ditampilkan langsung, hanya sebagai struktur data
 */
 class TrendingGear {
   final String name;

@@ -1,12 +1,15 @@
-/*
-* File : profile.dart
-* Deskripsi : Halaman profil pengguna yang menampilkan informasi akun dan riwayat
-* Dependencies : 
-*   - google_fonts: untuk styling text dengan font Poppins
-*   - navbar.dart: untuk komponen navigasi
-*   - notification.dart: untuk navigasi ke halaman notifikasi
-*   - historyPenyewaan.dart: untuk navigasi ke halaman riwayat penyewaan
-*/
+/**
+ * File         : profile.dart
+ * Dibuat oleh  : Izzuddin Azzam
+ * Tanggal      : 15-06-2025
+ * Deskripsi    : File ini berisi tampilan halaman profil pengguna yang menampilkan foto profil,
+ *                informasi akun dan ringkasan riwayat penyewaan
+ * Dependencies : 
+ *   - google_fonts: untuk mengatur font Poppins pada teks
+ *   - navbar.dart: untuk menampilkan menu navigasi bawah
+ *   - notification.dart: untuk membuka halaman notifikasi pengguna
+ *   - historyPenyewaan.dart: untuk membuka halaman detail riwayat penyewaan
+ */
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,19 +21,21 @@ void main() {
   runApp(CampingApp());
 }
 
-/*
-* Class : CampingApp
-* Deskripsi : Widget aplikasi utama untuk halaman profil
-* Bagian Layar : Root aplikasi untuk halaman profil
-*/
+/** Widget CampingApp
+ * 
+ * Deskripsi:
+ * - Widget utama yang menjalankan aplikasi profil pengguna
+ * - Mengatur tema warna dan font untuk halaman profil
+ * - Menggunakan StatelessWidget karena tidak perlu menyimpan perubahan state
+ */
 class CampingApp extends StatelessWidget {
   const CampingApp({super.key});
-  /*
-  * Method : build
-  * Deskripsi : Membangun widget MaterialApp untuk halaman profil
-  * Parameter : context - BuildContext untuk akses ke fitur framework
-  * Return : Widget MaterialApp yang berisi ProfilePage
-  */
+    /** Method build
+   * 
+   * Deskripsi: Metode ini membangun dan mengatur tampilan aplikasi profil
+   * Parameter: context - Konteks untuk mengakses tema, lokalisasi, dll
+   * Return: MaterialApp dengan tema yang sudah diatur
+   */
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -45,20 +50,21 @@ class CampingApp extends StatelessWidget {
   }
 }
 
-/*
-* Class : ProfilePage
-* Deskripsi : Widget halaman profil pengguna, merupakan StatelessWidget
-* Bagian Layar : Halaman profil pengguna
-*/
+/** Widget ProfilePage
+ * 
+ * Deskripsi:
+ * - Widget yang menampilkan halaman utama profil pengguna
+ * - Menampilkan foto profil, info akun, dan ringkasan riwayat
+ * - Menggunakan StatelessWidget karena hanya menampilkan data tanpa perubahan state
+ */
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
-
-  /*
-  * Method : build
-  * Deskripsi : Membangun tampilan UI untuk halaman profil
-  * Parameter : context - BuildContext untuk akses ke fitur framework
-  * Return : Widget Scaffold berisi konten halaman profil
-  */
+  /** Method build
+   * 
+   * Deskripsi: Metode ini menyusun tata letak halaman profil pengguna
+   * Parameter: context - Konteks yang memberikan akses ke tema dan navigasi
+   * Return: Scaffold dengan AppBar, daftar informasi profil dan menu navigasi
+   */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,13 +105,12 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
-
-  /*
-  * Method : _buildHeader
-  * Deskripsi : Membuat bagian header profil dengan foto dan nama pengguna
-  * Parameter : context - BuildContext untuk akses ke fitur framework
-  * Return : Widget Row yang berisi header profil
-  */
+  /** Method _buildHeader
+   * 
+   * Deskripsi: Membuat bagian atas profil yang berisi foto dan nama pengguna
+   * Parameter: context - Konteks untuk mengakses tema dan navigasi
+   * Return: Widget baris dengan foto profil, salam, dan nama pengguna
+   */
   Widget _buildHeader(context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -143,13 +148,12 @@ class ProfilePage extends StatelessWidget {
       ],
     );
   }
-
-  /*
-  * Method : _buildProfileDetails
-  * Deskripsi : Membuat bagian detail informasi akun pengguna
-  * Parameter : context - BuildContext untuk akses ke fitur framework
-  * Return : Widget Column berisi informasi akun
-  */
+  /** Method _buildProfileDetails
+   * 
+   * Deskripsi: Membuat bagian yang menampilkan detail informasi akun pengguna
+   * Parameter: context - Konteks untuk mengakses tema
+   * Return: Kolom berisi judul "Informasi Akun" dan kartu dengan data pengguna
+   */
   Widget _buildProfileDetails(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,15 +171,14 @@ class ProfilePage extends StatelessWidget {
       ],
     );
   }
-
-  /*
-  * Method : _buildProfileRow
-  * Deskripsi : Membuat baris untuk menampilkan label dan nilai informasi profil
-  * Parameter : 
-  *   - label - String label untuk informasi profil
-  *   - value - String nilai informasi profil
-  * Return : Widget Padding berisi Row untuk satu baris informasi
-  */
+  /** Method _buildProfileRow
+   * 
+   * Deskripsi: Membuat satu baris informasi dengan label dan nilainya
+   * Parameter: 
+   *   - label - Judul informasi (misal: Email, Telepon)
+   *   - value - Nilai informasi (misal: example@mail.com)
+   * Return: Widget baris dengan label di kiri dan nilainya di kanan
+   */
   Widget _buildProfileRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -188,13 +191,12 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
-
-  /*
-  * Method : _buildHistorySection
-  * Deskripsi : Membuat bagian riwayat aktivitas pengguna
-  * Parameter : context - BuildContext untuk navigasi ke halaman riwayat
-  * Return : Widget Column berisi informasi riwayat
-  */
+  /** Method _buildHistorySection
+   * 
+   * Deskripsi: Membuat bagian yang menampilkan ringkasan riwayat aktivitas pengguna
+   * Parameter: context - Konteks untuk navigasi ke halaman riwayat lengkap
+   * Return: Kolom dengan judul "Riwayat" dan kartu ringkasan aktivitas
+   */
   Widget _buildHistorySection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,15 +223,14 @@ class ProfilePage extends StatelessWidget {
       ],
     );
   }
-
-  /*
-  * Method : _buildHistoryRow
-  * Deskripsi : Membuat baris untuk menampilkan label dan nilai informasi riwayat
-  * Parameter : 
-  *   - label - String label untuk informasi riwayat
-  *   - value - String nilai informasi riwayat
-  * Return : Widget Padding berisi Row untuk satu baris riwayat
-  */
+  /** Method _buildHistoryRow
+   * 
+   * Deskripsi: Membuat satu baris untuk menampilkan informasi riwayat aktivitas
+   * Parameter: 
+   *   - label - Jenis aktivitas (misal: Pembelian, Penyewaan)
+   *   - value - Informasi jumlah atau status (misal: 3 Items)
+   * Return: Widget baris dengan jenis aktivitas di kiri dan informasinya di kanan
+   */
   Widget _buildHistoryRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -242,13 +243,12 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
-
-  /*
-  * Method : _buildCard
-  * Deskripsi : Membuat widget card dengan shadow untuk menampung konten
-  * Parameter : children - List<Widget> daftar widget yang akan ditampilkan dalam card
-  * Return : Widget Container berupa card dengan styling
-  */
+  /** Method _buildCard
+   * 
+   * Deskripsi: Membuat kartu dengan bayangan untuk mengelompokkan informasi terkait
+   * Parameter: children - Daftar widget yang akan ditampilkan di dalam kartu
+   * Return: Container berbentuk kartu dengan bayangan dan sudut membulat
+   */
   Widget _buildCard(List<Widget> children) {
     return Container(
       padding: EdgeInsets.all(16),
@@ -266,13 +266,12 @@ class ProfilePage extends StatelessWidget {
       child: Column(children: children),
     );
   }
-
-  /*
-  * Method : _buildSettingsButton
-  * Deskripsi : Membuat tombol untuk mengedit profil
-  * Parameter : context - BuildContext untuk navigasi
-  * Return : Widget ElevatedButton untuk navigasi ke halaman edit profil
-  */
+  /** Method _buildSettingsButton
+   * 
+   * Deskripsi: Membuat tombol besar untuk navigasi ke halaman pengaturan profil
+   * Parameter: context - Konteks untuk navigasi ke halaman edit profil
+   * Return: Tombol hijau dengan ikon pengaturan dan tulisan "Edit Profile"
+   */
   Widget _buildSettingsButton(BuildContext context) {
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
