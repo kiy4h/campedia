@@ -7,10 +7,20 @@ class ApiConfig {
   static const String register = '/api/register';
   static const String barangBeranda = '/api/barang_beranda';
   static const String semuaBarang = '/api/semua_barang';
+  static const String searchBarang = '/api/search_barang';
+  static const String barangDetail = '/api/barang';
+  static const String wishlist = '/api/wishlist';
   static const String wishlistInput = '/api/wishlist_input';
+  static const String removeWishlist = '/api/remove_wishlist_item';
+  static const String keranjang = '/api/keranjang';
   static const String addToCart = '/api/add_to_cart';
+  static const String editCartItem = '/api/edit_cart_item';
+  static const String removeCartItem = '/api/remove_cart_item';
   static const String transaksiInput = '/api/transaksi_input';
+  static const String transaksiDetail = '/api/transaksi_detail';
   static const String pembayaranInput = '/api/pembayaran_input';
+  static const String reviewInput = '/api/review_input';
+  static const String notifikasiInput = '/api/notifikasi_input';
 
   // Headers
   static Map<String, String> get headers => {

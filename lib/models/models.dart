@@ -80,20 +80,22 @@ class Barang {
     this.foto,
     this.isWishlist,
   });
-
   factory Barang.fromJson(Map<String, dynamic> json) {
     return Barang(
-      id: json['id'],
-      namaBarang: json['nama_barang'],
-      kategoriId: json['kategori_id'],
-      brandId: json['brand_id'],
-      stok: json['stok'],
-      hargaPerhari: json['harga_perhari'],
-      deskripsi: json['deskripsi'],
-      meanReview: json['mean_review'].toDouble(),
-      totalReview: json['total_review'],
-      statusBarang: json['status_barang'],
-      tanggalDitambahkan: DateTime.parse(json['tanggal_ditambahkan']),
+      id: json['id'] ?? 0,
+      namaBarang: json['nama_barang'] ?? '',
+      kategoriId: json['kategori_id'] ?? 0,
+      brandId: json['brand_id'] ?? 0,
+      stok: json['stok'] ?? 0,
+      hargaPerhari: json['harga_perhari'] ?? 0,
+      deskripsi: json['deskripsi'] ?? '',
+      meanReview:
+          (json['mean_review'] != null) ? json['mean_review'].toDouble() : 0.0,
+      totalReview: json['total_review'] ?? 0,
+      statusBarang: json['status_barang'] ?? '',
+      tanggalDitambahkan: json['tanggal_ditambahkan'] != null
+          ? DateTime.parse(json['tanggal_ditambahkan'])
+          : DateTime.now(),
       foto: json['foto'],
       isWishlist: json['is_wishlist'],
     );
@@ -149,14 +151,13 @@ class UserData {
     required this.token,
     required this.expiredDate,
   });
-
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
-      userId: json['user_id'],
-      nama: json['nama'],
-      email: json['email'],
-      token: json['token'],
-      expiredDate: json['expired_date'],
+      userId: json['user_id'] ?? 0,
+      nama: json['nama'] ?? '',
+      email: json['email'] ?? '',
+      token: json['token'] ?? '',
+      expiredDate: json['expired_date'] ?? '',
     );
   }
 
@@ -234,6 +235,305 @@ class ApiResponse<T> {
       success: false,
       message: '',
       error: error,
+    );
+  }
+}
+
+// Cart Models
+class CartItem {
+  final int id;
+  final int kuantitas;
+  final int subtotal;
+  final int barangId;
+  final String namaBarang;
+  final int hargaPerhari;
+  final String? foto;
+
+  CartItem({
+    required this.id,
+    required this.kuantitas,
+    required this.subtotal,
+    required this.barangId,
+    required this.namaBarang,
+    required this.hargaPerhari,
+    this.foto,
+  });
+  factory CartItem.fromJson(Map<String, dynamic> json) {
+    return CartItem(
+      id: json['item_keranjang_id'] ?? 0,
+      kuantitas: json['kuantitas'] ?? 0,
+      subtotal: json['subtotal'] ?? 0,
+      barangId: json['barang_id'] ?? 0,
+      namaBarang: json['nama_barang'] ?? '',
+      hargaPerhari: json['harga_perhari'] ?? 0,
+      foto: json['foto'],
+    );
+  }
+}
+
+class Cart {
+  final int id;
+  final String? tanggalPengambilan;
+  final String? tanggalPengembalian;
+  final int? lamaPeminjaman;
+  final int? totalBiayaHari;
+  final int? totalBiayaDeposito;
+  final List<CartItem> items;
+
+  Cart({
+    required this.id,
+    this.tanggalPengambilan,
+    this.tanggalPengembalian,
+    this.lamaPeminjaman,
+    this.totalBiayaHari,
+    this.totalBiayaDeposito,
+    required this.items,
+  });
+  factory Cart.fromJson(Map<String, dynamic> json) {
+    final cartData = json['keranjang'] ?? {};
+    final itemsData = (json['items'] as List<dynamic>?) ?? [];
+
+    return Cart(
+      id: cartData['id'] ?? 0,
+      tanggalPengambilan: cartData['tanggal_pengambilan'],
+      tanggalPengembalian: cartData['tanggal_pengembalian'],
+      lamaPeminjaman: cartData['lama_peminjaman'],
+      totalBiayaHari: cartData['total_biaya_hari'],
+      totalBiayaDeposito: cartData['total_biaya_deposito'],
+      items: itemsData.map((item) => CartItem.fromJson(item)).toList(),
+    );
+  }
+}
+
+class AddToCartRequest {
+  final int userId;
+  final List<AddToCartItem> items;
+
+  AddToCartRequest({
+    required this.userId,
+    required this.items,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'user_id': userId,
+      'items': items.map((item) => item.toJson()).toList(),
+    };
+  }
+}
+
+class AddToCartItem {
+  final int barangId;
+  final int kuantitas;
+
+  AddToCartItem({
+    required this.barangId,
+    required this.kuantitas,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'barang_id': barangId,
+      'kuantitas': kuantitas,
+    };
+  }
+}
+
+// Wishlist Models
+class WishlistRequest {
+  final int userId;
+  final int barangId;
+
+  WishlistRequest({
+    required this.userId,
+    required this.barangId,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'user_id': userId,
+      'barang_id': barangId,
+    };
+  }
+}
+
+// Transaction Models
+class TransactionRequest {
+  final int userId;
+  final int cabangPengambilanId;
+  final String tanggalPengambilan;
+  final String tanggalPengembalian;
+  final String? statusTransaksi;
+  final String? tanggalPengembalianAktual;
+  final String? expiredPembayaran;
+
+  TransactionRequest({
+    required this.userId,
+    required this.cabangPengambilanId,
+    required this.tanggalPengambilan,
+    required this.tanggalPengembalian,
+    this.statusTransaksi,
+    this.tanggalPengembalianAktual,
+    this.expiredPembayaran,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'user_id': userId,
+      'cabang_pengambilan_id': cabangPengambilanId,
+      'tanggal_pengambilan': tanggalPengambilan,
+      'tanggal_pengembalian': tanggalPengembalian,
+      'status_transaksi': statusTransaksi ?? 'Belum Dibayar',
+      'tanggal_pengembalian_aktual': tanggalPengembalianAktual,
+      'expired_pembayaran': expiredPembayaran,
+    };
+  }
+}
+
+class PaymentRequest {
+  final int transaksiId;
+  final String metodePembayaran;
+  final String tipePembayaran;
+  final int totalPembayaran;
+  final String? waktuPembuatan;
+
+  PaymentRequest({
+    required this.transaksiId,
+    required this.metodePembayaran,
+    required this.tipePembayaran,
+    required this.totalPembayaran,
+    this.waktuPembuatan,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'transaksi_id': transaksiId,
+      'metode_pembayaran': metodePembayaran,
+      'tipe_pembayaran': tipePembayaran,
+      'total_pembayaran': totalPembayaran,
+      'waktu_pembuatan': waktuPembuatan,
+    };
+  }
+}
+
+// Review Models
+class ReviewRequest {
+  final int rating;
+  final String ulasan;
+  final int userId;
+  final int barangId;
+
+  ReviewRequest({
+    required this.rating,
+    required this.ulasan,
+    required this.userId,
+    required this.barangId,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'rating': rating,
+      'ulasan': ulasan,
+      'user_id': userId,
+      'barang_id': barangId,
+    };
+  }
+}
+
+// Item Detail Models
+class DetailBarang extends Barang {
+  final List<FotoBarang>? fotoList;
+  final List<Review>? reviews;
+
+  DetailBarang({
+    required super.id,
+    required super.namaBarang,
+    required super.kategoriId,
+    required super.brandId,
+    required super.stok,
+    required super.hargaPerhari,
+    required super.deskripsi,
+    required super.meanReview,
+    required super.totalReview,
+    required super.statusBarang,
+    required super.tanggalDitambahkan,
+    super.foto,
+    super.isWishlist,
+    this.fotoList,
+    this.reviews,
+  });
+
+  factory DetailBarang.fromJson(Map<String, dynamic> json) {
+    List<FotoBarang>? fotoList;
+    if (json['foto'] is List) {
+      fotoList = (json['foto'] as List)
+          .map((foto) => FotoBarang.fromJson(foto))
+          .toList();
+    }
+
+    List<Review>? reviews;
+    if (json['reviews'] != null) {
+      reviews = (json['reviews'] as List)
+          .map((review) => Review.fromJson(review))
+          .toList();
+    }
+    return DetailBarang(
+      id: json['id'] ?? 0,
+      namaBarang: json['nama_barang'] ?? '',
+      kategoriId: json['kategori_id'] ?? 0,
+      brandId: json['brand_id'] ?? 0,
+      stok: json['stok'] ?? 0,
+      hargaPerhari: json['harga_perhari'] ?? 0,
+      deskripsi: json['deskripsi'] ?? '',
+      meanReview:
+          (json['mean_review'] != null) ? json['mean_review'].toDouble() : 0.0,
+      totalReview: json['total_review'] ?? 0,
+      statusBarang: json['status_barang'] ?? '',
+      tanggalDitambahkan: json['tanggal_ditambahkan'] != null
+          ? DateTime.parse(json['tanggal_ditambahkan'])
+          : DateTime.now(),
+      foto: json['foto'] is String ? json['foto'] : null,
+      isWishlist: json['is_wishlist'],
+      fotoList: fotoList,
+      reviews: reviews,
+    );
+  }
+}
+
+class FotoBarang {
+  final String foto;
+  final int urutan;
+
+  FotoBarang({
+    required this.foto,
+    required this.urutan,
+  });
+  factory FotoBarang.fromJson(Map<String, dynamic> json) {
+    return FotoBarang(
+      foto: json['foto'] ?? '',
+      urutan: json['urutan'] ?? 0,
+    );
+  }
+}
+
+class Review {
+  final int rating;
+  final String ulasan;
+  final String namaUser;
+  final String waktuPembuatan;
+
+  Review({
+    required this.rating,
+    required this.ulasan,
+    required this.namaUser,
+    required this.waktuPembuatan,
+  });
+  factory Review.fromJson(Map<String, dynamic> json) {
+    return Review(
+      rating: json['rating'] ?? 0,
+      ulasan: json['ulasan'] ?? '',
+      namaUser: json['nama_user'] ?? '',
+      waktuPembuatan: json['waktu_pembuatan'] ?? '',
     );
   }
 }

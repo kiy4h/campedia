@@ -30,7 +30,8 @@ Widget buildBottomNavBar(
       children: [
         _buildNavItem(context, Icons.home, 0, currentIndex),
         _buildNavItem(context, Icons.swap_horiz, 1, currentIndex),
-        _buildNavItem(context, Icons.shopping_cart_outlined, 2, currentIndex, hasNotification: true),
+        _buildNavItem(context, Icons.shopping_cart_outlined, 2, currentIndex,
+            hasNotification: true),
         _buildNavItem(context, Icons.favorite_border, 3, currentIndex),
         _buildProfileNavItem(context, 4, currentIndex),
       ],
@@ -102,7 +103,7 @@ Widget _buildProfileNavItem(BuildContext context, int index, int currentIndex) {
           width: 2,
         ),
         image: const DecorationImage(
-          image: AssetImage('assets/profile_placeholder.jpg'),
+          image: AssetImage('images/assets_Profile/profile_placeholder.jpg'),
           fit: BoxFit.cover,
         ),
       ),
@@ -113,19 +114,24 @@ Widget _buildProfileNavItem(BuildContext context, int index, int currentIndex) {
 void _navigateToPage(BuildContext context, int index) {
   switch (index) {
     case 0:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
       break;
     case 1:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => AllItemList()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => AllItemList()));
       break;
     case 2:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Shoping()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Shoping()));
       break;
     case 3:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => FavoritePage()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => FavoritePage()));
       break;
     case 4:
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => ProfilePage()));
       break;
   }
 }

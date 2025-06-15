@@ -74,6 +74,7 @@ flutter:
     - images/assets_PaymentMethods/
     - images/assets_SignUp/
     - images/assets_DestinationCamp/
+    - images/assets_Profile/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

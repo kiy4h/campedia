@@ -45,11 +45,13 @@ class ApiService {
       final responseData = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        return ApiResponse.success(
-            responseData['message'], responseData['message']);
+        final message = responseData['message'] ?? 'Registration successful';
+        return ApiResponse.success(message, message);
       } else {
-        return ApiResponse.error(
-            responseData['error'] ?? 'Registration failed');
+        final error = responseData['error'] ??
+            responseData['detail'] ??
+            'Registration failed';
+        return ApiResponse.error(error);
       }
     } catch (e) {
       return ApiResponse.error('Network error: $e');
@@ -110,15 +112,15 @@ class ApiService {
   static Future<ApiResponse<String>> addToWishlist(
       int userId, int barangId) async {
     try {
-      final requestData = {
-        'user_id': userId,
-        'barang_id': barangId,
-      };
+      final requestData = WishlistRequest(
+        userId: userId,
+        barangId: barangId,
+      );
 
       final response = await http.post(
         Uri.parse('${ApiConfig.baseUrl}${ApiConfig.wishlistInput}'),
         headers: ApiConfig.headers,
-        body: jsonEncode(requestData),
+        body: jsonEncode(requestData.toJson()),
       );
 
       final responseData = jsonDecode(response.body);
@@ -137,17 +139,17 @@ class ApiService {
 
   // Add to cart
   static Future<ApiResponse<String>> addToCart(
-      int userId, List<Map<String, dynamic>> items) async {
+      int userId, List<AddToCartItem> items) async {
     try {
-      final requestData = {
-        'user_id': userId,
-        'items': items,
-      };
+      final requestData = AddToCartRequest(
+        userId: userId,
+        items: items,
+      );
 
       final response = await http.post(
         Uri.parse('${ApiConfig.baseUrl}${ApiConfig.addToCart}'),
         headers: ApiConfig.headers,
-        body: jsonEncode(requestData),
+        body: jsonEncode(requestData.toJson()),
       );
 
       final responseData = jsonDecode(response.body);
@@ -166,12 +168,12 @@ class ApiService {
 
   // Create transaction
   static Future<ApiResponse<Map<String, dynamic>>> createTransaction(
-      Map<String, dynamic> transactionData) async {
+      TransactionRequest transactionRequest) async {
     try {
       final response = await http.post(
         Uri.parse('${ApiConfig.baseUrl}${ApiConfig.transaksiInput}'),
         headers: ApiConfig.headers,
-        body: jsonEncode(transactionData),
+        body: jsonEncode(transactionRequest.toJson()),
       );
 
       final responseData = jsonDecode(response.body);
@@ -189,12 +191,12 @@ class ApiService {
 
   // Create payment
   static Future<ApiResponse<String>> createPayment(
-      Map<String, dynamic> paymentData) async {
+      PaymentRequest paymentRequest) async {
     try {
       final response = await http.post(
         Uri.parse('${ApiConfig.baseUrl}${ApiConfig.pembayaranInput}'),
         headers: ApiConfig.headers,
-        body: jsonEncode(paymentData),
+        body: jsonEncode(paymentRequest.toJson()),
       );
 
       final responseData = jsonDecode(response.body);
@@ -205,6 +207,342 @@ class ApiService {
       } else {
         return ApiResponse.error(
             responseData['error'] ?? 'Failed to create payment');
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: $e');
+    }
+  }
+
+  // Search items
+  static Future<ApiResponse<List<Barang>>> searchBarang(
+      int userId, String keyword) async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+            '${ApiConfig.baseUrl}${ApiConfig.searchBarang}?user_id=$userId&keyword=$keyword'),
+        headers: ApiConfig.headers,
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        if (responseData['data'] != null) {
+          final List<dynamic> dataList = responseData['data'];
+          final List<Barang> barangList =
+              dataList.map((json) => Barang.fromJson(json)).toList();
+          return ApiResponse.success(
+              barangList, 'Search completed successfully');
+        } else {
+          return ApiResponse.error('No data found in response');
+        }
+      } else {
+        final error = responseData['error'] ??
+            responseData['detail'] ??
+            'Failed to search items';
+        return ApiResponse.error(error);
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: $e');
+    }
+  }
+
+  // Get item detail
+  static Future<ApiResponse<DetailBarang>> getBarangDetail(
+      int barangId, int userId) async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+            '${ApiConfig.baseUrl}${ApiConfig.barangDetail}?barang_id=$barangId&user_id=$userId'),
+        headers: ApiConfig.headers,
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        if (responseData['data'] != null) {
+          final DetailBarang barang =
+              DetailBarang.fromJson(responseData['data']);
+          return ApiResponse.success(barang, 'Item detail loaded successfully');
+        } else {
+          return ApiResponse.error('No data found in response');
+        }
+      } else {
+        final error = responseData['error'] ??
+            responseData['detail'] ??
+            'Failed to load item detail';
+        return ApiResponse.error(error);
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: $e');
+    }
+  }
+
+  // Get wishlist
+  static Future<ApiResponse<List<Barang>>> getWishlist(int userId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiConfig.baseUrl}${ApiConfig.wishlist}?user_id=$userId'),
+        headers: ApiConfig.headers,
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        if (responseData['data'] != null) {
+          final List<dynamic> dataList = responseData['data'];
+          final List<Barang> barangList =
+              dataList.map((json) => Barang.fromJson(json)).toList();
+          return ApiResponse.success(
+              barangList, 'Wishlist loaded successfully');
+        } else {
+          return ApiResponse.error('No data found in response');
+        }
+      } else {
+        final error = responseData['error'] ??
+            responseData['detail'] ??
+            'Failed to load wishlist';
+        return ApiResponse.error(error);
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: $e');
+    }
+  }
+
+  // Remove from wishlist
+  static Future<ApiResponse<String>> removeFromWishlist(
+      int userId, int barangId) async {
+    try {
+      final requestData = {
+        'user_id': userId,
+        'barang_id': barangId,
+      };
+
+      final response = await http.delete(
+        Uri.parse('${ApiConfig.baseUrl}${ApiConfig.removeWishlist}'),
+        headers: ApiConfig.headers,
+        body: jsonEncode(requestData),
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return ApiResponse.success(
+            responseData['message'], responseData['message']);
+      } else {
+        return ApiResponse.error(
+            responseData['error'] ?? 'Failed to remove from wishlist');
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: $e');
+    }
+  }
+
+  // Get cart items
+  static Future<ApiResponse<Cart>> getCart(int userId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiConfig.baseUrl}${ApiConfig.keranjang}?user_id=$userId'),
+        headers: ApiConfig.headers,
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        if (responseData['data'] != null) {
+          final Cart cart = Cart.fromJson(responseData['data']);
+          return ApiResponse.success(cart, 'Cart loaded successfully');
+        } else {
+          // Empty cart case
+          final emptyCart = Cart(id: 0, items: []);
+          return ApiResponse.success(
+              emptyCart, responseData['message'] ?? 'Cart is empty');
+        }
+      } else {
+        final error = responseData['error'] ??
+            responseData['detail'] ??
+            'Failed to load cart';
+        return ApiResponse.error(error);
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: $e');
+    }
+  }
+
+  // Edit cart item quantity
+  static Future<ApiResponse<String>> editCartItem(
+      int userId, int itemKeranjangId, int kuantitasBaru) async {
+    try {
+      final requestData = {
+        'user_id': userId,
+        'item_keranjang_id': itemKeranjangId,
+        'kuantitas_baru': kuantitasBaru,
+      };
+
+      final response = await http.patch(
+        Uri.parse('${ApiConfig.baseUrl}${ApiConfig.editCartItem}'),
+        headers: ApiConfig.headers,
+        body: jsonEncode(requestData),
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return ApiResponse.success(
+            responseData['message'], responseData['message']);
+      } else {
+        return ApiResponse.error(
+            responseData['error'] ?? 'Failed to edit cart item');
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: $e');
+    }
+  }
+
+  // Remove cart item
+  static Future<ApiResponse<String>> removeCartItem(
+      int userId, int itemKeranjangId) async {
+    try {
+      final requestData = {
+        'user_id': userId,
+        'item_keranjang_id': itemKeranjangId,
+      };
+
+      final response = await http.delete(
+        Uri.parse('${ApiConfig.baseUrl}${ApiConfig.removeCartItem}'),
+        headers: ApiConfig.headers,
+        body: jsonEncode(requestData),
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return ApiResponse.success(
+            responseData['message'], responseData['message']);
+      } else {
+        return ApiResponse.error(
+            responseData['error'] ?? 'Failed to remove cart item');
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: $e');
+    }
+  }
+
+  // Get transaction detail
+  static Future<ApiResponse<List<Map<String, dynamic>>>> getTransactionDetail(
+      int transaksiId) async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+            '${ApiConfig.baseUrl}${ApiConfig.transaksiDetail}?transaksi_id=$transaksiId'),
+        headers: ApiConfig.headers,
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        if (responseData['data'] != null) {
+          final List<dynamic> dataList = responseData['data'];
+          final List<Map<String, dynamic>> transactionItems =
+              dataList.map((item) => Map<String, dynamic>.from(item)).toList();
+          return ApiResponse.success(
+              transactionItems, 'Transaction detail loaded successfully');
+        } else {
+          return ApiResponse.error('No data found in response');
+        }
+      } else {
+        final error = responseData['error'] ??
+            responseData['detail'] ??
+            'Failed to load transaction detail';
+        return ApiResponse.error(error);
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: $e');
+    }
+  }
+
+  // Add review
+  static Future<ApiResponse<String>> addReview(
+      ReviewRequest reviewRequest) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${ApiConfig.baseUrl}${ApiConfig.reviewInput}'),
+        headers: ApiConfig.headers,
+        body: jsonEncode(reviewRequest.toJson()),
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return ApiResponse.success(
+            responseData['message'], responseData['message']);
+      } else {
+        return ApiResponse.error(
+            responseData['error'] ?? 'Failed to add review');
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: $e');
+    }
+  }
+
+  // Filter barang with advanced options
+  static Future<ApiResponse<List<Barang>>> filterBarang({
+    required int userId,
+    List<int>? kategoriId,
+    List<int>? brandId,
+    int? hargaMin,
+    int? hargaMax,
+    double? minRating,
+    String? sortBy,
+    String? order,
+  }) async {
+    try {
+      final uri = Uri.parse('${ApiConfig.baseUrl}/api/semua_barang/filter');
+      final queryParams = <String, dynamic>{
+        'user_id': userId.toString(),
+      };
+
+      if (kategoriId != null && kategoriId.isNotEmpty) {
+        for (int i = 0; i < kategoriId.length; i++) {
+          queryParams['kategori_id'] =
+              kategoriId.map((id) => id.toString()).toList();
+        }
+      }
+
+      if (brandId != null && brandId.isNotEmpty) {
+        for (int i = 0; i < brandId.length; i++) {
+          queryParams['brand_id'] = brandId.map((id) => id.toString()).toList();
+        }
+      }
+
+      if (hargaMin != null) queryParams['harga_min'] = hargaMin.toString();
+      if (hargaMax != null) queryParams['harga_max'] = hargaMax.toString();
+      if (minRating != null) queryParams['min_rating'] = minRating.toString();
+      if (sortBy != null) queryParams['sort_by'] = sortBy;
+      if (order != null) queryParams['order'] = order;
+
+      final finalUri = uri.replace(queryParameters: queryParams);
+
+      final response = await http.get(
+        finalUri,
+        headers: ApiConfig.headers,
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        if (responseData['data'] != null) {
+          final List<dynamic> dataList = responseData['data'];
+          final List<Barang> barangList =
+              dataList.map((json) => Barang.fromJson(json)).toList();
+          return ApiResponse.success(barangList, 'Items filtered successfully');
+        } else {
+          return ApiResponse.error('No data found in response');
+        }
+      } else {
+        final error = responseData['error'] ??
+            responseData['detail'] ??
+            'Failed to filter items';
+        return ApiResponse.error(error);
       }
     } catch (e) {
       return ApiResponse.error('Network error: $e');

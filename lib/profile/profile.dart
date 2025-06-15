@@ -77,7 +77,8 @@ class ProfilePage extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 30,
-              backgroundImage: AssetImage('assets/profile_pic.jpg'),
+              backgroundImage:
+                  AssetImage('images/assets_Profile/profile_placeholder.jpg'),
             ),
             SizedBox(width: 12),
             Column(
@@ -141,7 +142,8 @@ class ProfilePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Riwayat', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+        Text('Riwayat',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
         SizedBox(height: 12),
         _buildCard([
           _buildHistoryRow('Pembelian', '3 Items'),
@@ -153,7 +155,8 @@ class ProfilePage extends StatelessWidget {
           alignment: Alignment.centerRight,
           child: TextButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => ModernTransactionPage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => ModernTransactionPage()));
             },
             child: Text('Lihat Semua', style: TextStyle(color: Colors.blue)),
           ),
@@ -204,7 +207,8 @@ class ProfilePage extends StatelessWidget {
         // Tambahkan aksi edit profil
       },
       icon: Icon(Icons.settings, color: Colors.white),
-      label: Text('Edit Profile', style: TextStyle(color: Colors.white, fontSize: 16)),
+      label: Text('Edit Profile',
+          style: TextStyle(color: Colors.white, fontSize: 16)),
     );
   }
 }
