@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import '../Items/detailItem.dart';
 import '../components/navbar.dart';
+import '../providers/auth_provider.dart';
+import '../providers/barang_provider.dart';
+import '../providers/wishlist_provider.dart';
+import '../models/models.dart';
 
 void main() {
   runApp(const AllItemList());
@@ -31,50 +37,10 @@ class ItemCategory extends StatefulWidget {
 }
 
 class _ItemCategoryState extends State<ItemCategory> {
-  final List<Map<String, dynamic>> trendingItems = [
-    {
-      "name": "Tenda Camping",
-      "price": 300000,
-      "image": "images/assets_ItemDetails/tenda_bg1.png",
-      "rating": 4.5,
-      "isFavorite": false
-    },
-    {
-      "name": "Kompor Portable",
-      "price": 150000,
-      "image": "images/assets_ItemDetails/tenda_bg2.png",
-      "rating": 4.3,
-      "isFavorite": false
-    },
-    {
-      "name": "Sepatu Gunung",
-      "price": 250000,
-      "image": "images/assets_ItemDetails/tenda_bg3.png",
-      "rating": 4.7,
-      "isFavorite": false
-    },
-    {
-      "name": "Tas Gunung",
-      "price": 350000,
-      "image": "images/assets_ItemDetails/tenda_bg4.png",
-      "rating": 4.0,
-      "isFavorite": false
-    },
-    {
-      "name": "Senter LED",
-      "price": 120000,
-      "image": "images/assets_ItemDetails/tenda_bg5.png",
-      "rating": 4.8,
-      "isFavorite": false
-    },
-    {
-      "name": "Jaket Gunung",
-      "price": 400000,
-      "image": "images/assets_ItemDetails/tenda_bg6.png",
-      "rating": 4.2,
-      "isFavorite": false
-    },
-  ];
+  List<Barang> allItems = [];
+  List<Barang> filteredItems = [];
+  bool _isLoading = false;
+  String? _error;
 
   final List<String> categories = [
     "All",
@@ -94,6 +60,74 @@ class _ItemCategoryState extends State<ItemCategory> {
 
   TextEditingController minPriceController = TextEditingController(text: "0");
   TextEditingController maxPriceController = TextEditingController(text: "1000000");
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAllItems();
+  }
+
+  @override
+  void dispose() {
+    minPriceController.dispose();
+    maxPriceController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadAllItems() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final barangProvider = Provider.of<BarangProvider>(context, listen: false);
+
+    if (authProvider.isAuthenticated) {
+      setState(() {
+        _isLoading = true;
+        _error = null;
+      });
+
+      await barangProvider.fetchAllBarang(authProvider.user!.userId);
+
+      setState(() {
+        _isLoading = false;
+        allItems = List.from(barangProvider.allBarang);
+        filteredItems = List.from(allItems);
+        _error = barangProvider.error;
+      });
+    }
+  }
+
+  void _applyFilters() {
+    setState(() {
+      filteredItems = allItems.where((item) {
+        // Category filter
+        bool categoryMatch = selectedCategories.isEmpty || 
+                            selectedCategories.contains("All") ||
+                            _getCategoryName(item.kategoriId).any((cat) => selectedCategories.contains(cat));
+
+        // Price filter
+        bool priceMatch = item.hargaPerhari >= priceRange.start.round() &&
+                         item.hargaPerhari <= priceRange.end.round();
+
+        // Rating filter
+        bool ratingMatch = selectedRatings.isEmpty ||
+                          selectedRatings.any((rating) => item.meanReview >= rating && item.meanReview < rating + 1);
+
+        return categoryMatch && priceMatch && ratingMatch;
+      }).toList();
+    });
+  }
+
+  List<String> _getCategoryName(int categoryId) {
+    // Map category IDs to category names - you can adjust this based on your API
+    Map<int, String> categoryMap = {
+      1: "Tenda",
+      2: "Alat Masak", 
+      3: "Sepatu",
+      4: "Tas",
+      5: "Aksesoris",
+      6: "Pakaian",
+    };
+    return [categoryMap[categoryId] ?? "Other"];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,8 +189,7 @@ class _ItemCategoryState extends State<ItemCategory> {
                       scrollDirection: Axis.horizontal,
                       itemCount: categories.length,
                       separatorBuilder: (_, __) => const SizedBox(width: 10),
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
+                      itemBuilder: (context, index) {                        return GestureDetector(
                           onTap: () {
                             setState(() {
                               if (selectedCategories.contains(categories[index])) {
@@ -164,6 +197,7 @@ class _ItemCategoryState extends State<ItemCategory> {
                               } else {
                                 selectedCategories.add(categories[index]);
                               }
+                              _applyFilters(); // Apply filters when category changes
                             });
                           },
                           child: Container(
@@ -228,23 +262,70 @@ class _ItemCategoryState extends State<ItemCategory> {
                 ],
               ),
             ),
-          ),
-          SliverPadding(
+          ),          SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            sliver: SliverGrid(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return _buildTrendingItem(trendingItems[index], context, index);
-                },
-                childCount: trendingItems.length,
-              ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.75,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-            ),
+            sliver: _isLoading
+                ? SliverToBoxAdapter(
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(50),
+                        child: CircularProgressIndicator(
+                          color: Color(0xFFA0B25E),
+                        ),
+                      ),
+                    ),
+                  )
+                : _error != null
+                    ? SliverToBoxAdapter(
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(50),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Error loading items: $_error',
+                                  style: TextStyle(color: Colors.red),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 16),
+                                ElevatedButton(
+                                  onPressed: _loadAllItems,
+                                  child: Text('Retry'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    : filteredItems.isEmpty
+                        ? SliverToBoxAdapter(
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(50),
+                                child: Text(
+                                  'No items found',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : SliverGrid(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                return _buildBarangItem(filteredItems[index], context, index);
+                              },
+                              childCount: filteredItems.length,
+                            ),
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.75,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                            ),
+                          ),
           ),
         ],
       ),
@@ -603,9 +684,9 @@ class _ItemCategoryState extends State<ItemCategory> {
                         ),
                         const SizedBox(width: 10),
                         Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
+                          child: ElevatedButton(                            onPressed: () {
                               // Terapkan filter
+                              _applyFilters();
                               Navigator.pop(context);
                               // Refresh state
                               setState(() {});
@@ -681,8 +762,10 @@ class _ItemCategoryState extends State<ItemCategory> {
       ],
     );
   }
-
-  Widget _buildTrendingItem(Map<String, dynamic> item, BuildContext context, int index) {
+  Widget _buildBarangItem(Barang barang, BuildContext context, int index) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final wishlistProvider = Provider.of<WishlistProvider>(context, listen: false);
+    
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -693,70 +776,137 @@ class _ItemCategoryState extends State<ItemCategory> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
-            image: AssetImage(item['image']),
-            fit: BoxFit.cover,
-          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 5,
+              offset: Offset(0, 2),
+            ),
+          ],
         ),
-        child: Stack(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Positioned(
-              top: 10,
-              right: 10,
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    trendingItems[index]['isFavorite'] = !trendingItems[index]['isFavorite'];
-                  });
-                },
-                child: Icon(
-                  trendingItems[index]['isFavorite'] ? Icons.favorite : Icons.favorite_border,
-                  color: Colors.red,
-                  size: 28,
-                ),
+            // Image section
+            Expanded(
+              flex: 3,
+              child: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                      ),
+                      color: Colors.grey[200],
+                    ),
+                    child: barang.foto != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            ),
+                            child: Image.network(
+                              barang.foto!,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return _buildPlaceholderImage();
+                              },
+                            ),
+                          )
+                        : _buildPlaceholderImage(),
+                  ),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: GestureDetector(
+                      onTap: () async {
+                        if (authProvider.isAuthenticated) {
+                          if (barang.isWishlist == true) {
+                            // Remove from wishlist
+                            await wishlistProvider.removeFromWishlist(
+                              authProvider.user!.userId, 
+                              barang.id
+                            );
+                          } else {
+                            // Add to wishlist
+                            await wishlistProvider.addToWishlist(
+                              authProvider.user!.userId, 
+                              barang.id
+                            );
+                          }
+                          _loadAllItems(); // Refresh the list
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.9),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          barang.isWishlist == true ? Icons.favorite : Icons.favorite_border,
+                          color: Colors.red,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
-                  ),
-                  color: Colors.black.withOpacity(0.5),
-                ),
+            // Info section
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      item['name'],
+                      barang.namaBarang,
                       style: const TextStyle(
-                        color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      'Rp. ${item['price']}',
-                      style: const TextStyle(
-                        color: Colors.white,
                         fontSize: 14,
                       ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 5),
-                    Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.star, size: 16, color: Colors.amber),
-                        const SizedBox(width: 5),
                         Text(
-                          item['rating'].toString(),
-                          style: const TextStyle(color: Colors.white),
+                          NumberFormat.currency(locale: 'id', symbol: 'Rp', decimalDigits: 0)
+                              .format(barang.hargaPerhari),
+                          style: TextStyle(
+                            color: Color(0xFFA0B25E),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Icon(Icons.star, color: Colors.amber, size: 14),
+                            const SizedBox(width: 2),
+                            Text(
+                              barang.meanReview.toStringAsFixed(1),
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                            Text(
+                              ' (${barang.totalReview})',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -766,6 +916,25 @@ class _ItemCategoryState extends State<ItemCategory> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildPlaceholderImage() {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
+        color: Colors.grey[200],
+      ),
+      child: Icon(
+        Icons.image,
+        color: Colors.grey[400],
+        size: 40,
       ),
     );
   }
