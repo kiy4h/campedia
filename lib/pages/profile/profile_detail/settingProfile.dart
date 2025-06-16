@@ -1,5 +1,15 @@
+/**
+ * File         : settings_page.dart
+ * Dibuat oleh  : Izzuddin Azzam
+ * Tanggal      : 16-06-2025
+ * Deskripsi    : Halaman pengaturan pengguna aplikasi Campedia.
+ *                Berisi opsi untuk mengubah profil, notifikasi, bahasa,
+ *                bantuan, info aplikasi, dan logout.
+ */
+
 import 'package:flutter/material.dart';
 
+/// Halaman pengaturan akun pengguna
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -10,7 +20,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   bool _notifications = true;
   String _selectedLanguage = 'Bahasa Indonesia';
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,28 +38,32 @@ class _SettingsPageState extends State<SettingsPage> {
       body: ListView(
         children: [
           const SizedBox(height: 16),
-          
-          // Pengaturan Profil
+
+          // --- Bagian Profil ---
           _buildSectionTitle('Profil'),
           _buildSettingsItem(
             'Informasi Pribadi',
             'Perbarui nama, bio, foto profil',
             Icons.person,
-            onTap: () {},
+            onTap: () {
+              // TODO: Navigasi ke halaman informasi pribadi
+            },
           ),
           _buildSettingsItem(
             'Kontak',
             'Email, telepon, dan lokasi',
             Icons.contact_mail,
-            onTap: () {},
+            onTap: () {
+              // TODO: Navigasi ke halaman kontak
+            },
           ),
-          
+
           const Divider(height: 32),
-          
-          // Pengaturan Aplikasi
+
+          // --- Bagian Aplikasi ---
           _buildSectionTitle('Aplikasi'),
-          
-          // Toggle Notifikasi
+
+          // Switch notifikasi
           SwitchListTile(
             value: _notifications,
             onChanged: (value) {
@@ -64,8 +78,8 @@ class _SettingsPageState extends State<SettingsPage> {
               color: Colors.green.shade800,
             ),
           ),
-          
-          // Pilihan Bahasa
+
+          // Pilihan bahasa
           ListTile(
             leading: Icon(
               Icons.language,
@@ -78,22 +92,26 @@ class _SettingsPageState extends State<SettingsPage> {
               _showLanguageDialog();
             },
           ),
-          
+
           const Divider(height: 32),
-          
-          // Lainnya
+
+          // --- Bagian Lainnya ---
           _buildSectionTitle('Lainnya'),
           _buildSettingsItem(
             'Bantuan',
             'Pusat bantuan dan FAQ',
             Icons.help,
-            onTap: () {},
+            onTap: () {
+              // TODO: Navigasi ke halaman bantuan
+            },
           ),
           _buildSettingsItem(
             'Tentang',
             'Informasi dan versi aplikasi',
             Icons.info,
-            onTap: () {},
+            onTap: () {
+              // TODO: Navigasi ke halaman tentang
+            },
           ),
           _buildSettingsItem(
             'Keluar',
@@ -104,13 +122,14 @@ class _SettingsPageState extends State<SettingsPage> {
               _showLogoutDialog();
             },
           ),
-          
+
           const SizedBox(height: 24),
         ],
       ),
     );
   }
-  
+
+  /// Membangun judul untuk tiap bagian pengaturan
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -124,7 +143,8 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
-  
+
+  /// Membangun satu item pengaturan
   Widget _buildSettingsItem(
     String title,
     String subtitle,
@@ -149,7 +169,8 @@ class _SettingsPageState extends State<SettingsPage> {
       onTap: onTap,
     );
   }
-  
+
+  /// Menampilkan dialog pemilihan bahasa
   void _showLanguageDialog() {
     showDialog(
       context: context,
@@ -164,7 +185,8 @@ class _SettingsPageState extends State<SettingsPage> {
       },
     );
   }
-  
+
+  /// Membuat satu opsi bahasa dalam dialog
   Widget _buildLanguageOption(String language) {
     return SimpleDialogOption(
       onPressed: () {
@@ -183,7 +205,8 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
-  
+
+  /// Menampilkan dialog konfirmasi logout
   void _showLogoutDialog() {
     showDialog(
       context: context,
@@ -200,9 +223,9 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             TextButton(
               onPressed: () {
-                // Implementasi logout
-                Navigator.pop(context);
-                Navigator.pop(context);
+                // TODO: Tambahkan logika logout (e.g. clear session/token)
+                Navigator.pop(context); // tutup dialog
+                Navigator.pop(context); // kembali ke halaman sebelumnya
               },
               child: Text(
                 'Keluar',

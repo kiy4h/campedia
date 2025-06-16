@@ -2,9 +2,8 @@
  * File         : onboarding.dart
  * Dibuat oleh  : Izzuddin Azzam
  * Tanggal      : 15-06-2025
- * Deskripsi    : File ini berisi implementasi layar onboarding yang menampilkan carousel fitur-fitur aplikasi
- *                dan tombol untuk registrasi atau masuk
- * Dependencies : dart:async, flutter/material.dart, halaman register dan signin
+ * Deskripsi    : Menampilkan layar onboarding berisi carousel fitur-fitur aplikasi
+ *                serta tombol untuk registrasi dan login.
  */
 
 import 'dart:async';
@@ -12,6 +11,7 @@ import 'package:flutter/material.dart';
 import '../account/register.dart';
 import '../account/signin.dart';
 
+/// Widget layar onboarding utama dengan carousel dan tombol aksi.
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -24,6 +24,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentPage = 0;
   Timer? _timer;
 
+  /// Daftar halaman onboarding yang akan ditampilkan dalam carousel.
   final List<OnboardingPage> _pages = [
     OnboardingPage(
       image: 'images/assets_OnBoarding0/kompas_bg.png',
@@ -57,6 +58,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _startAutoSlide();
   }
 
+  /// Memulai auto-scroll carousel secara periodik.
   void _startAutoSlide() {
     _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
       if (_currentPage < _pages.length - 1) {
@@ -82,6 +84,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     super.dispose();
   }
 
+  /// Menyimpan indeks halaman saat carousel berubah.
   void _onPageChanged(int page) {
     setState(() {
       _currentPage = page;
@@ -94,6 +97,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: SafeArea(
         child: Column(
           children: [
+            // Carousel onboarding
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
@@ -104,6 +108,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 },
               ),
             ),
+
+            // Indikator posisi slide
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: Row(
@@ -114,6 +120,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
             ),
+
+            // Tombol register dan login
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
@@ -124,9 +132,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => Register(),
-                          ),
+                          MaterialPageRoute(builder: (context) => Register()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -153,9 +159,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => SignIn(),
-                          ),
+                          MaterialPageRoute(builder: (context) => SignIn()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -184,6 +188,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
+  /// Membangun indikator titik di bawah carousel
   Widget _buildDot(bool isActive) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -197,6 +202,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 }
 
+/// Widget halaman individual dalam carousel onboarding.
 class OnboardingPage extends StatelessWidget {
   final String image;
   final String title;

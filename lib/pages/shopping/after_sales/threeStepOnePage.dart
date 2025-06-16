@@ -1,5 +1,13 @@
+// Import package Flutter utama untuk UI
 import 'package:flutter/material.dart';
+
+// Import package countdown timer untuk menampilkan waktu mundur
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+
+// ====================
+// Halaman Pelacakan Pengambilan Barang
+// Terdiri dari 3 tahap: Ambil Barang → Waktu Pengembalian → Selesai
+// ====================
 
 class PickupTrackingPage extends StatefulWidget {
   const PickupTrackingPage({super.key});
@@ -9,16 +17,23 @@ class PickupTrackingPage extends StatefulWidget {
 }
 
 class _PickupTrackingPageState extends State<PickupTrackingPage> {
+  // Menyimpan tahapan proses pengambilan: 0 = Ambil, 1 = Countdown, 2 = Selesai
   int _currentStep = 0;
-  int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 60 * 60 * 48; // 2 hari dari sekarang
 
+  // Menentukan waktu akhir countdown (2 hari dari sekarang)
+  int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 60 * 60 * 48;
+
+  // ====================
+  // Fungsi untuk lanjut ke step berikutnya
+  // Jika sudah sampai step 2, tampilkan dialog konfirmasi
+  // ====================
   void nextStep() {
     if (_currentStep < 2) {
       setState(() {
         _currentStep++;
       });
     } else {
-      // Kalau sudah step terakhir
+      // Dialog selesai setelah step terakhir
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -35,8 +50,12 @@ class _PickupTrackingPageState extends State<PickupTrackingPage> {
     }
   }
 
+  // ====================
+  // Widget yang menampilkan isi konten berdasarkan tahapan
+  // ====================
   Widget buildContent() {
     if (_currentStep == 0) {
+      // === Tahap 1: Ambil Barang di Toko ===
       return Column(
         children: [
           Container(
@@ -46,7 +65,9 @@ class _PickupTrackingPageState extends State<PickupTrackingPage> {
               borderRadius: BorderRadius.circular(16),
               color: Colors.grey.shade300,
             ),
-            child: const Center(child: Text('MAPS', style: TextStyle(fontSize: 24))),
+            child: const Center(
+              child: Text('MAPS', style: TextStyle(fontSize: 24)),
+            ),
           ),
           const SizedBox(height: 16),
           const Text(
@@ -56,6 +77,7 @@ class _PickupTrackingPageState extends State<PickupTrackingPage> {
         ],
       );
     } else if (_currentStep == 1) {
+      // === Tahap 2: Countdown batas waktu pengembalian ===
       return Column(
         children: [
           const SizedBox(height: 16),
@@ -76,6 +98,7 @@ class _PickupTrackingPageState extends State<PickupTrackingPage> {
         ],
       );
     } else {
+      // === Tahap 3: Barang Dikembalikan ===
       return Column(
         children: [
           const SizedBox(height: 16),
@@ -85,7 +108,9 @@ class _PickupTrackingPageState extends State<PickupTrackingPage> {
               borderRadius: BorderRadius.circular(16),
               color: Colors.green.shade100,
             ),
-            child: const Center(child: Icon(Icons.check_circle_outline, size: 80, color: Colors.green)),
+            child: const Center(
+              child: Icon(Icons.check_circle_outline, size: 80, color: Colors.green),
+            ),
           ),
           const SizedBox(height: 16),
           const Text(
@@ -97,11 +122,15 @@ class _PickupTrackingPageState extends State<PickupTrackingPage> {
     }
   }
 
+  // ====================
+  // Widget indikator vertikal langkah (stepper) di sisi kiri
+  // ====================
   Widget buildStepIndicator() {
     return Column(
       children: List.generate(3, (index) {
         return Column(
           children: [
+            // Lingkaran indikator step
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -110,13 +139,20 @@ class _PickupTrackingPageState extends State<PickupTrackingPage> {
                   height: 24,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: index <= _currentStep ? const Color(0xFF627D2C) : Colors.grey,
+                    color: index <= _currentStep
+                        ? const Color(0xFF627D2C) // Warna aktif
+                        : Colors.grey, // Warna belum aktif
                   ),
                 ),
                 const SizedBox(width: 8),
-                Text('Step ${index + 1}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                  'Step ${index + 1}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
               ],
             ),
+
+            // Garis vertikal antar step
             if (index != 2)
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 11),
@@ -130,10 +166,14 @@ class _PickupTrackingPageState extends State<PickupTrackingPage> {
     );
   }
 
+  // ====================
+  // Build utama halaman
+  // ====================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // Tombol kembali (Close)
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.black),
           onPressed: () => Navigator.pop(context),
@@ -147,15 +187,18 @@ class _PickupTrackingPageState extends State<PickupTrackingPage> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
+            // === Konten Utama ===
             Expanded(
               child: Row(
                 children: [
-                  buildStepIndicator(),
+                  buildStepIndicator(), // Step indikator di kiri
                   const SizedBox(width: 16),
-                  Expanded(child: buildContent()),
+                  Expanded(child: buildContent()), // Konten berdasarkan step
                 ],
               ),
             ),
+
+            // === Tombol NEXT / Submit ===
             ElevatedButton(
               onPressed: nextStep,
               style: ElevatedButton.styleFrom(
@@ -163,7 +206,9 @@ class _PickupTrackingPageState extends State<PickupTrackingPage> {
                 minimumSize: const Size(double.infinity, 50),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
               ),
-              child: Text(_currentStep < 2 ? 'NEXT STEP' : 'SUBMIT REVIEW'),
+              child: Text(
+                _currentStep < 2 ? 'NEXT STEP' : 'SUBMIT REVIEW',
+              ),
             ),
           ],
         ),

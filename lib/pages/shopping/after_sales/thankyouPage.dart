@@ -1,18 +1,23 @@
+// Import library Flutter material untuk membangun UI
 import 'package:flutter/material.dart';
+
+// Import halaman Step1 sebagai tujuan navigasi dari tombol pelacakan
 import 'step1.dart';
 
+// Widget Stateless untuk halaman ucapan terima kasih setelah pemesanan berhasil
 class ThankYouPage extends StatelessWidget {
   const ThankYouPage({super.key});
 
+  // Method utama untuk membangun UI halaman
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9F4),
+      backgroundColor: const Color(0xFFF8F9F4), // Warna latar belakang halaman
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Title without Close Button
+            // === Header dengan judul "Pesanan Berhasil!" ===
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
               decoration: BoxDecoration(
@@ -37,13 +42,14 @@ class ThankYouPage extends StatelessWidget {
               ),
             ),
 
+            // === Bagian utama isi halaman ===
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    // Success Icon
+                    // --- Ikon sukses (ikon centang dalam lingkaran) ---
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: const BoxDecoration(
@@ -57,7 +63,7 @@ class ThankYouPage extends StatelessWidget {
                       ),
                     ),
                     
-                    // Thank You Message
+                    // --- Teks ucapan terima kasih dan konfirmasi ---
                     Column(
                       children: const [
                         Text(
@@ -69,9 +75,7 @@ class ThankYouPage extends StatelessWidget {
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        
                         SizedBox(height: 8),
-                        
                         Text(
                           "Pesanan Anda telah dikonfirmasi",
                           style: TextStyle(
@@ -83,7 +87,7 @@ class ThankYouPage extends StatelessWidget {
                       ],
                     ),
                     
-                    // Order Info
+                    // --- Informasi Pesanan: Order ID dan Tanggal ---
                     Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -99,6 +103,7 @@ class ThankYouPage extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
+                          // Baris: Order ID
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: const [
@@ -117,6 +122,7 @@ class ThankYouPage extends StatelessWidget {
                             ],
                           ),
                           const Divider(height: 24),
+                          // Baris: Tanggal Pesanan
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: const [
@@ -138,9 +144,9 @@ class ThankYouPage extends StatelessWidget {
                       ),
                     ),
                 
-                    // Image with proper sizing
+                    // --- Gambar Ilustrasi dengan Aspect Ratio 16:9 ---
                     AspectRatio(
-                      aspectRatio: 16/9,
+                      aspectRatio: 16 / 9,
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
@@ -162,7 +168,7 @@ class ThankYouPage extends StatelessWidget {
                       ),
                     ),
           
-                    // Condensed text description
+                    // --- Teks pengingat untuk pengguna ---
                     const Text(
                       "Pastikan untuk memeriksa daftar peralatan saat pengambilan.",
                       style: TextStyle(
@@ -176,7 +182,7 @@ class ThankYouPage extends StatelessWidget {
               ),
             ),
 
-            // Track Your Order Button
+            // === Tombol untuk melacak pesanan ===
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
               decoration: BoxDecoration(
@@ -201,7 +207,7 @@ class ThankYouPage extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    // Aksi ketika tombol diklik
+                    // Navigasi ke halaman Step1 untuk pelacakan pesanan
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Step1Page()),

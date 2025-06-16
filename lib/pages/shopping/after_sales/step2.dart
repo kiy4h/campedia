@@ -1,20 +1,11 @@
-/*
-* File : step2.dart
-* Deskripsi : Halaman langkah kedua untuk proses pengambilan barang dengan tampilan countdown timer
-* Dependencies : 
-*   - dart:async: untuk Timer countdown
-*   - step3.dart: untuk navigasi ke langkah berikutnya
-*/
+// File: step2.dart
+// Deskripsi: Halaman langkah ke-2 dalam proses peminjaman barang, berisi countdown timer untuk menunjukkan sisa waktu pengembalian
 
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'step3.dart';
+import 'step3.dart'; // Untuk navigasi ke halaman langkah ke-3
 
-/*
-* Class : Step2Page
-* Deskripsi : Widget halaman penggunaan barang (langkah 2), merupakan StatefulWidget
-* Bagian Layar : Halaman penggunaan barang dengan tampilan countdown timer
-*/
+// Widget utama halaman Step2
 class Step2Page extends StatefulWidget {
   const Step2Page({super.key});
 
@@ -22,60 +13,50 @@ class Step2Page extends StatefulWidget {
   State<Step2Page> createState() => _Step2PageState();
 }
 
-/*
-* Class : _Step2PageState
-* Deskripsi : State untuk widget Step2Page dengan pengelolaan countdown timer
-* Bagian Layar : Mengelola state dan tampilan halaman penggunaan barang
-*/
+// State dari Step2Page, berisi logika pengelolaan countdown timer
 class _Step2PageState extends State<Step2Page> {
-  // Timer untuk 2 hari (48 jam)
+  // Waktu akhir peminjaman (48 jam dari waktu saat ini)
   late DateTime endTime;
+
+  // Timer yang berjalan setiap detik
   late Timer _timer;
+
+  // Variabel untuk menampilkan sisa waktu
   int days = 0;
   int hours = 0;
   int minutes = 0;
   int seconds = 0;
-  /*
-  * Method : initState
-  * Deskripsi : Inisialisasi timer dan waktu akhir penggunaan
-  * Parameter : -
-  * Return : void
-  */
+
   @override
   void initState() {
     super.initState();
-    // Set end time to 2 days from now
+
+    // Hitung waktu akhir 2 hari ke depan dari saat ini
     endTime = DateTime.now().add(const Duration(days: 2));
-    _calculateTimeLeft();
     
-    // Update timer setiap detik
+    // Hitung waktu tersisa saat halaman pertama kali dimuat
+    _calculateTimeLeft();
+
+    // Buat timer yang memanggil _calculateTimeLeft setiap detik
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _calculateTimeLeft();
     });
   }
-  /*
-  * Method : dispose
-  * Deskripsi : Membersihkan resource timer saat widget dihapus
-  * Parameter : -
-  * Return : void
-  */
+
   @override
   void dispose() {
+    // Hentikan timer agar tidak terus berjalan saat halaman sudah tidak aktif
     _timer.cancel();
     super.dispose();
   }
-  /*
-  * Method : _calculateTimeLeft
-  * Deskripsi : Menghitung waktu tersisa pada countdown timer
-  * Parameter : -
-  * Return : void
-  */
+
+  // Menghitung sisa waktu dari sekarang hingga endTime
   void _calculateTimeLeft() {
     final now = DateTime.now();
     final difference = endTime.difference(now);
-    
+
     if (difference.isNegative) {
-      // Waktu sudah habis
+      // Jika waktu telah habis, tampilkan 0 semua
       setState(() {
         days = 0;
         hours = 0;
@@ -83,6 +64,7 @@ class _Step2PageState extends State<Step2Page> {
         seconds = 0;
       });
     } else {
+      // Update sisa waktu sesuai perhitungan
       setState(() {
         days = difference.inDays;
         hours = difference.inHours.remainder(24);
@@ -91,12 +73,7 @@ class _Step2PageState extends State<Step2Page> {
       });
     }
   }
-  /*
-  * Method : build
-  * Deskripsi : Membangun UI untuk halaman penggunaan barang dengan timer countdown
-  * Parameter : context - BuildContext untuk akses ke fitur framework
-  * Return : Widget Scaffold berisi timer countdown dan informasi penggunaan
-  */
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,48 +93,41 @@ class _Step2PageState extends State<Step2Page> {
             ),
             child: const Icon(Icons.close, color: Colors.white, size: 18),
           ),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context), // Kembali ke halaman sebelumnya
         ),
       ),
+
+      // Konten halaman utama
       body: Column(
         children: [
-          // Countdown Timer
+          // Tampilan countdown timer
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 24.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Hari
                 _buildTimeBox(days.toString().padLeft(2, '0'), "HARI"),
                 const SizedBox(width: 8),
-                
-                // Jam
                 _buildTimeBox(hours.toString().padLeft(2, '0'), "JAM"),
                 const SizedBox(width: 8),
-                
-                // Menit
                 _buildTimeBox(minutes.toString().padLeft(2, '0'), "MENIT"),
                 const SizedBox(width: 8),
-                
-                // Detik
                 _buildTimeBox(seconds.toString().padLeft(2, '0'), "DETIK"),
               ],
             ),
           ),
-          
-          // Stepper Content - Mengisi ruang kosong
+
+          // Stepper Progress
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 28.0),
               child: Column(
                 children: [
-                  // Stepper - First Step - Completed
+                  // Step 1 - Selesai
                   Expanded(
-                    flex: 1,
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Stepper Line & Circle
+                        // Indikator Step 1 (lingkaran hijau dan garis ke bawah)
                         SizedBox(
                           width: 50,
                           child: Column(
@@ -179,34 +149,26 @@ class _Step2PageState extends State<Step2Page> {
                             ],
                           ),
                         ),
-                        
-                        // Step Content
+                        // Label dan deskripsi step 1
                         const Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'step 1',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ],
+                          child: Text(
+                            'step 1',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black54,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  
-                  // Stepper - Second Step - Active
+
+                  // Step 2 - Aktif
                   Expanded(
-                    flex: 1,
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Stepper Line & Circle
+                        // Indikator Step 2 (lingkaran besar border hijau)
                         SizedBox(
                           width: 50,
                           child: Column(
@@ -232,12 +194,11 @@ class _Step2PageState extends State<Step2Page> {
                             ],
                           ),
                         ),
-                        
-                        // Step Content - Tetap dengan konten asli
-                        Expanded(
+                        // Label dan deskripsi step 2
+                        const Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 'step 2',
                                 style: TextStyle(
@@ -257,14 +218,12 @@ class _Step2PageState extends State<Step2Page> {
                       ],
                     ),
                   ),
-                  
-                  // Stepper - Third Step - Inactive
+
+                  // Step 3 - Belum aktif
                   Expanded(
-                    flex: 1,
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Stepper Circle only (no line)
+                        // Indikator Step 3 (lingkaran abu)
                         SizedBox(
                           width: 50,
                           child: Column(
@@ -278,25 +237,18 @@ class _Step2PageState extends State<Step2Page> {
                                   shape: BoxShape.circle,
                                 ),
                               ),
-                              // Tidak perlu garis di step terakhir
                             ],
                           ),
                         ),
-                        
-                        // Step Content - Tetap dengan konten asli
+                        // Label step 3
                         const Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'step 3',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ],
+                          child: Text(
+                            'step 3',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black54,
+                            ),
                           ),
                         ),
                       ],
@@ -306,8 +258,8 @@ class _Step2PageState extends State<Step2Page> {
               ),
             ),
           ),
-          
-          // Next Step Button
+
+          // Tombol menuju langkah berikutnya
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
@@ -328,8 +280,8 @@ class _Step2PageState extends State<Step2Page> {
               ),
             ),
           ),
-          
-          // Bottom Navigation
+
+          // Bottom Navigation Bar (ikon statis)
           Container(
             height: 60,
             decoration: BoxDecoration(
@@ -365,10 +317,7 @@ class _Step2PageState extends State<Step2Page> {
                   ],
                 ),
                 Icon(Icons.favorite_border, color: Colors.grey[600]),
-                const CircleAvatar(
-                  radius: 12,
-                  backgroundColor: Colors.grey,
-                ),
+                const CircleAvatar(radius: 12, backgroundColor: Colors.grey),
               ],
             ),
           ),
@@ -376,8 +325,8 @@ class _Step2PageState extends State<Step2Page> {
       ),
     );
   }
-  
-  // Widget untuk membuat kotak timer dengan angka dan label
+
+  // Membuat kotak tampilan untuk setiap unit waktu (hari/jam/menit/detik)
   Widget _buildTimeBox(String number, String label) {
     return Column(
       children: [

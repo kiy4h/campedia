@@ -1,54 +1,53 @@
+/**
+ * File         : transaction_detail_page.dart
+ * Dibuat oleh  : Tim Provis
+ * Tanggal      : 16-06-2025
+ * Deskripsi    : Menampilkan daftar detail barang dalam satu transaksi,
+ *                beserta tombol untuk review barang jika belum direview.
+ */
+
 import 'package:flutter/material.dart';
 import 'reviewItem.dart';
 
+/// Halaman untuk menampilkan daftar detail barang dalam satu transaksi
 class TransactionDetailPage extends StatelessWidget {
+  TransactionDetailPage({super.key});
+
+  /// Data transaksi dummy
   final List<Map<String, dynamic>> transactions = [
     {
       'title': 'Tenda Camping Eiger',
       'date': '4 Mei 2025',
-      'image': '../../images/assets_ItemDetails/tenda_bg6.png',
-      'status': 'Belum direview'
+      'image': 'https://via.placeholder.com/300x150.png?text=Tenda+Camping+Eiger',
+      'status': 'Belum direview',
     },
     {
       'title': 'Carrier 40L Eiger',
       'date': '28 Apr 2025',
-      'image': '../../images/assets_ItemDetails/jaket1.png',
-      'status': 'Belum direview'
+      'image': 'https://via.placeholder.com/300x150.png?text=Carrier+40L+Eiger',
+      'status': 'Belum direview',
     },
     {
       'title': 'Sepatu Hiking Merrell',
       'date': '13 Apr 2025',
-      'image': '../../images/assets_ItemDetails/tas2.png',
-      'status': 'Selesai'
+      'image': 'https://via.placeholder.com/300x150.png?text=Sepatu+Hiking+Merrell',
+      'status': 'Selesai',
     },
   ];
 
+  /// Warna status
   Color getStatusColor(String status) {
     switch (status) {
-      case 'Berhasil':
-        return const Color(0xFF4CAF50);
       case 'Selesai':
         return Colors.blue;
-      case 'Diproses':
+      case 'Belum direview':
         return Colors.orange;
       default:
         return Colors.grey;
     }
   }
 
-  Icon getTransactionIcon(String type) {
-    switch (type) {
-      case 'BPJS':
-        return const Icon(Icons.local_hospital, size: 20);
-      case 'Pulsa':
-        return const Icon(Icons.phone_android, size: 20);
-      case 'Belanja':
-        return const Icon(Icons.shopping_bag, size: 20);
-      default:
-        return const Icon(Icons.receipt_long, size: 20);
-    }
-  }
-
+  /// Widget chip filter (placeholder untuk pengembangan)
   Widget buildChip(String label) {
     return Chip(
       label: Text(label, style: const TextStyle(fontSize: 12)),
@@ -67,7 +66,7 @@ class TransactionDetailPage extends StatelessWidget {
         elevation: 0,
         title: TextField(
           decoration: InputDecoration(
-            hintText: 'Cari transaksi',
+            hintText: 'Cari barang dalam transaksi',
             hintStyle: TextStyle(color: Colors.grey[600]),
             prefixIcon: const Icon(Icons.search),
             suffixIcon: const Icon(Icons.filter_list),
@@ -84,6 +83,7 @@ class TransactionDetailPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          // Baris filter horizontal
           SizedBox(
             height: 36,
             child: ListView(
@@ -91,13 +91,15 @@ class TransactionDetailPage extends StatelessWidget {
               children: [
                 buildChip('Semua Status'),
                 const SizedBox(width: 8),
-                buildChip('Semua Produk'),
+                buildChip('Nama Produk'),
                 const SizedBox(width: 8),
-                buildChip('Semua Tanggal'),
+                buildChip('Tanggal'),
               ],
             ),
           ),
           const SizedBox(height: 16),
+
+          // Daftar barang transaksi
           ...transactions
               .map((item) => buildTransactionCard(item, context))
               .toList(),
@@ -106,7 +108,8 @@ class TransactionDetailPage extends StatelessWidget {
     );
   }
 
-  Widget buildTransactionCard(Map<String, dynamic> item, context) {
+  /// Widget kartu transaksi individual
+  Widget buildTransactionCard(Map<String, dynamic> item, BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(12),
@@ -118,29 +121,32 @@ class TransactionDetailPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Gambar barang (gunakan placeholder jika tidak ada)
+          // Gambar produk
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-              item['image'] ??
-                  'https://via.placeholder.com/300x150.png?text=Gambar+Barang',
+              item['image'],
               height: 150,
               width: double.infinity,
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => const SizedBox(
+                height: 150,
+                child: Center(child: Text('Gagal memuat gambar')),
+              ),
             ),
           ),
           const SizedBox(height: 12),
-          // Nama Barang
+
+          // Judul dan tanggal
           Text(item['title'],
-              style:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
           const SizedBox(height: 4),
-          // Tanggal Pemesanan
           Text('Dipesan pada ${item['date']}',
               style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+
           const SizedBox(height: 12),
 
-          // Tombol sesuai status
+          // Tombol aksi sesuai status
           if (item['status'] == 'Belum direview')
             Align(
               alignment: Alignment.centerRight,
@@ -150,10 +156,11 @@ class TransactionDetailPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ProductReviewPage(
-                              productImage: item['image'],
-                              productName: item['title'],
-                            )),
+                      builder: (_) => ProductReviewPage(
+                        productImage: item['image'],
+                        productName: item['title'],
+                      ),
+                    ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -163,6 +170,15 @@ class TransactionDetailPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8)),
                 ),
                 child: const Text("Review Barang"),
+              ),
+            ),
+          if (item['status'] == 'Selesai')
+            Align(
+              alignment: Alignment.centerRight,
+              child: Chip(
+                label: const Text("Sudah Direview"),
+                backgroundColor: Colors.green[100],
+                labelStyle: const TextStyle(color: Colors.green),
               ),
             ),
         ],

@@ -1,9 +1,21 @@
-import 'package:flutter/material.dart';
-import 'historyPenyewaanDetailBarang.dart'; // Halaman detail transaksi
-import '../../shopping/after_sales/step1.dart';
-import 'historyPenyewaanDetailBarang.dart'; // Halaman review
+/**
+ * File         : modern_transaction_page.dart
+ * Dibuat oleh  : Tim Provis
+ * Tanggal      : 16-06-2025
+ * Deskripsi    : Halaman yang menampilkan riwayat transaksi penyewaan
+ *                dengan informasi status, item, dan tindakan seperti
+ *                review atau pembayaran.
+ */
 
+import 'package:flutter/material.dart';
+import 'historyPenyewaanDetailBarang.dart'; // Halaman review transaksi
+import '../../shopping/after_sales/step1.dart';
+
+/// Halaman riwayat transaksi modern
 class ModernTransactionPage extends StatelessWidget {
+  ModernTransactionPage({super.key});
+
+  /// Data transaksi dummy
   final List<Map<String, dynamic>> transactions = [
     {
       'id': 'TX001',
@@ -44,6 +56,7 @@ class ModernTransactionPage extends StatelessWidget {
     },
   ];
 
+  /// Mendapatkan warna berdasarkan status transaksi
   Color getStatusColor(String status) {
     switch (status) {
       case 'Berhasil':
@@ -61,6 +74,7 @@ class ModernTransactionPage extends StatelessWidget {
     }
   }
 
+  /// Chip filter UI
   Widget buildChip(String label) {
     return Chip(
       label: Text(label, style: const TextStyle(fontSize: 12)),
@@ -110,6 +124,8 @@ class ModernTransactionPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
+
+          // Daftar kartu transaksi
           ...transactions
               .map((item) => buildTransactionCard(item, context))
               .toList(),
@@ -118,8 +134,12 @@ class ModernTransactionPage extends StatelessWidget {
     );
   }
 
+  /// Membangun kartu transaksi individual
   Widget buildTransactionCard(Map<String, dynamic> item, BuildContext context) {
     return InkWell(
+      onTap: () {
+        // TODO: Navigasi ke detail lengkap jika diperlukan
+      },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(12),
@@ -141,16 +161,15 @@ class ModernTransactionPage extends StatelessWidget {
             const SizedBox(height: 4),
             Text('Jumlah Barang: ${item['items'].length}'),
             const SizedBox(height: 8),
-            // Tombol berdasarkan status
+
+            // Tindakan berdasarkan status
             if (item['status'] == 'Sudah Dikembalikan')
               ElevatedButton(
                 onPressed: () {
-                  // Navigasi ke halaman review
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) =>
-                          TransactionDetailPage(), // Ganti dengan halaman review
+                      builder: (_) => TransactionDetailPage(),
                     ),
                   );
                 },
@@ -166,9 +185,7 @@ class ModernTransactionPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => const Step1Page(),
-                    ),
+                    MaterialPageRoute(builder: (_) => const Step1Page()),
                   );
                 },
                 style: ElevatedButton.styleFrom(

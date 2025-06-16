@@ -1,39 +1,49 @@
 /*
 * File : step3.dart
-* Deskripsi : Halaman langkah ketiga untuk proses pengembalian barang dengan konfirmasi pengembalian
+* Deskripsi : Halaman langkah ketiga untuk proses pengembalian barang, 
+*             berisi konfirmasi bahwa barang telah dikembalikan dan ajakan memberi ulasan.
 * Dependencies : 
-*   - flutter_map: untuk tampilan peta (tidak digunakan langsung dalam file ini)
-*   - step1.dart: untuk referensi navigasi
-*   - review.dart: untuk navigasi ke halaman ulasan
+*   - flutter_map: (tidak digunakan langsung tapi mungkin digunakan di halaman lain)
+*   - step1.dart: untuk keperluan navigasi sebelumnya
+*   - review.dart: untuk navigasi ke halaman ReviewPage setelah pengguna mengembalikan barang
 */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map/flutter_map.dart'; // Meskipun tidak dipakai langsung, mungkin digunakan di halaman sebelumnya
 import 'step1.dart';
-import 'review.dart';  // Tambahkan import ReviewPage
+import 'review.dart'; // Halaman untuk memberikan ulasan setelah pengembalian barang
 
 /*
 * Class : Step3Page
-* Deskripsi : Widget halaman pengembalian barang (langkah 3), merupakan StatelessWidget
-* Bagian Layar : Halaman konfirmasi pengembalian barang dengan tampilan status pengembalian
+* Deskripsi : StatelessWidget untuk menampilkan konfirmasi pengembalian barang (langkah 3)
+* Struktur Halaman : 
+*   - AppBar dengan tombol kembali
+*   - Konten konfirmasi pengembalian
+*   - Stepper visual (step 1, 2 selesai; step 3 aktif)
+*   - Tombol menuju ke halaman review
 */
 class Step3Page extends StatelessWidget {
   const Step3Page({super.key});
+
   /*
   * Method : build
-  * Deskripsi : Membangun UI untuk halaman konfirmasi pengembalian barang
-  * Parameter : context - BuildContext untuk akses ke fitur framework
-  * Return : Widget Scaffold berisi konfirmasi pengembalian dan stepper
+  * Deskripsi : Membangun tampilan halaman dengan struktur dan komponen UI
+  * Return : Widget Scaffold
   */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Bagian atas layar: AppBar
       appBar: AppBar(
-        title: const Text('Pengembalian Barang', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        title: const Text(
+          'Pengembalian Barang',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0.5,
         leading: IconButton(
+          // Tombol kembali (ikon silang dalam lingkaran hijau)
           icon: Container(
             decoration: const BoxDecoration(
               color: Color(0xFF627D2C),
@@ -41,16 +51,19 @@ class Step3Page extends StatelessWidget {
             ),
             child: const Icon(Icons.close, color: Colors.white, size: 18),
           ),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context), // Navigasi kembali
         ),
       ),
+
+      // Bagian utama layar: isi halaman
       body: Column(
         children: [
-          // Confirmation Content: Gambar dan teks di atas
+          // === Bagian konfirmasi visual dan teks ===
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
             child: Column(
               children: [
+                // Box dengan ikon centang
                 Container(
                   height: 150,
                   decoration: BoxDecoration(
@@ -62,6 +75,7 @@ class Step3Page extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
+                // Teks ajakan memberikan ulasan
                 const Text(
                   'Terima kasih! Barang telah dikembalikan.\nSilakan berikan ulasan untuk pengalaman sewa kamu.',
                   textAlign: TextAlign.center,
@@ -71,18 +85,19 @@ class Step3Page extends StatelessWidget {
             ),
           ),
 
-          // Stepper Content: Step 1 completed, Step 2 completed, Step 3 active
+          // === Bagian Stepper Visual ===
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 8.0),
               child: Column(
                 children: [
-                  // Step 1 - Completed
+                  // --- STEP 1: Selesai ---
                   Expanded(
                     flex: 1,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Indikator bulat hijau + garis bawah
                         SizedBox(
                           width: 50,
                           child: Column(
@@ -91,20 +106,21 @@ class Step3Page extends StatelessWidget {
                                 width: 20,
                                 height: 20,
                                 decoration: const BoxDecoration(
-                                  color: Color(0xFF9BAE76),
+                                  color: Color(0xFF9BAE76), // Hijau lembut
                                   shape: BoxShape.circle,
                                 ),
                               ),
                               Expanded(
                                 child: Container(
                                   width: 3,
-                                  color: Colors.grey[300],
+                                  color: Colors.grey[300], // Garis vertikal abu-abu
                                 ),
                               ),
                             ],
                           ),
                         ),
                         const SizedBox(width: 8),
+                        // Label step
                         const Expanded(
                           child: Text(
                             'step 1',
@@ -119,12 +135,13 @@ class Step3Page extends StatelessWidget {
                     ),
                   ),
 
-                  // Step 2 - Completed
+                  // --- STEP 2: Selesai ---
                   Expanded(
                     flex: 1,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Indikator bulat hijau + garis bawah
                         SizedBox(
                           width: 50,
                           child: Column(
@@ -161,12 +178,13 @@ class Step3Page extends StatelessWidget {
                     ),
                   ),
 
-                  // Step 3 - Active
+                  // --- STEP 3: Aktif (current step) ---
                   Expanded(
                     flex: 1,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Lingkaran besar dengan border hijau (tanda aktif)
                         SizedBox(
                           width: 50,
                           child: Column(
@@ -183,11 +201,12 @@ class Step3Page extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              // last step, no line
+                              // Tidak ada garis bawah karena ini langkah terakhir
                             ],
                           ),
                         ),
                         const SizedBox(width: 8),
+                        // Label dan deskripsi step 3
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,24 +235,31 @@ class Step3Page extends StatelessWidget {
             ),
           ),
 
-          // Submit Button at bottom
+          // === Tombol Aksi: Submit Review ===
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
               onPressed: () {
+                // Navigasi ke halaman ulasan
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const ReviewPage()),
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF627D2C),
+                backgroundColor: const Color(0xFF627D2C), // Warna hijau tua
                 minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
               ),
               child: const Text(
                 'SUBMIT REVIEW',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),

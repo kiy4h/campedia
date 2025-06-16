@@ -3,16 +3,18 @@ import 'package:provider/provider.dart';
 import 'termAndCondition.dart';
 import 'package:flutter/gestures.dart';
 import '../animation/onboarding.dart';
-import '../animation/congratulationsPopup.dart'; // Import popup
-import '../../../providers/auth_provider.dart';
+import '../animation/congratulationsPopup.dart'; // Popup ucapan selamat
+import '../../../providers/auth_provider.dart'; // Provider untuk proses registrasi
 
 void main() {
+  // Root dari aplikasi, menampilkan halaman Register
   runApp(const MaterialApp(
     home: Register(),
-    debugShowCheckedModeBanner: false,
+    debugShowCheckedModeBanner: false, // Hilangkan banner debug
   ));
 }
 
+// Stateful widget karena banyak interaksi user (input form, checkbox, toggle password)
 class Register extends StatefulWidget {
   const Register({super.key});
 
@@ -21,16 +23,24 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  // Untuk menyembunyikan atau menampilkan password
   bool _obscurePassword = true;
+
+  // Untuk status checkbox terms & conditions
   bool isChecked = false;
+
+  // Controller untuk mengambil nilai dari TextField
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  // Key untuk form validasi
   final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
+    // Dispose controller saat widget dihancurkan
     _firstNameController.dispose();
     _lastNameController.dispose();
     _emailController.dispose();
@@ -38,9 +48,11 @@ class _RegisterState extends State<Register> {
     super.dispose();
   }
 
+  // Fungsi untuk memproses registrasi
   Future<void> _handleRegister() async {
     if (_formKey.currentState?.validate() ?? false) {
       if (!isChecked) {
+        // Jika terms belum dicentang, munculkan snackbar error
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Please accept the terms and conditions'),
@@ -50,11 +62,14 @@ class _RegisterState extends State<Register> {
         return;
       }
 
+      // Ambil provider dari context
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
+      // Gabungkan nama depan dan belakang
       String fullName =
           '${_firstNameController.text.trim()} ${_lastNameController.text.trim()}';
 
+      // Proses registrasi lewat AuthProvider
       final success = await authProvider.register(
         fullName,
         _emailController.text.trim(),
@@ -62,7 +77,7 @@ class _RegisterState extends State<Register> {
       );
 
       if (success) {
-        // Show success popup
+        // Jika sukses, munculkan popup selamat
         showCongratulationsPopup(
           context,
           _firstNameController.text.isNotEmpty
@@ -70,7 +85,7 @@ class _RegisterState extends State<Register> {
               : "User",
         );
       } else {
-        // Show error message
+        // Jika gagal, munculkan pesan error
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(authProvider.error ?? 'Registration failed'),
@@ -84,17 +99,18 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F9F1),
+      backgroundColor: const Color(0xFFF5F9F1), // Warna latar belakang hijau muda
       body: SafeArea(
         child: Column(
           children: [
+            // Bagian gambar atas + tombol back
             Stack(
               children: [
                 SizedBox(
                   height: 300,
                   width: double.infinity,
                   child: Image.asset(
-                    'images/assets_SignUp/alam_bg.png',
+                    'images/assets_SignUp/alam_bg.png', // Gambar background
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -103,7 +119,7 @@ class _RegisterState extends State<Register> {
                   left: 16,
                   child: IconButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.pop(context); // Tombol kembali
                     },
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
                   ),
@@ -112,18 +128,20 @@ class _RegisterState extends State<Register> {
             ),
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.all(24), // Padding isi form
                 child: Form(
-                  key: _formKey,
+                  key: _formKey, // Kunci validasi form
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Create your account',
+                        'Create your account', // Judul halaman
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 24),
+
+                      // Input nama depan dan belakang dalam satu baris
                       Row(
                         children: [
                           Expanded(
@@ -167,7 +185,10 @@ class _RegisterState extends State<Register> {
                           ),
                         ],
                       ),
+
                       const SizedBox(height: 16),
+
+                      // Input email
                       TextFormField(
                         controller: _emailController,
                         decoration: InputDecoration(
@@ -183,6 +204,7 @@ class _RegisterState extends State<Register> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your email';
                           }
+                          // Validasi format email
                           if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                               .hasMatch(value)) {
                             return 'Please enter a valid email';
@@ -190,7 +212,10 @@ class _RegisterState extends State<Register> {
                           return null;
                         },
                       ),
+
                       const SizedBox(height: 16),
+
+                      // Input password dengan toggle visibility
                       TextFormField(
                         controller: _passwordController,
                         obscureText: _obscurePassword,
@@ -222,7 +247,10 @@ class _RegisterState extends State<Register> {
                           return null;
                         },
                       ),
+
                       const SizedBox(height: 16),
+
+                      // Checkbox terms & conditions + link teks
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -240,6 +268,7 @@ class _RegisterState extends State<Register> {
                                 text: 'By tapping Sign up you accept all ',
                                 style: const TextStyle(color: Colors.black54),
                                 children: [
+                                  // Link teks 'terms'
                                   TextSpan(
                                     text: 'terms',
                                     style: const TextStyle(
@@ -258,6 +287,7 @@ class _RegisterState extends State<Register> {
                                       },
                                   ),
                                   const TextSpan(text: ' and '),
+                                  // Link teks 'conditions'
                                   TextSpan(
                                     text: 'conditions',
                                     style: const TextStyle(
@@ -281,14 +311,17 @@ class _RegisterState extends State<Register> {
                           ),
                         ],
                       ),
+
                       const SizedBox(height: 24),
+
+                      // Tombol daftar (dengan animasi loading jika sedang register)
                       Consumer<AuthProvider>(
                         builder: (context, authProvider, child) {
                           return SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF566D3D),
+                                backgroundColor: const Color(0xFF566D3D), // Hijau gelap
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
                                 shape: RoundedRectangleBorder(
@@ -297,12 +330,12 @@ class _RegisterState extends State<Register> {
                               ),
                               onPressed: authProvider.isLoading
                                   ? null
-                                  : _handleRegister,
+                                  : _handleRegister, // Jalankan fungsi register
                               child: authProvider.isLoading
                                   ? const CircularProgressIndicator(
-                                      color: Colors.white)
+                                      color: Colors.white) // Loading spinner
                                   : const Text(
-                                      'CREATE AN ACCOUNT',
+                                      'CREATE AN ACCOUNT', // Teks tombol
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -326,7 +359,7 @@ class _RegisterState extends State<Register> {
   }
 }
 
-// Cara menampilkan popup
+// Fungsi untuk menampilkan popup ucapan selamat setelah register berhasil
 void showCongratulationsPopup(BuildContext context, String name) {
   showDialog(
     context: context,
@@ -336,7 +369,7 @@ void showCongratulationsPopup(BuildContext context, String name) {
         name: name,
         onSignIn: () {
           Navigator.of(context).pop();
-          // Tambahkan navigasi ke halaman sign in di sini
+          // Bisa ditambahkan navigasi ke halaman sign in di sini
         },
       );
     },

@@ -1,59 +1,47 @@
-/**
- * File         : favorite.dart
- * Dibuat oleh  : Izzuddin Azzam
- * Tanggal      : 15-06-2025
- * Deskripsi    : File ini berisi implementasi halaman favorit/wishlist yang menampilkan
- *                daftar barang yang telah ditandai sebagai favorit oleh pengguna
- * Dependencies : flutter/material.dart, font_awesome_flutter, detailItem, navbar
- */
+// ============================
+// IMPORT LIBRARY YANG DIPERLUKAN
+// ============================
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../detail_items/detailItem.dart';
 import '../components/navbar.dart';
 
+
+// ============================
+// ENTRY POINT APLIKASI
+// ============================
+
 void main() {
-  runApp(const FavoritePage());
+  runApp(const FavoritePage()); // Jalankan aplikasi dengan halaman FavoritePage sebagai root
 }
 
-/** Widget FavoritePage
- * 
- * Deskripsi:
- * - Widget root untuk halaman favorit/wishlist
- * - Menjadi entry point ketika halaman favorit diakses langsung
- * - Merupakan StatelessWidget karena hanya berfungsi sebagai container dan tidak menyimpan state
- */
+
+// ============================
+// HALAMAN FAVORITE (ROOT WIDGET)
+// ============================
+
 class FavoritePage extends StatelessWidget {
   const FavoritePage({Key? key}) : super(key: key);
 
   @override
-  /* Fungsi ini membangun widget root untuk halaman favorit
-   * 
-   * Parameter:
-   * - context: Konteks build dari framework Flutter
-   * 
-   * Return: Widget MaterialApp yang menampilkan halaman daftar favorit
-   */
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,        // Sembunyikan banner debug
+      debugShowCheckedModeBanner: false, // Hilangkan label debug
       theme: ThemeData(
-        primaryColor: const Color(0xFFA0B25E),  // Warna primer hijau muda
-        scaffoldBackgroundColor: const Color(0xFFF8F8F8), // Background abu-abu muda
+        primaryColor: const Color(0xFFA0B25E), // Warna utama aplikasi
+        scaffoldBackgroundColor: const Color(0xFFF8F8F8), // Warna latar belakang
       ),
-      home: ItemCategory(),                     // Menampilkan halaman kategori item favorit
+      home: ItemCategory(), // Tampilkan halaman daftar barang favorit
     );
   }
 }
 
-/** Widget ItemCategory
- * 
- * Deskripsi:
- * - Widget utama yang menampilkan daftar barang favorit pengguna
- * - Menampilkan barang beserta informasi harga, rating, dan tombol aksi
- * - Merupakan StatefulWidget karena perlu mengelola state seperti daftar favorit
- *   dan aksi penghapusan favorit
- */
+
+// ============================
+// WIDGET DAFTAR BARANG FAVORIT
+// ============================
+
 class ItemCategory extends StatefulWidget {
   ItemCategory({Key? key}) : super(key: key);
 
@@ -61,21 +49,15 @@ class ItemCategory extends StatefulWidget {
   _ItemCategoryState createState() => _ItemCategoryState();
 }
 
-/** State untuk widget ItemCategory
- * 
- * Deskripsi:
- * - Mengelola state dan data untuk halaman daftar barang favorit
- * - Menyimpan data dummy barang-barang favorit
- */
 class _ItemCategoryState extends State<ItemCategory> {
-  // Daftar barang favorit (dummy data)
+  // Data dummy barang-barang favorit
   final List<Map<String, dynamic>> trendingItems = [
     {
-      "name": "Tenda Camping",               // Nama barang
-      "price": 300000,                       // Harga barang
-      "image": "images/assets_ItemDetails/tenda_bg1.png", // Path gambar
-      "rating": 4.5,                         // Rating barang
-      "isFavorite": true                     // Status favorit
+      "name": "Tenda Camping",
+      "price": 300000,
+      "image": "images/assets_ItemDetails/tenda_bg1.png",
+      "rating": 4.5,
+      "isFavorite": true
     },
     {
       "name": "Kompor Portable",
@@ -114,27 +96,31 @@ class _ItemCategoryState extends State<ItemCategory> {
     },
   ];
 
+  // State untuk filtering
   List<String> selectedCategories = [];
   RangeValues priceRange = const RangeValues(0, 1000000);
   List<int> selectedRatings = [];
   List<String> selectedLocations = [];
   List<String> selectedBrands = [];
 
+  // Controller untuk input harga manual
   TextEditingController minPriceController = TextEditingController();
   TextEditingController maxPriceController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Konten halaman utama
       body: CustomScrollView(
         slivers: [
+          // Header teks judul
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
+                children: const [
+                  Text(
                     'Barang-Barang Favorit Kamu',
                     style: TextStyle(
                       fontSize: 20,
@@ -146,6 +132,7 @@ class _ItemCategoryState extends State<ItemCategory> {
               ),
             ),
           ),
+          // Grid daftar barang favorit
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             sliver: SliverGrid(
@@ -156,8 +143,8 @@ class _ItemCategoryState extends State<ItemCategory> {
                 childCount: trendingItems.length,
               ),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.75,
+                crossAxisCount: 2, // Jumlah kolom
+                childAspectRatio: 0.75, // Rasio lebar/tinggi
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
@@ -165,9 +152,14 @@ class _ItemCategoryState extends State<ItemCategory> {
           ),
         ],
       ),
+      // Bottom navigation bar
       bottomNavigationBar: buildBottomNavBar(context, currentIndex: 3),
     );
   }
+
+  // ============================
+  // FUNGSI: Tampilkan Bottom Sheet Filter
+  // ============================
 
   void _showFilterBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -196,12 +188,16 @@ class _ItemCategoryState extends State<ItemCategory> {
     );
   }
 
+  // ============================
+  // WIDGET: Kartu Barang Favorit
+  // ============================
+
   Widget _buildTrendingItem(Map<String, dynamic> item, BuildContext context, int index) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const DetailItem()),
+          MaterialPageRoute(builder: (_) => const DetailItem()), // Navigasi ke halaman detail
         );
       },
       child: Container(
@@ -214,6 +210,7 @@ class _ItemCategoryState extends State<ItemCategory> {
         ),
         child: Stack(
           children: [
+            // Tombol favorite (ikon hati)
             Positioned(
               top: 10,
               right: 10,
@@ -230,13 +227,13 @@ class _ItemCategoryState extends State<ItemCategory> {
                 ),
               ),
             ),
+            // Overlay detail barang (nama, harga, rating)
             Positioned(
               bottom: 0,
               left: 0,
               right: 0,
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(10),
@@ -285,6 +282,11 @@ class _ItemCategoryState extends State<ItemCategory> {
   }
 }
 
+
+// ============================
+// WIDGET: Bottom Sheet Filter
+// ============================
+
 class FilterBottomSheet extends StatelessWidget {
   final ScrollController scrollController;
   final List<String> selectedCategories;
@@ -312,7 +314,7 @@ class FilterBottomSheet extends StatelessWidget {
     return ListView(
       controller: scrollController,
       children: [
-        // Categories
+        // Filter kategori
         FilterSection(
           title: "Categories",
           items: ["Tenda", "Alat Masak", "Sepatu", "Tas", "Aksesoris", "Pakaian"],
@@ -321,7 +323,7 @@ class FilterBottomSheet extends StatelessWidget {
             selectedCategories.add(item);
           },
         ),
-        // Price
+        // Filter harga
         FilterSection(
           title: "Price",
           items: [
@@ -331,13 +333,18 @@ class FilterBottomSheet extends StatelessWidget {
           ],
           selectedItems: [],
           onSelected: (item) {
-            // Handle Price Filter
+            // Placeholder: aksi filter harga
           },
         ),
       ],
     );
   }
 }
+
+
+// ============================
+// WIDGET: Section Filter Chip
+// ============================
 
 class FilterSection extends StatelessWidget {
   final String title;

@@ -13,21 +13,15 @@ import 'package:latlong2/latlong.dart';
 import 'step2.dart';
 
 /*
-* Class : Step1Page
-* Deskripsi : Widget halaman pengambilan barang (langkah 1), merupakan StatelessWidget
-* Bagian Layar : Halaman pengambilan barang dengan tampilan peta dan stepper
+* Widget utama halaman Step1Page
+* Menampilkan peta lokasi dan langkah-langkah pengambilan barang
 */
 class Step1Page extends StatelessWidget {
   const Step1Page({super.key});
-  /*
-  * Method : build
-  * Deskripsi : Membangun UI untuk halaman pengambilan barang
-  * Parameter : context - BuildContext untuk akses ke fitur framework
-  * Return : Widget Scaffold berisi peta dan langkah-langkah pengambilan barang
-  */
+
   @override
   Widget build(BuildContext context) {
-    final LatLng jakartaLocation = LatLng(-6.2088, 106.8456);
+    final LatLng jakartaLocation = LatLng(-6.2088, 106.8456); // Lokasi pusat peta
 
     return Scaffold(
       appBar: AppBar(
@@ -46,13 +40,13 @@ class Step1Page extends StatelessWidget {
             ),
             child: const Icon(Icons.close, color: Colors.white, size: 18),
           ),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context), // Kembali ke halaman sebelumnya
         ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Map Container
+          // === PETA LOKASI ===
           Container(
             height: 180,
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -75,13 +69,14 @@ class Step1Page extends StatelessWidget {
               ),
             ),
           ),
-          // Stepper Content
+
+          // === LANGKAH-LANGKAH (STEPPER) ===
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 28.0),
               child: Column(
                 children: [
-                  // Stepper - First Step - Active
+                  // Langkah 1 - Aktif
                   Expanded(
                     flex: 1,
                     child: Row(
@@ -136,7 +131,7 @@ class Step1Page extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // Stepper - Second Step - Completed
+                  // Langkah 2 - Ditandai sebagai selesai (bulat hijau)
                   Expanded(
                     flex: 1,
                     child: Row(
@@ -177,7 +172,7 @@ class Step1Page extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // Stepper - Third Step - Inactive
+                  // Langkah 3 - Belum aktif (bulat abu-abu)
                   Expanded(
                     flex: 1,
                     child: Row(
@@ -217,11 +212,13 @@ class Step1Page extends StatelessWidget {
               ),
             ),
           ),
-          // Next Step Button
+
+          // === TOMBOL NEXT ===
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
               onPressed: () {
+                // Navigasi ke halaman Step 2
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const Step2Page()),
@@ -238,7 +235,8 @@ class Step1Page extends StatelessWidget {
               ),
             ),
           ),
-          // Bottom Navigation
+
+          // === NAVIGASI BAWAH (Ikon) ===
           Container(
             height: 60,
             decoration: BoxDecoration(

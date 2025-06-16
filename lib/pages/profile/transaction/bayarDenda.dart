@@ -1,10 +1,20 @@
+/**
+ * File         : detail_denda_page.dart
+ * Dibuat oleh  : Izzuddin Azzam
+ * Tanggal      : 16-06-2025
+ * Deskripsi    : Halaman detail denda kerusakan/pelanggaran pada penyewaan barang.
+ *                Menampilkan informasi barang, pelanggaran, nominal denda, dan tombol pembayaran.
+ */
+
 import 'package:flutter/material.dart';
 
+/// Halaman untuk menampilkan detail denda barang sewaan
 class DetailDendaPage extends StatelessWidget {
   const DetailDendaPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Dummy data (bisa diganti dengan data dari model/parameter)
     final namaBarang = 'Kabel HDMI';
     final deskripsi = 'Kabel rusak pada bagian ujung konektor.';
     final jenisPelanggaran = 'Kerusakan Barang';
@@ -34,36 +44,37 @@ class DetailDendaPage extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
+
+            // Daftar detail dalam ListView agar bisa di-scroll
             Expanded(
               child: ListView(
                 children: [
-                  buildDetailCard('Nama Barang', namaBarang),
-                  buildImageCard('../../images/assets_ItemDetails/jaket1.png'),
-                  buildDetailCard('Deskripsi Barang', deskripsi),
-                  buildDetailCard('Jenis Pelanggaran', jenisPelanggaran),
-                  buildDetailCard('Nominal Denda', nominal),
-                  buildDetailCard('Catatan Tambahan', catatan),
+                  _buildDetailCard('Nama Barang', namaBarang),
+                  _buildImageCard('https://via.placeholder.com/300x180.png?text=Gambar+Barang'), // Ganti path asset jika perlu
+                  _buildDetailCard('Deskripsi Barang', deskripsi),
+                  _buildDetailCard('Jenis Pelanggaran', jenisPelanggaran),
+                  _buildDetailCard('Nominal Denda', nominal),
+                  _buildDetailCard('Catatan Tambahan', catatan),
                 ],
               ),
             ),
             const SizedBox(height: 16),
+
+            // Tombol lanjut ke pembayaran
             SizedBox(
               width: double.infinity,
               height: 50,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // Navigasi ke metode pembayaran
+                  // TODO: Navigasi ke halaman metode pembayaran
                 },
-                icon: const Icon(
-                  Icons.payment,
-                  color: Color.fromARGB(255, 230, 228, 228),
-                  ),
+                icon: const Icon(Icons.payment, color: Colors.white),
                 label: const Text(
                   'LANJUT BAYAR',
                   style: TextStyle(
                     fontSize: 16,
                     letterSpacing: 1.2,
-                    color: Color.fromARGB(255, 230, 228, 228),
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -81,7 +92,8 @@ class DetailDendaPage extends StatelessWidget {
     );
   }
 
-  Widget buildDetailCard(String label, String value) {
+  /// Widget untuk menampilkan kartu detail dengan label dan isinya
+  Widget _buildDetailCard(String label, String value) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -100,7 +112,8 @@ class DetailDendaPage extends StatelessWidget {
     );
   }
 
-  Widget buildImageCard(String imageUrl) {
+  /// Widget untuk menampilkan gambar barang dalam kartu
+  Widget _buildImageCard(String imageUrl) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -112,6 +125,12 @@ class DetailDendaPage extends StatelessWidget {
           height: 180,
           width: double.infinity,
           fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return const SizedBox(
+              height: 180,
+              child: Center(child: Text('Gagal memuat gambar')),
+            );
+          },
         ),
       ),
     );

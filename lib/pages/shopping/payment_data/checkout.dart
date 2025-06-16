@@ -14,39 +14,29 @@ void main() {
   runApp(const Checkout());
 }
 
-/** Widget Checkout
- * 
- * Deskripsi:
- * - Widget root untuk halaman checkout
- * - Menjadi entry point ketika aplikasi dijalankan langsung
- * - Merupakan StatelessWidget karena hanya berfungsi sebagai container dan tidak menyimpan state
- */
+/// Widget Checkout
+///
+/// Deskripsi:
+/// - Widget root yang digunakan sebagai entry point aplikasi.
+/// - Merupakan StatelessWidget karena tidak memiliki state yang berubah.
+/// - Menjalankan halaman ShippingAddressPage sebagai halaman awal.
 class Checkout extends StatelessWidget {
   const Checkout({super.key});
 
   @override
-  /* Fungsi ini membangun widget root untuk halaman checkout
-   * 
-   * Parameter:
-   * - context: Konteks build dari framework Flutter
-   * 
-   * Return: Widget MaterialApp yang menampilkan halaman alamat pengiriman
-   */
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ShippingAddressPage(),             // Menampilkan halaman alamat pengiriman
-      debugShowCheckedModeBanner: false,        // Sembunyikan banner debug
+      home: ShippingAddressPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
 
-/** Widget ShippingAddressPage
- * 
- * Deskripsi:
- * - Widget yang menampilkan halaman formulir alamat pengiriman
- * - Bagian dari alur checkout untuk memasukkan data alamat
- * - Merupakan StatefulWidget karena perlu mengelola input form dan validasi
- */
+/// Widget ShippingAddressPage
+///
+/// Deskripsi:
+/// - Halaman pengisian alamat pengiriman yang digunakan dalam proses checkout.
+/// - Stateful karena perlu menyimpan dan memvalidasi input pengguna.
 class ShippingAddressPage extends StatefulWidget {
   const ShippingAddressPage({super.key});
 
@@ -54,24 +44,20 @@ class ShippingAddressPage extends StatefulWidget {
   _ShippingAddressPageState createState() => _ShippingAddressPageState();
 }
 
-/** State untuk widget ShippingAddressPage
- * 
- * Deskripsi:
- * - Mengelola state dan data untuk halaman alamat pengiriman
- * - Menangani validasi form dan pilihan kota dan booth
- */
+/// State dari ShippingAddressPage
+///
+/// - Mengelola input pengguna seperti nama, email, alamat, NIK, kota, booth, dan lainnya.
+/// - Melakukan validasi form sebelum melanjutkan ke halaman berikutnya.
 class _ShippingAddressPageState extends State<ShippingAddressPage> {
-  final _formKey = GlobalKey<FormState>();  // Key untuk validasi form
+  final _formKey = GlobalKey<FormState>();
 
-  bool saveConfirmation = false;            // Status konfirmasi simpan alamat
+  bool saveConfirmation = false;
 
-  // Variabel untuk menyimpan pilihan dropdown
-  String? selectedCity;                     // Kota yang dipilih
-  String? selectedBooth;                    // Booth yang dipilih
+  String? selectedCity;
+  String? selectedBooth;
 
-  // Data untuk pilihan dropdown
-  final List<String> cities = ['Bandung', 'Bekasi', 'Jakarta', 'Bogor'];  // Daftar kota
-  final List<String> booths = ['Gegerkalong1', 'Lembang2', 'Tangkuban3', 'Cimindi4'];  // Daftar booth
+  final List<String> cities = ['Bandung', 'Bekasi', 'Jakarta', 'Bogor'];
+  final List<String> booths = ['Gegerkalong1', 'Lembang2', 'Tangkuban3', 'Cimindi4'];
 
   @override
   Widget build(BuildContext context) {
@@ -157,6 +143,8 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
     );
   }
 
+  /// Widget untuk menampilkan indikator langkah proses checkout.
+  /// Menampilkan dua tahap: Rent Confirmation (aktif) dan Payment Method (belum aktif).
   Widget buildStepIndicator() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -208,8 +196,12 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
     );
   }
 
-  Widget buildTextField(String label,
-      {TextInputType keyboardType = TextInputType.text, int maxLines = 1}) {
+  /// Fungsi pembantu untuk membangun TextFormField
+  /// Parameter:
+  /// - label: teks hint
+  /// - keyboardType: jenis input (default: text)
+  /// - maxLines: jumlah baris (default: 1)
+  Widget buildTextField(String label, {TextInputType keyboardType = TextInputType.text, int maxLines = 1}) {
     return TextFormField(
       decoration: InputDecoration(
         hintText: label,
@@ -235,6 +227,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
     );
   }
 
+  /// Widget dropdown untuk memilih kota pengiriman
   Widget buildCityDropdown() {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
@@ -270,6 +263,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
     );
   }
 
+  /// Widget dropdown untuk memilih booth/cabang pengambilan
   Widget buildBoothDropdown() {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
