@@ -1,9 +1,9 @@
 /**
  * File         : allListItem.dart
- * Dibuat oleh  : Izzuddin Azzam
+ * Dibuat oleh  : Izzuddin Azzam, Al Ghifari
  * Tanggal      : 15-06-2025
  * Deskripsi    : File ini berisi implementasi halaman daftar semua barang camping yang tersedia untuk disewa
- *                dengan fitur filter berdasarkan kategori, harga, dan rating.
+ * dengan fitur filter berdasarkan kategori, harga, dan rating.
  * Dependencies : flutter/material.dart, font_awesome_flutter, provider, intl
  */
 
@@ -18,27 +18,25 @@ import '../../providers/barang_provider.dart';
 import '../../providers/wishlist_provider.dart';
 import '../../models/models.dart';
 
+// Fungsi main untuk menjalankan aplikasi sebagai contoh
 void main() {
   runApp(const AllItemList());
 }
 
 /** Widget AllItemList
- * 
- * Deskripsi:
- * - Widget utama yang mengatur root dari halaman daftar semua barang
- * - Menyediakan konfigurasi tema dan styling untuk halaman
- * - Merupakan StatelessWidget karena hanya berfungsi sebagai container dan tidak menyimpan state
+ * * Deskripsi:
+ * - Widget utama yang mengatur root dari halaman daftar semua barang.
+ * - Menyediakan konfigurasi tema dan styling untuk halaman.
+ * - Merupakan StatelessWidget karena hanya berfungsi sebagai container dan tidak menyimpan state.
  */
 class AllItemList extends StatelessWidget {
   const AllItemList({Key? key}) : super(key: key);
 
   @override
   /* Fungsi ini membangun widget root untuk aplikasi
-   * 
-   * Parameter:
-   * - context: Konteks build dari framework Flutter
-   * 
-   * Return: Widget MaterialApp yang merupakan root dari aplikasi
+   * * Parameter:
+   * - context: Konteks build dari framework Flutter.
+   * * Return: Widget MaterialApp yang merupakan root dari aplikasi.
    */
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -58,31 +56,29 @@ class AllItemList extends StatelessWidget {
 }
 
 /** Widget ItemCategory
- * 
- * Deskripsi:
- * - Widget utama yang menampilkan daftar barang dan opsi filter
- * - Bagian dari halaman katalog barang camping
+ * * Deskripsi:
+ * - Widget utama yang menampilkan daftar barang dan opsi filter.
+ * - Bagian dari halaman katalog barang camping.
  * - Merupakan StatefulWidget karena perlu menyimpan dan memperbarui status seperti
- *   kategori terpilih, filter harga, dan data barang
+ * kategori terpilih, filter harga, dan data barang.
  */
 class ItemCategory extends StatefulWidget {
   ItemCategory({Key? key}) : super(key: key);
 
   @override
-  /* Fungsi ini membuat state yang digunakan oleh widget ini
-   * 
-   * Return: Instance dari _ItemCategoryState
+  /* Fungsi ini membuat state yang digunakan oleh widget ini.
+   * * Return: Instance dari _ItemCategoryState.
    */
   _ItemCategoryState createState() => _ItemCategoryState();
 }
 
 /** State untuk widget ItemCategory
- * 
- * Deskripsi:
- * - Menyimpan semua data dan status yang berubah untuk halaman daftar barang
- * - Mengelola proses pengambilan data, pemfilteran, dan UI interaktif
+ * * Deskripsi:
+ * - Menyimpan semua data dan status yang berubah untuk halaman daftar barang.
+ * - Mengelola proses pengambilan data, pemfilteran, dan UI interaktif.
  */
-class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyimpan data barang
+class _ItemCategoryState extends State<ItemCategory> {
+  // Variabel untuk menyimpan data barang
   List<Barang> allItems = [];      // Semua barang dari API
   List<Barang> filteredItems = []; // Barang yang sudah difilter
   bool _isLoading = false;         // Status loading
@@ -90,51 +86,49 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
 
   // Daftar kategori barang yang tersedia
   final List<String> categories = [
-    "All",         // Semua kategori
-    "Tenda",       // Kategori 1
-    "Alat Masak",  // Kategori 2
-    "Sepatu",      // Kategori 3
-    "Tas",         // Kategori 4
-    "Aksesoris",   // Kategori 5
-    "Pakaian"      // Kategori 6
+    "All",        // Semua kategori
+    "Tenda",      // Kategori 1
+    "Alat Masak", // Kategori 2
+    "Sepatu",     // Kategori 3
+    "Tas",        // Kategori 4
+    "Aksesoris",  // Kategori 5
+    "Pakaian"     // Kategori 6
   ];
 
   // Variabel untuk menyimpan status filter
-  List<String> selectedCategories = [];                           // Kategori yang dipilih
-  RangeValues priceRange = const RangeValues(0, 1000000);         // Rentang harga
-  List<int> selectedRatings = [];                                 // Rating yang dipilih
-  List<String> selectedLocations = [];                            // Lokasi yang dipilih
-  List<String> selectedBrands = [];                               // Brand yang dipilih
+  List<String> selectedCategories = [];                         // Kategori yang dipilih
+  RangeValues priceRange = const RangeValues(0, 1000000);       // Rentang harga
+  List<int> selectedRatings = [];                               // Rating yang dipilih
+  List<String> selectedLocations = [];                          // Lokasi yang dipilih
+  List<String> selectedBrands = [];                             // Brand yang dipilih
 
   // Controller untuk input rentang harga
-  TextEditingController minPriceController = TextEditingController(text: "0");        // Harga minimum
-  TextEditingController maxPriceController = TextEditingController(text: "1000000");  // Harga maksimum
+  TextEditingController minPriceController = TextEditingController(text: "0");       // Harga minimum
+  TextEditingController maxPriceController = TextEditingController(text: "1000000"); // Harga maksimum
 
   @override
-  /* Fungsi ini dijalankan saat widget pertama kali dibuat
-   * 
-   * Melakukan inisialisasi state awal dan memuat data barang dari API
+  /* Fungsi ini dijalankan saat widget pertama kali dibuat.
+   * * Melakukan inisialisasi state awal dan memuat data barang dari API.
    */
   void initState() {
     super.initState();
     _loadAllItems(); // Memuat semua data barang
   }
+
   @override
-  /* Fungsi ini dijalankan saat widget dihapus dari widget tree
-   * 
-   * Melakukan pembersihan resource dengan membuang controller yang tidak digunakan lagi
-   * untuk mencegah memory leak
+  /* Fungsi ini dijalankan saat widget dihapus dari widget tree.
+   * * Melakukan pembersihan resource dengan membuang controller yang tidak digunakan lagi
+   * untuk mencegah memory leak.
    */
   void dispose() {
-    minPriceController.dispose();  // Membuang controller harga minimum
-    maxPriceController.dispose();  // Membuang controller harga maksimum
+    minPriceController.dispose(); // Membuang controller harga minimum
+    maxPriceController.dispose(); // Membuang controller harga maksimum
     super.dispose();
   }
 
-  /* Fungsi ini mengambil data barang dari API melalui provider
-   * 
-   * Menggunakan AuthProvider untuk mendapatkan ID pengguna dan
-   * BarangProvider untuk mendapatkan daftar barang
+  /* Fungsi ini mengambil data barang dari API melalui provider.
+   * * Menggunakan AuthProvider untuk mendapatkan ID pengguna dan
+   * BarangProvider untuk mendapatkan daftar barang.
    */
   Future<void> _loadAllItems() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -154,32 +148,32 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
       // Update state dengan data yang didapat
       setState(() {
         _isLoading = false;
-        allItems = List.from(barangProvider.allBarang);    // Salin semua barang
+        allItems = List.from(barangProvider.allBarang);   // Salin semua barang
         filteredItems = List.from(allItems);               // Tampilkan semua barang
         _error = barangProvider.error;                     // Catat error jika ada
       });
     }
   }
 
-  /* Fungsi ini menerapkan semua filter yang dipilih pengguna
-   * 
-   * Filter berdasarkan kategori, rentang harga, dan rating
+  /* Fungsi ini menerapkan semua filter yang dipilih pengguna.
+   * * Filter berdasarkan kategori, rentang harga, dan rating.
    */
   void _applyFilters() {
     setState(() {
       // Filter barang berdasarkan kriteria yang dipilih
-      filteredItems = allItems.where((item) {        // Filter berdasarkan kategori
+      filteredItems = allItems.where((item) {
+        // Filter berdasarkan kategori
         bool categoryMatch = selectedCategories.isEmpty || 
-                            selectedCategories.contains("All") ||
-                            _getCategoryName(item.kategoriId).any((cat) => selectedCategories.contains(cat));
+                             selectedCategories.contains("All") ||
+                             _getCategoryName(item.kategoriId).any((cat) => selectedCategories.contains(cat));
 
         // Filter berdasarkan harga
         bool priceMatch = item.hargaPerhari >= priceRange.start.round() &&
-                         item.hargaPerhari <= priceRange.end.round();
+                          item.hargaPerhari <= priceRange.end.round();
 
         // Filter berdasarkan rating
         bool ratingMatch = selectedRatings.isEmpty ||
-                          selectedRatings.any((rating) => item.meanReview >= rating && item.meanReview < rating + 1);
+                           selectedRatings.any((rating) => item.meanReview >= rating && item.meanReview < rating + 1);
 
         // Barang harus memenuhi semua kriteria filter
         return categoryMatch && priceMatch && ratingMatch;
@@ -187,12 +181,10 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
     });
   }
 
-  /* Fungsi ini mengubah ID kategori menjadi nama kategori
-   * 
-   * Parameter:
-   * - categoryId: ID kategori barang
-   * 
-   * Return: List string yang berisi nama kategori
+  /* Fungsi ini mengubah ID kategori menjadi nama kategori.
+   * * Parameter:
+   * - categoryId: ID kategori barang.
+   * * Return: List string yang berisi nama kategori.
    */
   List<String> _getCategoryName(int categoryId) {
     // Pemetaan ID kategori ke nama kategori
@@ -207,15 +199,15 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
     // Kembalikan nama kategori dalam bentuk list, atau "Other" jika ID tidak ditemukan
     return [categoryMap[categoryId] ?? "Other"];
   }
+
   @override
-  /* Fungsi ini membangun UI untuk halaman daftar item
-   * 
-   * Parameter:
-   * - context: Konteks build dari framework Flutter
-   * 
-   * Return: Widget Scaffold dengan struktur halaman daftar item
+  /* Fungsi ini membangun UI untuk halaman daftar item.
+   * * Parameter:
+   * - context: Konteks build dari framework Flutter.
+   * * Return: Widget Scaffold dengan struktur halaman daftar item.
    */
   Widget build(BuildContext context) {
+    // Scaffold sebagai kerangka utama halaman
     return Scaffold(
       // Menggunakan CustomScrollView untuk membuat layout scrollable yang lebih kompleks
       body: CustomScrollView(
@@ -227,7 +219,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Judul halaman
+                  // Widget Text untuk menampilkan judul halaman
                   const Text(
                     'Jelajahi Katalog Barang',
                     style: TextStyle(
@@ -237,6 +229,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                     ),
                   ),
                   const SizedBox(height: 12),
+                  // Widget Container untuk kotak pencarian dengan shadow
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -249,6 +242,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                         ),
                       ],
                     ),
+                    // Widget TextField untuk input pencarian
                     child: const TextField(
                       decoration: InputDecoration(
                         hintText: 'Search here',
@@ -262,9 +256,11 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
               ),
             ),
           ),
+          // Spacer
           SliverToBoxAdapter(
             child: SizedBox(height: 8),
           ),
+          // Baris untuk filter kategori, tombol sort, dan filter
           SliverToBoxAdapter(
             child: Container(
               margin: const EdgeInsets.only(bottom: 10),
@@ -272,12 +268,15 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
+                  // ListView horizontal untuk menampilkan daftar kategori
                   Expanded(
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: categories.length,
                       separatorBuilder: (_, __) => const SizedBox(width: 10),
-                      itemBuilder: (context, index) {                        return GestureDetector(
+                      itemBuilder: (context, index) {
+                        // Tombol untuk setiap kategori
+                        return GestureDetector(
                           onTap: () {
                             setState(() {
                               if (selectedCategories.contains(categories[index])) {
@@ -285,9 +284,10 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                               } else {
                                 selectedCategories.add(categories[index]);
                               }
-                              _applyFilters(); // Apply filters when category changes
+                              _applyFilters(); // Terapkan filter saat kategori berubah
                             });
                           },
+                          // Container sebagai chip kategori
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 8),
@@ -299,6 +299,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                               border:
                                   Border.all(color: const Color(0xFFA0B25E)),
                             ),
+                            // Teks nama kategori
                             child: Text(
                               categories[index],
                               style: TextStyle(
@@ -314,6 +315,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                     ),
                   ),
                   const SizedBox(width: 10),
+                  // Tombol untuk membuka bottom sheet 'Sort'
                   GestureDetector(
                     onTap: () {
                       _showSortBottomSheet(context);
@@ -331,6 +333,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                     ),
                   ),
                   const SizedBox(width: 10),
+                  // Tombol untuk membuka bottom sheet 'Filter'
                   GestureDetector(
                     onTap: () {
                       _showFilterBottomSheet(context);
@@ -350,10 +353,14 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                 ],
               ),
             ),
-          ),          SliverPadding(
+          ),
+          // Padding untuk Grid daftar barang
+          SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            // Menampilkan widget berdasarkan state: loading, error, empty, atau berisi data
             sliver: _isLoading
                 ? SliverToBoxAdapter(
+                    // Tampilan loading indicator
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.all(50),
@@ -365,6 +372,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                   )
                 : _error != null
                     ? SliverToBoxAdapter(
+                        // Tampilan jika terjadi error saat fetch data
                         child: Center(
                           child: Padding(
                             padding: const EdgeInsets.all(50),
@@ -387,6 +395,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                       )
                     : filteredItems.isEmpty
                         ? SliverToBoxAdapter(
+                            // Tampilan jika tidak ada barang yang ditemukan
                             child: Center(
                               child: Padding(
                                 padding: const EdgeInsets.all(50),
@@ -401,26 +410,33 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                             ),
                           )
                         : SliverGrid(
+                            // Tampilan grid untuk daftar barang
                             delegate: SliverChildBuilderDelegate(
                               (context, index) {
+                                // Membangun setiap item barang
                                 return _buildBarangItem(filteredItems[index], context, index);
                               },
                               childCount: filteredItems.length,
                             ),
                             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.75,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
+                              crossAxisCount: 2,        // 2 kolom
+                              childAspectRatio: 0.75,   // Rasio aspek item
+                              crossAxisSpacing: 10,     // Jarak horizontal
+                              mainAxisSpacing: 10,      // Jarak vertikal
                             ),
                           ),
           ),
         ],
       ),
+      // Bottom Navigation Bar kustom
       bottomNavigationBar: buildBottomNavBar(context, currentIndex: 1),
     );
   }
 
+  /* Fungsi ini menampilkan modal bottom sheet untuk opsi pengurutan (sort).
+   * * Parameter:
+   * - context: Konteks build dari Flutter.
+   */
   void _showSortBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -441,6 +457,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // Judul Bottom Sheet
                       const Text(
                         'Urutkan Berdasarkan',
                         style: TextStyle(
@@ -448,6 +465,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      // Tombol Close
                       IconButton(
                         onPressed: () => Navigator.pop(context),
                         icon: const Icon(Icons.close),
@@ -455,16 +473,19 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                     ],
                   ),
                   const Divider(),
+                  // Pilihan-pilihan untuk sorting
                   _buildSortOption(context, 'Terbaru', Icons.access_time),
                   _buildSortOption(context, 'Harga Tertinggi', Icons.arrow_upward),
                   _buildSortOption(context, 'Harga Terendah', Icons.arrow_downward),
                   _buildSortOption(context, 'Rating Tertinggi', Icons.star),
                   _buildSortOption(context, 'Paling Populer', Icons.favorite),
                   const SizedBox(height: 20),
+                  // Tombol terapkan
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
+                        // Logika untuk menerapkan sorting (belum diimplementasikan)
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
@@ -492,10 +513,17 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
     );
   }
 
+  /* Fungsi ini membangun satu baris opsi pengurutan di dalam bottom sheet.
+   * * Parameter:
+   * - context: Konteks build dari Flutter.
+   * - title: Judul opsi sorting.
+   * - icon: Ikon untuk opsi sorting.
+   * * Return: Widget yang menampilkan satu opsi sorting.
+   */
   Widget _buildSortOption(BuildContext context, String title, IconData icon) {
     return InkWell(
       onTap: () {
-        // Implementasi logika sort
+        // Implementasi logika sort (belum ditambahkan)
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
@@ -513,6 +541,10 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
     );
   }
 
+  /* Fungsi ini menampilkan modal bottom sheet untuk opsi filter.
+   * * Parameter:
+   * - context: Konteks build dari Flutter.
+   */
   void _showFilterBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -530,6 +562,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Header bottom sheet filter
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -547,10 +580,11 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                     ],
                   ),
                   const Divider(),
+                  // Konten filter yang bisa di-scroll
                   Expanded(
                     child: ListView(
                       children: [
-                        // Categories
+                        // Filter Section: Kategori
                         _buildFilterSection(
                           context,
                           "Kategori",
@@ -568,7 +602,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                         ),
                         const SizedBox(height: 15),
                         
-                        // Price Range
+                        // Filter Section: Rentang Harga
                         const Text(
                           "Rentang Harga",
                           style: TextStyle(
@@ -579,6 +613,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                         const SizedBox(height: 10),
                         Row(
                           children: [
+                            // Input harga minimum
                             Expanded(
                               child: TextField(
                                 controller: minPriceController,
@@ -602,6 +637,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                               ),
                             ),
                             const SizedBox(width: 10),
+                            // Input harga maksimum
                             Expanded(
                               child: TextField(
                                 controller: maxPriceController,
@@ -627,6 +663,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                           ],
                         ),
                         const SizedBox(height: 10),
+                        // Slider untuk rentang harga
                         RangeSlider(
                           values: priceRange,
                           min: 0,
@@ -647,7 +684,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                         ),
                         const SizedBox(height: 15),
                         
-                        // Rating
+                        // Filter Section: Rating
                         const Text(
                           "Rating",
                           style: TextStyle(
@@ -671,6 +708,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                                   }
                                 });
                               },
+                              // Tombol pilihan rating
                               child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                                 decoration: BoxDecoration(
@@ -700,7 +738,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                         ),
                         const SizedBox(height: 15),
                         
-                        // Lokasi
+                        // Filter Section: Lokasi
                         _buildFilterSection(
                           context,
                           "Lokasi",
@@ -718,7 +756,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                         ),
                         const SizedBox(height: 15),
                         
-                        // Brand
+                        // Filter Section: Brand
                         _buildFilterSection(
                           context,
                           "Brand",
@@ -737,10 +775,12 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                       ],
                     ),
                   ),
+                  // Tombol Aksi: Reset dan Terapkan
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 15),
                     child: Row(
                       children: [
+                        // Tombol Reset Filter
                         Expanded(
                           child: OutlinedButton(
                             onPressed: () {
@@ -771,12 +811,14 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                           ),
                         ),
                         const SizedBox(width: 10),
+                        // Tombol Terapkan Filter
                         Expanded(
-                          child: ElevatedButton(                            onPressed: () {
-                              // Terapkan filter
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Terapkan filter yang sudah dipilih
                               _applyFilters();
                               Navigator.pop(context);
-                              // Refresh state
+                              // Refresh state untuk menampilkan perubahan di halaman utama
                               setState(() {});
                             },
                             style: ElevatedButton.styleFrom(
@@ -806,16 +848,15 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
       },
     );
   }
-  /* Fungsi ini membangun bagian filter dengan judul dan pilihan filter
-   * 
-   * Parameter:
-   * - context: Konteks build dari Flutter
-   * - title: Judul bagian filter
-   * - items: Daftar pilihan filter yang tersedia
-   * - selectedItems: Daftar pilihan filter yang sudah dipilih
-   * - onToggle: Fungsi callback saat pilihan filter dipilih/dibatalkan
-   * 
-   * Return: Widget Column yang berisi bagian filter
+
+  /* Fungsi ini membangun bagian filter dengan judul dan pilihan filter.
+   * * Parameter:
+   * - context: Konteks build dari Flutter.
+   * - title: Judul bagian filter.
+   * - items: Daftar pilihan filter yang tersedia.
+   * - selectedItems: Daftar pilihan filter yang sudah dipilih.
+   * - onToggle: Fungsi callback saat pilihan filter dipilih/dibatalkan.
+   * * Return: Widget Column yang berisi bagian filter.
    */
   Widget _buildFilterSection(
     BuildContext context,
@@ -844,7 +885,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
             
             // Buat widget pilihan filter
             return GestureDetector(
-              onTap: () => onToggle(item, isSelected),  // Panggil onToggle saat diklik
+              onTap: () => onToggle(item, isSelected), // Panggil onToggle saat diklik
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
@@ -867,20 +908,21 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
         ),
       ],
     );
-  }  /* Fungsi ini membangun widget item barang yang ditampilkan dalam grid
-   * 
-   * Parameter:
-   * - barang: Objek Barang yang berisi data barang
-   * - context: Konteks build dari Flutter
-   * - index: Indeks barang dalam list
-   * 
-   * Return: Widget berisi tampilan kartu barang
+  }
+
+  /* Fungsi ini membangun widget item barang yang ditampilkan dalam grid.
+   * * Parameter:
+   * - barang: Objek Barang yang berisi data barang.
+   * - context: Konteks build dari Flutter.
+   * - index: Indeks barang dalam list.
+   * * Return: Widget berisi tampilan kartu barang.
    */
   Widget _buildBarangItem(Barang barang, BuildContext context, int index) {
     // Mendapatkan provider yang diperlukan
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final wishlistProvider = Provider.of<WishlistProvider>(context, listen: false);
     
+    // Widget GestureDetector agar kartu bisa diklik
     return GestureDetector(
       // Navigasi ke halaman detail barang saat diklik
       onTap: () {
@@ -889,6 +931,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
           MaterialPageRoute(builder: (_) => const DetailItem()),
         );
       },
+      // Widget Container sebagai card
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -904,7 +947,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image section
+            // Bagian gambar barang
             Expanded(
               flex: 3,
               child: Stack(
@@ -918,6 +961,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                       ),
                       color: Colors.grey[200],
                     ),
+                    // Menampilkan gambar dari URL jika ada, jika tidak, tampilkan placeholder
                     child: barang.foto != null
                         ? ClipRRect(
                             borderRadius: BorderRadius.only(
@@ -934,26 +978,28 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                           )
                         : _buildPlaceholderImage(),
                   ),
+                  // Tombol Wishlist/Favorite
                   Positioned(
                     top: 10,
                     right: 10,
                     child: GestureDetector(
                       onTap: () async {
+                        // Logika untuk menambah/menghapus dari wishlist
                         if (authProvider.isAuthenticated) {
                           if (barang.isWishlist == true) {
-                            // Remove from wishlist
+                            // Hapus dari wishlist
                             await wishlistProvider.removeFromWishlist(
                               authProvider.user!.userId, 
                               barang.id
                             );
                           } else {
-                            // Add to wishlist
+                            // Tambah ke wishlist
                             await wishlistProvider.addToWishlist(
                               authProvider.user!.userId, 
                               barang.id
                             );
                           }
-                          _loadAllItems(); // Refresh the list
+                          _loadAllItems(); // Refresh daftar barang untuk update status wishlist
                         }
                       },
                       child: Container(
@@ -962,6 +1008,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                           color: Colors.white.withOpacity(0.9),
                           shape: BoxShape.circle,
                         ),
+                        // Ikon berubah tergantung status wishlist barang
                         child: Icon(
                           barang.isWishlist == true ? Icons.favorite : Icons.favorite_border,
                           color: Colors.red,
@@ -973,7 +1020,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                 ],
               ),
             ),
-            // Info section
+            // Bagian informasi barang (nama, harga, rating)
             Expanded(
               flex: 2,
               child: Padding(
@@ -982,6 +1029,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    // Widget Text untuk nama barang
                     Text(
                       barang.namaBarang,
                       style: const TextStyle(
@@ -994,6 +1042,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Widget Text untuk harga barang per hari
                         Text(
                           NumberFormat.currency(locale: 'id', symbol: 'Rp', decimalDigits: 0)
                               .format(barang.hargaPerhari),
@@ -1004,10 +1053,12 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                           ),
                         ),
                         const SizedBox(height: 4),
+                        // Widget Row untuk menampilkan rating
                         Row(
                           children: [
                             Icon(Icons.star, color: Colors.amber, size: 14),
                             const SizedBox(width: 2),
+                            // Teks untuk rata-rata rating
                             Text(
                               barang.meanReview.toStringAsFixed(1),
                               style: TextStyle(
@@ -1015,6 +1066,7 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
                                 color: Colors.grey[600],
                               ),
                             ),
+                            // Teks untuk jumlah total review
                             Text(
                               ' (${barang.totalReview})',
                               style: TextStyle(
@@ -1035,9 +1087,9 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
       ),
     );
   }
-  /* Fungsi ini membuat placeholder gambar untuk item yang tidak memiliki foto
-   * 
-   * Return: Widget container dengan icon placeholder
+
+  /* Fungsi ini membuat placeholder gambar untuk item yang tidak memiliki foto.
+   * * Return: Widget container dengan icon placeholder.
    */
   Widget _buildPlaceholderImage() {
     return Container(
@@ -1049,8 +1101,9 @@ class _ItemCategoryState extends State<ItemCategory> {  // Variabel untuk menyim
           topLeft: Radius.circular(10),
           topRight: Radius.circular(10),
         ),
-        color: Colors.grey[200],  // Warna abu-abu muda
+        color: Colors.grey[200], // Warna abu-abu muda
       ),
+      // Menampilkan ikon gambar sebagai placeholder
       child: Icon(
         Icons.image,
         color: Colors.grey[400],

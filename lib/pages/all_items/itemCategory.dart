@@ -1,10 +1,12 @@
-/*
-* File : itemCategory.dart
-* Deskripsi : File ini berisi halaman yang menampilkan daftar produk dalam kategori tertentu dengan fitur filter harga dan rating
-* Ketergantungan (Dependencies) : 
-*   - detailItem.dart: digunakan untuk berpindah ke halaman detail produk saat item diklik
-*   - navbar.dart: digunakan untuk menampilkan navigasi bawah pada halaman
-*/
+/**
+ * File         : itemCategory.dart
+ * Dibuat oleh  : Izzuddin Azzam, Al Ghifari
+ * Tanggal      : 16-06-2025
+ * Deskripsi    : File ini berisi halaman yang menampilkan daftar produk dalam kategori tertentu dengan fitur filter harga dan rating.
+ * Dependencies : 
+ * - detailItem.dart: digunakan untuk berpindah ke halaman detail produk saat item diklik.
+ * - navbar.dart: digunakan untuk menampilkan navigasi bawah pada halaman.
+ */
 
 import 'package:flutter/material.dart';
 import '../detail_items/detailItem.dart';
@@ -14,40 +16,42 @@ void main() {
   runApp(const ItemCategoryApp());
 }
 
-/*
-* Class : ItemCategoryApp
-* Deskripsi : Kelas ini adalah widget utama yang berfungsi sebagai pembungkus aplikasi untuk halaman kategori item
-* Jenis Widget : StatelessWidget karena tidak memerlukan perubahan status internal
-* Bagian Layar : Mengatur keseluruhan tema dan pengaturan aplikasi untuk halaman kategori item
-*/
+/** Widget ItemCategoryApp
+ * * Deskripsi:
+ * - Widget utama yang berfungsi sebagai root atau pembungkus aplikasi untuk halaman kategori item.
+ * - Mengatur konfigurasi global seperti tema dan halaman awal untuk lingkup halaman ini.
+ * - Merupakan StatelessWidget karena tidak memerlukan perubahan state internal.
+ */
 class ItemCategoryApp extends StatelessWidget {
-  const ItemCategoryApp({super.key});  /*
-  * Method : build
-  * Deskripsi : Metode ini mengatur tampilan dasar aplikasi dengan tema dan warna untuk halaman kategori item
-  * Parameter : 
-  *   - context: menyediakan informasi dasar tentang lokasi widget dalam struktur aplikasi
-  * Nilai yang dihasilkan : 
-  *   - Menghasilkan widget MaterialApp dengan pengaturan tema dan ItemCategory sebagai halaman utama
-  */
+  const ItemCategoryApp({super.key});
+
+  /* Fungsi ini membangun widget root untuk halaman kategori item.
+   * * Parameter:
+   * - context: Menyediakan informasi tentang lokasi widget dalam struktur aplikasi.
+   * * Return: Menghasilkan widget MaterialApp dengan pengaturan tema dan ItemCategory sebagai halaman utama.
+   */
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // Menyembunyikan banner debug
       debugShowCheckedModeBanner: false,
+      // Konfigurasi tema
       theme: ThemeData(
         primaryColor: const Color(0xFFA0B25E),
         scaffoldBackgroundColor: const Color(0xFFF8F8F8),
       ),
+      // Menetapkan ItemCategory sebagai halaman utama
       home: const ItemCategory(),
     );
   }
 }
 
-/*
-* Class : ItemCategory
-* Deskripsi : Kelas ini adalah widget halaman utama yang menampilkan daftar produk dalam kategori tenda dengan fitur filter
-* Jenis Widget : StatefulWidget karena perlu menyimpan dan mengubah status filter harga dan rating
-* Bagian Layar : Widget ini menampilkan seluruh konten halaman kategori item termasuk pencarian, filter, dan grid produk
-*/
+/** Widget ItemCategory
+ * * Deskripsi:
+ * - Widget yang menampilkan halaman daftar produk untuk kategori tertentu (contoh: "Tenda").
+ * - Dilengkapi dengan fitur pencarian dan filter.
+ * - Merupakan StatefulWidget karena perlu menyimpan dan mengelola state filter seperti rentang harga dan rating yang dapat diubah oleh pengguna.
+ */
 class ItemCategory extends StatefulWidget {
   const ItemCategory({super.key});
 
@@ -55,20 +59,19 @@ class ItemCategory extends StatefulWidget {
   _ItemCategoryState createState() => _ItemCategoryState();
 }
 
-/*
-* Class : _ItemCategoryState
-* Deskripsi : Kelas ini mengatur status dan logika untuk halaman kategori item, termasuk filter dan tampilan produk
-* Jenis Widget : State dari StatefulWidget yang mengelola status filter harga dan rating
-* Bagian Layar : Mengimplementasikan logika filter dan tampilan untuk item-item dalam kategori
-*/
+/** State untuk widget ItemCategory
+ * * Deskripsi:
+ * - Mengelola semua state dan logika untuk halaman ItemCategory.
+ * - Menyimpan data produk, nilai filter, dan mengimplementasikan fungsi untuk menerapkan filter serta menampilkan dialog.
+ */
 class _ItemCategoryState extends State<ItemCategory> {
-  // Filter variables
+  // Variabel untuk menyimpan nilai filter
   double minPrice = 0;
   double maxPrice = 500000;
   double minRating = 0;
   double maxRating = 5;
 
-  // Data barang
+  // Data dummy untuk semua item dalam kategori
   final List<Map<String, dynamic>> allItems = [
     {"name": "Tenda Camping", "price": 300000, "image": "images/assets_ItemDetails/tenda_bg1.png", "rating": 4.5},
     {"name": "Kompor Portable", "price": 150000, "image": "images/assets_ItemDetails/tenda_bg2.png", "rating": 4.3},
@@ -78,56 +81,54 @@ class _ItemCategoryState extends State<ItemCategory> {
     {"name": "Jaket Gunung", "price": 400000, "image": "images/assets_ItemDetails/tenda_bg6.png", "rating": 4.2},
   ];
 
-  // Daftar barang yang difilter
-  late List<Map<String, dynamic>> filteredItems;  /*
-  * Method : initState
-  * Deskripsi : Metode ini melakukan inisialisasi daftar item yang difilter saat halaman pertama kali dibuat
-  * Parameter : 
-  *   - (Tidak ada parameter)
-  * Nilai yang dihasilkan : 
-  *   - (Tidak mengembalikan nilai) Hanya mengatur nilai awal filteredItems dari daftar allItems 
-  */
+  // List untuk menyimpan item yang telah difilter dan akan ditampilkan di UI
+  late List<Map<String, dynamic>> filteredItems;
+
+  /* Fungsi ini dijalankan sekali saat state pertama kali dibuat.
+   * * Menginisialisasi filteredItems dengan semua data dari allItems.
+   */
   @override
   void initState() {
     super.initState();
-    filteredItems = List.from(allItems); // Initialize filtered items
+    // Inisialisasi daftar item yang akan ditampilkan dengan semua item
+    filteredItems = List.from(allItems);
   }
-  /*
-  * Method : _applyFilter
-  * Deskripsi : Metode ini menerapkan filter pada daftar item berdasarkan rentang harga dan rating yang telah dipilih pengguna
-  * Parameter : 
-  *   - (Tidak ada parameter)
-  * Nilai yang dihasilkan : 
-  *   - (Tidak mengembalikan nilai) Memperbarui daftar filteredItems sesuai kriteria filter
-  */
+
+  /* Fungsi ini menerapkan filter pada daftar item.
+   * * Memperbarui state filteredItems berdasarkan kriteria rentang harga dan rating yang dipilih.
+   */
   void _applyFilter() {
     setState(() {
       filteredItems = allItems.where((item) {
-        return item['price'] >= minPrice &&
-            item['price'] <= maxPrice &&
-            item['rating'] >= minRating &&
-            item['rating'] <= maxRating;
+        final price = item['price'];
+        final rating = item['rating'];
+        // Kondisi untuk memfilter item
+        return price >= minPrice &&
+            price <= maxPrice &&
+            rating >= minRating &&
+            rating <= maxRating;
       }).toList();
     });
-  }  /*
-  * Method : _showFilterDialog
-  * Deskripsi : Metode ini menampilkan jendela popup dengan slider untuk memilih rentang harga dan rating produk
-  * Parameter : 
-  *   - (Tidak ada parameter)
-  * Nilai yang dihasilkan : 
-  *   - (Tidak mengembalikan nilai) Menampilkan dialog dengan slider filter dan tombol Apply/Reset
-  */
+  }
+
+  /* Fungsi ini menampilkan dialog (popup) untuk mengatur filter.
+   * * Dialog ini berisi slider untuk rentang harga dan rating.
+   */
   void _showFilterDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        // AlertDialog sebagai container popup
         return AlertDialog(
           title: const Text('Filter'),
+          // Konten dialog yang dapat di-scroll
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Label untuk filter harga
                 const Text('Price Range'),
+                // Slider untuk memilih rentang harga
                 RangeSlider(
                   values: RangeValues(minPrice, maxPrice),
                   min: 0,
@@ -140,7 +141,9 @@ class _ItemCategoryState extends State<ItemCategory> {
                   },
                 ),
                 const SizedBox(height: 20),
+                // Label untuk filter rating
                 const Text('Rating Range'),
+                // Slider untuk memilih rentang rating
                 RangeSlider(
                   values: RangeValues(minRating, maxRating),
                   min: 0,
@@ -155,7 +158,9 @@ class _ItemCategoryState extends State<ItemCategory> {
               ],
             ),
           ),
+          // Tombol aksi pada dialog
           actions: [
+            // Tombol untuk menerapkan filter
             TextButton(
               onPressed: () {
                 _applyFilter();
@@ -163,6 +168,7 @@ class _ItemCategoryState extends State<ItemCategory> {
               },
               child: const Text('Apply'),
             ),
+            // Tombol untuk mereset filter ke nilai default
             TextButton(
               onPressed: () {
                 setState(() {
@@ -180,38 +186,43 @@ class _ItemCategoryState extends State<ItemCategory> {
         );
       },
     );
-  }  /*
-  * Method : build
-  * Deskripsi : Metode ini membuat seluruh tampilan halaman kategori termasuk AppBar, judul kategori, kotak pencarian, dan grid item
-  * Parameter : 
-  *   - context: digunakan untuk navigasi dan akses ke tema aplikasi
-  * Nilai yang dihasilkan : 
-  *   - Menghasilkan widget Scaffold lengkap dengan daftar item dalam bentuk grid yang sudah difilter
-  */
+  }
+
+  /* Fungsi ini membangun seluruh UI halaman kategori item.
+   * * Parameter:
+   * - context: Digunakan untuk navigasi dan akses ke tema aplikasi.
+   * * Return: Menghasilkan widget Scaffold lengkap dengan AppBar, body berisi daftar item, dan navigasi bawah.
+   */
   @override
   Widget build(BuildContext context) {
+    // Scaffold sebagai kerangka utama halaman
     return Scaffold(
+      // AppBar halaman
       appBar: AppBar(
         backgroundColor: const Color(0xFFA0B25E),
         elevation: 0,
+        // Tombol kembali
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
+        // Tombol aksi di AppBar untuk sort dan filter
         actions: [
           IconButton(
             icon: const Icon(Icons.sort, color: Colors.black),
-            onPressed: _showFilterDialog,
+            onPressed: _showFilterDialog, // Memanggil dialog filter
           ),
           IconButton(
             icon: const Icon(Icons.filter_list, color: Colors.black),
-            onPressed: _showFilterDialog,
+            onPressed: _showFilterDialog, // Memanggil dialog filter
           ),
         ],
       ),
+      // Body halaman disusun dalam Column
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Widget Text untuk menampilkan nama kategori
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
@@ -223,6 +234,7 @@ class _ItemCategoryState extends State<ItemCategory> {
               ),
             ),
           ),
+          // Widget Text untuk menampilkan jumlah item
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
@@ -234,6 +246,7 @@ class _ItemCategoryState extends State<ItemCategory> {
             ),
           ),
           const SizedBox(height: 16),
+          // Widget TextField untuk fungsionalitas pencarian
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Container(
@@ -252,9 +265,11 @@ class _ItemCategoryState extends State<ItemCategory> {
             ),
           ),
           const SizedBox(height: 16),
+          // Expanded agar GridView mengisi sisa ruang yang tersedia
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              // GridView untuk menampilkan item-item yang sudah difilter
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -263,9 +278,12 @@ class _ItemCategoryState extends State<ItemCategory> {
                   mainAxisSpacing: 10,
                 ),
                 itemCount: filteredItems.length,
+                // Membangun setiap kartu item
                 itemBuilder: (context, index) {
                   final item = filteredItems[index];
+                  // Logika dummy untuk status 'liked'
                   final isLiked = index == 3 || index == 6;
+                  // GestureDetector agar kartu dapat diklik untuk ke halaman detail
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -273,16 +291,19 @@ class _ItemCategoryState extends State<ItemCategory> {
                         MaterialPageRoute(builder: (_) => const DetailItem()),
                       );
                     },
+                    // Container sebagai kartu item dengan gambar latar
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
-                          image: AssetImage(item['image']),
+                          image: AssetImage(item['image']), // Gambar item
                           fit: BoxFit.cover,
                         ),
                       ),
+                      // Stack untuk menumpuk elemen di atas gambar
                       child: Stack(
                         children: [
+                          // Ikon 'favorite' di pojok kanan atas
                           Positioned(
                             top: 10,
                             right: 10,
@@ -292,6 +313,7 @@ class _ItemCategoryState extends State<ItemCategory> {
                               size: 28,
                             ),
                           ),
+                          // Informasi item di bagian bawah
                           Positioned(
                             bottom: 0,
                             left: 0,
@@ -304,6 +326,7 @@ class _ItemCategoryState extends State<ItemCategory> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  // Widget Text untuk menampilkan nama item
                                   Text(
                                     item['name'],
                                     style: const TextStyle(
@@ -315,6 +338,7 @@ class _ItemCategoryState extends State<ItemCategory> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
+                                      // Widget Text untuk menampilkan harga item
                                       Text(
                                         '\$${item['price']}',
                                         style: const TextStyle(
@@ -322,19 +346,15 @@ class _ItemCategoryState extends State<ItemCategory> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
+                                      // Row untuk menampilkan rating
                                       Row(
                                         children: [
-                                          const Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                            size: 16,
-                                          ),
+                                          const Icon(Icons.star, color: Colors.amber, size: 16),
                                           const SizedBox(width: 4),
+                                          // Widget Text untuk menampilkan nilai rating
                                           Text(
                                             '${item['rating']}',
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
+                                            style: const TextStyle(color: Colors.white),
                                           ),
                                         ],
                                       ),
@@ -354,6 +374,7 @@ class _ItemCategoryState extends State<ItemCategory> {
           ),
         ],
       ),
+      // Navigasi bawah halaman
       bottomNavigationBar: buildBottomNavBar(
         context,
         currentIndex: 1,

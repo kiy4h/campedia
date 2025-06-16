@@ -1,22 +1,24 @@
-/*
-* File : notification.dart
-* Deskripsi : File ini berisi halaman yang menampilkan berbagai notifikasi sistem seperti promo, ketersediaan barang, dan informasi pembayaran denda
-* Ketergantungan (Dependencies) : 
-*   - checkout2.dart: digunakan untuk berpindah ke halaman pembayaran denda ketika tombol diklik
-*   - checkout.dart: digunakan untuk berpindah ke halaman pembayaran biasa (tidak digunakan secara langsung)
-*/
+/**
+ * File         : notification.dart
+ * Dibuat oleh  : Izzuddin Azzam, Al Ghifari
+ * Tanggal      : 16-06-2025
+ * Deskripsi    : File ini berisi halaman yang menampilkan berbagai notifikasi sistem seperti promo, 
+ * ketersediaan barang, dan informasi pembayaran denda.
+ * Dependencies : 
+ * - checkout2.dart: digunakan untuk berpindah ke halaman pembayaran denda.
+ */
 
 import 'package:flutter/material.dart';
 import 'package:tugas3provis/pages/shopping/payment_data/checkout2.dart';
-import '../shopping/payment_data/checkout.dart';
 
-/*
-* Class : NotificationPage
-* Deskripsi : Kelas ini menampilkan daftar notifikasi dengan ikon, judul, deskripsi, dan waktu penerimaan
-* Jenis Widget : StatelessWidget karena hanya menampilkan daftar notifikasi statis tanpa perubahan status
-* Bagian Layar : Menampilkan seluruh halaman notifikasi dengan kartu-kartu notifikasi yang dapat diklik
-*/
+/** Widget NotificationPage
+ * * Deskripsi:
+ * - Menampilkan daftar notifikasi dalam bentuk kartu yang informatif.
+ * - Setiap kartu notifikasi berisi ikon, judul, deskripsi, dan waktu.
+ * - Merupakan StatelessWidget karena hanya menampilkan daftar notifikasi statis tanpa perlu mengelola perubahan state.
+ */
 class NotificationPage extends StatelessWidget {
+  // Data statis yang berisi daftar notifikasi untuk ditampilkan.
   final List<Map<String, String>> notifications = [
     {
       "title": "Diskon Spesial untuk Gear Baru!",
@@ -40,17 +42,18 @@ class NotificationPage extends StatelessWidget {
     },
   ];
 
-  NotificationPage({super.key});  /*
-  * Method : build
-  * Deskripsi : Metode ini membuat tampilan halaman notifikasi dengan daftar notifikasi yang dapat di-scroll
-  * Parameter : 
-  *   - context: digunakan untuk mengakses tema aplikasi dan menampilkan pesan snackbar saat notifikasi diklik
-  * Nilai yang dihasilkan : 
-  *   - Menghasilkan widget Scaffold dengan AppBar dan daftar notifikasi dalam bentuk ListView
-  */
+  NotificationPage({super.key});
+
+  /* Fungsi ini membangun seluruh UI untuk halaman notifikasi.
+   * * Parameter:
+   * - context: Digunakan untuk mengakses tema, navigasi, dan menampilkan SnackBar.
+   * * Return: Menghasilkan widget Scaffold lengkap dengan AppBar dan ListView yang berisi kartu-kartu notifikasi.
+   */
   @override
   Widget build(BuildContext context) {
+    // Scaffold sebagai kerangka utama halaman.
     return Scaffold(
+      // AppBar halaman notifikasi.
       appBar: AppBar(
         title: const Text(
           "Notifications",
@@ -64,17 +67,21 @@ class NotificationPage extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.black),
       ),
       backgroundColor: const Color(0xFFF6F6F6),
+      // Body utama menggunakan ListView.builder untuk membuat daftar notifikasi secara dinamis.
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: notifications.length,
         itemBuilder: (context, index) {
           final item = notifications[index];
+          // GestureDetector untuk membuat setiap kartu notifikasi dapat diklik.
           return GestureDetector(
             onTap: () {
+              // Menampilkan SnackBar saat notifikasi diklik.
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text("Kamu membuka: ${item['title']}")),
               );
             },
+            // Container sebagai visual dari kartu notifikasi.
             child: Container(
               margin: const EdgeInsets.only(bottom: 16),
               padding: const EdgeInsets.all(16),
@@ -89,27 +96,32 @@ class NotificationPage extends StatelessWidget {
                   ),
                 ],
               ),
+              // Column untuk menyusun konten di dalam kartu.
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Different icon for penalty notification
+                      // Widget Icon yang berubah berdasarkan jenis notifikasi.
                       Icon(
+                        // Menggunakan ikon 'money_off' untuk denda, dan 'notifications_none' untuk lainnya.
                         item["title"] == "Bayar Denda Terlambat"
                             ? Icons.money_off
                             : Icons.notifications_none,
                         size: 28,
+                        // Warna ikon juga berubah: merah untuk denda, hijau untuk lainnya.
                         color: item["title"] == "Bayar Denda Terlambat"
                             ? Colors.red
                             : Colors.green,
                       ),
                       const SizedBox(width: 12),
+                      // Expanded agar teks mengisi sisa ruang.
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Widget Text untuk menampilkan judul notifikasi.
                             Text(
                               item["title"]!,
                               style: const TextStyle(
@@ -119,6 +131,7 @@ class NotificationPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 6),
+                            // Widget Text untuk menampilkan subjudul atau deskripsi notifikasi.
                             Text(
                               item["subtitle"]!,
                               style: const TextStyle(
@@ -127,6 +140,7 @@ class NotificationPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 6),
+                            // Widget Text untuk menampilkan waktu notifikasi.
                             Text(
                               item["time"]!,
                               style: const TextStyle(
@@ -139,24 +153,26 @@ class NotificationPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // Show the "Bayar Denda Sekarang" button only for penalty notifications
+                  // Menampilkan tombol "Bayar Denda" hanya jika notifikasi adalah tentang denda.
                   if (item["title"] == "Bayar Denda Terlambat")
                     Padding(
-                      padding: const EdgeInsets.only(top: 16), // Add some space above the button
+                      padding: const EdgeInsets.only(top: 16),
                       child: Align(
-                        alignment: Alignment.centerRight, // Align to the right
+                        alignment: Alignment.centerRight,
+                        // Widget ElevatedButton sebagai tombol aksi untuk membayar denda.
                         child: ElevatedButton(
                           onPressed: () {
-                            // Add the logic for paying the fine here
+                            // Navigasi ke halaman pembayaran denda (Checkout2).
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Checkout2(), // Replace with your payment page
+                                builder: (context) => Checkout2(),
                               ),
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white, backgroundColor: Colors.red, // Text color
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.red,
                             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
