@@ -9,7 +9,7 @@ class ApiConfig {
   static const String semuaBarang = '/api/barang/list';
   static const String barangDetail = '/api/barang';
   static const String wishlist = '/api/wishlist';
-  static const String wishlistInput = '/api/wishlist_input';
+  static const String wishlistInput = '/api/add_to_wishlist';
   static const String removeWishlist = '/api/remove_wishlist_item';
   static const String keranjang = '/api/keranjang';
   static const String addToCart = '/api/add_to_cart';
