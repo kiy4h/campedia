@@ -66,14 +66,10 @@ flutter:
   uses-material-design: true
 
   assets:
-    - images/assets_Categories/
-    - images/assets_Home/
-    - images/assets_ItemDetails/
     - images/assets_OnBoarding0/
     - images/assets_OrderTracking/
     - images/assets_PaymentMethods/
     - images/assets_SignUp/
-    - images/assets_DestinationCamp/
     - images/assets_Profile/
 
 
