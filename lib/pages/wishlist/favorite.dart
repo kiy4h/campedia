@@ -141,7 +141,8 @@ class _ItemCategoryState extends State<ItemCategory> {
             sliver: SliverGrid(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  return _buildTrendingItem(trendingItems[index], context, index);
+                  return _buildTrendingItem(
+                      trendingItems[index], context, index);
                 },
                 childCount: trendingItems.length,
               ),
@@ -170,12 +171,15 @@ class _ItemCategoryState extends State<ItemCategory> {
    * 
    * Return: Widget Container dengan dekorasi gambar dan informasi item
    */
-  Widget _buildTrendingItem(Map<String, dynamic> item, BuildContext context, int index) {
+  Widget _buildTrendingItem(
+      Map<String, dynamic> item, BuildContext context, int index) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const DetailItem()),
+          MaterialPageRoute(
+            builder: (_) => DetailItem(barangId: item['id'] ?? 1),
+          ),
         );
       },
       child: Container(
@@ -195,11 +199,14 @@ class _ItemCategoryState extends State<ItemCategory> {
               child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    trendingItems[index]['isFavorite'] = !trendingItems[index]['isFavorite'];
+                    trendingItems[index]['isFavorite'] =
+                        !trendingItems[index]['isFavorite'];
                   });
                 },
                 child: Icon(
-                  trendingItems[index]['isFavorite'] ? Icons.favorite : Icons.favorite_border,
+                  trendingItems[index]['isFavorite']
+                      ? Icons.favorite
+                      : Icons.favorite_border,
                   color: Colors.red,
                   size: 28,
                 ),
@@ -212,7 +219,8 @@ class _ItemCategoryState extends State<ItemCategory> {
               left: 0,
               right: 0,
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(10),
@@ -302,7 +310,14 @@ class FilterBottomSheet extends StatelessWidget {
         // Filter berdasarkan kategori
         FilterSection(
           title: "Categories",
-          items: ["Tenda", "Alat Masak", "Sepatu", "Tas", "Aksesoris", "Pakaian"],
+          items: [
+            "Tenda",
+            "Alat Masak",
+            "Sepatu",
+            "Tas",
+            "Aksesoris",
+            "Pakaian"
+          ],
           selectedItems: selectedCategories,
           onSelected: (item) {
             selectedCategories.add(item);
@@ -355,7 +370,9 @@ class FilterSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Judul section filter
-          Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Text(title,
+              style:
+                  const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
 
           // Chip pilihan kategori/harga/brand
@@ -373,7 +390,8 @@ class FilterSection extends StatelessWidget {
                 },
                 child: Chip(
                   label: Text(item),
-                  backgroundColor: isSelected ? const Color(0xFFA0B25E) : Colors.grey[300],
+                  backgroundColor:
+                      isSelected ? const Color(0xFFA0B25E) : Colors.grey[300],
                   labelStyle: TextStyle(
                     color: isSelected ? Colors.white : Colors.black,
                   ),

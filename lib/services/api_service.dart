@@ -219,7 +219,7 @@ class ApiService {
     try {
       final response = await http.get(
         Uri.parse(
-            '${ApiConfig.baseUrl}${ApiConfig.searchBarang}?user_id=$userId&keyword=$keyword'),
+            '${ApiConfig.baseUrl}${ApiConfig.semuaBarang}?user_id=$userId&keyword=$keyword'),
         headers: ApiConfig.headers,
       );
 
@@ -244,24 +244,44 @@ class ApiService {
     } catch (e) {
       return ApiResponse.error('Network error: $e');
     }
-  }
+  } // Get item detail
 
-  // Get item detail
   static Future<ApiResponse<DetailBarang>> getBarangDetail(
       int barangId, int userId) async {
     try {
+      final url =
+          '${ApiConfig.baseUrl}${ApiConfig.barangDetail}?barang_id=$barangId&user_id=$userId';
+      print('Requesting URL: $url'); // Debug log
+
       final response = await http.get(
-        Uri.parse(
-            '${ApiConfig.baseUrl}${ApiConfig.barangDetail}?barang_id=$barangId&user_id=$userId'),
+        Uri.parse(url),
         headers: ApiConfig.headers,
       );
 
-      final responseData = jsonDecode(response.body);
+      print('Response status: ${response.statusCode}'); // Debug log
+      print('Response body: ${response.body}'); // Debug log
 
+      final responseData = jsonDecode(response.body);
       if (response.statusCode == 200) {
         if (responseData['data'] != null) {
-          final DetailBarang barang =
-              DetailBarang.fromJson(responseData['data']);
+          // Extract the nested data structure from FastAPI response
+          final data = responseData['data'];
+          final barangData = data['barang'];
+          final reviewList = data['review'] ?? [];
+
+          // Merge barang data with additional fields for DetailBarang
+          final mergedData = Map<String, dynamic>.from(barangData);
+          mergedData['reviews'] =
+              reviewList; // Map 'review' to 'reviews' for model
+
+          // Handle foto field properly - it might be a list or a single string
+          if (barangData['foto'] is List) {
+            mergedData['foto'] = barangData['foto'];
+          }
+
+          print('Merged data: $mergedData'); // Debug log
+
+          final DetailBarang barang = DetailBarang.fromJson(mergedData);
           return ApiResponse.success(barang, 'Item detail loaded successfully');
         } else {
           return ApiResponse.error('No data found in response');
@@ -273,6 +293,7 @@ class ApiService {
         return ApiResponse.error(error);
       }
     } catch (e) {
+      print('Error in getBarangDetail: $e'); // Debug log
       return ApiResponse.error('Network error: $e');
     }
   }

@@ -46,9 +46,10 @@ class CampingApp extends StatelessWidget {
     return MaterialApp(
       // Konfigurasi tema aplikasi
       theme: ThemeData(
-        primaryColor: const Color(0xFF2E7D32),      // Warna primer hijau
-        scaffoldBackgroundColor: const Color(0xFFF8F8F8), // Background abu-abu muda
-        textTheme: GoogleFonts.poppinsTextTheme(),   // Menggunakan font Poppins
+        primaryColor: const Color(0xFF2E7D32), // Warna primer hijau
+        scaffoldBackgroundColor:
+            const Color(0xFFF8F8F8), // Background abu-abu muda
+        textTheme: GoogleFonts.poppinsTextTheme(), // Menggunakan font Poppins
       ),
       // Menetapkan HomePage sebagai halaman utama
       home: HomePage(),
@@ -102,10 +103,34 @@ class _HomePageState extends State<HomePage> {
 
   // Data statis untuk item tren sebagai fallback
   final List<Map<String, dynamic>> trendingItems = [
-    {"name": "Tenda","image": 'images/assets_ItemDetails/tenda1.png',"price": 500000,"rating": 4.3,"color": Color(0xFFFF9800),},
-    {"name": "Kompor","image": 'images/assets_ItemDetails/kompor1.png',"price": 200000,"rating": 4.3,"color": Color(0xFFE53935),},
-    {"name": "Sepatu","image": 'images/assets_ItemDetails/sepatu1.png',"price": 300000,"rating": 4.3,"color": Color(0xFF8D6E63),},
-    {"name": "Tas Leather","image": 'images/assets_ItemDetails/tas1.png',"price": 600000,"rating": 4.3,"color": Color(0xFF795548),},
+    {
+      "name": "Tenda",
+      "image": 'images/assets_ItemDetails/tenda1.png',
+      "price": 500000,
+      "rating": 4.3,
+      "color": Color(0xFFFF9800),
+    },
+    {
+      "name": "Kompor",
+      "image": 'images/assets_ItemDetails/kompor1.png',
+      "price": 200000,
+      "rating": 4.3,
+      "color": Color(0xFFE53935),
+    },
+    {
+      "name": "Sepatu",
+      "image": 'images/assets_ItemDetails/sepatu1.png',
+      "price": 300000,
+      "rating": 4.3,
+      "color": Color(0xFF8D6E63),
+    },
+    {
+      "name": "Tas Leather",
+      "image": 'images/assets_ItemDetails/tas1.png',
+      "price": 600000,
+      "rating": 4.3,
+      "color": Color(0xFF795548),
+    },
   ];
 
   // Data statis untuk kategori
@@ -116,14 +141,30 @@ class _HomePageState extends State<HomePage> {
     {"icon": "images/assets_Categories/cat_Tas.png", "name": "Tas"},
     {"icon": "images/assets_Categories/cat_Senter.png", "name": "Senter"},
     {"icon": "images/assets_Categories/cat_Jaket.png", "name": "Jaket"},
-    {"icon": "images/assets_Categories/cat_KeamananNavigasi.png","name": "Keamanan"},
-    {"icon": "images/assets_Categories/cat_FasilitasTambahan.png","name": "Lainnya"},
+    {
+      "icon": "images/assets_Categories/cat_KeamananNavigasi.png",
+      "name": "Keamanan"
+    },
+    {
+      "icon": "images/assets_Categories/cat_FasilitasTambahan.png",
+      "name": "Lainnya"
+    },
   ];
 
   // Data statis untuk slider fitur
   final List<Map<String, dynamic>> featuredSlides = [
-    {"key": "1","title": "Recommended\nGear Trip","image": "images/assets_Home/gunung1.png","color": Colors.black.withOpacity(0.6),},
-    {"key": "2","title": "Fresh Trending\nGear","image": "images/assets_Home/gunung2.png","color": Colors.black.withOpacity(0.6),},
+    {
+      "key": "1",
+      "title": "Recommended\nGear Trip",
+      "image": "images/assets_Home/gunung1.png",
+      "color": Colors.black.withOpacity(0.6),
+    },
+    {
+      "key": "2",
+      "title": "Fresh Trending\nGear",
+      "image": "images/assets_Home/gunung2.png",
+      "color": Colors.black.withOpacity(0.6),
+    },
   ];
 
   /* Fungsi ini membangun seluruh UI untuk halaman beranda.
@@ -208,7 +249,8 @@ class _HomePageState extends State<HomePage> {
                   onSubmitted: (value) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const AllItemList()),
+                      MaterialPageRoute(
+                          builder: (context) => const AllItemList()),
                     );
                   },
                 ),
@@ -246,7 +288,8 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => NotificationPage()),
+                      MaterialPageRoute(
+                          builder: (context) => NotificationPage()),
                     );
                   },
                   child: Container(
@@ -262,7 +305,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    child: const Icon(Icons.notifications_none, size: 24, color: Colors.black87),
+                    child: const Icon(Icons.notifications_none,
+                        size: 24, color: Colors.black87),
                   ),
                 ),
                 // Badge notifikasi (titik merah)
@@ -304,9 +348,15 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               // Navigasi berdasarkan key dari slide
               if (slide["key"] == "1") {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const RecommendedGearTripPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RecommendedGearTripPage()));
               } else if (slide["key"] == "2") {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const TrendingGearPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const TrendingGearPage()));
               }
             },
             child: Container(
@@ -318,7 +368,8 @@ class _HomePageState extends State<HomePage> {
                   image: AssetImage(slide["image"]),
                   fit: BoxFit.cover,
                   // Filter warna untuk menggelapkan gambar agar teks lebih terbaca
-                  colorFilter: ColorFilter.mode(slide["color"], BlendMode.darken),
+                  colorFilter:
+                      ColorFilter.mode(slide["color"], BlendMode.darken),
                 ),
               ),
               // Padding untuk menempatkan teks di dalam kartu
@@ -363,13 +414,17 @@ class _HomePageState extends State<HomePage> {
             // Judul bagian
             const Text(
               'Categories',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87),
             ),
             // Tombol panah untuk melihat semua kategori
             IconButton(
               icon: const Icon(Icons.arrow_forward, size: 22),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CategoryPage()));
               },
             ),
           ],
@@ -396,11 +451,13 @@ class _HomePageState extends State<HomePage> {
    * - context: Dibutuhkan untuk navigasi.
    * * Return: Widget GestureDetector yang berisi visual satu item kategori.
    */
-  Widget _buildCategoryItem(Map<String, String> category, BuildContext context) {
+  Widget _buildCategoryItem(
+      Map<String, String> category, BuildContext context) {
     return GestureDetector(
       onTap: () {
         // Navigasi ke halaman kategori saat item diklik
-        Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryPage()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => CategoryPage()));
       },
       child: Container(
         width: 100,
@@ -432,7 +489,10 @@ class _HomePageState extends State<HomePage> {
             // Widget Text untuk nama kategori
             Text(
               category["name"]!,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black87),
+              style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87),
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -455,7 +515,8 @@ class _HomePageState extends State<HomePage> {
         // Judul bagian
         const Text(
           'Trending Deals',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+          style: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
         ),
         const SizedBox(height: 16),
         // Logika kondisional untuk menampilkan UI berdasarkan state provider
@@ -467,8 +528,10 @@ class _HomePageState extends State<HomePage> {
           Center(
             child: Column(
               children: [
-                Text('Error: ${barangProvider.error}', style: const TextStyle(color: Colors.red)),
-                ElevatedButton(onPressed: _loadData, child: const Text('Retry')),
+                Text('Error: ${barangProvider.error}',
+                    style: const TextStyle(color: Colors.red)),
+                ElevatedButton(
+                    onPressed: _loadData, child: const Text('Retry')),
               ],
             ),
           )
@@ -484,7 +547,9 @@ class _HomePageState extends State<HomePage> {
               mainAxisSpacing: 16,
             ),
             // Tentukan jumlah item: utamakan data dari API, jika kosong gunakan data statis
-            itemCount: barangProvider.barangBeranda.isNotEmpty ? barangProvider.barangBeranda.length : trendingItems.length,
+            itemCount: barangProvider.barangBeranda.isNotEmpty
+                ? barangProvider.barangBeranda.length
+                : trendingItems.length,
             itemBuilder: (context, index) {
               // Jika data API tersedia, gunakan _buildApiBarangItem
               if (barangProvider.barangBeranda.isNotEmpty) {
@@ -505,8 +570,77 @@ class _HomePageState extends State<HomePage> {
    * * Return: Widget Container yang merepresentasikan satu kartu produk.
    */
   Widget _buildTrendingItem(Map<String, dynamic> item) {
-    // Implementasi kartu untuk data statis (jika diperlukan)
-    return Container(/* ... UI untuk item statis ... */);
+    // Implementasi kartu untuk data statis (fallback jika API tidak tersedia)
+    return GestureDetector(
+      onTap: () {
+        // Navigasi ke halaman detail dengan ID default untuk item statis
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailItem(barangId: item['id'] ?? 1),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Placeholder untuk gambar
+            Expanded(
+              flex: 3,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(12)),
+                  color: Colors.grey[200],
+                ),
+                child:
+                    const Icon(Icons.camera_alt, size: 40, color: Colors.grey),
+              ),
+            ),
+            // Placeholder untuk info produk
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item['name'] ?? 'Product Name',
+                      style: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.bold),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const Spacer(),
+                    Text(
+                      item['price'] ?? 'Rp 0',
+                      style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   /* Fungsi ini membangun satu kartu produk dari data API (model Barang).
@@ -517,8 +651,13 @@ class _HomePageState extends State<HomePage> {
   Widget _buildApiBarangItem(Barang barang) {
     return GestureDetector(
       onTap: () {
-        // Navigasi ke halaman detail saat kartu diklik
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailItem()));
+        // Navigasi ke halaman detail saat kartu diklik dengan barangId
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailItem(barangId: barang.id),
+          ),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -543,14 +682,20 @@ class _HomePageState extends State<HomePage> {
                 // Menampilkan gambar dari URL atau placeholder jika null/error
                 child: barang.foto != null
                     ? ClipRRect(
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(12)),
                         child: Image.network(
                           barang.foto!,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => const Icon(Icons.camera_alt, size: 40, color: Colors.grey),
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.camera_alt,
+                                  size: 40, color: Colors.grey),
                         ),
                       )
-                    : Container(color: Colors.grey[200], child: const Icon(Icons.camera_alt, size: 40, color: Colors.grey)),
+                    : Container(
+                        color: Colors.grey[200],
+                        child: const Icon(Icons.camera_alt,
+                            size: 40, color: Colors.grey)),
               ),
             ),
             // Bagian informasi produk
@@ -564,7 +709,10 @@ class _HomePageState extends State<HomePage> {
                     // Widget Text untuk nama barang
                     Text(
                       barang.namaBarang,
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black87),
+                      style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -575,17 +723,24 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         // Widget Text untuk harga, diformat ke Rupiah
                         Text(
-                          NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0).format(barang.hargaPerhari),
-                          style: const TextStyle(fontSize: 12, color: Colors.black87, fontWeight: FontWeight.w600),
+                          NumberFormat.currency(
+                                  locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                              .format(barang.hargaPerhari),
+                          style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.w600),
                         ),
                         // Row untuk ikon bintang dan nilai rating
                         Row(
                           children: [
-                            const Icon(Icons.star, color: Colors.amber, size: 14),
+                            const Icon(Icons.star,
+                                color: Colors.amber, size: 14),
                             const SizedBox(width: 2),
                             Text(
                               barang.meanReview.toStringAsFixed(1),
-                              style: const TextStyle(fontSize: 11, color: Colors.black87),
+                              style: const TextStyle(
+                                  fontSize: 11, color: Colors.black87),
                             ),
                           ],
                         ),
@@ -610,7 +765,8 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () {
         // Navigasi ke halaman daftar semua item
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const AllItemList()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const AllItemList()));
       },
       child: Container(
         height: 56,
@@ -621,7 +777,8 @@ class _HomePageState extends State<HomePage> {
         child: const Center(
           child: Text(
             'More',
-            style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
       ),

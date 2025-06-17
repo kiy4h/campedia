@@ -73,12 +73,42 @@ class _ItemCategoryState extends State<ItemCategory> {
 
   // Data dummy untuk semua item dalam kategori
   final List<Map<String, dynamic>> allItems = [
-    {"name": "Tenda Camping", "price": 300000, "image": "images/assets_ItemDetails/tenda_bg1.png", "rating": 4.5},
-    {"name": "Kompor Portable", "price": 150000, "image": "images/assets_ItemDetails/tenda_bg2.png", "rating": 4.3},
-    {"name": "Sepatu Gunung", "price": 250000, "image": "images/assets_ItemDetails/tenda_bg3.png", "rating": 4.7},
-    {"name": "Tas Gunung", "price": 350000, "image": "images/assets_ItemDetails/tenda_bg4.png", "rating": 4.0},
-    {"name": "Senter LED", "price": 120000, "image": "images/assets_ItemDetails/tenda_bg5.png", "rating": 4.8},
-    {"name": "Jaket Gunung", "price": 400000, "image": "images/assets_ItemDetails/tenda_bg6.png", "rating": 4.2},
+    {
+      "name": "Tenda Camping",
+      "price": 300000,
+      "image": "images/assets_ItemDetails/tenda_bg1.png",
+      "rating": 4.5
+    },
+    {
+      "name": "Kompor Portable",
+      "price": 150000,
+      "image": "images/assets_ItemDetails/tenda_bg2.png",
+      "rating": 4.3
+    },
+    {
+      "name": "Sepatu Gunung",
+      "price": 250000,
+      "image": "images/assets_ItemDetails/tenda_bg3.png",
+      "rating": 4.7
+    },
+    {
+      "name": "Tas Gunung",
+      "price": 350000,
+      "image": "images/assets_ItemDetails/tenda_bg4.png",
+      "rating": 4.0
+    },
+    {
+      "name": "Senter LED",
+      "price": 120000,
+      "image": "images/assets_ItemDetails/tenda_bg5.png",
+      "rating": 4.8
+    },
+    {
+      "name": "Jaket Gunung",
+      "price": 400000,
+      "image": "images/assets_ItemDetails/tenda_bg6.png",
+      "rating": 4.2
+    },
   ];
 
   // List untuk menyimpan item yang telah difilter dan akan ditampilkan di UI
@@ -282,13 +312,16 @@ class _ItemCategoryState extends State<ItemCategory> {
                 itemBuilder: (context, index) {
                   final item = filteredItems[index];
                   // Logika dummy untuk status 'liked'
-                  final isLiked = index == 3 || index == 6;
-                  // GestureDetector agar kartu dapat diklik untuk ke halaman detail
+                  final isLiked = index == 3 ||
+                      index ==
+                          6; // GestureDetector agar kartu dapat diklik untuk ke halaman detail
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const DetailItem()),
+                        MaterialPageRoute(
+                          builder: (_) => DetailItem(barangId: item['id'] ?? 1),
+                        ),
                       );
                     },
                     // Container sebagai kartu item dengan gambar latar
@@ -336,7 +369,8 @@ class _ItemCategoryState extends State<ItemCategory> {
                                     ),
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       // Widget Text untuk menampilkan harga item
                                       Text(
@@ -349,12 +383,14 @@ class _ItemCategoryState extends State<ItemCategory> {
                                       // Row untuk menampilkan rating
                                       Row(
                                         children: [
-                                          const Icon(Icons.star, color: Colors.amber, size: 16),
+                                          const Icon(Icons.star,
+                                              color: Colors.amber, size: 16),
                                           const SizedBox(width: 4),
                                           // Widget Text untuk menampilkan nilai rating
                                           Text(
                                             '${item['rating']}',
-                                            style: const TextStyle(color: Colors.white),
+                                            style: const TextStyle(
+                                                color: Colors.white),
                                           ),
                                         ],
                                       ),

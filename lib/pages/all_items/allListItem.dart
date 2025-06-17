@@ -42,13 +42,14 @@ class AllItemList extends StatelessWidget {
     return MaterialApp(
       // Menyembunyikan banner debug di kanan atas aplikasi
       debugShowCheckedModeBanner: false,
-      
+
       // Konfigurasi tema aplikasi dengan warna utama hijau
       theme: ThemeData(
         primaryColor: const Color(0xFF445018), // Warna primer hijau gelap
-        scaffoldBackgroundColor: const Color(0xFFF8F8F8), // Background abu-abu muda
+        scaffoldBackgroundColor:
+            const Color(0xFFF8F8F8), // Background abu-abu muda
       ),
-      
+
       // Menampilkan halaman kategori item sebagai halaman utama
       home: ItemCategory(),
     );
@@ -79,32 +80,34 @@ class ItemCategory extends StatefulWidget {
  */
 class _ItemCategoryState extends State<ItemCategory> {
   // Variabel untuk menyimpan data barang
-  List<Barang> allItems = [];      // Semua barang dari API
+  List<Barang> allItems = []; // Semua barang dari API
   List<Barang> filteredItems = []; // Barang yang sudah difilter
-  bool _isLoading = false;         // Status loading
-  String? _error;                  // Pesan error jika ada
+  bool _isLoading = false; // Status loading
+  String? _error; // Pesan error jika ada
 
   // Daftar kategori barang yang tersedia
   final List<String> categories = [
-    "All",        // Semua kategori
-    "Tenda",      // Kategori 1
+    "All", // Semua kategori
+    "Tenda", // Kategori 1
     "Alat Masak", // Kategori 2
-    "Sepatu",     // Kategori 3
-    "Tas",        // Kategori 4
-    "Aksesoris",  // Kategori 5
-    "Pakaian"     // Kategori 6
+    "Sepatu", // Kategori 3
+    "Tas", // Kategori 4
+    "Aksesoris", // Kategori 5
+    "Pakaian" // Kategori 6
   ];
 
   // Variabel untuk menyimpan status filter
-  List<String> selectedCategories = [];                         // Kategori yang dipilih
-  RangeValues priceRange = const RangeValues(0, 1000000);       // Rentang harga
-  List<int> selectedRatings = [];                               // Rating yang dipilih
-  List<String> selectedLocations = [];                          // Lokasi yang dipilih
-  List<String> selectedBrands = [];                             // Brand yang dipilih
+  List<String> selectedCategories = []; // Kategori yang dipilih
+  RangeValues priceRange = const RangeValues(0, 1000000); // Rentang harga
+  List<int> selectedRatings = []; // Rating yang dipilih
+  List<String> selectedLocations = []; // Lokasi yang dipilih
+  List<String> selectedBrands = []; // Brand yang dipilih
 
   // Controller untuk input rentang harga
-  TextEditingController minPriceController = TextEditingController(text: "0");       // Harga minimum
-  TextEditingController maxPriceController = TextEditingController(text: "1000000"); // Harga maksimum
+  TextEditingController minPriceController =
+      TextEditingController(text: "0"); // Harga minimum
+  TextEditingController maxPriceController =
+      TextEditingController(text: "1000000"); // Harga maksimum
 
   @override
   /* Fungsi ini dijalankan saat widget pertama kali dibuat.
@@ -148,9 +151,9 @@ class _ItemCategoryState extends State<ItemCategory> {
       // Update state dengan data yang didapat
       setState(() {
         _isLoading = false;
-        allItems = List.from(barangProvider.allBarang);   // Salin semua barang
-        filteredItems = List.from(allItems);               // Tampilkan semua barang
-        _error = barangProvider.error;                     // Catat error jika ada
+        allItems = List.from(barangProvider.allBarang); // Salin semua barang
+        filteredItems = List.from(allItems); // Tampilkan semua barang
+        _error = barangProvider.error; // Catat error jika ada
       });
     }
   }
@@ -163,17 +166,19 @@ class _ItemCategoryState extends State<ItemCategory> {
       // Filter barang berdasarkan kriteria yang dipilih
       filteredItems = allItems.where((item) {
         // Filter berdasarkan kategori
-        bool categoryMatch = selectedCategories.isEmpty || 
-                             selectedCategories.contains("All") ||
-                             _getCategoryName(item.kategoriId).any((cat) => selectedCategories.contains(cat));
+        bool categoryMatch = selectedCategories.isEmpty ||
+            selectedCategories.contains("All") ||
+            _getCategoryName(item.kategoriId)
+                .any((cat) => selectedCategories.contains(cat));
 
         // Filter berdasarkan harga
         bool priceMatch = item.hargaPerhari >= priceRange.start.round() &&
-                          item.hargaPerhari <= priceRange.end.round();
+            item.hargaPerhari <= priceRange.end.round();
 
         // Filter berdasarkan rating
         bool ratingMatch = selectedRatings.isEmpty ||
-                           selectedRatings.any((rating) => item.meanReview >= rating && item.meanReview < rating + 1);
+            selectedRatings.any((rating) =>
+                item.meanReview >= rating && item.meanReview < rating + 1);
 
         // Barang harus memenuhi semua kriteria filter
         return categoryMatch && priceMatch && ratingMatch;
@@ -189,12 +194,12 @@ class _ItemCategoryState extends State<ItemCategory> {
   List<String> _getCategoryName(int categoryId) {
     // Pemetaan ID kategori ke nama kategori
     Map<int, String> categoryMap = {
-      1: "Tenda",       // Kategori 1: Tenda
-      2: "Alat Masak",  // Kategori 2: Alat Masak 
-      3: "Sepatu",      // Kategori 3: Sepatu
-      4: "Tas",         // Kategori 4: Tas
-      5: "Aksesoris",   // Kategori 5: Aksesoris
-      6: "Pakaian",     // Kategori 6: Pakaian
+      1: "Tenda", // Kategori 1: Tenda
+      2: "Alat Masak", // Kategori 2: Alat Masak
+      3: "Sepatu", // Kategori 3: Sepatu
+      4: "Tas", // Kategori 4: Tas
+      5: "Aksesoris", // Kategori 5: Aksesoris
+      6: "Pakaian", // Kategori 6: Pakaian
     };
     // Kembalikan nama kategori dalam bentuk list, atau "Other" jika ID tidak ditemukan
     return [categoryMap[categoryId] ?? "Other"];
@@ -279,7 +284,8 @@ class _ItemCategoryState extends State<ItemCategory> {
                         return GestureDetector(
                           onTap: () {
                             setState(() {
-                              if (selectedCategories.contains(categories[index])) {
+                              if (selectedCategories
+                                  .contains(categories[index])) {
                                 selectedCategories.remove(categories[index]);
                               } else {
                                 selectedCategories.add(categories[index]);
@@ -292,9 +298,10 @@ class _ItemCategoryState extends State<ItemCategory> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
-                              color: selectedCategories.contains(categories[index])
-                                  ? const Color(0xFFA0B25E)
-                                  : Colors.white,
+                              color:
+                                  selectedCategories.contains(categories[index])
+                                      ? const Color(0xFFA0B25E)
+                                      : Colors.white,
                               borderRadius: BorderRadius.circular(20),
                               border:
                                   Border.all(color: const Color(0xFFA0B25E)),
@@ -303,7 +310,8 @@ class _ItemCategoryState extends State<ItemCategory> {
                             child: Text(
                               categories[index],
                               style: TextStyle(
-                                color: selectedCategories.contains(categories[index])
+                                color: selectedCategories
+                                        .contains(categories[index])
                                     ? Colors.white
                                     : const Color(0xFFA0B25E),
                                 fontWeight: FontWeight.bold,
@@ -414,15 +422,17 @@ class _ItemCategoryState extends State<ItemCategory> {
                             delegate: SliverChildBuilderDelegate(
                               (context, index) {
                                 // Membangun setiap item barang
-                                return _buildBarangItem(filteredItems[index], context, index);
+                                return _buildBarangItem(
+                                    filteredItems[index], context, index);
                               },
                               childCount: filteredItems.length,
                             ),
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,        // 2 kolom
-                              childAspectRatio: 0.75,   // Rasio aspek item
-                              crossAxisSpacing: 10,     // Jarak horizontal
-                              mainAxisSpacing: 10,      // Jarak vertikal
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2, // 2 kolom
+                              childAspectRatio: 0.75, // Rasio aspek item
+                              crossAxisSpacing: 10, // Jarak horizontal
+                              mainAxisSpacing: 10, // Jarak vertikal
                             ),
                           ),
           ),
@@ -475,8 +485,10 @@ class _ItemCategoryState extends State<ItemCategory> {
                   const Divider(),
                   // Pilihan-pilihan untuk sorting
                   _buildSortOption(context, 'Terbaru', Icons.access_time),
-                  _buildSortOption(context, 'Harga Tertinggi', Icons.arrow_upward),
-                  _buildSortOption(context, 'Harga Terendah', Icons.arrow_downward),
+                  _buildSortOption(
+                      context, 'Harga Tertinggi', Icons.arrow_upward),
+                  _buildSortOption(
+                      context, 'Harga Terendah', Icons.arrow_downward),
                   _buildSortOption(context, 'Rating Tertinggi', Icons.star),
                   _buildSortOption(context, 'Paling Populer', Icons.favorite),
                   const SizedBox(height: 20),
@@ -588,7 +600,14 @@ class _ItemCategoryState extends State<ItemCategory> {
                         _buildFilterSection(
                           context,
                           "Kategori",
-                          ["Tenda", "Alat Masak", "Sepatu", "Tas", "Aksesoris", "Pakaian"],
+                          [
+                            "Tenda",
+                            "Alat Masak",
+                            "Sepatu",
+                            "Tas",
+                            "Aksesoris",
+                            "Pakaian"
+                          ],
                           selectedCategories,
                           (category, isSelected) {
                             setModalState(() {
@@ -601,7 +620,7 @@ class _ItemCategoryState extends State<ItemCategory> {
                           },
                         ),
                         const SizedBox(height: 15),
-                        
+
                         // Filter Section: Rentang Harga
                         const Text(
                           "Rentang Harga",
@@ -650,7 +669,8 @@ class _ItemCategoryState extends State<ItemCategory> {
                                   ),
                                 ),
                                 onChanged: (value) {
-                                  double maxValue = double.tryParse(value) ?? 1000000;
+                                  double maxValue =
+                                      double.tryParse(value) ?? 1000000;
                                   setModalState(() {
                                     priceRange = RangeValues(
                                       priceRange.start,
@@ -677,13 +697,15 @@ class _ItemCategoryState extends State<ItemCategory> {
                           onChanged: (values) {
                             setModalState(() {
                               priceRange = values;
-                              minPriceController.text = values.start.round().toString();
-                              maxPriceController.text = values.end.round().toString();
+                              minPriceController.text =
+                                  values.start.round().toString();
+                              maxPriceController.text =
+                                  values.end.round().toString();
                             });
                           },
                         ),
                         const SizedBox(height: 15),
-                        
+
                         // Filter Section: Rating
                         const Text(
                           "Rating",
@@ -710,24 +732,32 @@ class _ItemCategoryState extends State<ItemCategory> {
                               },
                               // Tombol pilihan rating
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
                                 decoration: BoxDecoration(
-                                  color: isSelected ? const Color(0xFFA0B25E) : Colors.white,
+                                  color: isSelected
+                                      ? const Color(0xFFA0B25E)
+                                      : Colors.white,
                                   borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(color: const Color(0xFFA0B25E)),
+                                  border: Border.all(
+                                      color: const Color(0xFFA0B25E)),
                                 ),
                                 child: Row(
                                   children: [
                                     Icon(
                                       Icons.star,
-                                      color: isSelected ? Colors.white : Colors.amber,
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Colors.amber,
                                       size: 16,
                                     ),
                                     const SizedBox(width: 5),
                                     Text(
                                       "$rating",
                                       style: TextStyle(
-                                        color: isSelected ? Colors.white : Colors.black,
+                                        color: isSelected
+                                            ? Colors.white
+                                            : Colors.black,
                                       ),
                                     ),
                                   ],
@@ -737,12 +767,19 @@ class _ItemCategoryState extends State<ItemCategory> {
                           }),
                         ),
                         const SizedBox(height: 15),
-                        
+
                         // Filter Section: Lokasi
                         _buildFilterSection(
                           context,
                           "Lokasi",
-                          ["Jakarta", "Bandung", "Surabaya", "Yogyakarta", "Bali", "Medan"],
+                          [
+                            "Jakarta",
+                            "Bandung",
+                            "Surabaya",
+                            "Yogyakarta",
+                            "Bali",
+                            "Medan"
+                          ],
                           selectedLocations,
                           (location, isSelected) {
                             setModalState(() {
@@ -755,12 +792,19 @@ class _ItemCategoryState extends State<ItemCategory> {
                           },
                         ),
                         const SizedBox(height: 15),
-                        
+
                         // Filter Section: Brand
                         _buildFilterSection(
                           context,
                           "Brand",
-                          ["Eiger", "Consina", "Rei", "Avtech", "Osprey", "Deuter"],
+                          [
+                            "Eiger",
+                            "Consina",
+                            "Rei",
+                            "Avtech",
+                            "Osprey",
+                            "Deuter"
+                          ],
                           selectedBrands,
                           (brand, isSelected) {
                             setModalState(() {
@@ -874,31 +918,36 @@ class _ItemCategoryState extends State<ItemCategory> {
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 10),
-        
+
         // Daftar pilihan filter yang bisa wrap ke baris baru
         Wrap(
-          spacing: 10,      // Jarak horizontal antar pilihan
-          runSpacing: 10,   // Jarak vertikal antar baris
+          spacing: 10, // Jarak horizontal antar pilihan
+          runSpacing: 10, // Jarak vertikal antar baris
           children: items.map((item) {
             // Cek apakah item ini sedang dipilih
             final isSelected = selectedItems.contains(item);
-            
+
             // Buat widget pilihan filter
             return GestureDetector(
-              onTap: () => onToggle(item, isSelected), // Panggil onToggle saat diklik
+              onTap: () =>
+                  onToggle(item, isSelected), // Panggil onToggle saat diklik
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   // Warna berbeda untuk item yang dipilih dan tidak dipilih
                   color: isSelected ? const Color(0xFFA0B25E) : Colors.white,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: const Color.fromARGB(255, 69, 79, 31)),
+                  border:
+                      Border.all(color: const Color.fromARGB(255, 69, 79, 31)),
                 ),
                 child: Text(
                   item,
                   style: TextStyle(
                     // Warna teks berbeda untuk item yang dipilih dan tidak dipilih
-                    color: isSelected ? Colors.white : const Color.fromARGB(255, 67, 77, 29),
+                    color: isSelected
+                        ? Colors.white
+                        : const Color.fromARGB(255, 67, 77, 29),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -920,15 +969,17 @@ class _ItemCategoryState extends State<ItemCategory> {
   Widget _buildBarangItem(Barang barang, BuildContext context, int index) {
     // Mendapatkan provider yang diperlukan
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final wishlistProvider = Provider.of<WishlistProvider>(context, listen: false);
-    
+    final wishlistProvider =
+        Provider.of<WishlistProvider>(context, listen: false);
     // Widget GestureDetector agar kartu bisa diklik
     return GestureDetector(
-      // Navigasi ke halaman detail barang saat diklik
+      // Navigasi ke halaman detail barang saat diklik dengan barangId
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const DetailItem()),
+          MaterialPageRoute(
+            builder: (_) => DetailItem(barangId: barang.id),
+          ),
         );
       },
       // Widget Container sebagai card
@@ -989,15 +1040,11 @@ class _ItemCategoryState extends State<ItemCategory> {
                           if (barang.isWishlist == true) {
                             // Hapus dari wishlist
                             await wishlistProvider.removeFromWishlist(
-                              authProvider.user!.userId, 
-                              barang.id
-                            );
+                                authProvider.user!.userId, barang.id);
                           } else {
                             // Tambah ke wishlist
                             await wishlistProvider.addToWishlist(
-                              authProvider.user!.userId, 
-                              barang.id
-                            );
+                                authProvider.user!.userId, barang.id);
                           }
                           _loadAllItems(); // Refresh daftar barang untuk update status wishlist
                         }
@@ -1010,7 +1057,9 @@ class _ItemCategoryState extends State<ItemCategory> {
                         ),
                         // Ikon berubah tergantung status wishlist barang
                         child: Icon(
-                          barang.isWishlist == true ? Icons.favorite : Icons.favorite_border,
+                          barang.isWishlist == true
+                              ? Icons.favorite
+                              : Icons.favorite_border,
                           color: Colors.red,
                           size: 20,
                         ),
@@ -1044,7 +1093,8 @@ class _ItemCategoryState extends State<ItemCategory> {
                       children: [
                         // Widget Text untuk harga barang per hari
                         Text(
-                          NumberFormat.currency(locale: 'id', symbol: 'Rp', decimalDigits: 0)
+                          NumberFormat.currency(
+                                  locale: 'id', symbol: 'Rp', decimalDigits: 0)
                               .format(barang.hargaPerhari),
                           style: TextStyle(
                             color: Color(0xFFA0B25E),
