@@ -7,7 +7,10 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../after_sales/thankyouPage.dart'; // pastikan nama file kamu kecil semua
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+import '../../../providers/checkout_provider.dart';
+import '../after_sales/thankyouPage.dart';
 
 /// Widget [Checkout2]
 ///
@@ -845,45 +848,84 @@ class _Checkout2State extends State<Checkout2> {
        * - Tombol utama untuk mengonfirmasi pesanan.
        * - Saat ditekan, akan menampilkan snackbar konfirmasi dan menavigasi ke halaman `ThankYouPage`.
        * - **Fungsi Khusus:** Logika konfirmasi order (misalnya, mengirim data ke backend) akan ditambahkan di sini.
-       */
-      child: ElevatedButton(
-        onPressed: () {
-          // Memastikan formKey tidak null sebelum digunakan.
-          if (_formKey.currentState != null) {
-            // Memastikan salah satu metode pembayaran telah dipilih sebelum mengkonfirmasi.
-            if (selectedPayment == 'Transfer Bank' ||
-                selectedPayment == 'QRIS' ||
-                selectedPayment == 'Cash') {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Order Confirmed!')),
-              );
-              // Navigasi ke halaman terima kasih setelah konfirmasi.
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ThankYouPage()),
-              );
-            }
-          }
+       */      child: Consumer<CheckoutProvider>(
+        builder: (context, checkoutProvider, child) {
+          return ElevatedButton(
+            onPressed: checkoutProvider.isLoading ? null : () async {
+              // Memastikan formKey tidak null sebelum digunakan.
+              if (_formKey.currentState != null) {
+                // Memastikan salah satu metode pembayaran telah dipilih sebelum mengkonfirmasi.
+                if (selectedPayment == 'Transfer Bank' ||
+                    selectedPayment == 'QRIS' ||
+                    selectedPayment == 'Cash') {
+                  
+                  // Process payment via FastAPI if transaction data is available
+                  if (checkoutProvider.storedTransactionId != null &&
+                      checkoutProvider.storedTotalAmount != null) {
+                    
+                    final success = await checkoutProvider.processPayment(
+                      transaksiId: checkoutProvider.storedTransactionId!,
+                      metodePembayaran: selectedPayment,
+                      totalPembayaran: checkoutProvider.storedTotalAmount!,
+                    );
+
+                    if (success) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Payment processed successfully!'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                      // Navigasi ke halaman terima kasih setelah konfirmasi.
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ThankYouPage()),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(checkoutProvider.error ?? 'Payment failed'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  } else {
+                    // Fallback for existing flow without transaction data
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Order Confirmed!')),
+                    );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ThankYouPage()),
+                    );
+                  }
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF627D2C),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            ),
+            child: checkoutProvider.isLoading 
+                ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
+                : const Text(
+                    'CONFIRM ORDER',
+                    style: TextStyle(
+                      fontSize: 16,
+                      letterSpacing: 1.5,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+          );
         },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF627D2C),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        ),
-        /** Widget [Text]
-         *
-         * Deskripsi:
-         * - Teks "CONFIRM ORDER" pada tombol.
-         */
-        child: const Text(
-          'CONFIRM ORDER',
-          style: TextStyle(
-            fontSize: 16,
-            letterSpacing: 1.5,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
       ),
     );
   }

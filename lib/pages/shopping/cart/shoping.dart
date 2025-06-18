@@ -14,8 +14,10 @@ import 'package:intl/intl.dart';
 import '../../components/navbar.dart';
 import '../../../providers/cart_provider.dart';
 import '../../../providers/auth_provider.dart';
+import '../../../providers/checkout_provider.dart';
 import '../../../models/models.dart';
 import '../../detail_items/detailItem.dart';
+import 'date_selection_dialog.dart';
 
 void main() {
   runApp(const MyApp());
@@ -228,14 +230,12 @@ class _ShopingState extends State<Shoping> {
               // Place Order Button
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
-                  onPressed: cart.items.isNotEmpty
+                child: ElevatedButton(                  onPressed: cart.items.isNotEmpty
                       ? () {
-                          // Navigate to checkout or show date picker
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text(
-                                    'Checkout functionality will be implemented')),
+                          // Show date selection dialog
+                          showDialog(
+                            context: context,
+                            builder: (context) => const DateSelectionDialog(),
                           );
                         }
                       : null,

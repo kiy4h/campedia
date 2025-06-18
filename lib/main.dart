@@ -6,17 +6,18 @@ import 'package:tugas3provis/providers/barang_provider.dart';
 import 'package:tugas3provis/providers/cart_provider.dart';
 import 'package:tugas3provis/providers/wishlist_provider.dart';
 import 'package:tugas3provis/providers/detail_barang_provider.dart';
+import 'package:tugas3provis/providers/checkout_provider.dart';
 // import 'Intro/splashscreen.dart';
 
 void main() {
-  runApp(
-    MultiProvider(
+  runApp(    MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => BarangProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => WishlistProvider()),
         ChangeNotifierProvider(create: (_) => DetailBarangProvider()),
+        ChangeNotifierProvider(create: (_) => CheckoutProvider()),
       ],
       child: const MyApp(),
     ),
