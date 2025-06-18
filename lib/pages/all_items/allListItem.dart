@@ -98,12 +98,18 @@ class _ItemCategoryState extends State<ItemCategory> {
   List<int> selectedRatings = []; // Rating yang dipilih
   List<String> selectedLocations = []; // Lokasi yang dipilih
   List<String> selectedBrands = []; // Brand yang dipilih
-
   // Controller untuk input rentang harga
   TextEditingController minPriceController =
       TextEditingController(text: "0"); // Harga minimum
   TextEditingController maxPriceController =
       TextEditingController(text: "1000000"); // Harga maksimum
+
+  // Controller untuk search
+  TextEditingController searchController = TextEditingController();
+
+  // Current sort option
+  String? currentSortBy;
+  String? currentOrder;
 
   @override
   /* Fungsi ini dijalankan saat widget pertama kali dibuat.
@@ -122,12 +128,13 @@ class _ItemCategoryState extends State<ItemCategory> {
   void dispose() {
     minPriceController.dispose(); // Membuang controller harga minimum
     maxPriceController.dispose(); // Membuang controller harga maksimum
+    searchController.dispose(); // Membuang controller search
     super.dispose();
   }
 
-  /* Fungsi ini mengambil data barang dari API melalui provider.
+  /* Fungsi ini mengambil data barang dari API melalui provider dengan filter, sort, dan search.
    * * Menggunakan AuthProvider untuk mendapatkan ID pengguna dan
-   * BarangProvider untuk mendapatkan daftar barang.
+   * BarangProvider untuk mendapatkan daftar barang dengan parameter filter.
    */
   Future<void> _loadAllItems() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -141,8 +148,48 @@ class _ItemCategoryState extends State<ItemCategory> {
         _error = null;
       });
 
-      // Ambil data dari API
-      await barangProvider.fetchAllBarang(authProvider.user!.userId);
+      // Prepare filter parameters
+      List<int>? categoryIds;
+      if (selectedCategories.isNotEmpty &&
+          !selectedCategories.contains("All")) {
+        categoryIds = selectedCategories
+            .map((catName) {
+              // Convert category name to ID
+              switch (catName) {
+                case "Tenda":
+                  return 1;
+                case "Alat Masak":
+                  return 2;
+                case "Sepatu":
+                  return 3;
+                case "Tas":
+                  return 4;
+                case "Aksesoris":
+                  return 5;
+                case "Pakaian":
+                  return 6;
+                default:
+                  return 0;
+              }
+            })
+            .where((id) => id > 0)
+            .toList();
+      }
+
+      // Ambil data dari API dengan filter
+      await barangProvider.fetchBarangWithFilter(
+        userId: authProvider.user!.userId,
+        categoryIds: categoryIds,
+        hargaMin: priceRange.start.round(),
+        hargaMax: priceRange.end.round(),
+        minRating: selectedRatings.isNotEmpty
+            ? selectedRatings.first.toDouble()
+            : null,
+        keyword:
+            searchController.text.isNotEmpty ? searchController.text : null,
+        sortBy: currentSortBy,
+        order: currentOrder,
+      );
 
       // Update state dengan data yang didapat
       setState(() {
@@ -152,53 +199,12 @@ class _ItemCategoryState extends State<ItemCategory> {
         _error = barangProvider.error; // Catat error jika ada
       });
     }
-  }
-
-  /* Fungsi ini menerapkan semua filter yang dipilih pengguna.
-   * * Filter berdasarkan kategori, rentang harga, dan rating.
+  } /* Fungsi ini menerapkan semua filter yang dipilih pengguna.
+   * * Memanggil API dengan parameter filter yang sesuai.
    */
+
   void _applyFilters() {
-    setState(() {
-      // Filter barang berdasarkan kriteria yang dipilih
-      filteredItems = allItems.where((item) {
-        // Filter berdasarkan kategori
-        bool categoryMatch = selectedCategories.isEmpty ||
-            selectedCategories.contains("All") ||
-            _getCategoryName(item.kategoriId)
-                .any((cat) => selectedCategories.contains(cat));
-
-        // Filter berdasarkan harga
-        bool priceMatch = item.hargaPerhari >= priceRange.start.round() &&
-            item.hargaPerhari <= priceRange.end.round();
-
-        // Filter berdasarkan rating
-        bool ratingMatch = selectedRatings.isEmpty ||
-            selectedRatings.any((rating) =>
-                item.meanReview >= rating && item.meanReview < rating + 1);
-
-        // Barang harus memenuhi semua kriteria filter
-        return categoryMatch && priceMatch && ratingMatch;
-      }).toList();
-    });
-  }
-
-  /* Fungsi ini mengubah ID kategori menjadi nama kategori.
-   * * Parameter:
-   * - categoryId: ID kategori barang.
-   * * Return: List string yang berisi nama kategori.
-   */
-  List<String> _getCategoryName(int categoryId) {
-    // Pemetaan ID kategori ke nama kategori
-    Map<int, String> categoryMap = {
-      1: "Tenda", // Kategori 1: Tenda
-      2: "Alat Masak", // Kategori 2: Alat Masak
-      3: "Sepatu", // Kategori 3: Sepatu
-      4: "Tas", // Kategori 4: Tas
-      5: "Aksesoris", // Kategori 5: Aksesoris
-      6: "Pakaian", // Kategori 6: Pakaian
-    };
-    // Kembalikan nama kategori dalam bentuk list, atau "Other" jika ID tidak ditemukan
-    return [categoryMap[categoryId] ?? "Other"];
+    _loadAllItems(); // Reload data with current filters
   }
 
   @override
@@ -242,15 +248,36 @@ class _ItemCategoryState extends State<ItemCategory> {
                           offset: Offset(0, 2),
                         ),
                       ],
-                    ),
-                    // Widget TextField untuk input pencarian
-                    child: const TextField(
+                    ), // Widget TextField untuk input pencarian
+                    child: TextField(
+                      controller: searchController,
                       decoration: InputDecoration(
                         hintText: 'Search here',
-                        prefixIcon: Icon(Icons.search, color: Colors.grey),
+                        prefixIcon:
+                            const Icon(Icons.search, color: Colors.grey),
+                        suffixIcon: searchController.text.isNotEmpty
+                            ? IconButton(
+                                icon:
+                                    const Icon(Icons.clear, color: Colors.grey),
+                                onPressed: () {
+                                  searchController.clear();
+                                  _applyFilters();
+                                },
+                              )
+                            : null,
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(vertical: 15),
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 15),
                       ),
+                      onSubmitted: (value) {
+                        _applyFilters(); // Apply search when user submits
+                      },
+                      onChanged: (value) {
+                        setState(() {}); // Update UI to show/hide clear button
+                        // Optional: Apply search on every character change
+                        // Uncomment the next line for real-time search
+                        // _applyFilters();
+                      },
                     ),
                   ),
                 ],
@@ -488,23 +515,28 @@ class _ItemCategoryState extends State<ItemCategory> {
                   _buildSortOption(context, 'Rating Tertinggi', Icons.star),
                   _buildSortOption(context, 'Paling Populer', Icons.favorite),
                   const SizedBox(height: 20),
-                  // Tombol terapkan
+                  // Tombol reset
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Logika untuk menerapkan sorting (belum diimplementasikan)
+                        setState(() {
+                          // Reset sorting to default (no sorting)
+                          currentSortBy = null;
+                          currentOrder = null;
+                        });
+                        _applyFilters(); // Apply reset sorting
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFA0B25E),
+                        backgroundColor: Colors.grey[600],
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       child: const Text(
-                        'Terapkan',
+                        'Reset',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -531,7 +563,33 @@ class _ItemCategoryState extends State<ItemCategory> {
   Widget _buildSortOption(BuildContext context, String title, IconData icon) {
     return InkWell(
       onTap: () {
-        // Implementasi logika sort (belum ditambahkan)
+        setState(() {
+          switch (title) {
+            case 'Terbaru':
+              currentSortBy = 'newest';
+              currentOrder = 'desc';
+              break;
+            case 'Harga Tertinggi':
+              currentSortBy = 'harga';
+              currentOrder = 'desc';
+              break;
+            case 'Harga Terendah':
+              currentSortBy = 'harga';
+              currentOrder = 'asc';
+              break;
+            case 'Rating Tertinggi':
+              currentSortBy = 'rating';
+              currentOrder = 'desc';
+              break;
+            case 'Paling Populer':
+              currentSortBy = 'rating';
+              currentOrder = 'desc';
+              break;
+          }
+        });
+        // Apply sorting immediately and close modal
+        _applyFilters();
+        Navigator.pop(context);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
@@ -543,10 +601,31 @@ class _ItemCategoryState extends State<ItemCategory> {
               title,
               style: const TextStyle(fontSize: 16),
             ),
+            const Spacer(),
+            if (_isCurrentSortOption(title))
+              const Icon(Icons.check, color: Color(0xFFA0B25E)),
           ],
         ),
       ),
     );
+  }
+
+  /* Fungsi helper untuk mengecek apakah opsi sort sedang aktif */
+  bool _isCurrentSortOption(String title) {
+    switch (title) {
+      case 'Terbaru':
+        return currentSortBy == 'newest' && currentOrder == 'desc';
+      case 'Harga Tertinggi':
+        return currentSortBy == 'harga' && currentOrder == 'desc';
+      case 'Harga Terendah':
+        return currentSortBy == 'harga' && currentOrder == 'asc';
+      case 'Rating Tertinggi':
+        return currentSortBy == 'rating' && currentOrder == 'desc';
+      case 'Paling Populer':
+        return currentSortBy == 'rating' && currentOrder == 'desc';
+      default:
+        return false;
+    }
   }
 
   /* Fungsi ini menampilkan modal bottom sheet untuk opsi filter.
@@ -761,31 +840,6 @@ class _ItemCategoryState extends State<ItemCategory> {
                               ),
                             );
                           }),
-                        ),
-                        const SizedBox(height: 15),
-
-                        // Filter Section: Lokasi
-                        _buildFilterSection(
-                          context,
-                          "Lokasi",
-                          [
-                            "Jakarta",
-                            "Bandung",
-                            "Surabaya",
-                            "Yogyakarta",
-                            "Bali",
-                            "Medan"
-                          ],
-                          selectedLocations,
-                          (location, isSelected) {
-                            setModalState(() {
-                              if (isSelected) {
-                                selectedLocations.remove(location);
-                              } else {
-                                selectedLocations.add(location);
-                              }
-                            });
-                          },
                         ),
                         const SizedBox(height: 15),
 

@@ -63,6 +63,51 @@ class BarangProvider with ChangeNotifier {
     }
   }
 
+  // Get all items with filters, search, and sort
+  Future<void> fetchBarangWithFilter({
+    required int userId,
+    List<int>? categoryIds,
+    List<int>? brandIds,
+    int? hargaMin,
+    int? hargaMax,
+    double? minRating,
+    String? keyword,
+    String? sortBy,
+    String? order,
+  }) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      final response = await ApiService.getBarangWithFilter(
+        userId: userId,
+        categoryIds: categoryIds,
+        brandIds: brandIds,
+        hargaMin: hargaMin,
+        hargaMax: hargaMax,
+        minRating: minRating,
+        keyword: keyword,
+        sortBy: sortBy,
+        order: order,
+      );
+
+      if (response.success && response.data != null) {
+        _allBarang = response.data!;
+        _isLoading = false;
+        notifyListeners();
+      } else {
+        _error = response.error ?? 'Failed to load items';
+        _isLoading = false;
+        notifyListeners();
+      }
+    } catch (e) {
+      _error = 'Network error: $e';
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   // Add to wishlist
   Future<bool> addToWishlist(int userId, int barangId) async {
     try {

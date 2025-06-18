@@ -108,6 +108,80 @@ class ApiService {
     }
   }
 
+  // Get items with filters, search, and sort
+  static Future<ApiResponse<List<Barang>>> getBarangWithFilter({
+    required int userId,
+    List<int>? categoryIds,
+    List<int>? brandIds,
+    int? hargaMin,
+    int? hargaMax,
+    double? minRating,
+    String? keyword,
+    String? sortBy,
+    String? order,
+  }) async {
+    try {
+      // Build query parameters
+      List<String> queryParts = ['user_id=$userId'];
+
+      if (categoryIds != null && categoryIds.isNotEmpty) {
+        for (int categoryId in categoryIds) {
+          queryParts.add('kategori_id=$categoryId');
+        }
+      }
+
+      if (brandIds != null && brandIds.isNotEmpty) {
+        for (int brandId in brandIds) {
+          queryParts.add('brand_id=$brandId');
+        }
+      }
+
+      if (hargaMin != null) {
+        queryParts.add('harga_min=$hargaMin');
+      }
+
+      if (hargaMax != null) {
+        queryParts.add('harga_max=$hargaMax');
+      }
+
+      if (minRating != null) {
+        queryParts.add('min_rating=$minRating');
+      }
+
+      if (keyword != null && keyword.isNotEmpty) {
+        queryParts.add('keyword=${Uri.encodeComponent(keyword)}');
+      }
+
+      if (sortBy != null && sortBy.isNotEmpty) {
+        queryParts.add('sort_by=$sortBy');
+      }
+
+      if (order != null && order.isNotEmpty) {
+        queryParts.add('order=$order');
+      }
+
+      // Build final URL
+      final url =
+          '${ApiConfig.baseUrl}${ApiConfig.semuaBarang}?${queryParts.join('&')}';
+      final response =
+          await http.get(Uri.parse(url), headers: ApiConfig.headers);
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseMap = jsonDecode(response.body);
+        final List<dynamic> responseData = responseMap['data'];
+        final List<Barang> barangList =
+            responseData.map((json) => Barang.fromJson(json)).toList();
+        return ApiResponse.success(barangList, 'Data loaded successfully');
+      } else {
+        final responseData = jsonDecode(response.body);
+        return ApiResponse.error(
+            responseData['detail'] ?? 'Failed to load data');
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: $e');
+    }
+  }
+
   // Add to wishlist
   static Future<ApiResponse<String>> addToWishlist(
       int userId, int barangId) async {
