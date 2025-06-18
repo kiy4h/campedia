@@ -14,7 +14,6 @@ import 'package:intl/intl.dart';
 import '../../components/navbar.dart';
 import '../../../providers/cart_provider.dart';
 import '../../../providers/auth_provider.dart';
-import '../../../providers/checkout_provider.dart';
 import '../../../models/models.dart';
 import '../../detail_items/detailItem.dart';
 import 'date_selection_dialog.dart';
