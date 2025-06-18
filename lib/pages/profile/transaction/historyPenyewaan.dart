@@ -19,7 +19,7 @@ import '../../../providers/transaction_provider.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../models/models.dart';
 import 'historyPenyewaanDetailBarang.dart';
-import '../../shopping/after_sales/step1.dart';
+import '../../shopping/after_sales/order_tracking.dart';
 import '../../shopping/payment_data/checkout2.dart';
 
 /// Widget [ModernTransactionPage]
@@ -392,7 +392,7 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
   }
 
   void _handleTransactionAction(
-      UserTransaction transaction, BuildContext context) {
+      UserTransaction transaction, BuildContext context) async {
     switch (transaction.statusTransaksi) {
       case 'Belum Dibayar':
         // Navigate to payment page using existing checkout system
@@ -406,10 +406,26 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
       case 'Belum Diambil':
       case 'Belum Dikembalikan':
         // Navigate to tracking page
-        Navigator.push(
+        final result = await Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const Step1Page()),
+          MaterialPageRoute(
+              builder: (context) => OrderTrackingPage(
+                    transactionId: transaction.transaksiId,
+                    statusTransaksi: transaction.statusTransaksi,
+                  )),
         );
+        // If updates were made, refresh the transaction list
+        if (result == true) {
+          // Show brief loading indicator
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Refreshing transaction list...'),
+              duration: Duration(milliseconds: 1500),
+              backgroundColor: Colors.blue,
+            ),
+          );
+          _loadTransactions();
+        }
         break;
       case 'Sudah Dikembalikan':
         // Navigate to review page

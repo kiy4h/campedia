@@ -27,9 +27,7 @@ import 'profile/profile_detail/profile.dart';
 import 'profile/profile_detail/settingProfile.dart';
 import 'beranda/notification.dart';
 import 'shopping/after_sales/review.dart';
-import 'shopping/after_sales/step1.dart';
-import 'shopping/after_sales/step2.dart';
-import 'shopping/after_sales/step3.dart';
+import 'shopping/after_sales/order_tracking.dart';
 import 'shopping/cart/shoping.dart';
 import 'profile/transaction/historyPenyewaan.dart';
 import 'profile/transaction/historyPenyewaanDetailBarang.dart'; // Halaman detail transaksi
@@ -211,19 +209,12 @@ class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
       'title': 'Order Progress',
       'pages': [
         {
-          'title': 'Pengambilan Barang 1',
-          'description': 'Step 1 of item pickup process',
-          'page': Step1Page()
-        },
-        {
-          'title': 'Pengambilan Barang 2',
-          'description': 'Step 2 of item pickup process',
-          'page': Step2Page()
-        },
-        {
-          'title': 'Pengambilan Barang 3',
-          'description': 'Step 3 of item pickup process',
-          'page': Step3Page()
+          'title': 'Order Tracking (Merged)',
+          'description': 'Complete order tracking',
+          'page': const OrderTrackingPage(
+            transactionId: 1234567,
+            currentStatus: OrderStatus.pickup,
+          )
         },
         {
           'title': 'Review dari User',

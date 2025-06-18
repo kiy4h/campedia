@@ -8,8 +8,7 @@
 library;
 
 import 'package:flutter/material.dart';
-// Asumsi 'step1.dart' ada di lokasi yang sama atau sudah dikonfigurasi di pubspec.yaml
-import 'step1.dart';
+import 'order_tracking.dart';
 
 /// Widget [ThankYouPage]
 /// * Deskripsi:
@@ -359,13 +358,17 @@ class ThankYouPage extends StatelessWidget {
                       borderRadius:
                           BorderRadius.circular(30), // Bentuk tombol bulat.
                     ),
-                  ),
-                  // Fungsi yang dijalankan saat tombol ditekan.
+                  ), // Fungsi yang dijalankan saat tombol ditekan.
                   onPressed: () {
-                    // Navigasi ke halaman Step1Page menggunakan MaterialPageRoute.
+                    // Navigasi ke halaman order_tracking menggunakan MaterialPageRoute.
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Step1Page()),
+                      MaterialPageRoute(
+                        builder: (context) => const OrderTrackingPage(
+                          transactionId: 2505001,
+                          currentStatus: OrderStatus.pickup,
+                        ),
+                      ),
                     );
                   },
                   /** Widget [Text]
