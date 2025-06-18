@@ -10,7 +10,8 @@ import 'package:tugas3provis/providers/checkout_provider.dart';
 // import 'Intro/splashscreen.dart';
 
 void main() {
-  runApp(    MultiProvider(
+  runApp(
+    MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => BarangProvider()),

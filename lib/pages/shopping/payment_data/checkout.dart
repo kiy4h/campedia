@@ -589,10 +589,12 @@ class ShippingAddressPageWithData extends StatefulWidget {
   });
 
   @override
-  _ShippingAddressPageWithDataState createState() => _ShippingAddressPageWithDataState();
+  _ShippingAddressPageWithDataState createState() =>
+      _ShippingAddressPageWithDataState();
 }
 
-class _ShippingAddressPageWithDataState extends State<ShippingAddressPageWithData> {
+class _ShippingAddressPageWithDataState
+    extends State<ShippingAddressPageWithData> {
   // Kunci global untuk form, digunakan untuk mengakses state form dan melakukan validasi.
   final _formKey = GlobalKey<FormState>();
 
