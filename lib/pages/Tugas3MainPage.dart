@@ -243,7 +243,7 @@ class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
         {
           'title': 'Detail Barang Penyewaan',
           'description': 'Detailed view of rented items',
-          'page': TransactionDetailPage()
+          'page': TransactionDetailPage(transactionId: 1) // Demo transaction ID
         },
         {
           'title': 'Review Barang',

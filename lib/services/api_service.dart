@@ -523,7 +523,7 @@ class ApiService {
   }
 
   // Get transaction detail
-  static Future<ApiResponse<List<Map<String, dynamic>>>> getTransactionDetail(
+  static Future<ApiResponse<TransactionDetail>> getTransactionDetail(
       int transaksiId) async {
     try {
       final response = await http.get(
@@ -536,11 +536,10 @@ class ApiService {
 
       if (response.statusCode == 200) {
         if (responseData['data'] != null) {
-          final List<dynamic> dataList = responseData['data'];
-          final List<Map<String, dynamic>> transactionItems =
-              dataList.map((item) => Map<String, dynamic>.from(item)).toList();
+          final TransactionDetail transactionDetail =
+              TransactionDetail.fromJson(responseData['data']);
           return ApiResponse.success(
-              transactionItems, 'Transaction detail loaded successfully');
+              transactionDetail, 'Transaction detail loaded successfully');
         } else {
           return ApiResponse.error('No data found in response');
         }
@@ -637,6 +636,38 @@ class ApiService {
         final error = responseData['error'] ??
             responseData['detail'] ??
             'Failed to filter items';
+        return ApiResponse.error(error);
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: $e');
+    }
+  }
+
+  // Get user transactions
+  static Future<ApiResponse<List<UserTransaction>>> getUserTransactions(
+      int userId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiConfig.baseUrl}${ApiConfig.transaksi}?user_id=$userId'),
+        headers: ApiConfig.headers,
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        if (responseData['data'] != null) {
+          final List<dynamic> dataList = responseData['data'];
+          final List<UserTransaction> transactions =
+              dataList.map((json) => UserTransaction.fromJson(json)).toList();
+          return ApiResponse.success(
+              transactions, 'Transactions loaded successfully');
+        } else {
+          return ApiResponse.error('No data found in response');
+        }
+      } else {
+        final error = responseData['error'] ??
+            responseData['detail'] ??
+            'Failed to load transactions';
         return ApiResponse.error(error);
       }
     } catch (e) {

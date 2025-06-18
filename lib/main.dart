@@ -7,6 +7,8 @@ import 'package:tugas3provis/providers/cart_provider.dart';
 import 'package:tugas3provis/providers/wishlist_provider.dart';
 import 'package:tugas3provis/providers/detail_barang_provider.dart';
 import 'package:tugas3provis/providers/checkout_provider.dart';
+import 'package:tugas3provis/providers/transaction_provider.dart';
+import 'package:tugas3provis/providers/transaction_detail_provider.dart';
 // import 'Intro/splashscreen.dart';
 
 void main() {
@@ -19,6 +21,8 @@ void main() {
         ChangeNotifierProvider(create: (_) => WishlistProvider()),
         ChangeNotifierProvider(create: (_) => DetailBarangProvider()),
         ChangeNotifierProvider(create: (_) => CheckoutProvider()),
+        ChangeNotifierProvider(create: (_) => TransactionProvider()),
+        ChangeNotifierProvider(create: (_) => TransactionDetailProvider()),
       ],
       child: const MyApp(),
     ),

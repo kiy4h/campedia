@@ -16,6 +16,7 @@ class ApiConfig {
   static const String editCartItem = '/api/edit_cart_item';
   static const String removeCartItem = '/api/remove_cart_item';
   static const String transaksiInput = '/api/transaksi_input';
+  static const String transaksi = '/api/transaksi';
   static const String transaksiDetail = '/api/transaksi_detail';
   static const String pembayaranInput = '/api/pembayaran_input';
   static const String reviewInput = '/api/review_input';

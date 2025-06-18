@@ -537,3 +537,126 @@ class Review {
     );
   }
 }
+
+// User Transaction Model (for transaction history)
+class UserTransaction {
+  final int transaksiId;
+  final String waktuPembuatan;
+  final String statusTransaksi;
+  final int jumlahBarang;
+
+  UserTransaction({
+    required this.transaksiId,
+    required this.waktuPembuatan,
+    required this.statusTransaksi,
+    required this.jumlahBarang,
+  });
+
+  factory UserTransaction.fromJson(Map<String, dynamic> json) {
+    return UserTransaction(
+      transaksiId: json['transaksi_id'] ?? 0,
+      waktuPembuatan: json['waktu_pembuatan'] ?? '',
+      statusTransaksi: json['status_transaksi'] ?? '',
+      jumlahBarang: json['jumlah_barang'] ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'transaksi_id': transaksiId,
+      'waktu_pembuatan': waktuPembuatan,
+      'status_transaksi': statusTransaksi,
+      'jumlah_barang': jumlahBarang,
+    };
+  }
+}
+
+// Transaction Detail Models
+class TransactionDetail {
+  final TransactionInfo transaction;
+  final List<TransactionItem> items;
+
+  TransactionDetail({
+    required this.transaction,
+    required this.items,
+  });
+
+  factory TransactionDetail.fromJson(Map<String, dynamic> json) {
+    return TransactionDetail(
+      transaction: TransactionInfo.fromJson(json['transaction']),
+      items: (json['items'] as List)
+          .map((item) => TransactionItem.fromJson(item))
+          .toList(),
+    );
+  }
+}
+
+class TransactionInfo {
+  final int transaksiId;
+  final String statusTransaksi;
+  final String waktuPembuatan;
+  final String tanggalPengambilan;
+  final String tanggalPengembalian;
+  final String? tanggalPengembalianAktual;
+  final int totalBiayaHari;
+  final int totalBiayaDeposito;
+  final int totalBiaya;
+
+  TransactionInfo({
+    required this.transaksiId,
+    required this.statusTransaksi,
+    required this.waktuPembuatan,
+    required this.tanggalPengambilan,
+    required this.tanggalPengembalian,
+    this.tanggalPengembalianAktual,
+    required this.totalBiayaHari,
+    required this.totalBiayaDeposito,
+    required this.totalBiaya,
+  });
+
+  factory TransactionInfo.fromJson(Map<String, dynamic> json) {
+    return TransactionInfo(
+      transaksiId: json['transaksi_id'] ?? 0,
+      statusTransaksi: json['status_transaksi'] ?? '',
+      waktuPembuatan: json['waktu_pembuatan'] ?? '',
+      tanggalPengambilan: json['tanggal_pengambilan'] ?? '',
+      tanggalPengembalian: json['tanggal_pengembalian'] ?? '',
+      tanggalPengembalianAktual: json['tanggal_pengembalian_aktual'],
+      totalBiayaHari: json['total_biaya_hari'] ?? 0,
+      totalBiayaDeposito: json['total_biaya_deposito'] ?? 0,
+      totalBiaya: json['total_biaya'] ?? 0,
+    );
+  }
+}
+
+class TransactionItem {
+  final int barangId;
+  final String namaBarang;
+  final int hargaPerhari;
+  final int kuantitas;
+  final int subtotal;
+  final String? foto;
+  final bool isReviewed;
+
+  TransactionItem({
+    required this.barangId,
+    required this.namaBarang,
+    required this.hargaPerhari,
+    required this.kuantitas,
+    required this.subtotal,
+    this.foto,
+    required this.isReviewed,
+  });
+
+  factory TransactionItem.fromJson(Map<String, dynamic> json) {
+    return TransactionItem(
+      barangId: json['barang_id'] ?? 0,
+      namaBarang: json['nama_barang'] ?? '',
+      hargaPerhari: json['harga_perhari'] ?? 0,
+      kuantitas: json['kuantitas'] ?? 0,
+      subtotal: json['subtotal'] ?? 0,
+      foto: json['foto'],
+      isReviewed: json['is_reviewed'] ?? false,
+    );
+  }
+}

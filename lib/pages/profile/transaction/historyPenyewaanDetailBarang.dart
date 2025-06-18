@@ -10,6 +10,10 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+import '../../../providers/transaction_detail_provider.dart';
+import '../../../models/models.dart';
 import 'reviewItem.dart'; // Import halaman ProductReviewPage
 
 /// Widget [TransactionDetailPage]
@@ -17,34 +21,31 @@ import 'reviewItem.dart'; // Import halaman ProductReviewPage
 /// Deskripsi:
 /// - Halaman ini berfungsi untuk menampilkan detail item-item yang ada dalam sebuah transaksi.
 /// - Ini adalah bagian dari alur riwayat transaksi pengguna, memungkinkan mereka melihat status review.
-/// - Merupakan StatelessWidget karena data transaksi yang ditampilkan bersifat statis dan tidak berubah di dalam widget ini.
-class TransactionDetailPage extends StatelessWidget {
-  TransactionDetailPage({super.key});
+/// - Merupakan StatefulWidget karena data transaksi akan dimuat secara dinamis dari API.
+class TransactionDetailPage extends StatefulWidget {
+  final int transactionId;
 
-  /// Data transaksi dummy untuk tujuan demonstrasi.
-  /// Dalam aplikasi nyata, data ini akan diambil dari sumber data (misalnya API, database).
-  final List<Map<String, dynamic>> transactions = [
-    {
-      'title': 'Tenda Camping Eiger',
-      'date': '4 Mei 2025',
-      'image':
-          'https://via.placeholder.com/300x150.png?text=Tenda+Camping+Eiger',
-      'status': 'Belum direview',
-    },
-    {
-      'title': 'Carrier 40L Eiger',
-      'date': '28 Apr 2025',
-      'image': 'https://via.placeholder.com/300x150.png?text=Carrier+40L+Eiger',
-      'status': 'Belum direview',
-    },
-    {
-      'title': 'Sepatu Hiking Merrell',
-      'date': '13 Apr 2025',
-      'image':
-          'https://via.placeholder.com/300x150.png?text=Sepatu+Hiking+Merrell',
-      'status': 'Selesai',
-    },
-  ];
+  const TransactionDetailPage({
+    super.key,
+    required this.transactionId,
+  });
+
+  @override
+  State<TransactionDetailPage> createState() => _TransactionDetailPageState();
+}
+
+class _TransactionDetailPageState extends State<TransactionDetailPage> {
+  @override
+  void initState() {
+    super.initState();
+    _loadTransactionDetail();
+  }
+
+  void _loadTransactionDetail() {
+    final provider =
+        Provider.of<TransactionDetailProvider>(context, listen: false);
+    provider.loadTransactionDetail(widget.transactionId);
+  }
 
   /* Fungsi ini mengembalikan warna yang sesuai berdasarkan status review barang.
    *
@@ -72,262 +73,362 @@ class TransactionDetailPage extends StatelessWidget {
    *
    * Return: Widget [Chip] dengan teks dan gaya tertentu.
    */
-  Widget buildChip(String label) {
-    return Chip(
-      /** Widget [Text]
-       * * Deskripsi:
-       * - Teks label pada chip filter, misalnya "Semua Status".
-       * - Ukuran font diatur menjadi 12.
-       */
-      label: Text(label, style: const TextStyle(fontSize: 12)),
-      backgroundColor: Colors.grey[200], // Warna latar belakang chip.
-      padding: const EdgeInsets.symmetric(
-          horizontal: 10), // Padding horizontal chip.
-      shape: const StadiumBorder(), // Bentuk chip seperti stadion.
-    );
+  String _formatDate(String? dateString) {
+    if (dateString == null || dateString.isEmpty) return '-';
+    try {
+      final date = DateTime.parse(dateString);
+      return DateFormat('dd MMM yyyy').format(date);
+    } catch (e) {
+      return dateString;
+    }
   }
 
-  /* Fungsi ini membangun seluruh struktur UI dari halaman detail transaksi.
-   *
-   * Parameter:
-   * - [context]: BuildContext dari widget.
-   *
-   * Return: Sebuah widget [Scaffold] yang berisi AppBar dan body halaman.
-   */
+  String _formatCurrency(int amount) {
+    return 'Rp ${amount.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}';
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status) {
+      case 'Belum Dibayar':
+        return Colors.red;
+      case 'Belum Diambil':
+        return Colors.orange;
+      case 'Belum Dikembalikan':
+        return Colors.blue;
+      case 'Sudah Dikembalikan':
+        return Colors.green;
+      default:
+        return Colors.grey;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          Colors.grey[100], // Mengatur warna latar belakang halaman.
-      /** Widget [AppBar]
-       * * Deskripsi:
-       * - Bilah aplikasi di bagian atas halaman, berfungsi sebagai header.
-       * - Berisi kolom pencarian untuk mencari barang dalam transaksi.
-       */
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        backgroundColor: Colors.white, // Warna latar belakang AppBar.
-        elevation: 0, // Menghilangkan bayangan di bawah AppBar.
-        /** Widget [TextField]
-         * * Deskripsi:
-         * - Kolom input untuk mencari barang dalam transaksi.
-         * - Memiliki ikon pencarian di depan dan ikon filter di belakang.
-         */
-        title: TextField(
-          decoration: InputDecoration(
-            hintText: 'Cari barang dalam transaksi', // Placeholder teks.
-            hintStyle:
-                TextStyle(color: Colors.grey[600]), // Gaya teks placeholder.
-            prefixIcon: const Icon(Icons.search), // Ikon pencarian di awal.
-            suffixIcon: const Icon(Icons.filter_list), // Ikon filter di akhir.
-            filled: true, // Mengisi latar belakang TextField.
-            fillColor: Colors.grey[200], // Warna latar belakang TextField.
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 0), // Padding internal.
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30), // Border melingkar.
-              borderSide: BorderSide.none, // Tanpa border sisi.
-            ),
+        title: const Text(
+          'Transaction Details',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
-      /** Widget [ListView]
-       * * Deskripsi:
-       * - Tampilan daftar yang dapat digulir untuk menampilkan elemen-elemen transaksi.
-       * - Memberikan padding keseluruhan pada daftar.
-       */
-      body: ListView(
-        padding: const EdgeInsets.all(16),
+      body: Consumer<TransactionDetailProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (provider.error != null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
+                  const SizedBox(height: 16),
+                  Text('Error: ${provider.error}'),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _loadTransactionDetail,
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          if (provider.transactionDetail == null) {
+            return const Center(
+              child: Text('No transaction data found'),
+            );
+          }
+
+          final detail = provider.transactionDetail!;
+          final transaction = detail.transaction;
+
+          return RefreshIndicator(
+            onRefresh: () async => _loadTransactionDetail(),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Transaction Info Card
+                  Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Transaction #${transaction.transaksiId}',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: _getStatusColor(
+                                          transaction.statusTransaksi)
+                                      .withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  transaction.statusTransaksi,
+                                  style: TextStyle(
+                                    color: _getStatusColor(
+                                        transaction.statusTransaksi),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          _buildInfoRow('Created',
+                              _formatDate(transaction.waktuPembuatan)),
+                          _buildInfoRow('Pickup Date',
+                              _formatDate(transaction.tanggalPengambilan)),
+                          _buildInfoRow('Return Date',
+                              _formatDate(transaction.tanggalPengembalian)),
+                          if (transaction.tanggalPengembalianAktual != null)
+                            _buildInfoRow(
+                                'Actual Return',
+                                _formatDate(
+                                    transaction.tanggalPengembalianAktual)),
+                          const Divider(height: 24),
+                          _buildInfoRow('Daily Cost',
+                              _formatCurrency(transaction.totalBiayaHari)),
+                          _buildInfoRow('Deposit',
+                              _formatCurrency(transaction.totalBiayaDeposito)),
+                          _buildInfoRow('Total Cost',
+                              _formatCurrency(transaction.totalBiaya),
+                              isTotal: true),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Items Section
+                  const Text(
+                    'Rented Items',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: detail.items.length,
+                    itemBuilder: (context, index) {
+                      final item = detail.items[index];
+                      return _buildItemCard(item);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value, {bool isTotal = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // --- Baris Filter Horizontal ---
-          /** Widget [SizedBox]
-           * * Deskripsi:
-           * - Membatasi tinggi untuk baris filter horizontal.
-           */
-          SizedBox(
-            height: 36,
-            /** Widget [ListView]
-             * * Deskripsi:
-             * - Daftar horizontal yang dapat digulir untuk menampilkan chip filter.
-             */
-            child: ListView(
-              scrollDirection: Axis.horizontal, // Arah gulir horizontal.
-              children: [
-                buildChip('Semua Status'), // Chip filter "Semua Status".
-                const SizedBox(width: 8), // Spasi antar chip.
-                buildChip('Nama Produk'), // Chip filter "Nama Produk".
-                const SizedBox(width: 8), // Spasi antar chip.
-                buildChip('Tanggal'), // Chip filter "Tanggal".
-              ],
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.grey[600],
+              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
             ),
           ),
-          const SizedBox(height: 16), // Spasi vertikal.
-
-          // --- Daftar Barang Transaksi ---
-          // Menggunakan operator spread (...) untuk menambahkan setiap kartu transaksi.
-          ...transactions
-              .map((item) => buildTransactionCard(item,
-                  context)) // Membangun kartu transaksi untuk setiap item.
-              .toList(), // Mengubah iterasi menjadi daftar widget.
+          Text(
+            value,
+            style: TextStyle(
+              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+              fontSize: isTotal ? 16 : 14,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  /* Fungsi ini membangun widget kartu untuk setiap item transaksi.
-   *
-   * Parameter:
-   * - [item]: Map<String, dynamic> yang berisi data detail item transaksi (judul, tanggal, gambar, status).
-   * - [context]: BuildContext dari widget.
-   *
-   * Return: Widget [Container] yang merepresentasikan kartu transaksi.
-   */
-  Widget buildTransactionCard(Map<String, dynamic> item, BuildContext context) {
-    return Container(
-      margin:
-          const EdgeInsets.only(bottom: 16), // Margin bawah untuk setiap kartu.
-      padding: const EdgeInsets.all(12), // Padding internal kartu.
-      decoration: BoxDecoration(
-        color: Colors.white, // Warna latar belakang kartu.
-        borderRadius: BorderRadius.circular(12), // Sudut kartu membulat.
-        boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 6)
-        ], // Bayangan kartu.
+  Widget _buildItemCard(TransactionItem item) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      elevation: 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
       ),
-      /** Widget [Column]
-       * * Deskripsi:
-       * - Mengatur tata letak elemen-elemen di dalam kartu transaksi secara vertikal.
-       */
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // Penataan ke kiri.
-        children: [
-          // --- Gambar Produk ---
-          /** Widget [ClipRRect]
-           * * Deskripsi:
-           * - Memastikan gambar produk dipotong sesuai dengan border radius.
-           */
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8), // Sudut gambar membulat.
-            /** Widget [Image.network]
-             * * Deskripsi:
-             * - Menampilkan **gambar produk** dari URL.
-             * - `item['image']` adalah data dinamis yang berisi URL gambar.
-             * - Menyertakan `errorBuilder` untuk menangani jika gambar gagal dimuat.
-             */
-            child: Image.network(
-              item['image'],
-              height: 150, // Tinggi gambar.
-              width: double.infinity, // Lebar gambar memenuhi container.
-              fit: BoxFit.cover, // Gambar akan menutupi area yang tersedia.
-              errorBuilder: (context, error, stackTrace) => const SizedBox(
-                height: 150,
-                /** Widget [Center]
-                 * * Deskripsi:
-                 * - Memusatkan teks error jika gambar gagal dimuat.
-                 */
-                child: Center(
-                  /** Widget [Text]
-                   * * Deskripsi:
-                   * - Pesan error jika gambar tidak dapat dimuat.
-                   */
-                  child: Text('Gagal memuat gambar'),
-                ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            // Item Image
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.grey[200],
+              ),
+              child: item.foto != null && item.foto!.isNotEmpty
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        item.foto!,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          print('Image load error: $error'); // Debug print
+                          print('Image URL: ${item.foto}'); // Debug print
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Icon(
+                              Icons.image_not_supported,
+                              color: Colors.grey[500],
+                              size: 30,
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  : Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.image,
+                        color: Colors.grey[500],
+                        size: 30,
+                      ),
+                    ),
+            ),
+            const SizedBox(width: 12),
+
+            // Item Details
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.namaBarang,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '${_formatCurrency(item.hargaPerhari)}/day x ${item.kuantitas}',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Subtotal: ${_formatCurrency(item.subtotal)}',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-          const SizedBox(height: 12), // Spasi vertikal.
 
-          // --- Judul dan Tanggal ---
-          /** Widget [Text]
-           * * Deskripsi:
-           * - Menampilkan **judul produk** (`item['title']`).
-           * - Data dinamis dari item transaksi.
-           * - Gaya teks dengan font tebal dan ukuran 16.
-           */
-          Text(item['title'],
-              style:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          const SizedBox(height: 4), // Spasi vertikal kecil.
-
-          /** Widget [Text]
-           * * Deskripsi:
-           * - Menampilkan **tanggal pemesanan** produk (`item['date']`).
-           * - Data dinamis dari item transaksi.
-           * - Gaya teks dengan warna abu-abu dan ukuran 13.
-           */
-          Text('Dipesan pada ${item['date']}',
-              style: TextStyle(color: Colors.grey[600], fontSize: 13)),
-
-          const SizedBox(height: 12), // Spasi vertikal.
-
-          // --- Tombol Aksi Sesuai Status ---
-          // Menampilkan tombol "Review Barang" jika statusnya "Belum direview".
-          if (item['status'] == 'Belum direview')
-            /** Widget [Align]
-             * * Deskripsi:
-             * - Menyelaraskan tombol ke kanan bawah kartu.
-             */
-            Align(
-              alignment: Alignment.centerRight,
-              /** Widget [ElevatedButton]
-               * * Deskripsi:
-               * - Tombol untuk menavigasi ke halaman review produk.
-               * - Hanya muncul jika status barang adalah "Belum direview".
-               */
-              child: ElevatedButton(
+            // Review Button
+            if (!item.isReviewed)
+              ElevatedButton(
                 onPressed: () {
-                  // Navigasi ke halaman ProductReviewPage dengan membawa data gambar dan nama produk.
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => ProductReviewPage(
-                        productImage:
-                            item['image'], // Meneruskan URL gambar produk.
-                        productName: item['title'], // Meneruskan nama produk.
+                      builder: (context) => ProductReviewPage(
+                        productName: item.namaBarang,
+                        productImage: item.foto ?? '',
                       ),
                     ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      Colors.blueAccent, // Warna latar belakang tombol.
-                  foregroundColor: Colors.white, // Warna teks tombol.
+                  backgroundColor: const Color(0xFF5D6D3E),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(8)), // Sudut tombol membulat.
+                    borderRadius: BorderRadius.circular(6),
+                  ),
                 ),
-                /** Widget [Text]
-                 * * Deskripsi:
-                 * - Teks pada tombol "Review Barang".
-                 */
-                child: const Text("Review Barang"),
+                child: const Text(
+                  'Review',
+                  style: TextStyle(fontSize: 12, color: Colors.white),
+                ),
+              )
+            else
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.green.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: const Text(
+                  'Reviewed',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
-          // Menampilkan chip "Sudah Direview" jika statusnya "Selesai".
-          if (item['status'] == 'Selesai')
-            /** Widget [Align]
-             * * Deskripsi:
-             * - Menyelaraskan chip status ke kanan bawah kartu.
-             */
-            Align(
-              alignment: Alignment.centerRight,
-              /** Widget [Chip]
-               * * Deskripsi:
-               * - Chip yang menunjukkan bahwa barang sudah direview.
-               * - Hanya muncul jika status barang adalah "Selesai".
-               */
-              child: Chip(
-                /** Widget [Text]
-                 * * Deskripsi:
-                 * - Teks pada chip "Sudah Direview".
-                 */
-                label: const Text("Sudah Direview"),
-                backgroundColor:
-                    Colors.green[100], // Warna latar belakang chip hijau muda.
-                labelStyle: const TextStyle(
-                    color: Colors.green), // Gaya teks chip berwarna hijau.
-              ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
