@@ -15,6 +15,7 @@ import '../components/navbar.dart';
 import '../../providers/detail_barang_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/cart_provider.dart';
+import '../../providers/wishlist_provider.dart';
 import '../../models/models.dart';
 
 // Fungsi main untuk menjalankan aplikasi sebagai contoh standalone.
@@ -70,11 +71,13 @@ class _DetailItemState extends State<DetailItem>
   // Controller untuk mengelola state dan animasi TabBar.
   late TabController _tabController;
   // Controller untuk mengelola state PageView (carousel gambar).
-  late PageController _pageController;
-  // State untuk menyimpan jumlah barang yang akan dipesan.
+  late PageController
+      _pageController; // State untuk menyimpan jumlah barang yang akan dipesan.
   int _quantity = 1;
   // State untuk menyimpan status favorit (disukai) dari barang.
   bool _isFavorite = false;
+  // State untuk loading wishlist operation
+  bool _isWishlistLoading = false;
   // State untuk melacak indeks gambar yang sedang ditampilkan di carousel.
   int _currentImage = 0;
 
@@ -97,10 +100,14 @@ class _DetailItemState extends State<DetailItem>
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final detailProvider =
         Provider.of<DetailBarangProvider>(context, listen: false);
+    final wishlistProvider =
+        Provider.of<WishlistProvider>(context, listen: false);
 
     if (authProvider.isAuthenticated) {
       detailProvider.fetchDetailBarang(
           widget.barangId, authProvider.user!.userId);
+      // Load wishlist to check if current item is in wishlist
+      wishlistProvider.loadWishlist(authProvider.user!.userId);
     }
   }
 
@@ -179,10 +186,10 @@ class _DetailItemState extends State<DetailItem>
             return const Center(
               child: Text('No item data available'),
             );
-          }
-
-          // Update favorite status from API data
-          _isFavorite = barang.isWishlist ?? false;
+          } // Update favorite status from WishlistProvider and API data
+          final wishlistProvider = Provider.of<WishlistProvider>(context);
+          _isFavorite = wishlistProvider.isInWishlist(widget.barangId) ||
+              (barang.isWishlist ?? false);
 
           // Get images from API or use default placeholder
           final List<String> images =
@@ -369,15 +376,98 @@ class _DetailItemState extends State<DetailItem>
                 ' (${barang.totalReview} reviews)',
                 style: const TextStyle(fontSize: 14, color: Colors.black54),
               ),
-              const Spacer(),
-              // Tombol favorit
+              const Spacer(), // Tombol favorit
               IconButton(
-                icon: Icon(
-                  _isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: Colors.red,
-                  size: 28,
-                ),
-                onPressed: () => setState(() => _isFavorite = !_isFavorite),
+                icon: _isWishlistLoading
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.red,
+                        ),
+                      )
+                    : Icon(
+                        _isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: Colors.red,
+                        size: 28,
+                      ),
+                onPressed: _isWishlistLoading
+                    ? null
+                    : () async {
+                        final authProvider =
+                            Provider.of<AuthProvider>(context, listen: false);
+                        final wishlistProvider = Provider.of<WishlistProvider>(
+                            context,
+                            listen: false);
+
+                        if (!authProvider.isAuthenticated ||
+                            authProvider.user == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content:
+                                  Text('Please login first to add to wishlist'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
+                        // Show loading state
+                        setState(() => _isWishlistLoading = true);
+
+                        bool success;
+                        if (_isFavorite) {
+                          // Remove from wishlist
+                          success = await wishlistProvider.removeFromWishlist(
+                            authProvider.user!.userId,
+                            widget.barangId,
+                          );
+
+                          if (success) {
+                            setState(() => _isFavorite = false);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text('Removed from wishlist'),
+                                backgroundColor: Colors.orange,
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                          }
+                        } else {
+                          // Add to wishlist
+                          success = await wishlistProvider.addToWishlist(
+                            authProvider.user!.userId,
+                            widget.barangId,
+                          );
+
+                          if (success) {
+                            setState(() => _isFavorite = true);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text('Added to wishlist!'),
+                                backgroundColor: Colors.green,
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                          }
+                        }
+
+                        // Hide loading state
+                        setState(() => _isWishlistLoading = false);
+
+                        // If operation failed, show error
+                        if (!success) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  wishlistProvider.error ?? 'Operation failed'),
+                              backgroundColor: Colors.red,
+                              duration: const Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      },
               ),
             ],
           ),
