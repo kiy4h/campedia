@@ -660,3 +660,153 @@ class TransactionItem {
     );
   }
 }
+
+// Notification Models
+class NotificationItem {
+  final int id;
+  final String judul;
+  final String deskripsi;
+  final String jenis;
+  final int userId;
+  final DateTime waktuPembuatan;
+  final int? dendaId;
+  final int? transaksiId;
+  final DetailDenda? detailDenda;
+  final DetailTransaksi? detailTransaksi;
+
+  NotificationItem({
+    required this.id,
+    required this.judul,
+    required this.deskripsi,
+    required this.jenis,
+    required this.userId,
+    required this.waktuPembuatan,
+    this.dendaId,
+    this.transaksiId,
+    this.detailDenda,
+    this.detailTransaksi,
+  });
+
+  factory NotificationItem.fromJson(Map<String, dynamic> json) {
+    return NotificationItem(
+      id: json['id'] ?? 0,
+      judul: json['judul'] ?? '',
+      deskripsi: json['deskripsi'] ?? '',
+      jenis: json['jenis'] ?? '',
+      userId: json['user_id'] ?? 0,
+      waktuPembuatan: json['waktu_pembuatan'] != null
+          ? DateTime.parse(json['waktu_pembuatan'])
+          : DateTime.now(),
+      dendaId: json['denda_id'],
+      transaksiId: json['transaksi_id'],
+      detailDenda: json['detail_denda'] != null
+          ? DetailDenda.fromJson(json['detail_denda'])
+          : null,
+      detailTransaksi: json['detail_transaksi'] != null
+          ? DetailTransaksi.fromJson(json['detail_transaksi'])
+          : null,
+    );
+  }
+
+  // Helper method to get formatted time
+  String getFormattedTime() {
+    final now = DateTime.now();
+    final difference = now.difference(waktuPembuatan);
+
+    if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} menit lalu';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} jam lalu';
+    } else {
+      return '${difference.inDays} hari lalu';
+    }
+  }
+
+  // Helper method to get icon based on notification type
+  String getIconType() {
+    switch (jenis) {
+      case 'denda':
+        return 'money_off';
+      case 'transaksi':
+        return 'receipt_long';
+      case 'pengumuman':
+        return 'campaign';
+      default:
+        return 'notifications';
+    }
+  }
+
+  // Helper method to check if it's a penalty notification
+  bool isPenalty() {
+    return jenis == 'denda' && detailDenda != null;
+  }
+}
+
+class DetailDenda {
+  final int id;
+  final int jumlahDenda;
+  final String alasanDenda;
+  final String statusDenda;
+
+  DetailDenda({
+    required this.id,
+    required this.jumlahDenda,
+    required this.alasanDenda,
+    required this.statusDenda,
+  });
+
+  factory DetailDenda.fromJson(Map<String, dynamic> json) {
+    return DetailDenda(
+      id: json['id'] ?? 0,
+      jumlahDenda: json['jumlah_denda'] ?? 0,
+      alasanDenda: json['alasan_denda'] ?? '',
+      statusDenda: json['status_denda'] ?? '',
+    );
+  }
+}
+
+class DetailTransaksi {
+  final int id;
+  final String statusTransaksi;
+  final DateTime waktuPembuatan;
+
+  DetailTransaksi({
+    required this.id,
+    required this.statusTransaksi,
+    required this.waktuPembuatan,
+  });
+
+  factory DetailTransaksi.fromJson(Map<String, dynamic> json) {
+    return DetailTransaksi(
+      id: json['id'] ?? 0,
+      statusTransaksi: json['status_transaksi'] ?? '',
+      waktuPembuatan: json['waktu_pembuatan'] != null
+          ? DateTime.parse(json['waktu_pembuatan'])
+          : DateTime.now(),
+    );
+  }
+}
+
+class NotificationResponse {
+  final List<NotificationItem> data;
+  final String? error;
+
+  NotificationResponse({
+    required this.data,
+    this.error,
+  });
+
+  factory NotificationResponse.fromJson(Map<String, dynamic> json) {
+    List<NotificationItem> notifications = [];
+    if (json['data'] != null) {
+      notifications = (json['data'] as List)
+          .map((item) => NotificationItem.fromJson(item))
+          .toList();
+    }
+
+    return NotificationResponse(
+      data: notifications,
+      error: json['error'],
+    );
+  }
+}

@@ -21,6 +21,7 @@ class ApiConfig {
   static const String pembayaranInput = '/api/pembayaran_input';
   static const String reviewInput = '/api/review_input';
   static const String notifikasiInput = '/api/notifikasi_input';
+  static const String notifikasi = '/api/notifikasi';
 
   // Headers
   static Map<String, String> get headers => {

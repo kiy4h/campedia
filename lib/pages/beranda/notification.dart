@@ -5,54 +5,269 @@
 /// ketersediaan barang, dan informasi pembayaran denda.
 /// Dependencies :
 /// - checkout2.dart: digunakan untuk berpindah ke halaman pembayaran denda.
+/// - notification_provider.dart: untuk mengelola state notifikasi
+/// - auth_provider.dart: untuk mendapatkan user_id
 library;
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tugas3provis/pages/shopping/payment_data/checkout2.dart';
+import 'package:tugas3provis/providers/notification_provider.dart';
+import 'package:tugas3provis/providers/auth_provider.dart';
+import 'package:tugas3provis/models/models.dart';
 
 /// Widget NotificationPage
 /// * Deskripsi:
 /// - Menampilkan daftar notifikasi dalam bentuk kartu yang informatif.
 /// - Setiap kartu notifikasi berisi ikon, judul, deskripsi, dan waktu.
-/// - Merupakan StatelessWidget karena hanya menampilkan daftar notifikasi statis tanpa perlu mengelola perubahan state.
-class NotificationPage extends StatelessWidget {
-  // Data statis yang berisi daftar notifikasi untuk ditampilkan.
-  final List<Map<String, String>> notifications = [
-    {
-      "title": "Diskon Spesial untuk Gear Baru!",
-      "subtitle": "Dapatkan hingga 50% untuk tenda & kompor.",
-      "time": "2 jam lalu",
-    },
-    {
-      "title": "Barang Favoritmu Tersedia Lagi",
-      "subtitle": "Tas carrier 65L kini tersedia kembali.",
-      "time": "1 hari lalu",
-    },
-    {
-      "title": "Pemesanan Berhasil",
-      "subtitle": "Pesananmu telah dikonfirmasi.",
-      "time": "3 hari lalu",
-    },
-    {
-      "title": "Bayar Denda Terlambat",
-      "subtitle":
-          "Kamu dikenakan denda Rp10.000 karena terlambat mengembalikan perlengkapan.",
-      "time": "5 jam lalu",
-    },
-  ];
+/// - Menggunakan data dinamis dari API backend.
+/// - Merupakan StatefulWidget untuk mengelola state loading dan refresh notifikasi.
+class NotificationPage extends StatefulWidget {
+  const NotificationPage({super.key});
 
-  NotificationPage({super.key});
+  @override
+  State<NotificationPage> createState() => _NotificationPageState();
+}
+
+class _NotificationPageState extends State<NotificationPage> {
+  late NotificationProvider _notificationProvider;
+  late AuthProvider _authProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadNotifications();
+    });
+  }
+
+  void _loadNotifications() {
+    _authProvider = Provider.of<AuthProvider>(context, listen: false);
+    _notificationProvider =
+        Provider.of<NotificationProvider>(context, listen: false);
+
+    if (_authProvider.isAuthenticated && _authProvider.user != null) {
+      _notificationProvider.fetchNotifications(_authProvider.user!.userId);
+    }
+  }
+
+  Future<void> _refreshNotifications() async {
+    if (_authProvider.isAuthenticated && _authProvider.user != null) {
+      await _notificationProvider
+          .refreshNotifications(_authProvider.user!.userId);
+    }
+  }
+
+  Widget _buildNotificationIcon(NotificationItem notification) {
+    IconData iconData;
+    Color iconColor;
+
+    switch (notification.jenis) {
+      case 'denda':
+        iconData = Icons.money_off;
+        iconColor = Colors.red;
+        break;
+      case 'transaksi':
+        iconData = Icons.receipt_long;
+        iconColor = Colors.blue;
+        break;
+      case 'pengumuman':
+        iconData = Icons.campaign;
+        iconColor = Colors.orange;
+        break;
+      default:
+        iconData = Icons.notifications_none;
+        iconColor = Colors.green;
+    }
+
+    return Icon(
+      iconData,
+      size: 28,
+      color: iconColor,
+    );
+  }
+
+  Widget _buildNotificationCard(NotificationItem notification) {
+    return GestureDetector(
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Kamu membuka: ${notification.judul}")),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildNotificationIcon(notification),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        notification.judul,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        notification.deskripsi,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        notification.getFormattedTime(),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            // Show penalty payment button if it's a penalty notification
+            if (notification.isPenalty())
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Checkout2(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.red,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 24),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                        "Bayar Denda (Rp${notification.detailDenda?.jumlahDenda.toString() ?? '0'})"),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingState() {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget _buildErrorState(String error) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.error_outline,
+            size: 64,
+            color: Colors.red,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Gagal memuat notifikasi',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            error,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.grey,
+            ),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: _loadNotifications,
+            child: const Text('Coba Lagi'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.notifications_off_outlined,
+            size: 64,
+            color: Colors.grey,
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Belum ada notifikasi',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Notifikasi akan muncul di sini ketika ada update terbaru',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   /* Fungsi ini membangun seluruh UI untuk halaman notifikasi.
    * * Parameter:
    * - context: Digunakan untuk mengakses tema, navigasi, dan menampilkan SnackBar.
-   * * Return: Menghasilkan widget Scaffold lengkap dengan AppBar dan ListView yang berisi kartu-kartu notifikasi.
+   * * Return: Menghasilkan widget Scaffold lengkap dengan AppBar dan body yang berisi
+   *          loading state, error state, empty state, atau ListView notifikasi.
    */
   @override
   Widget build(BuildContext context) {
-    // Scaffold sebagai kerangka utama halaman.
     return Scaffold(
-      // AppBar halaman notifikasi.
       appBar: AppBar(
         title: const Text(
           "Notifications",
@@ -64,126 +279,42 @@ class NotificationPage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
+        actions: [
+          // Refresh button
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: _refreshNotifications,
+          ),
+        ],
       ),
       backgroundColor: const Color(0xFFF6F6F6),
-      // Body utama menggunakan ListView.builder untuk membuat daftar notifikasi secara dinamis.
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: notifications.length,
-        itemBuilder: (context, index) {
-          final item = notifications[index];
-          // GestureDetector untuk membuat setiap kartu notifikasi dapat diklik.
-          return GestureDetector(
-            onTap: () {
-              // Menampilkan SnackBar saat notifikasi diklik.
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Kamu membuka: ${item['title']}")),
-              );
-            },
-            // Container sebagai visual dari kartu notifikasi.
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 16),
+      body: Consumer<NotificationProvider>(
+        builder: (context, notificationProvider, child) {
+          // Show loading state
+          if (notificationProvider.isLoading) {
+            return _buildLoadingState();
+          }
+
+          // Show error state
+          if (notificationProvider.error != null) {
+            return _buildErrorState(notificationProvider.error!);
+          }
+
+          // Show empty state
+          if (notificationProvider.notifications.isEmpty) {
+            return _buildEmptyState();
+          }
+
+          // Show notifications list
+          return RefreshIndicator(
+            onRefresh: _refreshNotifications,
+            child: ListView.builder(
               padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              // Column untuk menyusun konten di dalam kartu.
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Widget Icon yang berubah berdasarkan jenis notifikasi.
-                      Icon(
-                        // Menggunakan ikon 'money_off' untuk denda, dan 'notifications_none' untuk lainnya.
-                        item["title"] == "Bayar Denda Terlambat"
-                            ? Icons.money_off
-                            : Icons.notifications_none,
-                        size: 28,
-                        // Warna ikon juga berubah: merah untuk denda, hijau untuk lainnya.
-                        color: item["title"] == "Bayar Denda Terlambat"
-                            ? Colors.red
-                            : Colors.green,
-                      ),
-                      const SizedBox(width: 12),
-                      // Expanded agar teks mengisi sisa ruang.
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Widget Text untuk menampilkan judul notifikasi.
-                            Text(
-                              item["title"]!,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            // Widget Text untuk menampilkan subjudul atau deskripsi notifikasi.
-                            Text(
-                              item["subtitle"]!,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.black54,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            // Widget Text untuk menampilkan waktu notifikasi.
-                            Text(
-                              item["time"]!,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  // Menampilkan tombol "Bayar Denda" hanya jika notifikasi adalah tentang denda.
-                  if (item["title"] == "Bayar Denda Terlambat")
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        // Widget ElevatedButton sebagai tombol aksi untuk membayar denda.
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Navigasi ke halaman pembayaran denda (Checkout2).
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Checkout2(),
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.red,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 24),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: const Text("Bayar Denda Sekarang"),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
+              itemCount: notificationProvider.notifications.length,
+              itemBuilder: (context, index) {
+                final notification = notificationProvider.notifications[index];
+                return _buildNotificationCard(notification);
+              },
             ),
           );
         },
