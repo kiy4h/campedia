@@ -1,22 +1,20 @@
-/**
- * File        : checkout2.dart
- * Dibuat oleh : Izzuddin Azzam
- * Tanggal     : 16-06-2025
- * Deskripsi   : Halaman ini menampilkan proses pembayaran, memungkinkan pengguna untuk memilih metode pembayaran (QRIS, Transfer Bank, atau Tunai)
- * dan menampilkan instruksi pembayaran yang relevan. Ini adalah bagian dari alur checkout aplikasi.
- * Dependencies : flutter/material.dart, ../after_sales/thankyouPage.dart
- */
+/// File        : checkout2.dart
+/// Dibuat oleh : Izzuddin Azzam
+/// Tanggal     : 16-06-2025
+/// Deskripsi   : Halaman ini menampilkan proses pembayaran, memungkinkan pengguna untuk memilih metode pembayaran (QRIS, Transfer Bank, atau Tunai)
+/// dan menampilkan instruksi pembayaran yang relevan. Ini adalah bagian dari alur checkout aplikasi.
+/// Dependencies : flutter/material.dart, ../after_sales/thankyouPage.dart
+library;
 
 import 'package:flutter/material.dart';
 import '../after_sales/thankyouPage.dart'; // pastikan nama file kamu kecil semua
 
-/** Widget [Checkout2]
- *
- * Deskripsi:
- * - Ini adalah halaman kedua dalam proses checkout, berfokus pada pemilihan dan tampilan metode pembayaran.
- * - Widget ini adalah bagian dari alur konfirmasi penyewaan dan pembayaran.
- * - Ini adalah widget stateful karena mengelola state `selectedPayment` yang berubah berdasarkan interaksi pengguna.
- */
+/// Widget [Checkout2]
+///
+/// Deskripsi:
+/// - Ini adalah halaman kedua dalam proses checkout, berfokus pada pemilihan dan tampilan metode pembayaran.
+/// - Widget ini adalah bagian dari alur konfirmasi penyewaan dan pembayaran.
+/// - Ini adalah widget stateful karena mengelola state `selectedPayment` yang berubah berdasarkan interaksi pengguna.
 class Checkout2 extends StatefulWidget {
   const Checkout2({super.key});
 
@@ -24,12 +22,11 @@ class Checkout2 extends StatefulWidget {
   _Checkout2State createState() => _Checkout2State();
 }
 
-/** State [Checkout2State]
- *
- * Deskripsi:
- * - Mengelola state untuk widget Checkout2, termasuk metode pembayaran yang dipilih.
- * - Bertanggung jawab untuk membangun UI berdasarkan state saat ini.
- */
+/// State [Checkout2State]
+///
+/// Deskripsi:
+/// - Mengelola state untuk widget Checkout2, termasuk metode pembayaran yang dipilih.
+/// - Bertanggung jawab untuk membangun UI berdasarkan state saat ini.
 class _Checkout2State extends State<Checkout2> {
   // Menyimpan metode pembayaran yang saat ini dipilih oleh pengguna.
   String selectedPayment = 'QRIS';
@@ -62,8 +59,8 @@ class _Checkout2State extends State<Checkout2> {
          * Deskripsi:
          * - Judul halaman yang menunjukkan 'Payment Method'.
          */
-        title: const Text('Payment Method',
-            style: TextStyle(color: Colors.black)),
+        title:
+            const Text('Payment Method', style: TextStyle(color: Colors.black)),
         centerTitle: true,
       ),
       /** Widget [Padding]
@@ -279,8 +276,7 @@ class _Checkout2State extends State<Checkout2> {
           color: isSelected ? const Color(0xFF627D2C) : Colors.grey,
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        backgroundColor:
-            isSelected ? const Color(0xFF627D2C) : Colors.white,
+        backgroundColor: isSelected ? const Color(0xFF627D2C) : Colors.white,
       ),
       /** Widget [Text]
        *
@@ -666,7 +662,8 @@ class _Checkout2State extends State<Checkout2> {
                * - **Fungsi Khusus:** Logika penyalinan ke clipboard perlu diimplementasikan.
                */
               IconButton(
-                icon: const Icon(Icons.copy, size: 20, color: Color(0xFF627D2C)),
+                icon:
+                    const Icon(Icons.copy, size: 20, color: Color(0xFF627D2C)),
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Nomor rekening disalin')),

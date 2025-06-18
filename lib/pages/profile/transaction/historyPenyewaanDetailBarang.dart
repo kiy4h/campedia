@@ -1,25 +1,23 @@
-/**
- * File        : transaction_detail_page.dart
- * Dibuat oleh  : Tim Provis
- * Tanggal      : 16-06-2025
- * Deskripsi    : Halaman ini menampilkan daftar detail barang yang termasuk dalam satu transaksi.
- * Dilengkapi dengan informasi produk, tanggal transaksi, dan status review.
- * Pengguna dapat memberikan review untuk barang yang belum direview melalui tombol yang tersedia.
- * Dependencies :
- * - flutter/material.dart: Pustaka dasar Flutter untuk membangun UI.
- * - reviewItem.dart: Mengimpor halaman ProductReviewPage untuk navigasi ke halaman review produk.
- */
+/// File        : transaction_detail_page.dart
+/// Dibuat oleh  : Tim Provis
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : Halaman ini menampilkan daftar detail barang yang termasuk dalam satu transaksi.
+/// Dilengkapi dengan informasi produk, tanggal transaksi, dan status review.
+/// Pengguna dapat memberikan review untuk barang yang belum direview melalui tombol yang tersedia.
+/// Dependencies :
+/// - flutter/material.dart: Pustaka dasar Flutter untuk membangun UI.
+/// - reviewItem.dart: Mengimpor halaman ProductReviewPage untuk navigasi ke halaman review produk.
+library;
 
 import 'package:flutter/material.dart';
 import 'reviewItem.dart'; // Import halaman ProductReviewPage
 
-/** Widget [TransactionDetailPage]
- *
- * Deskripsi:
- * - Halaman ini berfungsi untuk menampilkan detail item-item yang ada dalam sebuah transaksi.
- * - Ini adalah bagian dari alur riwayat transaksi pengguna, memungkinkan mereka melihat status review.
- * - Merupakan StatelessWidget karena data transaksi yang ditampilkan bersifat statis dan tidak berubah di dalam widget ini.
- */
+/// Widget [TransactionDetailPage]
+///
+/// Deskripsi:
+/// - Halaman ini berfungsi untuk menampilkan detail item-item yang ada dalam sebuah transaksi.
+/// - Ini adalah bagian dari alur riwayat transaksi pengguna, memungkinkan mereka melihat status review.
+/// - Merupakan StatelessWidget karena data transaksi yang ditampilkan bersifat statis dan tidak berubah di dalam widget ini.
 class TransactionDetailPage extends StatelessWidget {
   TransactionDetailPage({super.key});
 
@@ -29,7 +27,8 @@ class TransactionDetailPage extends StatelessWidget {
     {
       'title': 'Tenda Camping Eiger',
       'date': '4 Mei 2025',
-      'image': 'https://via.placeholder.com/300x150.png?text=Tenda+Camping+Eiger',
+      'image':
+          'https://via.placeholder.com/300x150.png?text=Tenda+Camping+Eiger',
       'status': 'Belum direview',
     },
     {
@@ -41,7 +40,8 @@ class TransactionDetailPage extends StatelessWidget {
     {
       'title': 'Sepatu Hiking Merrell',
       'date': '13 Apr 2025',
-      'image': 'https://via.placeholder.com/300x150.png?text=Sepatu+Hiking+Merrell',
+      'image':
+          'https://via.placeholder.com/300x150.png?text=Sepatu+Hiking+Merrell',
       'status': 'Selesai',
     },
   ];
@@ -81,7 +81,8 @@ class TransactionDetailPage extends StatelessWidget {
        */
       label: Text(label, style: const TextStyle(fontSize: 12)),
       backgroundColor: Colors.grey[200], // Warna latar belakang chip.
-      padding: const EdgeInsets.symmetric(horizontal: 10), // Padding horizontal chip.
+      padding: const EdgeInsets.symmetric(
+          horizontal: 10), // Padding horizontal chip.
       shape: const StadiumBorder(), // Bentuk chip seperti stadion.
     );
   }
@@ -96,7 +97,8 @@ class TransactionDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100], // Mengatur warna latar belakang halaman.
+      backgroundColor:
+          Colors.grey[100], // Mengatur warna latar belakang halaman.
       /** Widget [AppBar]
        * * Deskripsi:
        * - Bilah aplikasi di bagian atas halaman, berfungsi sebagai header.
@@ -113,12 +115,14 @@ class TransactionDetailPage extends StatelessWidget {
         title: TextField(
           decoration: InputDecoration(
             hintText: 'Cari barang dalam transaksi', // Placeholder teks.
-            hintStyle: TextStyle(color: Colors.grey[600]), // Gaya teks placeholder.
+            hintStyle:
+                TextStyle(color: Colors.grey[600]), // Gaya teks placeholder.
             prefixIcon: const Icon(Icons.search), // Ikon pencarian di awal.
             suffixIcon: const Icon(Icons.filter_list), // Ikon filter di akhir.
             filled: true, // Mengisi latar belakang TextField.
             fillColor: Colors.grey[200], // Warna latar belakang TextField.
-            contentPadding: const EdgeInsets.symmetric(vertical: 0), // Padding internal.
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 0), // Padding internal.
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30), // Border melingkar.
               borderSide: BorderSide.none, // Tanpa border sisi.
@@ -161,7 +165,8 @@ class TransactionDetailPage extends StatelessWidget {
           // --- Daftar Barang Transaksi ---
           // Menggunakan operator spread (...) untuk menambahkan setiap kartu transaksi.
           ...transactions
-              .map((item) => buildTransactionCard(item, context)) // Membangun kartu transaksi untuk setiap item.
+              .map((item) => buildTransactionCard(item,
+                  context)) // Membangun kartu transaksi untuk setiap item.
               .toList(), // Mengubah iterasi menjadi daftar widget.
         ],
       ),
@@ -178,12 +183,15 @@ class TransactionDetailPage extends StatelessWidget {
    */
   Widget buildTransactionCard(Map<String, dynamic> item, BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16), // Margin bawah untuk setiap kartu.
+      margin:
+          const EdgeInsets.only(bottom: 16), // Margin bawah untuk setiap kartu.
       padding: const EdgeInsets.all(12), // Padding internal kartu.
       decoration: BoxDecoration(
         color: Colors.white, // Warna latar belakang kartu.
         borderRadius: BorderRadius.circular(12), // Sudut kartu membulat.
-        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)], // Bayangan kartu.
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 6)
+        ], // Bayangan kartu.
       ),
       /** Widget [Column]
        * * Deskripsi:
@@ -236,7 +244,8 @@ class TransactionDetailPage extends StatelessWidget {
            * - Gaya teks dengan font tebal dan ukuran 16.
            */
           Text(item['title'],
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
           const SizedBox(height: 4), // Spasi vertikal kecil.
 
           /** Widget [Text]
@@ -271,17 +280,20 @@ class TransactionDetailPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (_) => ProductReviewPage(
-                        productImage: item['image'], // Meneruskan URL gambar produk.
+                        productImage:
+                            item['image'], // Meneruskan URL gambar produk.
                         productName: item['title'], // Meneruskan nama produk.
                       ),
                     ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent, // Warna latar belakang tombol.
+                  backgroundColor:
+                      Colors.blueAccent, // Warna latar belakang tombol.
                   foregroundColor: Colors.white, // Warna teks tombol.
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)), // Sudut tombol membulat.
+                      borderRadius:
+                          BorderRadius.circular(8)), // Sudut tombol membulat.
                 ),
                 /** Widget [Text]
                  * * Deskripsi:
@@ -309,8 +321,10 @@ class TransactionDetailPage extends StatelessWidget {
                  * - Teks pada chip "Sudah Direview".
                  */
                 label: const Text("Sudah Direview"),
-                backgroundColor: Colors.green[100], // Warna latar belakang chip hijau muda.
-                labelStyle: const TextStyle(color: Colors.green), // Gaya teks chip berwarna hijau.
+                backgroundColor:
+                    Colors.green[100], // Warna latar belakang chip hijau muda.
+                labelStyle: const TextStyle(
+                    color: Colors.green), // Gaya teks chip berwarna hijau.
               ),
             ),
         ],

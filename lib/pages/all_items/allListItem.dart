@@ -1,11 +1,10 @@
-/**
- * File         : allListItem.dart
- * Dibuat oleh  : Izzuddin Azzam, Al Ghifari
- * Tanggal      : 15-06-2025
- * Deskripsi    : File ini berisi implementasi halaman daftar semua barang camping yang tersedia untuk disewa
- * dengan fitur filter berdasarkan kategori, harga, dan rating.
- * Dependencies : flutter/material.dart, font_awesome_flutter, provider, intl
- */
+/// File         : allListItem.dart
+/// Dibuat oleh  : Izzuddin Azzam, Al Ghifari
+/// Tanggal      : 15-06-2025
+/// Deskripsi    : File ini berisi implementasi halaman daftar semua barang camping yang tersedia untuk disewa
+/// dengan fitur filter berdasarkan kategori, harga, dan rating.
+/// Dependencies : flutter/material.dart, font_awesome_flutter, provider, intl
+library;
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,14 +22,13 @@ void main() {
   runApp(const AllItemList());
 }
 
-/** Widget AllItemList
- * * Deskripsi:
- * - Widget utama yang mengatur root dari halaman daftar semua barang.
- * - Menyediakan konfigurasi tema dan styling untuk halaman.
- * - Merupakan StatelessWidget karena hanya berfungsi sebagai container dan tidak menyimpan state.
- */
+/// Widget AllItemList
+/// * Deskripsi:
+/// - Widget utama yang mengatur root dari halaman daftar semua barang.
+/// - Menyediakan konfigurasi tema dan styling untuk halaman.
+/// - Merupakan StatelessWidget karena hanya berfungsi sebagai container dan tidak menyimpan state.
 class AllItemList extends StatelessWidget {
-  const AllItemList({Key? key}) : super(key: key);
+  const AllItemList({super.key});
 
   @override
   /* Fungsi ini membangun widget root untuk aplikasi
@@ -56,15 +54,14 @@ class AllItemList extends StatelessWidget {
   }
 }
 
-/** Widget ItemCategory
- * * Deskripsi:
- * - Widget utama yang menampilkan daftar barang dan opsi filter.
- * - Bagian dari halaman katalog barang camping.
- * - Merupakan StatefulWidget karena perlu menyimpan dan memperbarui status seperti
- * kategori terpilih, filter harga, dan data barang.
- */
+/// Widget ItemCategory
+/// * Deskripsi:
+/// - Widget utama yang menampilkan daftar barang dan opsi filter.
+/// - Bagian dari halaman katalog barang camping.
+/// - Merupakan StatefulWidget karena perlu menyimpan dan memperbarui status seperti
+/// kategori terpilih, filter harga, dan data barang.
 class ItemCategory extends StatefulWidget {
-  ItemCategory({Key? key}) : super(key: key);
+  const ItemCategory({super.key});
 
   @override
   /* Fungsi ini membuat state yang digunakan oleh widget ini.
@@ -73,11 +70,10 @@ class ItemCategory extends StatefulWidget {
   _ItemCategoryState createState() => _ItemCategoryState();
 }
 
-/** State untuk widget ItemCategory
- * * Deskripsi:
- * - Menyimpan semua data dan status yang berubah untuk halaman daftar barang.
- * - Mengelola proses pengambilan data, pemfilteran, dan UI interaktif.
- */
+/// State untuk widget ItemCategory
+/// * Deskripsi:
+/// - Menyimpan semua data dan status yang berubah untuk halaman daftar barang.
+/// - Mengelola proses pengambilan data, pemfilteran, dan UI interaktif.
 class _ItemCategoryState extends State<ItemCategory> {
   // Variabel untuk menyimpan data barang
   List<Barang> allItems = []; // Semua barang dari API

@@ -1,28 +1,26 @@
-/**
- * File        : step3.dart
- * Dibuat oleh  : Izzuddin Azzam
- * Tanggal      : 16-06-2025
- * Deskripsi    : Halaman langkah ketiga untuk proses pengembalian barang,
- * berisi konfirmasi bahwa barang telah dikembalikan dan ajakan memberi ulasan.
- * Dependencies :
- * - flutter/material.dart
- * - flutter_map: (Tidak digunakan langsung di halaman ini, tetapi diimpor, mungkin untuk konteks aplikasi yang lebih besar)
- * - step1.dart: Untuk navigasi kembali ke halaman sebelumnya (misalnya, melacak status).
- * - review.dart: Untuk navigasi ke halaman ReviewPage setelah pengguna mengembalikan barang.
- */
+/// File        : step3.dart
+/// Dibuat oleh  : Izzuddin Azzam
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : Halaman langkah ketiga untuk proses pengembalian barang,
+/// berisi konfirmasi bahwa barang telah dikembalikan dan ajakan memberi ulasan.
+/// Dependencies :
+/// - flutter/material.dart
+/// - flutter_map: (Tidak digunakan langsung di halaman ini, tetapi diimpor, mungkin untuk konteks aplikasi yang lebih besar)
+/// - step1.dart: Untuk navigasi kembali ke halaman sebelumnya (misalnya, melacak status).
+/// - review.dart: Untuk navigasi ke halaman ReviewPage setelah pengguna mengembalikan barang.
+library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart'; // Meskipun tidak dipakai langsung, mungkin digunakan di halaman sebelumnya
-import 'step1.dart'; // Halaman untuk navigasi kembali
+// Meskipun tidak dipakai langsung, mungkin digunakan di halaman sebelumnya
+// import 'step1.dart'; // Halaman untuk navigasi kembali
 import 'review.dart'; // Halaman untuk memberikan ulasan setelah pengembalian barang
 
-/** Widget [Step3Page]
- * * Deskripsi:
- * - Widget ini menampilkan konfirmasi bahwa proses pengembalian barang telah selesai.
- * - Merupakan bagian dari alur pengembalian barang sewaan, yaitu langkah terakhir.
- * - Ini adalah widget stateless karena tampilannya statis dan tidak ada data
- * yang berubah secara internal di dalam widget ini.
- */
+/// Widget [Step3Page]
+/// * Deskripsi:
+/// - Widget ini menampilkan konfirmasi bahwa proses pengembalian barang telah selesai.
+/// - Merupakan bagian dari alur pengembalian barang sewaan, yaitu langkah terakhir.
+/// - Ini adalah widget stateless karena tampilannya statis dan tidak ada data
+/// yang berubah secara internal di dalam widget ini.
 class Step3Page extends StatelessWidget {
   const Step3Page({super.key});
 
@@ -89,7 +87,8 @@ class Step3Page extends StatelessWidget {
            * - Memberikan padding di sekitar konten konfirmasi.
            */
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
             /** Widget [Column]
              * * Deskripsi:
              * - Mengatur ikon centang dan teks ajakan ulasan secara vertikal.
@@ -118,7 +117,8 @@ class Step3Page extends StatelessWidget {
                      * - Menampilkan ikon 'check_circle_outline' berwarna hijau.
                      * - Ukuran ikon besar.
                      */
-                    child: Icon(Icons.check_circle_outline, size: 80, color: Colors.green),
+                    child: Icon(Icons.check_circle_outline,
+                        size: 80, color: Colors.green),
                   ),
                 ),
                 const SizedBox(height: 16), // Spasi vertikal
@@ -148,7 +148,8 @@ class Step3Page extends StatelessWidget {
              * - Memberikan padding di sekitar stepper visual.
              */
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 28.0, vertical: 8.0),
               /** Widget [Column]
                * * Deskripsi:
                * - Mengatur tampilan langkah-langkah proses (step 1, 2, 3) secara vertikal.
@@ -201,7 +202,8 @@ class Step3Page extends StatelessWidget {
                               Expanded(
                                 child: Container(
                                   width: 3,
-                                  color: Colors.grey[300], // Garis vertikal abu-abu
+                                  color: Colors
+                                      .grey[300], // Garis vertikal abu-abu
                                 ),
                               ),
                             ],
@@ -344,7 +346,8 @@ class Step3Page extends StatelessWidget {
                                   color: Colors.white,
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: const Color(0xFF9BAE76), // Hijau lembut
+                                    color:
+                                        const Color(0xFF9BAE76), // Hijau lembut
                                     width: 6,
                                   ),
                                 ),
@@ -386,7 +389,8 @@ class Step3Page extends StatelessWidget {
                                */
                               Text(
                                 'Kembalikan barang ke toko sesuai waktu. Setelah itu, beri ulasan untuk pengalaman sewa kamu.',
-                                style: TextStyle(fontSize: 16, color: Colors.black87),
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.black87),
                               ),
                             ],
                           ),
@@ -420,9 +424,11 @@ class Step3Page extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF627D2C), // Warna hijau tua
-                minimumSize: const Size(double.infinity, 50), // Lebar penuh, tinggi 50
+                minimumSize:
+                    const Size(double.infinity, 50), // Lebar penuh, tinggi 50
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25), // Sudut tombol membulat
+                  borderRadius:
+                      BorderRadius.circular(25), // Sudut tombol membulat
                 ),
               ),
               /** Widget [Text]

@@ -1,24 +1,22 @@
-/**
- * File        : thank_you_page.dart
- * Dibuat oleh  : Izzuddin Azzam
- * Tanggal      : 16-06-2025
- * Deskripsi    : Halaman ini menampilkan ucapan terima kasih setelah pesanan berhasil dibuat.
- * Dilengkapi dengan konfirmasi pesanan, informasi Order ID, tanggal pesanan,
- * ilustrasi, dan tombol untuk melacak pesanan.
- * Dependencies : flutter/material.dart, step1.dart
- */
+/// File        : thank_you_page.dart
+/// Dibuat oleh  : Izzuddin Azzam
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : Halaman ini menampilkan ucapan terima kasih setelah pesanan berhasil dibuat.
+/// Dilengkapi dengan konfirmasi pesanan, informasi Order ID, tanggal pesanan,
+/// ilustrasi, dan tombol untuk melacak pesanan.
+/// Dependencies : flutter/material.dart, step1.dart
+library;
 
 import 'package:flutter/material.dart';
 // Asumsi 'step1.dart' ada di lokasi yang sama atau sudah dikonfigurasi di pubspec.yaml
-import 'step1.dart'; 
+import 'step1.dart';
 
-/** Widget [ThankYouPage]
- * * Deskripsi:
- * - Widget ini berfungsi sebagai tampilan konfirmasi keberhasilan pesanan.
- * - Ini adalah halaman setelah pengguna menyelesaikan proses pemesanan.
- * - Ini adalah widget stateless karena tampilannya statis dan tidak ada data
- * yang berubah secara internal di dalam widget ini.
- */
+/// Widget [ThankYouPage]
+/// * Deskripsi:
+/// - Widget ini berfungsi sebagai tampilan konfirmasi keberhasilan pesanan.
+/// - Ini adalah halaman setelah pengguna menyelesaikan proses pemesanan.
+/// - Ini adalah widget stateless karena tampilannya statis dan tidak ada data
+/// yang berubah secara internal di dalam widget ini.
 class ThankYouPage extends StatelessWidget {
   const ThankYouPage({super.key});
 
@@ -52,7 +50,8 @@ class ThankYouPage extends StatelessWidget {
              * - Memiliki padding, dekorasi latar belakang putih, dan shadow.
              */
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
               decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: [
@@ -127,7 +126,7 @@ class ThankYouPage extends StatelessWidget {
                         size: 50,
                       ),
                     ),
-                    
+
                     // --- Teks ucapan terima kasih dan konfirmasi ---
                     /** Widget [Column]
                      * * Deskripsi:
@@ -165,7 +164,7 @@ class ThankYouPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    
+
                     // --- Informasi Pesanan: Order ID dan Tanggal ---
                     /** Widget [Container]
                      * * Deskripsi:
@@ -259,7 +258,7 @@ class ThankYouPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                  
+
                     // --- Gambar Ilustrasi dengan Aspect Ratio 16:9 ---
                     /** Widget [AspectRatio]
                      * * Deskripsi:
@@ -301,7 +300,7 @@ class ThankYouPage extends StatelessWidget {
                         ),
                       ),
                     ),
-          
+
                     // --- Teks pengingat untuk pengguna ---
                     /** Widget [Text]
                      * * Deskripsi:
@@ -328,7 +327,8 @@ class ThankYouPage extends StatelessWidget {
              * - Memiliki padding, latar belakang putih, dan shadow di bagian atas.
              */
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
               decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: [
@@ -352,10 +352,12 @@ class ThankYouPage extends StatelessWidget {
                  */
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF627D2C), // Warna latar belakang tombol.
+                    backgroundColor:
+                        const Color(0xFF627D2C), // Warna latar belakang tombol.
                     elevation: 0, // Tanpa elevasi (shadow) tambahan.
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30), // Bentuk tombol bulat.
+                      borderRadius:
+                          BorderRadius.circular(30), // Bentuk tombol bulat.
                     ),
                   ),
                   // Fungsi yang dijalankan saat tombol ditekan.

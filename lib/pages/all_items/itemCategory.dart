@@ -1,12 +1,11 @@
-/**
- * File         : itemCategory.dart
- * Dibuat oleh  : Izzuddin Azzam, Al Ghifari
- * Tanggal      : 16-06-2025
- * Deskripsi    : File ini berisi halaman yang menampilkan daftar produk dalam kategori tertentu dengan fitur filter harga dan rating.
- * Dependencies : 
- * - detailItem.dart: digunakan untuk berpindah ke halaman detail produk saat item diklik.
- * - navbar.dart: digunakan untuk menampilkan navigasi bawah pada halaman.
- */
+/// File         : itemCategory.dart
+/// Dibuat oleh  : Izzuddin Azzam, Al Ghifari
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : File ini berisi halaman yang menampilkan daftar produk dalam kategori tertentu dengan fitur filter harga dan rating.
+/// Dependencies :
+/// - detailItem.dart: digunakan untuk berpindah ke halaman detail produk saat item diklik.
+/// - navbar.dart: digunakan untuk menampilkan navigasi bawah pada halaman.
+library;
 
 import 'package:flutter/material.dart';
 import '../detail_items/detailItem.dart';
@@ -16,12 +15,11 @@ void main() {
   runApp(const ItemCategoryApp());
 }
 
-/** Widget ItemCategoryApp
- * * Deskripsi:
- * - Widget utama yang berfungsi sebagai root atau pembungkus aplikasi untuk halaman kategori item.
- * - Mengatur konfigurasi global seperti tema dan halaman awal untuk lingkup halaman ini.
- * - Merupakan StatelessWidget karena tidak memerlukan perubahan state internal.
- */
+/// Widget ItemCategoryApp
+/// * Deskripsi:
+/// - Widget utama yang berfungsi sebagai root atau pembungkus aplikasi untuk halaman kategori item.
+/// - Mengatur konfigurasi global seperti tema dan halaman awal untuk lingkup halaman ini.
+/// - Merupakan StatelessWidget karena tidak memerlukan perubahan state internal.
 class ItemCategoryApp extends StatelessWidget {
   const ItemCategoryApp({super.key});
 
@@ -46,12 +44,11 @@ class ItemCategoryApp extends StatelessWidget {
   }
 }
 
-/** Widget ItemCategory
- * * Deskripsi:
- * - Widget yang menampilkan halaman daftar produk untuk kategori tertentu (contoh: "Tenda").
- * - Dilengkapi dengan fitur pencarian dan filter.
- * - Merupakan StatefulWidget karena perlu menyimpan dan mengelola state filter seperti rentang harga dan rating yang dapat diubah oleh pengguna.
- */
+/// Widget ItemCategory
+/// * Deskripsi:
+/// - Widget yang menampilkan halaman daftar produk untuk kategori tertentu (contoh: "Tenda").
+/// - Dilengkapi dengan fitur pencarian dan filter.
+/// - Merupakan StatefulWidget karena perlu menyimpan dan mengelola state filter seperti rentang harga dan rating yang dapat diubah oleh pengguna.
 class ItemCategory extends StatefulWidget {
   const ItemCategory({super.key});
 
@@ -59,11 +56,10 @@ class ItemCategory extends StatefulWidget {
   _ItemCategoryState createState() => _ItemCategoryState();
 }
 
-/** State untuk widget ItemCategory
- * * Deskripsi:
- * - Mengelola semua state dan logika untuk halaman ItemCategory.
- * - Menyimpan data produk, nilai filter, dan mengimplementasikan fungsi untuk menerapkan filter serta menampilkan dialog.
- */
+/// State untuk widget ItemCategory
+/// * Deskripsi:
+/// - Mengelola semua state dan logika untuk halaman ItemCategory.
+/// - Menyimpan data produk, nilai filter, dan mengimplementasikan fungsi untuk menerapkan filter serta menampilkan dialog.
 class _ItemCategoryState extends State<ItemCategory> {
   // Variabel untuk menyimpan nilai filter
   double minPrice = 0;

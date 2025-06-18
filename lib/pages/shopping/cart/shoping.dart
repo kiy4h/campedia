@@ -10,10 +10,7 @@
 
 import 'package:flutter/material.dart';
 import '../../components/navbar.dart';
-import '../../components/appBar.dart';
 import '../payment_data/checkout.dart';
-import 'package:intl/intl.dart';
-
 
 void main() {
   runApp(const MyApp());
@@ -136,6 +133,7 @@ class _ShopingState extends State<Shoping> {
   String formatToRupiah(double price) {
     return 'Rp${price.toStringAsFixed(2).replaceAll('.', ',').replaceAll(RegExp(r'\B(?=(\d{3})+(?!\d))'), '.')}';
   }
+
   /*
   * Method : build
   * Deskripsi : Membangun UI untuk halaman keranjang belanja
@@ -158,7 +156,7 @@ class _ShopingState extends State<Shoping> {
               itemBuilder: (context, index) {
                 final item = items[index];
                 final itemKey = Key(item.name + index.toString());
-                
+
                 return SlidableDeleteItem(
                   key: itemKey,
                   item: item,
@@ -185,7 +183,7 @@ class _ShopingState extends State<Shoping> {
               },
             ),
           ),
-          
+
           // Modified Place Order Button with more rounded corners and centered text
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -212,14 +210,13 @@ class _ShopingState extends State<Shoping> {
                           DateTime(2025, 5, 25),
                           DateTime(2025, 5, 26),
                         ];
-                        
+
                         // Fungsi untuk memeriksa apakah tanggal tersedia
                         bool isDateAvailable(DateTime date) {
-                          return !bookedDates.any((bookedDate) => 
-                            date.year == bookedDate.year && 
-                            date.month == bookedDate.month && 
-                            date.day == bookedDate.day
-                          );
+                          return !bookedDates.any((bookedDate) =>
+                              date.year == bookedDate.year &&
+                              date.month == bookedDate.month &&
+                              date.day == bookedDate.day);
                         }
 
                         // Fungsi untuk menghitung durasi sewa
@@ -235,11 +232,36 @@ class _ShopingState extends State<Shoping> {
 
                         // Data item yang dipesan
                         final List<Map<String, dynamic>> items = [
-                          {'name': 'Tenda Dome', 'qty': 2, 'price': 50000, 'days': calculateDuration()},
-                          {'name': 'Tenda Besar', 'qty': 1, 'price': 80000, 'days': calculateDuration()},
-                          {'name': 'Sleeping Bag', 'qty': 3, 'price': 20000, 'days': calculateDuration()},
-                          {'name': 'Matras', 'qty': 2, 'price': 15000, 'days': calculateDuration()},
-                          {'name': 'Kompor Camping', 'qty': 1, 'price': 30000, 'days': calculateDuration()},
+                          {
+                            'name': 'Tenda Dome',
+                            'qty': 2,
+                            'price': 50000,
+                            'days': calculateDuration()
+                          },
+                          {
+                            'name': 'Tenda Besar',
+                            'qty': 1,
+                            'price': 80000,
+                            'days': calculateDuration()
+                          },
+                          {
+                            'name': 'Sleeping Bag',
+                            'qty': 3,
+                            'price': 20000,
+                            'days': calculateDuration()
+                          },
+                          {
+                            'name': 'Matras',
+                            'qty': 2,
+                            'price': 15000,
+                            'days': calculateDuration()
+                          },
+                          {
+                            'name': 'Kompor Camping',
+                            'qty': 1,
+                            'price': 30000,
+                            'days': calculateDuration()
+                          },
                         ];
 
                         // Menghitung total harga
@@ -283,11 +305,14 @@ class _ShopingState extends State<Shoping> {
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           children: [
-                                            Icon(Icons.shopping_cart, color: Colors.green[700], size: 18),
+                                            Icon(Icons.shopping_cart,
+                                                color: Colors.green[700],
+                                                size: 18),
                                             SizedBox(width: 8),
                                             Text(
                                               'Detail Pesanan',
@@ -299,34 +324,49 @@ class _ShopingState extends State<Shoping> {
                                           ],
                                         ),
                                         Divider(thickness: 1),
-                                        
+
                                         // List item yang dipesan
                                         Container(
                                           constraints: BoxConstraints(
-                                            maxHeight: isExpanded ? double.infinity : 150,
+                                            maxHeight: isExpanded
+                                                ? double.infinity
+                                                : 150,
                                           ),
                                           child: SingleChildScrollView(
                                             child: Column(
                                               children: items.map((item) {
-                                                int totalPrice = item['qty'] * item['price'] * item['days'];
+                                                int totalPrice = item['qty'] *
+                                                    item['price'] *
+                                                    item['days'];
                                                 return Padding(
-                                                  padding: EdgeInsets.symmetric(vertical: 6),
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 6),
                                                   child: Row(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Expanded(
                                                         flex: 5,
                                                         child: Text(
                                                           '${item['name']} (x${item['qty']})',
-                                                          style: TextStyle(fontWeight: FontWeight.w500),
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
                                                         ),
                                                       ),
                                                       Expanded(
                                                         flex: 3,
                                                         child: Text(
-                                                          formatCurrency(totalPrice),
-                                                          textAlign: TextAlign.right,
-                                                          style: TextStyle(fontWeight: FontWeight.w500),
+                                                          formatCurrency(
+                                                              totalPrice),
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
                                                         ),
                                                       ),
                                                     ],
@@ -336,7 +376,7 @@ class _ShopingState extends State<Shoping> {
                                             ),
                                           ),
                                         ),
-                                        
+
                                         // Tombol Lihat Selengkapnya
                                         if (items.length > 3)
                                           Align(
@@ -348,11 +388,15 @@ class _ShopingState extends State<Shoping> {
                                                 });
                                               },
                                               style: TextButton.styleFrom(
-                                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 12,
+                                                    vertical: 0),
                                                 minimumSize: Size(0, 30),
                                               ),
                                               child: Text(
-                                                isExpanded ? 'Tutup' : 'Lihat Semua',
+                                                isExpanded
+                                                    ? 'Tutup'
+                                                    : 'Lihat Semua',
                                                 style: TextStyle(
                                                   color: Colors.green[700],
                                                   fontSize: 13,
@@ -360,11 +404,12 @@ class _ShopingState extends State<Shoping> {
                                               ),
                                             ),
                                           ),
-                                        
+
                                         Divider(thickness: 1),
                                         // Total Bayar
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               'Total Bayar',
@@ -386,9 +431,9 @@ class _ShopingState extends State<Shoping> {
                                       ],
                                     ),
                                   ),
-                                  
+
                                   SizedBox(height: 16),
-                                  
+
                                   // Bagian Tanggal Sewa
                                   Container(
                                     padding: EdgeInsets.all(12),
@@ -397,11 +442,14 @@ class _ShopingState extends State<Shoping> {
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           children: [
-                                            Icon(Icons.calendar_today, color: Colors.green[700], size: 18),
+                                            Icon(Icons.calendar_today,
+                                                color: Colors.green[700],
+                                                size: 18),
                                             SizedBox(width: 8),
                                             Text(
                                               'Periode Sewa',
@@ -414,7 +462,7 @@ class _ShopingState extends State<Shoping> {
                                         ),
                                         Divider(thickness: 1),
                                         SizedBox(height: 8),
-                                        
+
                                         // Tanggal Peminjaman
                                         Text(
                                           'Tanggal Peminjaman',
@@ -426,19 +474,24 @@ class _ShopingState extends State<Shoping> {
                                         SizedBox(height: 4),
                                         GestureDetector(
                                           onTap: () async {
-                                            DateTime? picked = await showDatePicker(
+                                            DateTime? picked =
+                                                await showDatePicker(
                                               context: context,
                                               initialDate: DateTime.now(),
                                               firstDate: DateTime.now(),
                                               lastDate: DateTime(2026),
-                                              selectableDayPredicate: (DateTime date) {
+                                              selectableDayPredicate:
+                                                  (DateTime date) {
                                                 return isDateAvailable(date);
                                               },
                                               builder: (context, child) {
                                                 return Theme(
-                                                  data: Theme.of(context).copyWith(
-                                                    colorScheme: ColorScheme.light(
-                                                      primary: Colors.green[700]!,
+                                                  data: Theme.of(context)
+                                                      .copyWith(
+                                                    colorScheme:
+                                                        ColorScheme.light(
+                                                      primary:
+                                                          Colors.green[700]!,
                                                       onPrimary: Colors.white,
                                                     ),
                                                   ),
@@ -450,37 +503,47 @@ class _ShopingState extends State<Shoping> {
                                               setState(() {
                                                 startDate = picked;
                                                 // Reset tanggal akhir jika tanggal awal diubah
-                                                if (endDate != null && endDate!.isBefore(startDate!)) {
+                                                if (endDate != null &&
+                                                    endDate!
+                                                        .isBefore(startDate!)) {
                                                   endDate = null;
                                                 }
                                               });
                                             }
                                           },
                                           child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 12, vertical: 10),
                                             decoration: BoxDecoration(
-                                              border: Border.all(color: Colors.grey[400]!),
-                                              borderRadius: BorderRadius.circular(8),
+                                              border: Border.all(
+                                                  color: Colors.grey[400]!),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Text(
                                                   startDate == null
                                                       ? 'Pilih tanggal'
                                                       : '${startDate!.day.toString().padLeft(2, '0')}/${startDate!.month.toString().padLeft(2, '0')}/${startDate!.year}',
                                                   style: TextStyle(
-                                                    color: startDate == null ? Colors.grey[600] : Colors.black,
+                                                    color: startDate == null
+                                                        ? Colors.grey[600]
+                                                        : Colors.black,
                                                   ),
                                                 ),
-                                                Icon(Icons.calendar_month, color: Colors.grey[600]),
+                                                Icon(Icons.calendar_month,
+                                                    color: Colors.grey[600]),
                                               ],
                                             ),
                                           ),
                                         ),
-                                        
+
                                         SizedBox(height: 12),
-                                        
+
                                         // Tanggal Pengembalian
                                         Text(
                                           'Tanggal Pengembalian',
@@ -494,28 +557,37 @@ class _ShopingState extends State<Shoping> {
                                           onTap: () async {
                                             if (startDate == null) {
                                               // Tampilkan pesan untuk memilih tanggal awal terlebih dahulu
-                                              ScaffoldMessenger.of(context).showSnackBar(
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
                                                 SnackBar(
-                                                  content: Text('Pilih tanggal peminjaman terlebih dahulu'),
-                                                  backgroundColor: Colors.red[400],
+                                                  content: Text(
+                                                      'Pilih tanggal peminjaman terlebih dahulu'),
+                                                  backgroundColor:
+                                                      Colors.red[400],
                                                 ),
                                               );
                                               return;
                                             }
-                                            
-                                            DateTime? picked = await showDatePicker(
+
+                                            DateTime? picked =
+                                                await showDatePicker(
                                               context: context,
-                                              initialDate: startDate!.add(Duration(days: 1)),
+                                              initialDate: startDate!
+                                                  .add(Duration(days: 1)),
                                               firstDate: startDate!,
                                               lastDate: DateTime(2026),
-                                              selectableDayPredicate: (DateTime date) {
+                                              selectableDayPredicate:
+                                                  (DateTime date) {
                                                 return isDateAvailable(date);
                                               },
                                               builder: (context, child) {
                                                 return Theme(
-                                                  data: Theme.of(context).copyWith(
-                                                    colorScheme: ColorScheme.light(
-                                                      primary: Colors.green[700]!,
+                                                  data: Theme.of(context)
+                                                      .copyWith(
+                                                    colorScheme:
+                                                        ColorScheme.light(
+                                                      primary:
+                                                          Colors.green[700]!,
                                                       onPrimary: Colors.white,
                                                     ),
                                                   ),
@@ -530,42 +602,55 @@ class _ShopingState extends State<Shoping> {
                                             }
                                           },
                                           child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 12, vertical: 10),
                                             decoration: BoxDecoration(
-                                              border: Border.all(color: Colors.grey[400]!),
-                                              borderRadius: BorderRadius.circular(8),
+                                              border: Border.all(
+                                                  color: Colors.grey[400]!),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Text(
                                                   endDate == null
                                                       ? 'Pilih tanggal'
                                                       : '${endDate!.day.toString().padLeft(2, '0')}/${endDate!.month.toString().padLeft(2, '0')}/${endDate!.year}',
                                                   style: TextStyle(
-                                                    color: endDate == null ? Colors.grey[600] : Colors.black,
+                                                    color: endDate == null
+                                                        ? Colors.grey[600]
+                                                        : Colors.black,
                                                   ),
                                                 ),
-                                                Icon(Icons.calendar_month, color: Colors.grey[600]),
+                                                Icon(Icons.calendar_month,
+                                                    color: Colors.grey[600]),
                                               ],
                                             ),
                                           ),
                                         ),
-                                        
+
                                         SizedBox(height: 12),
-                                        
+
                                         // Durasi Sewa
-                                        if (startDate != null && endDate != null)
+                                        if (startDate != null &&
+                                            endDate != null)
                                           Container(
                                             padding: EdgeInsets.all(8),
                                             decoration: BoxDecoration(
                                               color: Colors.green[50],
-                                              borderRadius: BorderRadius.circular(8),
-                                              border: Border.all(color: Colors.green[100]!),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              border: Border.all(
+                                                  color: Colors.green[100]!),
                                             ),
                                             child: Row(
                                               children: [
-                                                Icon(Icons.info_outline, color: Colors.green[700], size: 16),
+                                                Icon(Icons.info_outline,
+                                                    color: Colors.green[700],
+                                                    size: 16),
                                                 SizedBox(width: 8),
                                                 Text(
                                                   'Durasi sewa: ${calculateDuration()} hari',
@@ -586,7 +671,8 @@ class _ShopingState extends State<Shoping> {
                           ),
                           actions: [
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
                               child: Row(
                                 children: [
                                   Expanded(
@@ -598,14 +684,17 @@ class _ShopingState extends State<Shoping> {
                                         backgroundColor: Colors.grey[300],
                                         foregroundColor: Colors.black,
                                         elevation: 0,
-                                        padding: EdgeInsets.symmetric(vertical: 12),
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                         ),
                                       ),
                                       child: Text(
                                         'KEMBALI',
-                                        style: TextStyle(fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ),
@@ -613,16 +702,19 @@ class _ShopingState extends State<Shoping> {
                                   Expanded(
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        if (startDate == null || endDate == null) {
-                                          ScaffoldMessenger.of(context).showSnackBar(
+                                        if (startDate == null ||
+                                            endDate == null) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
                                             SnackBar(
-                                              content: Text('Pilih tanggal peminjaman dan pengembalian terlebih dahulu'),
+                                              content: Text(
+                                                  'Pilih tanggal peminjaman dan pengembalian terlebih dahulu'),
                                               backgroundColor: Colors.red[400],
                                             ),
                                           );
                                           return;
                                         }
-                                        
+
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -634,14 +726,17 @@ class _ShopingState extends State<Shoping> {
                                         backgroundColor: Colors.green[700],
                                         foregroundColor: Colors.white,
                                         elevation: 0,
-                                        padding: EdgeInsets.symmetric(vertical: 12),
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                         ),
                                       ),
                                       child: Text(
                                         'BAYAR SEKARANG',
-                                        style: TextStyle(fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ),
@@ -661,12 +756,15 @@ class _ShopingState extends State<Shoping> {
                 elevation: 0,
                 padding: EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30), // More rounded corners like in the image
+                  borderRadius: BorderRadius.circular(
+                      30), // More rounded corners like in the image
                 ),
                 minimumSize: Size(double.infinity, 56), // Full width and tall
               ),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 24), // Add horizontal padding to center text better
+                padding: EdgeInsets.symmetric(
+                    horizontal:
+                        24), // Add horizontal padding to center text better
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -772,7 +870,7 @@ class _SlidableDeleteItemState extends State<SlidableDeleteItem> {
             }
           }
         }
-        
+
         // Reset drag distance
         setState(() {
           _dragDistance = 0;
@@ -819,11 +917,8 @@ class _SlidableDeleteItemState extends State<SlidableDeleteItem> {
           // Item content that slides
           AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            transform: Matrix4.translationValues(
-              widget.isExpanded ? -100 : 0,
-              0, 
-              0
-            ),
+            transform:
+                Matrix4.translationValues(widget.isExpanded ? -100 : 0, 0, 0),
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
@@ -838,7 +933,8 @@ class _SlidableDeleteItemState extends State<SlidableDeleteItem> {
               child: Column(
                 children: [
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center, // Center align all row content
+                    crossAxisAlignment: CrossAxisAlignment
+                        .center, // Center align all row content
                     children: [
                       // Image with price badge
                       Stack(
@@ -869,7 +965,8 @@ class _SlidableDeleteItemState extends State<SlidableDeleteItem> {
                               ),
                               child: Center(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 4),
                                   child: Text(
                                     widget.formatToRupiah(widget.item.price),
                                     style: const TextStyle(
@@ -912,7 +1009,8 @@ class _SlidableDeleteItemState extends State<SlidableDeleteItem> {
                             const SizedBox(height: 8),
                             // Price information
                             Text(
-                              widget.formatToRupiah(widget.item.price * widget.item.quantity),
+                              widget.formatToRupiah(
+                                  widget.item.price * widget.item.quantity),
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -923,7 +1021,8 @@ class _SlidableDeleteItemState extends State<SlidableDeleteItem> {
                       ),
                       // QTY selector - repositioned to align vertically centered
                       Column(
-                        mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+                        mainAxisAlignment:
+                            MainAxisAlignment.center, // Center vertically
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const Text(

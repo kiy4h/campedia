@@ -1,22 +1,20 @@
-/**
- * File         : notification.dart
- * Dibuat oleh  : Izzuddin Azzam, Al Ghifari
- * Tanggal      : 16-06-2025
- * Deskripsi    : File ini berisi halaman yang menampilkan berbagai notifikasi sistem seperti promo, 
- * ketersediaan barang, dan informasi pembayaran denda.
- * Dependencies : 
- * - checkout2.dart: digunakan untuk berpindah ke halaman pembayaran denda.
- */
+/// File         : notification.dart
+/// Dibuat oleh  : Izzuddin Azzam, Al Ghifari
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : File ini berisi halaman yang menampilkan berbagai notifikasi sistem seperti promo,
+/// ketersediaan barang, dan informasi pembayaran denda.
+/// Dependencies :
+/// - checkout2.dart: digunakan untuk berpindah ke halaman pembayaran denda.
+library;
 
 import 'package:flutter/material.dart';
 import 'package:tugas3provis/pages/shopping/payment_data/checkout2.dart';
 
-/** Widget NotificationPage
- * * Deskripsi:
- * - Menampilkan daftar notifikasi dalam bentuk kartu yang informatif.
- * - Setiap kartu notifikasi berisi ikon, judul, deskripsi, dan waktu.
- * - Merupakan StatelessWidget karena hanya menampilkan daftar notifikasi statis tanpa perlu mengelola perubahan state.
- */
+/// Widget NotificationPage
+/// * Deskripsi:
+/// - Menampilkan daftar notifikasi dalam bentuk kartu yang informatif.
+/// - Setiap kartu notifikasi berisi ikon, judul, deskripsi, dan waktu.
+/// - Merupakan StatelessWidget karena hanya menampilkan daftar notifikasi statis tanpa perlu mengelola perubahan state.
 class NotificationPage extends StatelessWidget {
   // Data statis yang berisi daftar notifikasi untuk ditampilkan.
   final List<Map<String, String>> notifications = [
@@ -37,7 +35,8 @@ class NotificationPage extends StatelessWidget {
     },
     {
       "title": "Bayar Denda Terlambat",
-      "subtitle": "Kamu dikenakan denda Rp10.000 karena terlambat mengembalikan perlengkapan.",
+      "subtitle":
+          "Kamu dikenakan denda Rp10.000 karena terlambat mengembalikan perlengkapan.",
       "time": "5 jam lalu",
     },
   ];
@@ -173,7 +172,8 @@ class NotificationPage extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Colors.white,
                             backgroundColor: Colors.red,
-                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 24),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),

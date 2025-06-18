@@ -1,24 +1,22 @@
-/**
- * File        : review_page.dart
- * Dibuat oleh  : Izzuddin Azzam
- * Tanggal      : 16-06-2025
- * Deskripsi    : Halaman ini memungkinkan pengguna untuk memberikan rating dan menulis ulasan/review
- * terhadap pengalaman mereka dalam menggunakan layanan atau produk.
- * Dependencies :
- * - flutter/material.dart: Mengimpor komponen dan widget dasar Flutter Material Design.
- * - ../../beranda/home.dart: Mengimpor halaman utama (Home) untuk navigasi setelah proses review selesai.
- */
+/// File        : review_page.dart
+/// Dibuat oleh  : Izzuddin Azzam
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : Halaman ini memungkinkan pengguna untuk memberikan rating dan menulis ulasan/review
+/// terhadap pengalaman mereka dalam menggunakan layanan atau produk.
+/// Dependencies :
+/// - flutter/material.dart: Mengimpor komponen dan widget dasar Flutter Material Design.
+/// - ../../beranda/home.dart: Mengimpor halaman utama (Home) untuk navigasi setelah proses review selesai.
+library;
 
 import 'package:flutter/material.dart'; // Import library Flutter Material untuk membangun UI
 import '../../beranda/home.dart'; // Import halaman Home untuk navigasi kembali setelah review selesai
 
-/** Widget [ReviewPage]
- *
- * Deskripsi:
- * - Ini adalah widget utama untuk halaman pemberian ulasan.
- * - Widget ini memungkinkan pengguna memilih rating bintang dan menulis komentar.
- * - Ini adalah widget StatefulWidget karena memiliki state yang dapat berubah (nilai rating dan teks review).
- */
+/// Widget [ReviewPage]
+///
+/// Deskripsi:
+/// - Ini adalah widget utama untuk halaman pemberian ulasan.
+/// - Widget ini memungkinkan pengguna memilih rating bintang dan menulis komentar.
+/// - Ini adalah widget StatefulWidget karena memiliki state yang dapat berubah (nilai rating dan teks review).
 class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key}); // Konstruktor widget dengan optional key
 
@@ -27,19 +25,21 @@ class ReviewPage extends StatefulWidget {
    * Return: Sebuah instance dari [_ReviewPageState].
    */
   @override
-  _ReviewPageState createState() => _ReviewPageState(); // Membuat state ReviewPage
+  _ReviewPageState createState() =>
+      _ReviewPageState(); // Membuat state ReviewPage
 }
 
-/** Widget [_ReviewPageState]
- *
- * Deskripsi:
- * - Ini adalah state yang terkait dengan widget [ReviewPage].
- * - Mengelola nilai rating yang dipilih pengguna dan input teks ulasan.
- * - Bertanggung jawab untuk membangun dan memperbarui UI berdasarkan interaksi pengguna.
- */
+/// Widget [_ReviewPageState]
+///
+/// Deskripsi:
+/// - Ini adalah state yang terkait dengan widget [ReviewPage].
+/// - Mengelola nilai rating yang dipilih pengguna dan input teks ulasan.
+/// - Bertanggung jawab untuk membangun dan memperbarui UI berdasarkan interaksi pengguna.
 class _ReviewPageState extends State<ReviewPage> {
-  double _rating = 5.0; // Menyimpan nilai rating saat ini (default 5.0), dapat berubah.
-  final TextEditingController _controller = TextEditingController(); // Mengontrol input dari TextField review.
+  double _rating =
+      5.0; // Menyimpan nilai rating saat ini (default 5.0), dapat berubah.
+  final TextEditingController _controller =
+      TextEditingController(); // Mengontrol input dari TextField review.
 
   /* Fungsi ini membangun tampilan ikon bintang individual berdasarkan indeks dan nilai rating saat ini.
    *
@@ -89,7 +89,8 @@ class _ReviewPageState extends State<ReviewPage> {
    */
   @override
   void dispose() {
-    _controller.dispose(); // Bersihkan controller saat widget dihapus dari tree untuk mencegah memory leak.
+    _controller
+        .dispose(); // Bersihkan controller saat widget dihapus dari tree untuk mencegah memory leak.
     super.dispose();
   }
 
@@ -123,7 +124,8 @@ class _ReviewPageState extends State<ReviewPage> {
            * - Ikon silang berwarna hitam sebagai indikator tombol tutup.
            */
           icon: const Icon(Icons.close, color: Colors.black),
-          onPressed: () => Navigator.pop(context), // Kembali ke halaman sebelumnya
+          onPressed: () =>
+              Navigator.pop(context), // Kembali ke halaman sebelumnya
         ),
         /** Widget [Text]
          * * Deskripsi:
@@ -132,7 +134,8 @@ class _ReviewPageState extends State<ReviewPage> {
          */
         title: const Text(
           'Write Reviews', // Judul AppBar
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
         ),
         centerTitle: true, // Judul berada di tengah AppBar
       ),
@@ -147,15 +150,18 @@ class _ReviewPageState extends State<ReviewPage> {
          * - Memberikan padding horizontal pada konten utama halaman.
          */
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0), // Padding horizontal
+          padding: const EdgeInsets.symmetric(
+              horizontal: 24.0), // Padding horizontal
           /** Widget [Column]
            * * Deskripsi:
            * - Mengatur tata letak elemen-elemen UI (teks, rating, TextField, tombol) secara vertikal.
            * - Elemen-elemen ini akan di tengah secara vertikal dan horizontal.
            */
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center, // Tengah secara vertikal
-            crossAxisAlignment: CrossAxisAlignment.center, // Tengah secara horizontal
+            mainAxisAlignment:
+                MainAxisAlignment.center, // Tengah secara vertikal
+            crossAxisAlignment:
+                CrossAxisAlignment.center, // Tengah secara horizontal
             children: [
               /** Widget [Text]
                * * Deskripsi:
@@ -176,7 +182,8 @@ class _ReviewPageState extends State<ReviewPage> {
               const Text(
                 'Gimana pengalamanmu? Ceritain yuk biar yang lain juga bisa tahu serunya pakai alat kemah dari kami!',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, color: Colors.black54), // Teks penjelasan
+                style: TextStyle(
+                    fontSize: 18, color: Colors.black54), // Teks penjelasan
               ),
               const SizedBox(height: 32),
 
@@ -186,8 +193,10 @@ class _ReviewPageState extends State<ReviewPage> {
                * - Nilai ini diperbarui secara dinamis saat pengguna memilih bintang.
                */
               Text(
-                _rating.toStringAsFixed(1), // Tampilkan nilai rating (1 desimal)
-                style: const TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
+                _rating
+                    .toStringAsFixed(1), // Tampilkan nilai rating (1 desimal)
+                style:
+                    const TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
 
@@ -197,7 +206,8 @@ class _ReviewPageState extends State<ReviewPage> {
                */
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(5, (index) => _buildStar(index)), // Buat 5 bintang rating
+                children: List.generate(
+                    5, (index) => _buildStar(index)), // Buat 5 bintang rating
               ),
               const SizedBox(height: 32),
 
@@ -222,12 +232,14 @@ class _ReviewPageState extends State<ReviewPage> {
                     hintText: 'Write your review here', // Placeholder
                     contentPadding: const EdgeInsets.all(16.0),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20), // Border membulat
+                      borderRadius:
+                          BorderRadius.circular(20), // Border membulat
                       borderSide: BorderSide(color: Colors.grey.shade300),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.grey.shade500), // Border saat fokus
+                      borderSide: BorderSide(
+                          color: Colors.grey.shade500), // Border saat fokus
                     ),
                   ),
                 ),
@@ -256,9 +268,11 @@ class _ReviewPageState extends State<ReviewPage> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF627D2C), // Warna tombol (hijau zaitun)
+                    backgroundColor:
+                        const Color(0xFF627D2C), // Warna tombol (hijau zaitun)
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25), // Sudut tombol membulat
+                      borderRadius:
+                          BorderRadius.circular(25), // Sudut tombol membulat
                     ),
                   ),
                   /** Widget [Text]
@@ -268,7 +282,10 @@ class _ReviewPageState extends State<ReviewPage> {
                    */
                   child: const Text(
                     'DONE', // Teks tombol
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                 ),
               ),

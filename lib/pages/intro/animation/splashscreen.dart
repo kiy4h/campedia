@@ -1,29 +1,27 @@
-/**
- * File        : splashscreen.dart
- * Dibuat oleh  : Izzuddin Azzam
- * Tanggal      : 15-06-2025
- * Deskripsi    : File ini bertanggung jawab untuk menampilkan splash screen saat aplikasi Campedia
- * pertama kali diluncurkan. Setelah durasi tertentu, aplikasi akan secara otomatis
- * menavigasi pengguna ke halaman onboarding untuk pengenalan fitur.
- * Dependencies :
- * - dart:async: Diperlukan untuk menggunakan Future.delayed guna mengatur penundaan navigasi.
- * - flutter/material.dart: Pustaka dasar Flutter untuk membangun antarmuka pengguna.
- * - onboarding.dart: Halaman tujuan navigasi setelah splash screen selesai.
- */
+/// File        : splashscreen.dart
+/// Dibuat oleh  : Izzuddin Azzam
+/// Tanggal      : 15-06-2025
+/// Deskripsi    : File ini bertanggung jawab untuk menampilkan splash screen saat aplikasi Campedia
+/// pertama kali diluncurkan. Setelah durasi tertentu, aplikasi akan secara otomatis
+/// menavigasi pengguna ke halaman onboarding untuk pengenalan fitur.
+/// Dependencies :
+/// - dart:async: Diperlukan untuk menggunakan Future.delayed guna mengatur penundaan navigasi.
+/// - flutter/material.dart: Pustaka dasar Flutter untuk membangun antarmuka pengguna.
+/// - onboarding.dart: Halaman tujuan navigasi setelah splash screen selesai.
+library;
 
 import 'dart:async'; // Mengimpor pustaka 'dart:async' untuk fungsi Future.delayed.
 import 'package:flutter/material.dart'; // Mengimpor pustaka dasar Flutter untuk UI.
 import 'onboarding.dart'; // Mengimpor halaman OnboardingScreen.
 
-/** Widget [SplashScreen]
- *
- * Deskripsi:
- * - Widget ini berfungsi sebagai tampilan pembuka aplikasi Campedia.
- * - Menampilkan logo, nama aplikasi, dan tagline.
- * - Ini adalah StatefulWidget karena memiliki state yang mengelola waktu penundaan
- * sebelum navigasi otomatis ke halaman onboarding. State tersebut akan diinisialisasi
- * sekali saat widget pertama kali dibuat.
- */
+/// Widget [SplashScreen]
+///
+/// Deskripsi:
+/// - Widget ini berfungsi sebagai tampilan pembuka aplikasi Campedia.
+/// - Menampilkan logo, nama aplikasi, dan tagline.
+/// - Ini adalah StatefulWidget karena memiliki state yang mengelola waktu penundaan
+/// sebelum navigasi otomatis ke halaman onboarding. State tersebut akan diinisialisasi
+/// sekali saat widget pertama kali dibuat.
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -31,13 +29,12 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-/** State [ _SplashScreenState]
- *
- * Deskripsi:
- * - Mengelola state internal untuk [SplashScreen].
- * - Bertanggung jawab untuk memicu navigasi otomatis setelah durasi tertentu
- * saat widget pertama kali dibuat.
- */
+/// State [ _SplashScreenState]
+///
+/// Deskripsi:
+/// - Mengelola state internal untuk [SplashScreen].
+/// - Bertanggung jawab untuk memicu navigasi otomatis setelah durasi tertentu
+/// saat widget pertama kali dibuat.
 class _SplashScreenState extends State<SplashScreen> {
   /* Fungsi ini diinisialisasi saat State objek dibuat.
    *
@@ -76,7 +73,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF9D5), // Warna latar belakang krem kekuningan.
+      backgroundColor:
+          const Color(0xFFFFF9D5), // Warna latar belakang krem kekuningan.
       /** Widget [Center]
        * * Deskripsi:
        * - Memusatkan konten di tengah layar.
@@ -88,7 +86,8 @@ class _SplashScreenState extends State<SplashScreen> {
          * - Memusatkan elemen-elemen tersebut di tengah kolom.
          */
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // Memusatkan konten secara vertikal.
+          mainAxisAlignment:
+              MainAxisAlignment.center, // Memusatkan konten secara vertikal.
           children: [
             // --- Logo Campedia ---
             /** Widget [Image.asset]
@@ -100,7 +99,8 @@ class _SplashScreenState extends State<SplashScreen> {
               'images/assets_OnBoarding0/logoCampedia.png', // Path ke aset gambar logo.
               width: 200, // Lebar gambar.
               height: 200, // Tinggi gambar.
-              fit: BoxFit.contain, // Gambar akan diukur untuk masuk ke dalam kotak sumber.
+              fit: BoxFit
+                  .contain, // Gambar akan diukur untuk masuk ke dalam kotak sumber.
             ),
             const SizedBox(height: 20), // Spasi vertikal antara logo dan judul.
 
@@ -118,7 +118,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 color: Color(0xFF475A3A), // Warna teks hijau tua.
               ),
             ),
-            const SizedBox(height: 8), // Spasi vertikal antara judul dan tagline.
+            const SizedBox(
+                height: 8), // Spasi vertikal antara judul dan tagline.
 
             // --- Tagline Aplikasi ---
             /** Widget [Text]

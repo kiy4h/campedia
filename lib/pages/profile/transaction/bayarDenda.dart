@@ -1,25 +1,23 @@
-/**
- * File        : detail_denda_page.dart
- * Dibuat oleh  : Izzuddin Azzam
- * Tanggal      : 16-06-2025
- * Deskripsi    : Halaman ini menampilkan detail informasi mengenai denda kerusakan atau pelanggaran
- * pada barang yang disewa. Detail mencakup nama barang, deskripsi kerusakan, jenis pelanggaran,
- * nominal denda, dan catatan tambahan, serta dilengkapi dengan tombol untuk melanjutkan pembayaran denda.
- * Dependencies :
- * - flutter/material.dart: Pustaka dasar Flutter untuk membangun UI.
- */
+/// File        : detail_denda_page.dart
+/// Dibuat oleh  : Izzuddin Azzam
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : Halaman ini menampilkan detail informasi mengenai denda kerusakan atau pelanggaran
+/// pada barang yang disewa. Detail mencakup nama barang, deskripsi kerusakan, jenis pelanggaran,
+/// nominal denda, dan catatan tambahan, serta dilengkapi dengan tombol untuk melanjutkan pembayaran denda.
+/// Dependencies :
+/// - flutter/material.dart: Pustaka dasar Flutter untuk membangun UI.
+library;
 
 import 'package:flutter/material.dart';
 
-/** Widget [DetailDendaPage]
- *
- * Deskripsi:
- * - Halaman ini berfungsi untuk menampilkan rincian denda yang dikenakan pada penyewaan barang.
- * - Ini adalah bagian dari alur penanganan insiden atau pengembalian barang yang bermasalah.
- * - Merupakan StatelessWidget karena data denda yang ditampilkan bersifat statis (untuk contoh ini)
- * dan tidak ada interaksi yang mengubah state di halaman ini. Dalam implementasi nyata,
- * data denda mungkin akan diterima sebagai parameter atau dari provider state management.
- */
+/// Widget [DetailDendaPage]
+///
+/// Deskripsi:
+/// - Halaman ini berfungsi untuk menampilkan rincian denda yang dikenakan pada penyewaan barang.
+/// - Ini adalah bagian dari alur penanganan insiden atau pengembalian barang yang bermasalah.
+/// - Merupakan StatelessWidget karena data denda yang ditampilkan bersifat statis (untuk contoh ini)
+/// dan tidak ada interaksi yang mengubah state di halaman ini. Dalam implementasi nyata,
+/// data denda mungkin akan diterima sebagai parameter atau dari provider state management.
 class DetailDendaPage extends StatelessWidget {
   const DetailDendaPage({super.key});
 
@@ -64,7 +62,8 @@ class DetailDendaPage extends StatelessWidget {
          * * Deskripsi:
          * - Tombol navigasi kembali ke halaman sebelumnya.
          */
-        leading: const BackButton(color: Colors.black), // Tombol kembali berwarna hitam.
+        leading: const BackButton(
+            color: Colors.black), // Tombol kembali berwarna hitam.
       ),
       /** Widget [Padding]
        * * Deskripsi:
@@ -83,7 +82,8 @@ class DetailDendaPage extends StatelessWidget {
              * * Deskripsi:
              * - Ikon peringatan visual yang menarik perhatian.
              */
-            const Icon(Icons.report_gmailerrorred_rounded, size: 60, color: Color(0xFF627D2C)),
+            const Icon(Icons.report_gmailerrorred_rounded,
+                size: 60, color: Color(0xFF627D2C)),
             const SizedBox(height: 12), // Spasi vertikal.
 
             /** Widget [Text]
@@ -110,12 +110,18 @@ class DetailDendaPage extends StatelessWidget {
                */
               child: ListView(
                 children: [
-                  _buildDetailCard('Nama Barang', namaBarang), // Kartu untuk nama barang.
-                  _buildImageCard('https://via.placeholder.com/300x180.png?text=Gambar+Barang'), // Kartu untuk gambar barang.
-                  _buildDetailCard('Deskripsi Barang', deskripsi), // Kartu untuk deskripsi.
-                  _buildDetailCard('Jenis Pelanggaran', jenisPelanggaran), // Kartu untuk jenis pelanggaran.
-                  _buildDetailCard('Nominal Denda', nominal), // Kartu untuk nominal denda.
-                  _buildDetailCard('Catatan Tambahan', catatan), // Kartu untuk catatan tambahan.
+                  _buildDetailCard(
+                      'Nama Barang', namaBarang), // Kartu untuk nama barang.
+                  _buildImageCard(
+                      'https://via.placeholder.com/300x180.png?text=Gambar+Barang'), // Kartu untuk gambar barang.
+                  _buildDetailCard(
+                      'Deskripsi Barang', deskripsi), // Kartu untuk deskripsi.
+                  _buildDetailCard('Jenis Pelanggaran',
+                      jenisPelanggaran), // Kartu untuk jenis pelanggaran.
+                  _buildDetailCard(
+                      'Nominal Denda', nominal), // Kartu untuk nominal denda.
+                  _buildDetailCard('Catatan Tambahan',
+                      catatan), // Kartu untuk catatan tambahan.
                 ],
               ),
             ),
@@ -158,9 +164,11 @@ class DetailDendaPage extends StatelessWidget {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF627D2C), // Warna latar belakang tombol (hijau zaitun).
+                  backgroundColor: const Color(
+                      0xFF627D2C), // Warna latar belakang tombol (hijau zaitun).
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30), // Sudut tombol membulat.
+                    borderRadius:
+                        BorderRadius.circular(30), // Sudut tombol membulat.
                   ),
                 ),
               ),
@@ -182,8 +190,11 @@ class DetailDendaPage extends StatelessWidget {
   Widget _buildDetailCard(String label, String value) {
     return Card(
       elevation: 2, // Ketinggian bayangan kartu.
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), // Bentuk kartu dengan sudut membulat.
-      margin: const EdgeInsets.only(bottom: 16), // Margin bawah untuk setiap kartu.
+      shape: RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.circular(16)), // Bentuk kartu dengan sudut membulat.
+      margin:
+          const EdgeInsets.only(bottom: 16), // Margin bawah untuk setiap kartu.
       child: Padding(
         padding: const EdgeInsets.all(16), // Padding internal kartu.
         /** Widget [Column]
@@ -198,14 +209,17 @@ class DetailDendaPage extends StatelessWidget {
              * - Menampilkan **label detail** (misalnya "Nama Barang").
              * - Gaya teks dengan ukuran 14 dan warna abu-abu.
              */
-            Text(label, style: const TextStyle(fontSize: 14, color: Colors.grey)),
+            Text(label,
+                style: const TextStyle(fontSize: 14, color: Colors.grey)),
             const SizedBox(height: 6), // Spasi vertikal.
             /** Widget [Text]
              * * Deskripsi:
              * - Menampilkan **nilai detail** (misalnya "Kabel HDMI").
              * - Gaya teks dengan ukuran 16 dan font semi-bold.
              */
-            Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+            Text(value,
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           ],
         ),
       ),
@@ -222,8 +236,11 @@ class DetailDendaPage extends StatelessWidget {
   Widget _buildImageCard(String imageUrl) {
     return Card(
       elevation: 2, // Ketinggian bayangan kartu.
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), // Bentuk kartu dengan sudut membulat.
-      margin: const EdgeInsets.only(bottom: 16), // Margin bawah untuk setiap kartu.
+      shape: RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.circular(16)), // Bentuk kartu dengan sudut membulat.
+      margin:
+          const EdgeInsets.only(bottom: 16), // Margin bawah untuk setiap kartu.
       /** Widget [ClipRRect]
        * * Deskripsi:
        * - Memastikan gambar produk dipotong sesuai dengan border radius kartu.

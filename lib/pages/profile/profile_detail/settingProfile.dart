@@ -1,24 +1,22 @@
-/**
- * File        : settings_page.dart
- * Dibuat oleh  : Izzuddin Azzam
- * Tanggal      : 16-06-2025
- * Deskripsi    : Halaman ini menyediakan berbagai opsi pengaturan untuk pengguna aplikasi Campedia.
- * Pengguna dapat mengelola informasi profil, preferensi aplikasi (notifikasi, bahasa),
- * mengakses bantuan, melihat informasi tentang aplikasi, dan keluar dari akun mereka.
- * Dependencies :
- * - flutter/material.dart: Pustaka dasar Flutter untuk membangun UI.
- */
+/// File        : settings_page.dart
+/// Dibuat oleh  : Izzuddin Azzam
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : Halaman ini menyediakan berbagai opsi pengaturan untuk pengguna aplikasi Campedia.
+/// Pengguna dapat mengelola informasi profil, preferensi aplikasi (notifikasi, bahasa),
+/// mengakses bantuan, melihat informasi tentang aplikasi, dan keluar dari akun mereka.
+/// Dependencies :
+/// - flutter/material.dart: Pustaka dasar Flutter untuk membangun UI.
+library;
 
 import 'package:flutter/material.dart';
 
-/** Widget [SettingsPage]
- *
- * Deskripsi:
- * - Halaman ini berfungsi sebagai antarmuka pengguna untuk mengatur preferensi dan informasi akun.
- * - Merupakan bagian penting dari pengalaman pengguna untuk personalisasi aplikasi.
- * - Ini adalah StatefulWidget karena memiliki state yang berubah (misalnya, status notifikasi, pilihan bahasa)
- * yang perlu diperbarui dan dirender ulang di UI.
- */
+/// Widget [SettingsPage]
+///
+/// Deskripsi:
+/// - Halaman ini berfungsi sebagai antarmuka pengguna untuk mengatur preferensi dan informasi akun.
+/// - Merupakan bagian penting dari pengalaman pengguna untuk personalisasi aplikasi.
+/// - Ini adalah StatefulWidget karena memiliki state yang berubah (misalnya, status notifikasi, pilihan bahasa)
+/// yang perlu diperbarui dan dirender ulang di UI.
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -26,13 +24,12 @@ class SettingsPage extends StatefulWidget {
   State<SettingsPage> createState() => _SettingsPageState();
 }
 
-/** State [ _SettingsPageState]
- *
- * Deskripsi:
- * - Mengelola state internal untuk [SettingsPage].
- * - Menyimpan status _notifications (on/off) dan _selectedLanguage.
- * - Membangun UI halaman pengaturan berdasarkan state ini.
- */
+/// State [ _SettingsPageState]
+///
+/// Deskripsi:
+/// - Mengelola state internal untuk [SettingsPage].
+/// - Menyimpan status _notifications (on/off) dan _selectedLanguage.
+/// - Membangun UI halaman pengaturan berdasarkan state ini.
 class _SettingsPageState extends State<SettingsPage> {
   // Variabel untuk mengontrol status switch notifikasi. Defaultnya aktif.
   bool _notifications = true;
@@ -70,8 +67,10 @@ class _SettingsPageState extends State<SettingsPage> {
          * - Tombol ikon di sisi kiri AppBar untuk kembali ke halaman sebelumnya.
          */
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white), // Ikon panah kembali berwarna putih.
-          onPressed: () => Navigator.pop(context), // Aksi untuk kembali ke halaman sebelumnya.
+          icon: const Icon(Icons.arrow_back,
+              color: Colors.white), // Ikon panah kembali berwarna putih.
+          onPressed: () => Navigator.pop(
+              context), // Aksi untuk kembali ke halaman sebelumnya.
         ),
       ),
       /** Widget [ListView]
@@ -220,7 +219,8 @@ class _SettingsPageState extends State<SettingsPage> {
    */
   Widget _buildSectionTitle(String title) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Padding di sekitar judul.
+      padding: const EdgeInsets.symmetric(
+          horizontal: 16, vertical: 8), // Padding di sekitar judul.
       /** Widget [Text]
        * * Deskripsi:
        * - Teks judul bagian (misalnya "Profil", "Aplikasi").
@@ -249,12 +249,12 @@ class _SettingsPageState extends State<SettingsPage> {
    * Return: Widget [ListTile] yang merepresentasikan satu opsi pengaturan.
    */
   Widget _buildSettingsItem(
-      String title,
-      String subtitle,
-      IconData icon, {
-        required VoidCallback onTap,
-        Color? textColor,
-      }) {
+    String title,
+    String subtitle,
+    IconData icon, {
+    required VoidCallback onTap,
+    Color? textColor,
+  }) {
     return ListTile(
       /** Widget [Icon]
        * * Deskripsi:
@@ -263,7 +263,9 @@ class _SettingsPageState extends State<SettingsPage> {
        */
       leading: Icon(
         icon,
-        color: textColor ?? Colors.green.shade800, // Warna ikon default atau sesuai `textColor`.
+        color: textColor ??
+            Colors
+                .green.shade800, // Warna ikon default atau sesuai `textColor`.
       ),
       /** Widget [Text]
        * * Deskripsi:
@@ -273,8 +275,11 @@ class _SettingsPageState extends State<SettingsPage> {
       title: Text(
         title,
         style: TextStyle(
-          color: textColor ?? Colors.black, // Warna teks default atau sesuai `textColor`.
-          fontWeight: textColor != null ? FontWeight.bold : FontWeight.normal, // Teks tebal jika warna diatur.
+          color: textColor ??
+              Colors.black, // Warna teks default atau sesuai `textColor`.
+          fontWeight: textColor != null
+              ? FontWeight.bold
+              : FontWeight.normal, // Teks tebal jika warna diatur.
         ),
       ),
       /** Widget [Text]
@@ -310,7 +315,8 @@ class _SettingsPageState extends State<SettingsPage> {
            */
           title: const Text('Pilih Bahasa'),
           children: [
-            _buildLanguageOption('Bahasa Indonesia'), // Opsi bahasa "Bahasa Indonesia".
+            _buildLanguageOption(
+                'Bahasa Indonesia'), // Opsi bahasa "Bahasa Indonesia".
             _buildLanguageOption('English'), // Opsi bahasa "English".
           ],
         );
@@ -338,7 +344,8 @@ class _SettingsPageState extends State<SettingsPage> {
        * - Mengatur tata letak teks bahasa dan ikon cek (jika dipilih) secara horizontal.
        */
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween, // Menyebarkan elemen secara merata.
+        mainAxisAlignment:
+            MainAxisAlignment.spaceBetween, // Menyebarkan elemen secara merata.
         children: [
           /** Widget [Text]
            * * Deskripsi:
@@ -404,7 +411,8 @@ class _SettingsPageState extends State<SettingsPage> {
               onPressed: () {
                 // TODO: Tambahkan logika logout di sini (misalnya, menghapus token sesi).
                 Navigator.pop(context); // Menutup dialog konfirmasi.
-                Navigator.pop(context); // Kembali ke halaman sebelumnya (misal: halaman login).
+                Navigator.pop(
+                    context); // Kembali ke halaman sebelumnya (misal: halaman login).
               },
               /** Widget [Text]
                * * Deskripsi:

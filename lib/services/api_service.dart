@@ -251,15 +251,15 @@ class ApiService {
     try {
       final url =
           '${ApiConfig.baseUrl}${ApiConfig.barangDetail}?barang_id=$barangId&user_id=$userId';
-      print('Requesting URL: $url'); // Debug log
+      // print('Requesting URL: $url'); // Debug log
 
       final response = await http.get(
         Uri.parse(url),
         headers: ApiConfig.headers,
       );
 
-      print('Response status: ${response.statusCode}'); // Debug log
-      print('Response body: ${response.body}'); // Debug log
+      // print('Response status: ${response.statusCode}'); // Debug log
+      // print('Response body: ${response.body}'); // Debug log
 
       final responseData = jsonDecode(response.body);
       if (response.statusCode == 200) {
@@ -279,7 +279,7 @@ class ApiService {
             mergedData['foto'] = barangData['foto'];
           }
 
-          print('Merged data: $mergedData'); // Debug log
+          // print('Merged data: $mergedData'); // Debug log
 
           final DetailBarang barang = DetailBarang.fromJson(mergedData);
           return ApiResponse.success(barang, 'Item detail loaded successfully');
@@ -293,7 +293,7 @@ class ApiService {
         return ApiResponse.error(error);
       }
     } catch (e) {
-      print('Error in getBarangDetail: $e'); // Debug log
+      // print('Error in getBarangDetail: $e'); // Debug log
       return ApiResponse.error('Network error: $e');
     }
   }

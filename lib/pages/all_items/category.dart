@@ -1,13 +1,12 @@
-/**
- * File         : category.dart
- * Dibuat oleh  : Izzuddin Azzam, Al Ghifari
- * Tanggal      : 16-06-2025
- * Deskripsi    : File ini berisi halaman yang menampilkan berbagai kategori produk camping dalam bentuk grid dengan gambar dan jumlah item.
- * Dependencies : 
- * - google_fonts: digunakan untuk mengatur font Poppins pada tampilan teks.
- * - allListItem.dart: digunakan untuk berpindah ke halaman daftar semua barang.
- * - navbar.dart: digunakan untuk menampilkan navigasi bawah layar.
- */
+/// File         : category.dart
+/// Dibuat oleh  : Izzuddin Azzam, Al Ghifari
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : File ini berisi halaman yang menampilkan berbagai kategori produk camping dalam bentuk grid dengan gambar dan jumlah item.
+/// Dependencies :
+/// - google_fonts: digunakan untuk mengatur font Poppins pada tampilan teks.
+/// - allListItem.dart: digunakan untuk berpindah ke halaman daftar semua barang.
+/// - navbar.dart: digunakan untuk menampilkan navigasi bawah layar.
+library;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,12 +18,11 @@ void main() {
   runApp(const CategoryPage());
 }
 
-/** Widget CategoryPage
- * * Deskripsi:
- * - Widget ini adalah root untuk halaman kategori produk.
- * - Mengatur konfigurasi global seperti tema, warna, dan font untuk halaman ini.
- * - Merupakan StatelessWidget karena tidak perlu mengelola state internal yang berubah.
- */
+/// Widget CategoryPage
+/// * Deskripsi:
+/// - Widget ini adalah root untuk halaman kategori produk.
+/// - Mengatur konfigurasi global seperti tema, warna, dan font untuk halaman ini.
+/// - Merupakan StatelessWidget karena tidak perlu mengelola state internal yang berubah.
 class CategoryPage extends StatelessWidget {
   const CategoryPage({super.key});
 
@@ -50,23 +48,56 @@ class CategoryPage extends StatelessWidget {
   }
 }
 
-/** Widget CategoriesPage
- * * Deskripsi:
- * - Widget ini menampilkan halaman utama yang berisi daftar kategori produk.
- * - Tampilan utama menggunakan layout GridView untuk menyusun kartu-kartu kategori.
- * - Merupakan StatelessWidget karena konten kategori bersifat statis dan tidak ada perubahan state di dalam widget ini.
- */
+/// Widget CategoriesPage
+/// * Deskripsi:
+/// - Widget ini menampilkan halaman utama yang berisi daftar kategori produk.
+/// - Tampilan utama menggunakan layout GridView untuk menyusun kartu-kartu kategori.
+/// - Merupakan StatelessWidget karena konten kategori bersifat statis dan tidak ada perubahan state di dalam widget ini.
 class CategoriesPage extends StatelessWidget {
   // Variabel final untuk menyimpan data kategori. Setiap kategori adalah Map yang berisi nama, path icon, dan jumlah item.
   final List<Map<String, dynamic>> categories = [
-    {"name": "Alat Masak", "icon": "images/assets_Categories/cat_Kompor.png", "items": 87},
-    {"name": "Tenda", "icon": "images/assets_Categories/cat_Tenda.png", "items": 87},
-    {"name": "Sepatu", "icon": "images/assets_Categories/cat_Sepatu.png", "items": 87},
-    {"name": "Tas Gunung", "icon": "images/assets_Categories/cat_Tas.png", "items": 27},
-    {"name": "Senter", "icon": "images/assets_Categories/cat_Senter.png", "items": 87},
-    {"name": "Jaket Gunung", "icon": "images/assets_Categories/cat_Jaket.png", "items": 87},
-    {"name": "Alat Pendukung", "icon": "images/assets_Categories/cat_KeamananNavigasi.png", "items": 87},
-    {"name": "Fasilitas Tambahan", "icon": "images/assets_Categories/cat_FasilitasTambahan.png", "items": 120},
+    {
+      "name": "Alat Masak",
+      "icon": "http://localhost:8000/images/assets_Categories/cat_Kompor.png",
+      "items": 87
+    },
+    {
+      "name": "Tenda",
+      "icon": "http://localhost:8000/images/assets_Categories/cat_Tenda.png",
+      "items": 87
+    },
+    {
+      "name": "Sepatu",
+      "icon": "http://localhost:8000/images/assets_Categories/cat_Sepatu.png",
+      "items": 87
+    },
+    {
+      "name": "Tas Gunung",
+      "icon": "http://localhost:8000/images/assets_Categories/cat_Tas.png",
+      "items": 27
+    },
+    {
+      "name": "Senter",
+      "icon": "http://localhost:8000/images/assets_Categories/cat_Senter.png",
+      "items": 87
+    },
+    {
+      "name": "Jaket Gunung",
+      "icon": "http://localhost:8000/images/assets_Categories/cat_Jaket.png",
+      "items": 87
+    },
+    {
+      "name": "Alat Pendukung",
+      "icon":
+          "http://localhost:8000/images/assets_Categories/cat_KeamananNavigasi.png",
+      "items": 87
+    },
+    {
+      "name": "Fasilitas Tambahan",
+      "icon":
+          "http://localhost:8000/images/assets_Categories/cat_FasilitasTambahan.png",
+      "items": 120
+    },
   ];
 
   CategoriesPage({super.key});
@@ -89,10 +120,10 @@ class CategoriesPage extends StatelessWidget {
         child: GridView.builder(
           // Pengaturan layout grid: jumlah kolom, rasio aspek, dan jarak antar item
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,        // 2 kolom
-            childAspectRatio: 1.1,    // Rasio lebar-tinggi setiap item
-            crossAxisSpacing: 16,     // Jarak horizontal antar item
-            mainAxisSpacing: 16,      // Jarak vertikal antar item
+            crossAxisCount: 2, // 2 kolom
+            childAspectRatio: 1.1, // Rasio lebar-tinggi setiap item
+            crossAxisSpacing: 16, // Jarak horizontal antar item
+            mainAxisSpacing: 16, // Jarak vertikal antar item
           ),
           // Jumlah total item dalam grid, diambil dari panjang list categories
           itemCount: categories.length,
@@ -116,7 +147,8 @@ class CategoriesPage extends StatelessWidget {
    * - context: Diperlukan untuk menangani navigasi saat kartu diklik.
    * * Return: Widget GestureDetector yang berisi Container (kartu) yang dapat diklik.
    */
-  Widget _buildCategoryCard(Map<String, dynamic> category, BuildContext context) {
+  Widget _buildCategoryCard(
+      Map<String, dynamic> category, BuildContext context) {
     // GestureDetector untuk membuat seluruh kartu dapat diklik
     return GestureDetector(
       onTap: () {
@@ -147,11 +179,16 @@ class CategoriesPage extends StatelessWidget {
             Container(
               width: 100,
               height: 100,
-              padding: const EdgeInsets.all(8),
-              // Widget Image untuk menampilkan ikon kategori dari asset
-              child: Image.asset(
+              padding: const EdgeInsets.all(
+                  8), // Widget Image untuk menampilkan ikon kategori dari network
+              child: Image.network(
                 category['icon'], // Mengambil path gambar dari data Map
                 fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) => const Icon(
+                  Icons.image_not_supported,
+                  size: 50,
+                  color: Colors.grey,
+                ),
               ),
             ),
             const SizedBox(height: 10),
@@ -199,7 +236,9 @@ PreferredSizeWidget buildAppBar({
     case 0:
       title = 'Home';
       actions = [
-        IconButton(onPressed: () {}, icon: const Icon(Icons.search, color: Colors.black)),
+        IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.search, color: Colors.black)),
       ];
       break;
     case 1:
@@ -216,7 +255,8 @@ PreferredSizeWidget buildAppBar({
           ),
           style: TextButton.styleFrom(
             foregroundColor: Colors.amber,
-            textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            textStyle:
+                const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           child: const Text('Place Order'),
         ),
@@ -231,7 +271,8 @@ PreferredSizeWidget buildAppBar({
           ),
           style: TextButton.styleFrom(
             foregroundColor: Colors.amber,
-            textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            textStyle:
+                const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           child: const Text('Place Order'),
         ),
@@ -240,7 +281,9 @@ PreferredSizeWidget buildAppBar({
     case 4:
       title = 'Profile';
       actions = [
-        IconButton(onPressed: () {}, icon: const Icon(Icons.settings, color: Colors.black)),
+        IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.settings, color: Colors.black)),
       ];
       break;
     default:
@@ -253,7 +296,9 @@ PreferredSizeWidget buildAppBar({
     backgroundColor: Colors.white,
     elevation: 0,
     // Widget Text untuk judul AppBar
-    title: Text(title, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20)),
+    title: Text(title,
+        style: const TextStyle(
+            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20)),
     // Daftar widget untuk tombol aksi di sebelah kanan AppBar
     actions: actions,
   );

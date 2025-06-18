@@ -1,12 +1,11 @@
-/**
- * File         : app_bar.dart
- * Dibuat oleh  : Izzuddin Azzam, Al Ghifari
- * Tanggal      : 16-06-2025
- * Deskripsi    : File ini berisi fungsi pembantu (helper function) yang dapat digunakan kembali 
- * untuk membuat widget AppBar yang disesuaikan untuk berbagai halaman dalam aplikasi.
- * Ketergantungan (Dependencies) : 
- * - flutter/material.dart: Digunakan untuk semua komponen UI dasar, termasuk AppBar.
- */
+/// File         : app_bar.dart
+/// Dibuat oleh  : Izzuddin Azzam, Al Ghifari
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : File ini berisi fungsi pembantu (helper function) yang dapat digunakan kembali
+/// untuk membuat widget AppBar yang disesuaikan untuk berbagai halaman dalam aplikasi.
+/// Ketergantungan (Dependencies) :
+/// - flutter/material.dart: Digunakan untuk semua komponen UI dasar, termasuk AppBar.
+library;
 
 import 'package:flutter/material.dart';
 

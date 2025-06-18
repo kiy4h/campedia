@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'termAndCondition.dart' as terms; // Tambahkan alias untuk menghindari konflik
+import 'termAndCondition.dart'
+    as terms; // Tambahkan alias untuk menghindari konflik
 import 'package:flutter/gestures.dart';
-import '../animation/onboarding.dart';
-import '../animation/congratulationsPopup.dart' as popup; // Popup ucapan selamat dengan alias
+import '../animation/congratulationsPopup.dart'
+    as popup; // Popup ucapan selamat dengan alias
 import '../../../providers/auth_provider.dart';
 
 void main() {
@@ -252,8 +253,8 @@ class _RegisterState extends State<Register> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const terms.TermsConditionPage()),
+                                              builder: (context) => const terms
+                                                  .TermsConditionPage()),
                                         );
                                       },
                                   ),
@@ -270,8 +271,8 @@ class _RegisterState extends State<Register> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const terms.TermsConditionPage()),
+                                              builder: (context) => const terms
+                                                  .TermsConditionPage()),
                                         );
                                       },
                                   ),

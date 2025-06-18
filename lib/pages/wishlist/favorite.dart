@@ -1,29 +1,26 @@
-/**
- * File         : favorite.dart
- * Dibuat oleh  : Izzuddin Azzam
- * Tanggal      : 16-06-2025
- * Deskripsi    : Halaman ini menampilkan daftar barang favorit pengguna dalam tampilan grid,
- *                lengkap dengan fitur untuk menyukai/menghapus favorit dan filter tambahan.
- * Dependencies : 
- * - flutter/material.dart
- * - font_awesome_flutter
- * - detailItem.dart (navigasi ke halaman detail barang)
- * - navbar.dart (bottom navigation bar aplikasi)
- */
+/// File         : favorite.dart
+/// Dibuat oleh  : Izzuddin Azzam
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : Halaman ini menampilkan daftar barang favorit pengguna dalam tampilan grid,
+///                lengkap dengan fitur untuk menyukai/menghapus favorit dan filter tambahan.
+/// Dependencies :
+/// - flutter/material.dart
+/// - font_awesome_flutter
+/// - detailItem.dart (navigasi ke halaman detail barang)
+/// - navbar.dart (bottom navigation bar aplikasi)
+library;
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../detail_items/detailItem.dart';
 import '../components/navbar.dart';
 
-/** Widget FavoritePage
- * 
- * Deskripsi:
- * - Root widget aplikasi yang menampilkan halaman favorit.
- * - Stateless karena tidak memiliki perubahan internal state pada widget ini.
- */
+/// Widget FavoritePage
+///
+/// Deskripsi:
+/// - Root widget aplikasi yang menampilkan halaman favorit.
+/// - Stateless karena tidak memiliki perubahan internal state pada widget ini.
 class FavoritePage extends StatelessWidget {
-  const FavoritePage({Key? key}) : super(key: key);
+  const FavoritePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +35,13 @@ class FavoritePage extends StatelessWidget {
   }
 }
 
-/** Widget ItemCategory
- * 
- * Deskripsi:
- * - Menampilkan daftar barang yang telah difavoritkan oleh pengguna dalam bentuk grid.
- * - Stateful karena memiliki interaksi pengguna seperti toggle ikon favorit dan filter.
- */
+/// Widget ItemCategory
+///
+/// Deskripsi:
+/// - Menampilkan daftar barang yang telah difavoritkan oleh pengguna dalam bentuk grid.
+/// - Stateful karena memiliki interaksi pengguna seperti toggle ikon favorit dan filter.
 class ItemCategory extends StatefulWidget {
-  ItemCategory({Key? key}) : super(key: key);
+  const ItemCategory({super.key});
 
   @override
   _ItemCategoryState createState() => _ItemCategoryState();
@@ -274,12 +270,11 @@ class _ItemCategoryState extends State<ItemCategory> {
   }
 }
 
-/** Widget FilterBottomSheet
- * 
- * Deskripsi:
- * - Widget bottom sheet yang digunakan untuk menyaring daftar barang favorit.
- * - Stateless karena data dikontrol dari atas oleh widget parent.
- */
+/// Widget FilterBottomSheet
+///
+/// Deskripsi:
+/// - Widget bottom sheet yang digunakan untuk menyaring daftar barang favorit.
+/// - Stateless karena data dikontrol dari atas oleh widget parent.
 class FilterBottomSheet extends StatelessWidget {
   final ScrollController scrollController;
   final List<String> selectedCategories;
@@ -291,7 +286,7 @@ class FilterBottomSheet extends StatelessWidget {
   final TextEditingController maxPriceController;
 
   const FilterBottomSheet({
-    Key? key,
+    super.key,
     required this.scrollController,
     required this.selectedCategories,
     required this.selectedRatings,
@@ -300,7 +295,7 @@ class FilterBottomSheet extends StatelessWidget {
     required this.priceRange,
     required this.minPriceController,
     required this.maxPriceController,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -342,12 +337,11 @@ class FilterBottomSheet extends StatelessWidget {
   }
 }
 
-/** Widget FilterSection
- * 
- * Deskripsi:
- * - Menampilkan sekumpulan pilihan filter dalam bentuk chip.
- * - Stateless karena hanya menampilkan UI berdasarkan input dari parent.
- */
+/// Widget FilterSection
+///
+/// Deskripsi:
+/// - Menampilkan sekumpulan pilihan filter dalam bentuk chip.
+/// - Stateless karena hanya menampilkan UI berdasarkan input dari parent.
 class FilterSection extends StatelessWidget {
   final String title;
   final List<String> items;
@@ -355,12 +349,12 @@ class FilterSection extends StatelessWidget {
   final ValueChanged<String> onSelected;
 
   const FilterSection({
-    Key? key,
+    super.key,
     required this.title,
     required this.items,
     required this.selectedItems,
     required this.onSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

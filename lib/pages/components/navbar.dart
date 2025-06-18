@@ -1,12 +1,10 @@
-/**
- * File         : navbar.dart
- * Dibuat oleh  : Izzuddin Azzam, Al Ghifari
- * Tanggal      : 16-06-2025
- * Deskripsi    : File ini berisi serangkaian fungsi untuk membangun sebuah widget navigasi bawah 
- * (Bottom Navigation Bar) yang dapat digunakan kembali di berbagai halaman aplikasi.
- * Ketergantungan (Dependencies) : 
- * - home.dart, shoping.dart, favorite.dart, profile.dart, allListItem.dart: Halaman-halaman tujuan navigasi.
- */
+/// File         : navbar.dart
+/// Dibuat oleh  : Izzuddin Azzam, Al Ghifari
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : File ini berisi serangkaian fungsi untuk membangun sebuah widget navigasi bawah
+/// (Bottom Navigation Bar) yang dapat digunakan kembali di berbagai halaman aplikasi.
+/// Ketergantungan (Dependencies) :
+/// - home.dart, shoping.dart, favorite.dart, profile.dart, allListItem.dart: Halaman-halaman tujuan navigasi.
 
 import 'package:flutter/material.dart';
 import '../beranda/home.dart';
@@ -57,7 +55,8 @@ Widget buildBottomNavBar(
         _buildNavItem(context, Icons.shopping_cart_outlined, 2, currentIndex,
             hasNotification: true), // Item dengan notifikasi.
         _buildNavItem(context, Icons.favorite_border, 3, currentIndex),
-        _buildProfileNavItem(context, 4, currentIndex), // Item khusus untuk profil.
+        _buildProfileNavItem(
+            context, 4, currentIndex), // Item khusus untuk profil.
       ],
     ),
   );
@@ -185,20 +184,20 @@ void _navigateToPage(BuildContext context, int index) {
           context, MaterialPageRoute(builder: (context) => HomePage()));
       break;
     case 1: // Halaman Semua Item/Katalog
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const AllItemList()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const AllItemList()));
       break;
     case 2: // Halaman Keranjang Belanja
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const Shoping()));
       break;
     case 3: // Halaman Wishlist/Favorit
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const FavoritePage()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const FavoritePage()));
       break;
     case 4: // Halaman Profil
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const ProfilePage()));
       break;
   }
 }

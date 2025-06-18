@@ -29,7 +29,7 @@ class AuthProvider with ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-      print('Error loading user from storage: $e');
+      // print('Error loading user from storage: $e');
     }
   }
 
@@ -39,7 +39,7 @@ class AuthProvider with ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('user_data', jsonEncode(user.toJson()));
     } catch (e) {
-      print('Error saving user to storage: $e');
+      // print('Error saving user to storage: $e');
     }
   }
 
@@ -49,7 +49,7 @@ class AuthProvider with ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('user_data');
     } catch (e) {
-      print('Error clearing user from storage: $e');
+      // print('Error clearing user from storage: $e');
     }
   }
 

@@ -45,7 +45,7 @@ void main() {
 * Bagian Layar : Root aplikasi navigasi
 */
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
   /*
   * Method : build
   * Deskripsi : Membangun widget MaterialApp dengan tema dan warna kustom
@@ -84,7 +84,7 @@ class MyApp extends StatelessWidget {
 * Bagian Layar : Halaman navigasi dengan daftar semua halaman aplikasi
 */
 class Tugas3ProvisPage extends StatefulWidget {
-  Tugas3ProvisPage({super.key});
+  const Tugas3ProvisPage({super.key});
 
   @override
   _Tugas3ProvisPageState createState() => _Tugas3ProvisPageState();

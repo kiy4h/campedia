@@ -1,22 +1,20 @@
-/**
- * File        : pickup_tracking_page.dart
- * Dibuat oleh  : Izzuddin Azzam
- * Tanggal      : 16-06-2025
- * Deskripsi    : Halaman ini menampilkan proses pelacakan pengambilan dan pengembalian barang sewaan
- * dalam tiga tahapan: Ambil Barang, Waktu Pengembalian, dan Selesai.
- * Dependencies : flutter/material.dart, flutter_countdown_timer
- */
+/// File        : pickup_tracking_page.dart
+/// Dibuat oleh  : Izzuddin Azzam
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : Halaman ini menampilkan proses pelacakan pengambilan dan pengembalian barang sewaan
+/// dalam tiga tahapan: Ambil Barang, Waktu Pengembalian, dan Selesai.
+/// Dependencies : flutter/material.dart, flutter_countdown_timer
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 
-/** Widget [PickupTrackingPage]
- * * Deskripsi:
- * - Widget ini berfungsi sebagai halaman utama untuk melacak status pengambilan dan pengembalian barang.
- * - Merupakan bagian dari alur peminjaman barang.
- * - Ini adalah widget stateful karena mengelola state [_currentStep] untuk navigasi antar tahapan
- * dan [endTime] untuk timer countdown.
- */
+/// Widget [PickupTrackingPage]
+/// * Deskripsi:
+/// - Widget ini berfungsi sebagai halaman utama untuk melacak status pengambilan dan pengembalian barang.
+/// - Merupakan bagian dari alur peminjaman barang.
+/// - Ini adalah widget stateful karena mengelola state [_currentStep] untuk navigasi antar tahapan
+/// dan [endTime] untuk timer countdown.
 class PickupTrackingPage extends StatefulWidget {
   const PickupTrackingPage({super.key});
 
@@ -106,7 +104,8 @@ class _PickupTrackingPageState extends State<PickupTrackingPage> {
           // Saat countdown berakhir, _currentStep akan diatur ke 2.
           CountdownTimer(
             endTime: endTime,
-            textStyle: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            textStyle:
+                const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             onEnd: () {
               setState(() {
                 _currentStep = 2;
@@ -135,7 +134,8 @@ class _PickupTrackingPageState extends State<PickupTrackingPage> {
             ),
             // Icon centang sebagai indikator sukses.
             child: const Center(
-              child: Icon(Icons.check_circle_outline, size: 80, color: Colors.green),
+              child: Icon(Icons.check_circle_outline,
+                  size: 80, color: Colors.green),
             ),
           ),
           const SizedBox(height: 16),
@@ -197,11 +197,10 @@ class _PickupTrackingPageState extends State<PickupTrackingPage> {
     );
   }
 
-  /** Widget [Scaffold]
-   * * Deskripsi:
-   * - Scaffold ini menyediakan struktur dasar visual untuk halaman.
-   * - Berisi AppBar, body, dan tombol navigasi di bagian bawah.
-   */
+  /// Widget [Scaffold]
+  /// * Deskripsi:
+  /// - Scaffold ini menyediakan struktur dasar visual untuk halaman.
+  /// - Berisi AppBar, body, dan tombol navigasi di bagian bawah.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -219,7 +218,8 @@ class _PickupTrackingPageState extends State<PickupTrackingPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         // Judul halaman "Pengambilan Barang".
-        title: const Text('Pengambilan Barang', style: TextStyle(color: Colors.black)),
+        title: const Text('Pengambilan Barang',
+            style: TextStyle(color: Colors.black)),
         centerTitle: true,
       ),
       /** Widget [Padding]
@@ -272,9 +272,12 @@ class _PickupTrackingPageState extends State<PickupTrackingPage> {
               // Aksi yang dipanggil saat tombol ditekan, yaitu fungsi nextStep().
               onPressed: nextStep,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF627D2C), // Warna latar belakang tombol.
-                minimumSize: const Size(double.infinity, 50), // Ukuran minimum tombol (lebar penuh).
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), // Bentuk tombol.
+                backgroundColor:
+                    const Color(0xFF627D2C), // Warna latar belakang tombol.
+                minimumSize: const Size(double.infinity,
+                    50), // Ukuran minimum tombol (lebar penuh).
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30)), // Bentuk tombol.
               ),
               // Teks pada tombol, berubah menjadi 'SUBMIT REVIEW' pada langkah terakhir.
               child: Text(

@@ -1,12 +1,11 @@
-/**
- * File        : checkout.dart
- * Dibuat oleh : Izzuddin Azzam
- * Tanggal     : 16-06-2025
- * Deskripsi   : File ini berisi implementasi halaman checkout tahap pertama,
- * memungkinkan pengguna untuk memasukkan data alamat pengiriman
- * dan informasi kontak sebelum melanjutkan ke tahap pembayaran.
- * Dependencies : flutter/material.dart, checkout2.dart
- */
+/// File        : checkout.dart
+/// Dibuat oleh : Izzuddin Azzam
+/// Tanggal     : 16-06-2025
+/// Deskripsi   : File ini berisi implementasi halaman checkout tahap pertama,
+/// memungkinkan pengguna untuk memasukkan data alamat pengiriman
+/// dan informasi kontak sebelum melanjutkan ke tahap pembayaran.
+/// Dependencies : flutter/material.dart, checkout2.dart
+library;
 
 import 'package:flutter/material.dart';
 import 'checkout2.dart';
@@ -21,13 +20,12 @@ void main() {
   runApp(const Checkout());
 }
 
-/** Widget [Checkout]
- *
- * Deskripsi:
- * - Widget root aplikasi yang membungkus keseluruhan aplikasi checkout.
- * - Ini adalah bagian dari struktur navigasi aplikasi secara keseluruhan.
- * - Ini adalah widget stateless karena tidak memiliki state internal yang perlu dikelola.
- */
+/// Widget [Checkout]
+///
+/// Deskripsi:
+/// - Widget root aplikasi yang membungkus keseluruhan aplikasi checkout.
+/// - Ini adalah bagian dari struktur navigasi aplikasi secara keseluruhan.
+/// - Ini adalah widget stateless karena tidak memiliki state internal yang perlu dikelola.
 class Checkout extends StatelessWidget {
   const Checkout({super.key});
 
@@ -41,19 +39,19 @@ class Checkout extends StatelessWidget {
      */
     return MaterialApp(
       home: ShippingAddressPage(),
-      debugShowCheckedModeBanner: false, // Menghilangkan banner debug di pojok kanan atas.
+      debugShowCheckedModeBanner:
+          false, // Menghilangkan banner debug di pojok kanan atas.
     );
   }
 }
 
-/** Widget [ShippingAddressPage]
- *
- * Deskripsi:
- * - Halaman ini bertanggung jawab untuk mengumpulkan informasi alamat pengiriman dari pengguna.
- * - Ini adalah bagian penting dari alur checkout di mana pengguna memasukkan detail kontak dan lokasi.
- * - Ini adalah widget stateful karena mengelola state dari input form (seperti nilai TextFormField dan DropdownButtonFormField)
- * serta melakukan validasi input pengguna.
- */
+/// Widget [ShippingAddressPage]
+///
+/// Deskripsi:
+/// - Halaman ini bertanggung jawab untuk mengumpulkan informasi alamat pengiriman dari pengguna.
+/// - Ini adalah bagian penting dari alur checkout di mana pengguna memasukkan detail kontak dan lokasi.
+/// - Ini adalah widget stateful karena mengelola state dari input form (seperti nilai TextFormField dan DropdownButtonFormField)
+/// serta melakukan validasi input pengguna.
 class ShippingAddressPage extends StatefulWidget {
   const ShippingAddressPage({super.key});
 
@@ -61,13 +59,12 @@ class ShippingAddressPage extends StatefulWidget {
   _ShippingAddressPageState createState() => _ShippingAddressPageState();
 }
 
-/** State [ShippingAddressPageState]
- *
- * Deskripsi:
- * - Mengelola state internal untuk `ShippingAddressPage`, termasuk data yang dimasukkan pengguna
- * dan status validasi form.
- * - Bertanggung jawab untuk membangun UI form alamat pengiriman.
- */
+/// State [ShippingAddressPageState]
+///
+/// Deskripsi:
+/// - Mengelola state internal untuk `ShippingAddressPage`, termasuk data yang dimasukkan pengguna
+/// dan status validasi form.
+/// - Bertanggung jawab untuk membangun UI form alamat pengiriman.
 class _ShippingAddressPageState extends State<ShippingAddressPage> {
   // Kunci global untuk form, digunakan untuk mengakses state form dan melakukan validasi.
   final _formKey = GlobalKey<FormState>();
@@ -83,7 +80,12 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
   // Daftar kota yang tersedia untuk dipilih.
   final List<String> cities = ['Bandung', 'Bekasi', 'Jakarta', 'Bogor'];
   // Daftar booth yang tersedia untuk dipilih.
-  final List<String> booths = ['Gegerkalong1', 'Lembang2', 'Tangkuban3', 'Cimindi4'];
+  final List<String> booths = [
+    'Gegerkalong1',
+    'Lembang2',
+    'Tangkuban3',
+    'Cimindi4'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +148,8 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
               buildTextField('Full Name'),
               const SizedBox(height: 16),
               // Field input untuk alamat email, dengan keyboard khusus email.
-              buildTextField('Email Address', keyboardType: TextInputType.emailAddress),
+              buildTextField('Email Address',
+                  keyboardType: TextInputType.emailAddress),
               const SizedBox(height: 16),
               // Field input untuk nomor telepon, dengan keyboard khusus angka telepon.
               buildTextField('Phone', keyboardType: TextInputType.phone),
@@ -358,7 +361,8 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
    *
    * Return: Sebuah widget TextFormField yang telah dikonfigurasi.
    */
-  Widget buildTextField(String label, {TextInputType keyboardType = TextInputType.text, int maxLines = 1}) {
+  Widget buildTextField(String label,
+      {TextInputType keyboardType = TextInputType.text, int maxLines = 1}) {
     /** Widget [TextFormField]
      *
      * Deskripsi:
@@ -370,7 +374,8 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
       decoration: InputDecoration(
         hintText: label,
         hintStyle: const TextStyle(color: Colors.grey),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
           borderSide: const BorderSide(color: Color(0xFFBCCB9F)),
@@ -414,7 +419,8 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
      */
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         hintText: 'Choose your city',
         hintStyle: const TextStyle(color: Colors.grey),
         enabledBorder: OutlineInputBorder(
@@ -482,7 +488,8 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
      */
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         hintText: 'Choose Branch Booth',
         hintStyle: const TextStyle(color: Colors.grey),
         enabledBorder: OutlineInputBorder(

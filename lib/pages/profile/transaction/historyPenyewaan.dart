@@ -1,29 +1,27 @@
-/**
- * File        : modern_transaction_page.dart
- * Dibuat oleh  : Tim Provis
- * Tanggal      : 16-06-2025
- * Deskripsi    : Halaman ini menampilkan riwayat transaksi penyewaan pengguna.
- * Setiap transaksi mencakup informasi seperti ID, tanggal, status, dan daftar item yang disewa.
- * Pengguna juga dapat melakukan tindakan seperti melihat detail review atau melanjutkan pembayaran
- * berdasarkan status transaksi.
- * Dependencies :
- * - flutter/material.dart: Pustaka dasar Flutter untuk membangun UI.
- * - historyPenyewaanDetailBarang.dart: Mengimpor halaman detail barang yang direview (TransactionDetailPage).
- * - ../../shopping/after_sales/step1.dart: Mengimpor halaman langkah pertama setelah penjualan (pembayaran/pengambilan).
- */
+/// File        : modern_transaction_page.dart
+/// Dibuat oleh  : Tim Provis
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : Halaman ini menampilkan riwayat transaksi penyewaan pengguna.
+/// Setiap transaksi mencakup informasi seperti ID, tanggal, status, dan daftar item yang disewa.
+/// Pengguna juga dapat melakukan tindakan seperti melihat detail review atau melanjutkan pembayaran
+/// berdasarkan status transaksi.
+/// Dependencies :
+/// - flutter/material.dart: Pustaka dasar Flutter untuk membangun UI.
+/// - historyPenyewaanDetailBarang.dart: Mengimpor halaman detail barang yang direview (TransactionDetailPage).
+/// - ../../shopping/after_sales/step1.dart: Mengimpor halaman langkah pertama setelah penjualan (pembayaran/pengambilan).
+library;
 
 import 'package:flutter/material.dart';
 import 'historyPenyewaanDetailBarang.dart'; // Halaman detail review transaksi (TransactionDetailPage)
 import '../../shopping/after_sales/step1.dart'; // Halaman langkah pertama setelah penjualan (misal: pembayaran)
 
-/** Widget [ModernTransactionPage]
- *
- * Deskripsi:
- * - Halaman ini berfungsi sebagai tampilan riwayat transaksi penyewaan untuk pengguna.
- * - Merupakan bagian dari fitur riwayat atau profil pengguna yang menunjukkan semua transaksi mereka.
- * - Ini adalah StatelessWidget karena data transaksi dummy bersifat statis di dalam widget ini,
- * meskipun dalam aplikasi nyata data ini akan dinamis dari sumber eksternal.
- */
+/// Widget [ModernTransactionPage]
+///
+/// Deskripsi:
+/// - Halaman ini berfungsi sebagai tampilan riwayat transaksi penyewaan untuk pengguna.
+/// - Merupakan bagian dari fitur riwayat atau profil pengguna yang menunjukkan semua transaksi mereka.
+/// - Ini adalah StatelessWidget karena data transaksi dummy bersifat statis di dalam widget ini,
+/// meskipun dalam aplikasi nyata data ini akan dinamis dari sumber eksternal.
 class ModernTransactionPage extends StatelessWidget {
   ModernTransactionPage({super.key});
 
@@ -109,7 +107,8 @@ class ModernTransactionPage extends StatelessWidget {
        */
       label: Text(label, style: const TextStyle(fontSize: 12)),
       backgroundColor: Colors.grey[200], // Warna latar belakang chip.
-      padding: const EdgeInsets.symmetric(horizontal: 10), // Padding horizontal chip.
+      padding: const EdgeInsets.symmetric(
+          horizontal: 10), // Padding horizontal chip.
       shape: const StadiumBorder(), // Bentuk chip seperti stadion.
     );
   }
@@ -124,7 +123,8 @@ class ModernTransactionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100], // Mengatur warna latar belakang halaman.
+      backgroundColor:
+          Colors.grey[100], // Mengatur warna latar belakang halaman.
       /** Widget [AppBar]
        * * Deskripsi:
        * - Bilah aplikasi di bagian atas halaman, berisi kolom pencarian.
@@ -140,12 +140,14 @@ class ModernTransactionPage extends StatelessWidget {
         title: TextField(
           decoration: InputDecoration(
             hintText: 'Cari transaksi', // Placeholder teks.
-            hintStyle: TextStyle(color: Colors.grey[600]), // Gaya teks placeholder.
+            hintStyle:
+                TextStyle(color: Colors.grey[600]), // Gaya teks placeholder.
             prefixIcon: const Icon(Icons.search), // Ikon pencarian di awal.
             suffixIcon: const Icon(Icons.filter_list), // Ikon filter di akhir.
             filled: true, // Mengisi latar belakang TextField.
             fillColor: Colors.grey[200], // Warna latar belakang TextField.
-            contentPadding: const EdgeInsets.symmetric(vertical: 0), // Padding internal.
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 0), // Padding internal.
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30), // Border melingkar.
               borderSide: BorderSide.none, // Tanpa border sisi.
@@ -186,9 +188,8 @@ class ModernTransactionPage extends StatelessWidget {
 
           // --- Daftar Kartu Transaksi ---
           // Menggunakan operator spread (...) untuk menambahkan setiap kartu transaksi.
-          ...transactions
-              .map((item) => buildTransactionCard(item, context)) // Membangun kartu transaksi untuk setiap item.
-              .toList(), // Mengubah iterasi menjadi daftar widget.
+          ...transactions.map((item) => buildTransactionCard(
+              item, context)) // Membangun kartu transaksi untuk setiap item.
         ],
       ),
     );
@@ -214,12 +215,15 @@ class ModernTransactionPage extends StatelessWidget {
        * - Memiliki margin, padding, warna latar belakang putih, sudut membulat, dan bayangan.
        */
       child: Container(
-        margin: const EdgeInsets.only(bottom: 16), // Margin bawah untuk setiap kartu.
+        margin: const EdgeInsets.only(
+            bottom: 16), // Margin bawah untuk setiap kartu.
         padding: const EdgeInsets.all(12), // Padding internal kartu.
         decoration: BoxDecoration(
           color: Colors.white, // Warna latar belakang kartu.
           borderRadius: BorderRadius.circular(12), // Sudut kartu membulat.
-          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)], // Bayangan kartu.
+          boxShadow: const [
+            BoxShadow(color: Colors.black12, blurRadius: 6)
+          ], // Bayangan kartu.
         ),
         /** Widget [Column]
          * * Deskripsi:
@@ -234,7 +238,8 @@ class ModernTransactionPage extends StatelessWidget {
              * - Data dinamis dari item transaksi.
              * - Gaya teks tebal.
              */
-            Text('ID: ${item['id']}', style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text('ID: ${item['id']}',
+                style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 4), // Spasi vertikal kecil.
 
             /** Widget [Text]
@@ -284,7 +289,8 @@ class ModernTransactionPage extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green, // Warna latar belakang tombol.
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)), // Sudut tombol membulat.
+                      borderRadius:
+                          BorderRadius.circular(20)), // Sudut tombol membulat.
                 ),
                 /** Widget [Text]
                  * * Deskripsi:
@@ -308,9 +314,11 @@ class ModernTransactionPage extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange, // Warna latar belakang tombol.
+                  backgroundColor:
+                      Colors.orange, // Warna latar belakang tombol.
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)), // Sudut tombol membulat.
+                      borderRadius:
+                          BorderRadius.circular(20)), // Sudut tombol membulat.
                 ),
                 /** Widget [Text]
                  * * Deskripsi:

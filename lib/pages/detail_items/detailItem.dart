@@ -1,13 +1,12 @@
-/**
- * File         : detailItem.dart
- * Dibuat oleh  : Izzuddin Azzam, Al Ghifari
- * Tanggal      : 16-06-2025
- * Deskripsi    : File ini berisi implementasi halaman detail barang yang menampilkan
- * informasi lengkap tentang suatu barang, seperti galeri gambar, deskripsi, harga, dan ulasan.
- * Ketergantungan (Dependencies) : 
- * - flutter/material.dart
- * - navbar.dart (komponen navigasi bawah)
- */
+/// File         : detailItem.dart
+/// Dibuat oleh  : Izzuddin Azzam, Al Ghifari
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : File ini berisi implementasi halaman detail barang yang menampilkan
+/// informasi lengkap tentang suatu barang, seperti galeri gambar, deskripsi, harga, dan ulasan.
+/// Ketergantungan (Dependencies) :
+/// - flutter/material.dart
+/// - navbar.dart (komponen navigasi bawah)
+library;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,12 +19,11 @@ import '../../models/models.dart';
 // Fungsi main untuk menjalankan aplikasi sebagai contoh standalone.
 void main() => runApp(const MyApp());
 
-/** Widget MyApp
- * * Deskripsi:
- * - Widget root untuk aplikasi demo, hanya digunakan saat file ini dijalankan secara terpisah.
- * - Menyediakan tema dan pengaturan dasar untuk halaman DetailItem.
- * - Merupakan StatelessWidget karena hanya berfungsi sebagai container dan tidak menyimpan state.
- */
+/// Widget MyApp
+/// * Deskripsi:
+/// - Widget root untuk aplikasi demo, hanya digunakan saat file ini dijalankan secara terpisah.
+/// - Menyediakan tema dan pengaturan dasar untuk halaman DetailItem.
+/// - Merupakan StatelessWidget karena hanya berfungsi sebagai container dan tidak menyimpan state.
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -48,12 +46,11 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/** Widget DetailItem
- * * Deskripsi:
- * - Widget utama yang menampilkan halaman detail lengkap sebuah barang.
- * - Menampilkan carousel gambar, informasi produk, tab deskripsi/ulasan, dan opsi pembelian.
- * - Merupakan StatefulWidget karena perlu mengelola state seperti jumlah barang, halaman carousel, dan status favorit.
- */
+/// Widget DetailItem
+/// * Deskripsi:
+/// - Widget utama yang menampilkan halaman detail lengkap sebuah barang.
+/// - Menampilkan carousel gambar, informasi produk, tab deskripsi/ulasan, dan opsi pembelian.
+/// - Merupakan StatefulWidget karena perlu mengelola state seperti jumlah barang, halaman carousel, dan status favorit.
 class DetailItem extends StatefulWidget {
   final int barangId;
 
@@ -63,11 +60,10 @@ class DetailItem extends StatefulWidget {
   State<DetailItem> createState() => _DetailItemState();
 }
 
-/** State untuk widget DetailItem
- * * Deskripsi:
- * - Mengelola semua state dan logika interaktif untuk halaman detail barang.
- * - Menggunakan `SingleTickerProviderStateMixin` untuk menyediakan Ticker yang dibutuhkan oleh `TabController` untuk animasi perpindahan tab.
- */
+/// State untuk widget DetailItem
+/// * Deskripsi:
+/// - Mengelola semua state dan logika interaktif untuk halaman detail barang.
+/// - Menggunakan `SingleTickerProviderStateMixin` untuk menyediakan Ticker yang dibutuhkan oleh `TabController` untuk animasi perpindahan tab.
 class _DetailItemState extends State<DetailItem>
     with SingleTickerProviderStateMixin {
   // Controller untuk mengelola state dan animasi TabBar.

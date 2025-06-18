@@ -1,24 +1,22 @@
-/**
- * File        : product_review_page.dart
- * Dibuat oleh  : Tim Provis
- * Tanggal      : 16-06-2025
- * Deskripsi    : Halaman ini menyediakan antarmuka bagi pengguna untuk memberikan ulasan produk,
- * termasuk rating bintang dan kolom teks review. Setelah submit, dialog konfirmasi akan muncul.
- * Dependencies :
- * - flutter/material.dart: Pustaka dasar Flutter untuk membangun UI.
- * - ../../beranda/home.dart: Mengimpor halaman beranda aplikasi untuk navigasi setelah ulasan berhasil.
- */
+/// File        : product_review_page.dart
+/// Dibuat oleh  : Tim Provis
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : Halaman ini menyediakan antarmuka bagi pengguna untuk memberikan ulasan produk,
+/// termasuk rating bintang dan kolom teks review. Setelah submit, dialog konfirmasi akan muncul.
+/// Dependencies :
+/// - flutter/material.dart: Pustaka dasar Flutter untuk membangun UI.
+/// - ../../beranda/home.dart: Mengimpor halaman beranda aplikasi untuk navigasi setelah ulasan berhasil.
+library;
 
 import 'package:flutter/material.dart';
 import '../../beranda/home.dart';
 
-/** Widget [ProductReviewPage]
- *
- * Deskripsi:
- * - Halaman ini adalah formulir untuk mengumpulkan ulasan produk dari pengguna.
- * - Ini adalah bagian dari alur pemberian feedback pengguna terhadap produk yang telah digunakan.
- * - Merupakan StatefulWidget karena rating dan konten review dapat berubah berdasarkan interaksi pengguna.
- */
+/// Widget [ProductReviewPage]
+///
+/// Deskripsi:
+/// - Halaman ini adalah formulir untuk mengumpulkan ulasan produk dari pengguna.
+/// - Ini adalah bagian dari alur pemberian feedback pengguna terhadap produk yang telah digunakan.
+/// - Merupakan StatefulWidget karena rating dan konten review dapat berubah berdasarkan interaksi pengguna.
 class ProductReviewPage extends StatefulWidget {
   // Nama produk yang akan diulas, diterima sebagai parameter wajib.
   final String productName;
@@ -39,13 +37,12 @@ class ProductReviewPage extends StatefulWidget {
   _ProductReviewPageState createState() => _ProductReviewPageState();
 }
 
-/** Widget [_ProductReviewPageState]
- *
- * Deskripsi:
- * - State yang terkait dengan [ProductReviewPage].
- * - Mengelola nilai rating yang dipilih pengguna dan input teks ulasan.
- * - Bertanggung jawab untuk membangun dan memperbarui UI berdasarkan interaksi pengguna.
- */
+/// Widget [_ProductReviewPageState]
+///
+/// Deskripsi:
+/// - State yang terkait dengan [ProductReviewPage].
+/// - Mengelola nilai rating yang dipilih pengguna dan input teks ulasan.
+/// - Bertanggung jawab untuk membangun dan memperbarui UI berdasarkan interaksi pengguna.
 class _ProductReviewPageState extends State<ProductReviewPage> {
   // Variabel untuk menyimpan nilai rating saat ini, defaultnya 5.0 (bintang penuh).
   double _rating = 5.0;
@@ -63,17 +60,21 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
     IconData icon;
     // Menentukan ikon bintang berdasarkan nilai rating saat ini.
     if (_rating >= index + 1) {
-      icon = Icons.star; // Bintang penuh jika rating lebih besar atau sama dengan indeks + 1
+      icon = Icons
+          .star; // Bintang penuh jika rating lebih besar atau sama dengan indeks + 1
     } else if (_rating > index && _rating < index + 1) {
-      icon = Icons.star_half; // Bintang setengah jika rating berada di antara indeks dan indeks + 1
+      icon = Icons
+          .star_half; // Bintang setengah jika rating berada di antara indeks dan indeks + 1
     } else {
-      icon = Icons.star_border; // Bintang kosong jika rating lebih kecil dari indeks + 1
+      icon = Icons
+          .star_border; // Bintang kosong jika rating lebih kecil dari indeks + 1
     }
 
     return IconButton(
       onPressed: () {
         setState(() {
-          _rating = index + 1.0; // Memperbarui nilai rating saat bintang ditekan.
+          _rating =
+              index + 1.0; // Memperbarui nilai rating saat bintang ditekan.
         });
       },
       /** Widget [Icon]
@@ -132,7 +133,8 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
            */
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(); // Menutup dialog saat tombol 'OK' ditekan.
+              Navigator.of(context)
+                  .pop(); // Menutup dialog saat tombol 'OK' ditekan.
               // Navigasi ke halaman Home dan menghapus semua rute sebelumnya dari stack.
               Navigator.pushAndRemoveUntil(
                 context,
@@ -157,7 +159,8 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Mengatur warna latar belakang halaman menjadi putih.
+      backgroundColor:
+          Colors.white, // Mengatur warna latar belakang halaman menjadi putih.
       /** Widget [AppBar]
        * * Deskripsi:
        * - Bilah aplikasi di bagian atas halaman.
@@ -176,7 +179,8 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
            * - Ikon panah kembali berwarna hitam.
            */
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context), // Aksi untuk kembali ke halaman sebelumnya.
+          onPressed: () => Navigator.pop(
+              context), // Aksi untuk kembali ke halaman sebelumnya.
         ),
         /** Widget [Text]
          * * Deskripsi:
@@ -306,7 +310,8 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
              * - Nilai ini berubah secara dinamis saat pengguna berinteraksi dengan bintang.
              */
             Text(
-              _rating.toStringAsFixed(1), // Menampilkan nilai rating dengan satu angka di belakang koma.
+              _rating.toStringAsFixed(
+                  1), // Menampilkan nilai rating dengan satu angka di belakang koma.
               style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
             ),
 
@@ -319,7 +324,8 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
              */
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(5, (index) => _buildStar(index)), // Membangun 5 bintang.
+              children: List.generate(
+                  5, (index) => _buildStar(index)), // Membangun 5 bintang.
             ),
 
             const SizedBox(height: 24), // Spasi vertikal.
@@ -343,12 +349,15 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
               child: TextField(
                 controller: _controller, // Mengikat TextField ke controller.
                 maxLines: 5, // Mengizinkan maksimal 5 baris teks.
-                textAlignVertical: TextAlignVertical.top, // Mengatur teks agar dimulai dari atas.
+                textAlignVertical: TextAlignVertical
+                    .top, // Mengatur teks agar dimulai dari atas.
                 decoration: const InputDecoration(
                   hintText:
                       'Ceritakan pendapat Anda tentang kualitas, fungsi, atau kenyamanan produk ini...', // Placeholder teks.
-                  contentPadding: EdgeInsets.all(16.0), // Padding internal TextField.
-                  border: InputBorder.none, // Menghilangkan border default TextField.
+                  contentPadding:
+                      EdgeInsets.all(16.0), // Padding internal TextField.
+                  border: InputBorder
+                      .none, // Menghilangkan border default TextField.
                 ),
               ),
             ),
@@ -371,12 +380,15 @@ class _ProductReviewPageState extends State<ProductReviewPage> {
               child: ElevatedButton(
                 onPressed: () {
                   // TODO: Logika untuk menyimpan ulasan ke backend akan ditambahkan di sini.
-                  _showConfirmationDialog(context); // Menampilkan dialog konfirmasi.
+                  _showConfirmationDialog(
+                      context); // Menampilkan dialog konfirmasi.
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF627D2C), // Warna latar belakang tombol (hijau zaitun).
+                  backgroundColor: const Color(
+                      0xFF627D2C), // Warna latar belakang tombol (hijau zaitun).
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25), // Sudut tombol membulat.
+                    borderRadius:
+                        BorderRadius.circular(25), // Sudut tombol membulat.
                   ),
                 ),
                 /** Widget [Text]

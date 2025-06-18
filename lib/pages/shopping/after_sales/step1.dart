@@ -1,28 +1,26 @@
-/**
- * File        : step1.dart
- * Dibuat oleh  : Izzuddin Azzam
- * Tanggal      : 16-06-2025
- * Deskripsi    : Halaman langkah pertama dalam proses peminjaman barang,
- * menampilkan tampilan peta lokasi pengambilan dan progress stepper.
- * Dependencies :
- * - flutter_map: ^ untuk menampilkan peta lokasi interaktif.
- * - latlong2: ^ untuk mengelola koordinat lintang dan bujur.
- * - step2.dart: Untuk navigasi ke halaman langkah kedua.
- */
+/// File        : step1.dart
+/// Dibuat oleh  : Izzuddin Azzam
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : Halaman langkah pertama dalam proses peminjaman barang,
+/// menampilkan tampilan peta lokasi pengambilan dan progress stepper.
+/// Dependencies :
+/// - flutter_map: ^ untuk menampilkan peta lokasi interaktif.
+/// - latlong2: ^ untuk mengelola koordinat lintang dan bujur.
+/// - step2.dart: Untuk navigasi ke halaman langkah kedua.
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart'; // Mengimpor pustaka flutter_map untuk peta
 import 'package:latlong2/latlong.dart'; // Mengimpor pustaka latlong2 untuk koordinat geografis
 import 'step2.dart'; // Mengimpor halaman Step2Page untuk navigasi selanjutnya
 
-/** Widget [Step1Page]
- *
- * Deskripsi:
- * - Ini adalah widget utama untuk halaman langkah pertama dalam proses pengambilan barang.
- * - Halaman ini menampilkan peta lokasi pengambilan barang dan visualisasi langkah-langkah (stepper) dari proses tersebut.
- * - Ini adalah widget Stateless karena tidak memiliki state internal yang berubah seiring waktu;
- * semua datanya bersifat statis atau diterima dari parent widget.
- */
+/// Widget [Step1Page]
+///
+/// Deskripsi:
+/// - Ini adalah widget utama untuk halaman langkah pertama dalam proses pengambilan barang.
+/// - Halaman ini menampilkan peta lokasi pengambilan barang dan visualisasi langkah-langkah (stepper) dari proses tersebut.
+/// - Ini adalah widget Stateless karena tidak memiliki state internal yang berubah seiring waktu;
+/// semua datanya bersifat statis atau diterima dari parent widget.
 class Step1Page extends StatelessWidget {
   const Step1Page({super.key});
 
@@ -121,7 +119,8 @@ class Step1Page extends StatelessWidget {
                    * - Menampilkan data peta visual.
                    */
                   TileLayer(
-                    urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    urlTemplate:
+                        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     subdomains: const ['a', 'b', 'c'],
                   ),
                 ],
@@ -181,7 +180,8 @@ class Step1Page extends StatelessWidget {
                                   color: Colors.white,
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: const Color(0xFF9BAE76), // Warna hijau lembut
+                                    color: const Color(
+                                        0xFF9BAE76), // Warna hijau lembut
                                     width: 6,
                                   ),
                                 ),
@@ -193,7 +193,8 @@ class Step1Page extends StatelessWidget {
                               Expanded(
                                 child: Container(
                                   width: 3,
-                                  color: Colors.grey[300], // Garis vertikal abu-abu
+                                  color: Colors
+                                      .grey[300], // Garis vertikal abu-abu
                                 ),
                               ),
                             ],
@@ -231,7 +232,8 @@ class Step1Page extends StatelessWidget {
                                */
                               Text(
                                 'Ambil perlengkapan sewa langsung di toko. Lokasi bisa dilihat melalui Google Maps yang telah disediakan.',
-                                style: TextStyle(fontSize: 16, color: Colors.black87),
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.black87),
                               ),
                             ],
                           ),
@@ -270,7 +272,8 @@ class Step1Page extends StatelessWidget {
                                 width: 20,
                                 height: 20,
                                 decoration: const BoxDecoration(
-                                  color: Color(0xFF9BAE76), // Warna hijau lembut
+                                  color:
+                                      Color(0xFF9BAE76), // Warna hijau lembut
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -396,8 +399,11 @@ class Step1Page extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF627D2C), // Warna hijau tua
-                minimumSize: const Size(double.infinity, 50), // Lebar penuh, tinggi 50
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)), // Sudut tombol membulat
+                minimumSize:
+                    const Size(double.infinity, 50), // Lebar penuh, tinggi 50
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(25)), // Sudut tombol membulat
               ),
               /** Widget [Text]
                * * Deskripsi:
@@ -406,7 +412,10 @@ class Step1Page extends StatelessWidget {
                */
               child: const Text(
                 'NEXT STEP',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
             ),
           ),

@@ -1,11 +1,10 @@
-/**
- * File         : home.dart
- * Dibuat oleh  : Izzuddin Azzam, Al Ghifari
- * Tanggal      : 16-06-2025
- * Deskripsi    : File ini berisi implementasi halaman beranda (home) aplikasi Campedia
- * yang menampilkan salam pengguna, pencarian, slider fitur, kategori, dan daftar barang yang sedang tren.
- * Dependencies : flutter/material.dart, intl, google_fonts, provider
- */
+/// File         : home.dart
+/// Dibuat oleh  : Izzuddin Azzam, Al Ghifari
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : File ini berisi implementasi halaman beranda (home) aplikasi Campedia
+/// yang menampilkan salam pengguna, pencarian, slider fitur, kategori, dan daftar barang yang sedang tren.
+/// Dependencies : flutter/material.dart, intl, google_fonts, provider
+library;
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -27,12 +26,11 @@ void main() {
   runApp(const CampingApp());
 }
 
-/** Widget CampingApp
- * * Deskripsi:
- * - Widget utama yang menjadi root aplikasi untuk halaman beranda.
- * - Mengatur tema global, termasuk warna primer, warna latar, dan jenis font.
- * - Merupakan StatelessWidget karena hanya berfungsi sebagai container konfigurasi dan tidak mengelola state.
- */
+/// Widget CampingApp
+/// * Deskripsi:
+/// - Widget utama yang menjadi root aplikasi untuk halaman beranda.
+/// - Mengatur tema global, termasuk warna primer, warna latar, dan jenis font.
+/// - Merupakan StatelessWidget karena hanya berfungsi sebagai container konfigurasi dan tidak mengelola state.
 class CampingApp extends StatelessWidget {
   const CampingApp({super.key});
 
@@ -59,23 +57,23 @@ class CampingApp extends StatelessWidget {
   }
 }
 
-/** Widget HomePage
- * * Deskripsi:
- * - Widget yang menampilkan seluruh konten halaman beranda.
- * - Menampilkan fitur utama seperti barang rekomendasi, kategori, dan daftar barang tren.
- * - Merupakan StatefulWidget karena perlu memuat data dari API saat halaman diinisialisasi.
- */
+/// Widget HomePage
+/// * Deskripsi:
+/// - Widget yang menampilkan seluruh konten halaman beranda.
+/// - Menampilkan fitur utama seperti barang rekomendasi, kategori, dan daftar barang tren.
+/// - Merupakan StatefulWidget karena perlu memuat data dari API saat halaman diinisialisasi.
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-/** State untuk widget HomePage
- * * Deskripsi:
- * - Mengelola state, data, dan logika untuk halaman beranda.
- * - Memuat data barang dari API melalui provider saat state diinisialisasi.
- * - Berisi data statis sebagai fallback jika data dari API gagal dimuat.
- */
+/// State untuk widget HomePage
+/// * Deskripsi:
+/// - Mengelola state, data, dan logika untuk halaman beranda.
+/// - Memuat data barang dari API melalui provider saat state diinisialisasi.
+/// - Berisi data statis sebagai fallback jika data dari API gagal dimuat.
 class _HomePageState extends State<HomePage> {
   /* Fungsi ini dijalankan saat state widget pertama kali dibuat.
    * * Menggunakan addPostFrameCallback untuk memastikan _loadData() dipanggil setelah frame pertama selesai dirender.
@@ -132,37 +130,57 @@ class _HomePageState extends State<HomePage> {
       "color": Color(0xFF795548),
     },
   ];
-
-  // Data statis untuk kategori
+  // Data statis untuk kategori - menggunakan endpoint API
   final List<Map<String, String>> categories = [
-    {"icon": "images/assets_Categories/cat_Kompor.png", "name": "Kompor"},
-    {"icon": "images/assets_Categories/cat_Tenda.png", "name": "Tenda"},
-    {"icon": "images/assets_Categories/cat_Sepatu.png", "name": "Sepatu"},
-    {"icon": "images/assets_Categories/cat_Tas.png", "name": "Tas"},
-    {"icon": "images/assets_Categories/cat_Senter.png", "name": "Senter"},
-    {"icon": "images/assets_Categories/cat_Jaket.png", "name": "Jaket"},
     {
-      "icon": "images/assets_Categories/cat_KeamananNavigasi.png",
+      "icon": "http://localhost:8000/images/assets_Categories/cat_Kompor.png",
+      "name": "Kompor"
+    },
+    {
+      "icon": "http://localhost:8000/images/assets_Categories/cat_Tenda.png",
+      "name": "Tenda"
+    },
+    {
+      "icon": "http://localhost:8000/images/assets_Categories/cat_Sepatu.png",
+      "name": "Sepatu"
+    },
+    {
+      "icon": "http://localhost:8000/images/assets_Categories/cat_Tas.png",
+      "name": "Tas"
+    },
+    {
+      "icon": "http://localhost:8000/images/assets_Categories/cat_Senter.png",
+      "name": "Senter"
+    },
+    {
+      "icon": "http://localhost:8000/images/assets_Categories/cat_Jaket.png",
+      "name": "Jaket"
+    },
+    {
+      "icon":
+          "http://localhost:8000/images/assets_Categories/cat_KeamananNavigasi.png",
       "name": "Keamanan"
     },
     {
-      "icon": "images/assets_Categories/cat_FasilitasTambahan.png",
+      "icon":
+          "http://localhost:8000/images/assets_Categories/cat_FasilitasTambahan.png",
       "name": "Lainnya"
     },
   ];
-
   // Data statis untuk slider fitur
   final List<Map<String, dynamic>> featuredSlides = [
     {
       "key": "1",
       "title": "Recommended\nGear Trip",
-      "image": "images/assets_Home/gunung1.png",
+      "image":
+          "http://localhost:8000/images/assets_DestinationCamp/gunung1.jpg",
       "color": Colors.black.withOpacity(0.6),
     },
     {
       "key": "2",
       "title": "Fresh Trending\nGear",
-      "image": "images/assets_Home/gunung2.png",
+      "image":
+          "http://localhost:8000/images/assets_DestinationCamp/gunung2.jpg",
       "color": Colors.black.withOpacity(0.6),
     },
   ];
@@ -365,7 +383,7 @@ class _HomePageState extends State<HomePage> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 image: DecorationImage(
-                  image: AssetImage(slide["image"]),
+                  image: NetworkImage(slide["image"]),
                   fit: BoxFit.cover,
                   // Filter warna untuk menggelapkan gambar agar teks lebih terbaca
                   colorFilter:
@@ -481,8 +499,8 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(14),
-                // Widget Image untuk menampilkan ikon dari asset
-                child: Image.asset(category["icon"]!, fit: BoxFit.contain),
+                // Widget Image untuk menampilkan ikon dari network
+                child: Image.network(category["icon"]!, fit: BoxFit.contain),
               ),
             ),
             const SizedBox(height: 10),

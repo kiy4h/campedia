@@ -1,27 +1,25 @@
-/**
- * File        : step2.dart
- * Dibuat oleh  : Izzuddin Azzam
- * Tanggal      : 16-06-2025
- * Deskripsi    : Halaman langkah ke-2 dalam proses peminjaman barang,
- * berisi countdown timer untuk menunjukkan sisa waktu pengembalian.
- * Dependencies :
- * - flutter/material.dart
- * - dart:async (untuk Timer)
- * - step3.dart (untuk navigasi ke halaman langkah ke-3)
- */
+/// File        : step2.dart
+/// Dibuat oleh  : Izzuddin Azzam
+/// Tanggal      : 16-06-2025
+/// Deskripsi    : Halaman langkah ke-2 dalam proses peminjaman barang,
+/// berisi countdown timer untuk menunjukkan sisa waktu pengembalian.
+/// Dependencies :
+/// - flutter/material.dart
+/// - dart:async (untuk Timer)
+/// - step3.dart (untuk navigasi ke halaman langkah ke-3)
+library;
 
 import 'package:flutter/material.dart';
 import 'dart:async'; // Mengimpor pustaka async untuk menggunakan Timer
 import 'step3.dart'; // Mengimpor halaman Step3Page untuk navigasi selanjutnya
 
-/** Widget [Step2Page]
- *
- * Deskripsi:
- * - Ini adalah widget utama untuk halaman langkah kedua dalam proses peminjaman barang.
- * - Halaman ini menampilkan hitungan mundur (countdown timer) untuk menunjukkan sisa waktu pengembalian barang.
- * - Ini adalah widget Stateful karena memiliki state internal (waktu hitung mundur) yang dapat berubah seiring waktu
- * dan memerlukan pembaharuan UI secara periodik.
- */
+/// Widget [Step2Page]
+///
+/// Deskripsi:
+/// - Ini adalah widget utama untuk halaman langkah kedua dalam proses peminjaman barang.
+/// - Halaman ini menampilkan hitungan mundur (countdown timer) untuk menunjukkan sisa waktu pengembalian barang.
+/// - Ini adalah widget Stateful karena memiliki state internal (waktu hitung mundur) yang dapat berubah seiring waktu
+/// dan memerlukan pembaharuan UI secara periodik.
 class Step2Page extends StatefulWidget {
   const Step2Page({super.key});
 
@@ -29,13 +27,12 @@ class Step2Page extends StatefulWidget {
   State<Step2Page> createState() => _Step2PageState();
 }
 
-/** Widget [_Step2PageState]
- *
- * Deskripsi:
- * - State dari widget Step2Page yang mengelola logika dan data untuk hitungan mundur.
- * - Bertanggung jawab untuk menghitung dan memperbarui sisa waktu pengembalian barang setiap detik.
- * - Merupakan bagian dari layar "Pengambilan Barang" yang menampilkan informasi waktu kritis.
- */
+/// Widget [_Step2PageState]
+///
+/// Deskripsi:
+/// - State dari widget Step2Page yang mengelola logika dan data untuk hitungan mundur.
+/// - Bertanggung jawab untuk menghitung dan memperbarui sisa waktu pengembalian barang setiap detik.
+/// - Merupakan bagian dari layar "Pengambilan Barang" yang menampilkan informasi waktu kritis.
 class _Step2PageState extends State<Step2Page> {
   // Waktu akhir peminjaman (48 jam dari waktu saat ini)
   late DateTime endTime;
@@ -258,7 +255,8 @@ class _Step2PageState extends State<Step2Page> {
                                 width: 20,
                                 height: 20,
                                 decoration: const BoxDecoration(
-                                  color: Color(0xFF9BAE76), // Warna hijau lembut
+                                  color:
+                                      Color(0xFF9BAE76), // Warna hijau lembut
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -269,7 +267,8 @@ class _Step2PageState extends State<Step2Page> {
                               Expanded(
                                 child: Container(
                                   width: 3,
-                                  color: Colors.grey[300], // Garis vertikal abu-abu
+                                  color: Colors
+                                      .grey[300], // Garis vertikal abu-abu
                                 ),
                               ),
                             ],
@@ -330,7 +329,8 @@ class _Step2PageState extends State<Step2Page> {
                                   color: Colors.white,
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: const Color(0xFF9BAE76), // Warna hijau lembut
+                                    color: const Color(
+                                        0xFF9BAE76), // Warna hijau lembut
                                     width: 6,
                                   ),
                                 ),
@@ -380,7 +380,8 @@ class _Step2PageState extends State<Step2Page> {
                                */
                               Text(
                                 'Lihat waktu tersisa hingga batas pengembalian barang. Pastikan barang dikembalikan tepat waktu.',
-                                style: TextStyle(fontSize: 16, color: Colors.black87),
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.black87),
                               ),
                             ],
                           ),
@@ -474,8 +475,11 @@ class _Step2PageState extends State<Step2Page> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF627D2C), // Warna hijau tua
-                minimumSize: const Size(double.infinity, 50), // Lebar penuh, tinggi 50
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)), // Sudut tombol membulat
+                minimumSize:
+                    const Size(double.infinity, 50), // Lebar penuh, tinggi 50
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(25)), // Sudut tombol membulat
               ),
               /** Widget [Text]
                * * Deskripsi:
@@ -484,7 +488,10 @@ class _Step2PageState extends State<Step2Page> {
                */
               child: const Text(
                 'NEXT STEP',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
             ),
           ),
