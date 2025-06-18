@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import '../components/navbar.dart';
 import '../../providers/detail_barang_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/cart_provider.dart';
 import '../../models/models.dart';
 
 // Fungsi main untuk menjalankan aplikasi sebagai contoh standalone.
@@ -521,16 +522,51 @@ class _DetailItemState extends State<DetailItem>
               ],
             ),
           ),
-          const SizedBox(width: 20),
-          // Tombol "ADD TO CART".
+          const SizedBox(width: 20), // Tombol "ADD TO CART".
           Expanded(
             child: ElevatedButton(
               onPressed: barang.stok > 0
-                  ? () {
-                      // TODO: Implement add to cart functionality
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Added to cart!')),
+                  ? () async {
+                      final authProvider =
+                          Provider.of<AuthProvider>(context, listen: false);
+                      final cartProvider =
+                          Provider.of<CartProvider>(context, listen: false);
+
+                      if (!authProvider.isAuthenticated ||
+                          authProvider.user == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content:
+                                Text('Please login first to add items to cart'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
+
+                      final success = await cartProvider.addToCart(
+                        authProvider.user!.userId,
+                        widget.barangId,
+                        _quantity,
                       );
+
+                      if (success) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'Added $_quantity ${barang.namaBarang} to cart!'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                cartProvider.error ?? 'Failed to add to cart'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
                     }
                   : null,
               style: ElevatedButton.styleFrom(
