@@ -14,9 +14,13 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:tugas3provis/pages/components/navbar.dart'; // Import komponen navbar bawah
 import 'package:tugas3provis/pages/beranda/notification.dart'; // Import halaman notifikasi
 import '../transaction/historyPenyewaan.dart'; // Import halaman riwayat penyewaan
+import '../../../providers/auth_provider.dart'; // Import AuthProvider
+import '../../../providers/profile_provider.dart'; // Import ProfileProvider
+import '../../../models/models.dart'; // Import models
 
 /* Fungsi utama untuk menjalankan aplikasi Flutter yang menampilkan halaman profil.
  *
@@ -63,13 +67,35 @@ class CampingApp extends StatelessWidget {
 ///
 /// Deskripsi:
 /// - Halaman ini berfungsi sebagai tampilan profil utama pengguna dalam aplikasi Campedia.
-/// - Menampilkan foto profil, nama pengguna, informasi kontak, ringkasan riwayat transaksi,
-/// dan tombol untuk navigasi ke pengaturan lebih lanjut.
-/// - Ini adalah StatelessWidget karena semua data yang ditampilkan (nama, email, dll.)
-/// bersifat statis dalam contoh ini dan tidak ada interaksi langsung yang mengubah state di halaman ini.
-/// Perubahan data akan ditangani oleh halaman terpisah (misal: Edit Profile Page).
-class ProfilePage extends StatelessWidget {
+/// - Menampilkan foto profil, nama pengguna, informasi kontak, dan tombol untuk navigasi ke pengaturan.
+/// - Ini adalah StatefulWidget karena menggunakan provider untuk mengambil data dinamis dari API.
+/// Data profil akan diambil dari backend dan ditampilkan secara real-time.
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  @override
+  void initState() {
+    super.initState();
+    // Fetch user profile data when page loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadUserProfile();
+    });
+  }
+
+  void _loadUserProfile() {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+
+    if (authProvider.user != null) {
+      profileProvider.fetchUserProfile(authProvider.user!.userId);
+    }
+  }
 
   /* Fungsi ini membangun seluruh struktur UI dari halaman profil.
    *
@@ -120,25 +146,70 @@ class ProfilePage extends StatelessWidget {
        * - Memastikan konten UI tidak tumpang tindih dengan area sistem seperti status bar.
        */
       body: SafeArea(
-        /** Widget [ListView]
-         * * Deskripsi:
-         * - Tampilan daftar yang dapat digulir untuk menampung semua bagian profil.
-         * - Memungkinkan pengguna untuk menggulir jika konten melebihi tinggi layar.
-         */
-        child: ListView(
-          padding: const EdgeInsets.symmetric(
-              vertical: 16, horizontal: 20), // Padding di sekitar konten.
-          children: [
-            _buildHeader(
-                context), // Bagian header profil (foto, nama, tombol edit).
-            const SizedBox(height: 24), // Spasi vertikal.
-            _buildProfileDetails(), // Bagian detail informasi akun.
-            const SizedBox(height: 24), // Spasi vertikal.
-            _buildHistorySection(
-                context), // Bagian ringkasan riwayat penyewaan/pembelian.
-            const SizedBox(height: 32), // Spasi vertikal.
-            _buildSettingsButton(), // Tombol untuk navigasi ke pengaturan profil.
-          ],
+        child: Consumer2<AuthProvider, ProfileProvider>(
+          builder: (context, authProvider, profileProvider, child) {
+            // Show loading indicator
+            if (profileProvider.isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2E7D32)),
+                ),
+              );
+            }
+
+            // Show error message
+            if (profileProvider.error != null) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      size: 64,
+                      color: Colors.grey[400],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Error: ${profileProvider.error}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.red,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _loadUserProfile,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF2E7D32),
+                      ),
+                      child: const Text(
+                        'Coba Lagi',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            // Show profile content
+            return ListView(
+              padding: const EdgeInsets.symmetric(
+                  vertical: 16, horizontal: 20), // Padding di sekitar konten.
+              children: [
+                _buildHeader(context,
+                    profileProvider.userProfile), // Header profil dinamis
+                const SizedBox(height: 24), // Spasi vertikal.
+                _buildProfileDetails(
+                    profileProvider.userProfile), // Detail informasi dinamis
+                const SizedBox(height: 24), // Spasi vertikal.
+                _buildHistorySection(context), // Tombol riwayat transaksi
+                const SizedBox(height: 32), // Spasi vertikal.
+                _buildSettingsButton(), // Tombol pengaturan profil.
+              ],
+            );
+          },
         ),
       ),
       /** Widget [buildBottomNavBar]
@@ -155,69 +226,43 @@ class ProfilePage extends StatelessWidget {
   /* Fungsi ini membangun bagian header halaman profil, termasuk foto, salam, nama, dan tombol edit.
    *
    * Parameter:
+   * - [context]: BuildContext dari widget, digunakan untuk navigasi.   *
+   * Parameter:
    * - [context]: BuildContext dari widget, digunakan untuk navigasi.
+   * - [user]: Data user dari API, nullable.
    *
    * Return: Widget [Row] yang berisi elemen-elemen header.
    */
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, User? user) {
     return Row(
-      mainAxisAlignment:
-          MainAxisAlignment.spaceBetween, // Menempatkan elemen di kedua ujung.
       children: [
-        Row(
-          children: [
-            /** Widget [CircleAvatar]
-             * * Deskripsi:
-             * - Menampilkan foto profil pengguna dalam bentuk lingkaran.
-             * - Menggunakan gambar placeholder dari aset lokal.
-             */
-            const CircleAvatar(
-              radius: 30, // Ukuran radius avatar.
-              backgroundImage: AssetImage(
-                  'images/assets_Profile/profile_placeholder.jpg'), // Gambar profil.
-            ),
-            const SizedBox(width: 12), // Spasi horizontal.
-            /** Widget [Column]
-             * * Deskripsi:
-             * - Mengatur teks salam dan nama pengguna secara vertikal.
-             */
-            Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start, // Penataan teks ke kiri.
-              children: const [
-                /** Widget [Text]
-                 * * Deskripsi:
-                 * - Teks sapaan "Hello,".
-                 * - Gaya teks kecil dan berwarna abu-abu.
-                 */
-                Text('Hello,',
-                    style: TextStyle(color: Colors.grey, fontSize: 14)),
-                /** Widget [Text]
-                 * * Deskripsi:
-                 * - Menampilkan **nama pengguna** "Izzuddin Azzam".
-                 * - Data dinamis dari placeholder.
-                 * - Gaya teks besar dan tebal.
-                 */
-                Text('Izzuddin Azzam',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-              ],
-            ),
-          ],
-        ),
-        /** Widget [GestureDetector]
+        /** Widget [CircleAvatar]
          * * Deskripsi:
-         * - Memungkinkan ikon edit untuk dapat ditekan.
+         * - Menampilkan foto profil pengguna dalam bentuk lingkaran.
+         * - Menggunakan gambar dari API atau placeholder jika tidak ada.
          */
-        GestureDetector(
-          onTap: () {
-            // TODO: Logika navigasi ke halaman EditProfilePage akan ditambahkan di sini.
-          },
-          /** Widget [Icon]
-           * * Deskripsi:
-           * - Ikon edit di sisi kanan header, untuk mengedit profil.
-           */
-          child: const Icon(Icons.edit, color: Colors.black87),
+        CircleAvatar(
+          radius: 30, // Ukuran radius avatar.
+          backgroundImage: user?.gambar != null && user!.gambar!.isNotEmpty
+              ? NetworkImage(user.gambar!) // Gambar dari API
+              : const AssetImage(
+                      'images/assets_Profile/profile_placeholder.jpg')
+                  as ImageProvider, // Placeholder
+        ),
+        const SizedBox(width: 12), // Spasi horizontal.        // Widget Column
+        // Deskripsi: Mengatur nama pengguna secara vertikal.
+        Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.start, // Penataan teks ke kiri.
+          children: [
+            // Widget Text
+            // Deskripsi: Menampilkan nama pengguna dari API atau placeholder.
+            // Data dinamis dari backend.
+            // Gaya teks besar dan tebal.
+            Text(user?.nama ?? 'Loading...',
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+          ],
         ),
       ],
     );
@@ -225,9 +270,12 @@ class ProfilePage extends StatelessWidget {
 
   /* Fungsi ini membangun bagian detail informasi akun pengguna.
    *
+   * Parameter:
+   * - [user]: Data user dari API, nullable.
+   *
    * Return: Widget [Column] yang berisi judul bagian dan kartu informasi.
    */
-  Widget _buildProfileDetails() {
+  Widget _buildProfileDetails(User? user) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start, // Penataan ke kiri.
       children: [
@@ -241,11 +289,14 @@ class ProfilePage extends StatelessWidget {
         const SizedBox(height: 12), // Spasi vertikal.
         _buildCard([
           _buildProfileRow(
-              'Email', 'izzuddin@example.com'), // Baris detail email.
+              'Email', user?.email ?? 'Loading...'), // Email dari API
           _buildProfileRow(
-              'Telepon', '+62 812 3456 7890'), // Baris detail telepon.
+              'Telepon', user?.noHp ?? 'Loading...'), // Telepon dari API
           _buildProfileRow(
-              'Lokasi', 'Jakarta, Indonesia'), // Baris detail lokasi.
+              'Lokasi',
+              user != null
+                  ? '${user.alamat ?? ''}, ${user.kota ?? ''}'
+                  : 'Loading...'), // Alamat dari API
         ]),
       ],
     );
@@ -290,101 +341,58 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  /* Fungsi ini membangun bagian ringkasan riwayat penyewaan/pembelian pengguna.
+  /* Fungsi ini membangun tombol untuk melihat riwayat transaksi.
    *
    * Parameter:
    * - [context]: BuildContext dari widget, digunakan untuk navigasi.
    *
-   * Return: Widget [Column] yang berisi judul bagian, kartu ringkasan, dan tombol "Lihat Semua".
+   * Return: Widget [ElevatedButton] untuk navigasi ke halaman riwayat transaksi.
    */
   Widget _buildHistorySection(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start, // Penataan ke kiri.
+      crossAxisAlignment:
+          CrossAxisAlignment.stretch, // Membuat tombol memenuhi lebar
       children: [
-        /** Widget [Text]
+        /** Widget [ElevatedButton]
          * * Deskripsi:
-         * - Judul bagian "Riwayat".
-         * - Gaya teks semi-bold dengan ukuran 18.
+         * - Tombol yang lebih signifikan untuk mengakses riwayat transaksi.
          */
-        const Text('Riwayat',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-        const SizedBox(height: 12), // Spasi vertikal.
-        _buildCard([
-          _buildHistoryRow(
-              'Pembelian', '3 Items'), // Baris ringkasan jumlah pembelian.
-          _buildHistoryRow(
-              'Penyewaan', '2 Rentals'), // Baris ringkasan jumlah penyewaan.
-          _buildHistoryRow('Status Pembayaran',
-              'Lunas'), // Baris ringkasan status pembayaran.
-        ]),
-        const SizedBox(height: 12), // Spasi vertikal.
-        /** Widget [Align]
-         * * Deskripsi:
-         * - Menempatkan tombol "Lihat Semua" di sisi kanan.
-         */
-        Align(
-          alignment: Alignment.centerRight, // Penataan ke kanan.
-          /** Widget [TextButton]
+        ElevatedButton.icon(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.white, // Warna latar belakang putih
+            foregroundColor:
+                const Color(0xFF2E7D32), // Warna teks dan ikon hijau
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: const BorderSide(
+                  color: Color(0xFF2E7D32), width: 1.5), // Border hijau
+            ),
+            elevation: 2, // Sedikit bayangan
+          ),
+          onPressed: () {
+            // Navigasi ke halaman ModernTransactionPage.
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => ModernTransactionPage()),
+            );
+          },
+          /** Widget [Icon]
            * * Deskripsi:
-           * - Tombol untuk menavigasi ke halaman riwayat penyewaan yang lebih detail.
+           * - Ikon riwayat di sebelah kiri teks tombol.
            */
-          child: TextButton(
-            onPressed: () {
-              // Navigasi ke halaman ModernTransactionPage.
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => ModernTransactionPage()),
-              );
-            },
-            /** Widget [Text]
-             * * Deskripsi:
-             * - Teks tombol "Lihat Semua".
-             * - Gaya teks berwarna biru.
-             */
-            child:
-                const Text('Lihat Semua', style: TextStyle(color: Colors.blue)),
+          icon: const Icon(Icons.history, size: 24),
+          /** Widget [Text]
+           * * Deskripsi:
+           * - Teks tombol "Riwayat Transaksi".
+           * - Gaya teks dengan ukuran 16 dan semi-bold.
+           */
+          label: const Text(
+            'Riwayat Transaksi',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
         ),
       ],
-    );
-  }
-
-  /* Fungsi ini membangun satu baris untuk menampilkan label dan nilai ringkasan aktivitas.
-   *
-   * Parameter:
-   * - [label]: Label aktivitas (misal: "Pembelian").
-   * - [value]: Nilai aktivitas (misal: "3 Items").
-   *
-   * Return: Widget [Padding] yang berisi satu baris aktivitas.
-   */
-  Widget _buildHistoryRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-          vertical: 6.0), // Padding vertikal untuk setiap baris.
-      /** Widget [Row]
-       * * Deskripsi:
-       * - Mengatur label dan nilai aktivitas secara horizontal dengan spasi di tengah.
-       */
-      child: Row(
-        mainAxisAlignment:
-            MainAxisAlignment.spaceBetween, // Menyebarkan elemen ke ujung.
-        children: [
-          /** Widget [Text]
-           * * Deskripsi:
-           * - Menampilkan **label aktivitas** (misalnya "Pembelian", "Penyewaan").
-           * - Data dinamis dari parameter `label`.
-           * - Gaya teks semi-bold.
-           */
-          Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
-          /** Widget [Text]
-           * * Deskripsi:
-           * - Menampilkan **nilai aktivitas** (misalnya "3 Items", "2 Rentals").
-           * - Data dinamis dari parameter `value`.
-           * - Gaya teks berwarna abu-abu.
-           */
-          Text(value, style: const TextStyle(color: Colors.black54)),
-        ],
-      ),
     );
   }
 

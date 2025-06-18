@@ -674,4 +674,33 @@ class ApiService {
       return ApiResponse.error('Network error: $e');
     }
   }
+
+  // Get user profile
+  static Future<ApiResponse<User>> getUserProfile(int userId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiConfig.baseUrl}/api/user/profile?user_id=$userId'),
+        headers: ApiConfig.headers,
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        if (responseData['data'] != null) {
+          final User user = User.fromJson(responseData['data']);
+          return ApiResponse.success(
+              user, responseData['message'] ?? 'Profile loaded successfully');
+        } else {
+          return ApiResponse.error('No data found in response');
+        }
+      } else {
+        final error = responseData['error'] ??
+            responseData['detail'] ??
+            'Failed to load user profile';
+        return ApiResponse.error(error);
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: $e');
+    }
+  }
 }
