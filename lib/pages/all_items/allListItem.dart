@@ -738,16 +738,20 @@ class ItemCategoryState extends State<ItemCategory> {
                         ),
                         const SizedBox(height: 10),
                         Row(
-                          children: [
-                            // Input harga minimum
+                          children: [                            // Input harga minimum
                             Expanded(
                               child: TextField(
                                 controller: minPriceController,
                                 keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                  labelText: "Minimum",
+                                decoration: InputDecoration(                                  labelText: "Minimum",
+                                  labelStyle: const TextStyle(color: Color(0xFF627D2C)),
                                   prefixText: "Rp. ",
                                   hintText: "0",
+                                  focusColor: const Color(0xFF627D2C), // Warna saat fokus
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(color: Color(0xFF627D2C)), // Warna border saat fokus
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
@@ -764,16 +768,20 @@ class ItemCategoryState extends State<ItemCategory> {
                                 },
                               ),
                             ),
-                            const SizedBox(width: 10),
-                            // Input harga maksimum
+                            const SizedBox(width: 10),                            // Input harga maksimum
                             Expanded(
                               child: TextField(
                                 controller: maxPriceController,
                                 keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                  labelText: "Maksimum",
+                                decoration: InputDecoration(                                  labelText: "Maksimum",
+                                  labelStyle: const TextStyle(color: Color(0xFF627D2C)),
                                   prefixText: "Rp. ",
                                   hintText: "-",
+                                  focusColor: const Color(0xFF627D2C), // Warna saat fokus
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(color: Color(0xFF627D2C)), // Warna border saat fokus
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),

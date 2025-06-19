@@ -105,9 +105,14 @@ class SignInState extends State<SignIn> {
                       const SizedBox(height: 24),
                       const SizedBox(height: 16),
                       TextFormField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
+                        controller: _emailController,                        decoration: InputDecoration(
                           hintText: 'Email',
+                          labelText: 'Email',
+                          labelStyle: const TextStyle(color: Color(0xFF627D2C)),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Color(0xFF627D2C)),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -129,9 +134,14 @@ class SignInState extends State<SignIn> {
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _passwordController,
-                        obscureText: _obscurePassword,
-                        decoration: InputDecoration(
+                        obscureText: _obscurePassword,                        decoration: InputDecoration(
                           hintText: 'Password',
+                          labelText: 'Password',
+                          labelStyle: const TextStyle(color: Color(0xFF627D2C)),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Color(0xFF627D2C)),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),

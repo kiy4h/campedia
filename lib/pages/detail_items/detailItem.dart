@@ -280,7 +280,7 @@ class DetailItemState extends State<DetailItem>
                             tabs: const [
                               Tab(text: 'Deskripsi'),
                               Tab(text: 'Ulasan'),
-                              Tab(text: 'Diskusi'),
+                              Tab(text: 'Panduan'),
                             ],
                           ),
                         ],
@@ -306,7 +306,7 @@ class DetailItemState extends State<DetailItem>
                       // Konten tab "Discussion".
                       const SingleChildScrollView(
                         padding: EdgeInsets.all(20),
-                        child: Text('Belum ada diskusi untuk produk ini.'),
+                        child: Text('Belum ada Panduan untuk produk ini.'),
                       ),
                     ],
                   ),
