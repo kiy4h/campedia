@@ -208,7 +208,7 @@ class ThankYouPage extends StatelessWidget {
                                * - Label "Order ID".
                                */
                               Text(
-                                "Transaction ID",
+                                "ID Transaksi",
                                 style: TextStyle(
                                   color: Color(0xFF8A8A8A),
                                 ),

@@ -63,7 +63,7 @@ class Checkout2State extends State<Checkout2> {
          * - Judul halaman yang menunjukkan 'Payment Method'.
          */
         title:
-            const Text('Payment Method', style: TextStyle(color: Colors.black)),
+            const Text('Metode Pembayaran', style: TextStyle(color: Colors.black)),
         centerTitle: true,
       ),
       /** Widget [Padding]
@@ -198,7 +198,7 @@ class Checkout2State extends State<Checkout2> {
          * - Teksnya berubah berdasarkan status `isActive`.
          */
         Text(
-          isActive ? 'Payment Method' : 'Rent Confirmation',
+          isActive ? 'Metode Pembayaran' : 'Konfirmasi Penyewaan',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ],

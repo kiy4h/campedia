@@ -245,7 +245,7 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'Status Penyewaan #${widget.statusTransaksi}',
+            'Status Penyewaan',
             style: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold),
           ),
