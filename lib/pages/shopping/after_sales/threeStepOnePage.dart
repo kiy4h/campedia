@@ -8,6 +8,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'thankyouPage.dart';
 
 /// Widget [PickupTrackingPage]
 /// * Deskripsi:
@@ -209,11 +210,13 @@ class PickupTrackingPageState extends State<PickupTrackingPage> {
        * - Bilah aplikasi di bagian atas halaman.
        * - Berisi tombol "Close" dan judul halaman.
        */
-      appBar: AppBar(
-        // Tombol kembali (Close) di sisi kiri AppBar.
+      appBar: AppBar(        // Tombol kembali (Close) di sisi kiri AppBar yang mengarah ke ThankYouPage.
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const ThankYouPage()),
+          ),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,

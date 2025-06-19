@@ -13,6 +13,7 @@ import '../../../providers/auth_provider.dart';
 import '../../../services/api_service.dart';
 import '../../../models/models.dart';
 import 'checkout2.dart';
+import '../cart/shoping.dart';
 
 /// Widget [Checkout]
 ///
