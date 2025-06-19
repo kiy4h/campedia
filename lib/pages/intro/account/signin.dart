@@ -15,10 +15,10 @@ class SignIn extends StatefulWidget {
   const SignIn({super.key});
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<SignIn> createState() => SignInState();
 }
 
-class _SignInState extends State<SignIn> {
+class SignInState extends State<SignIn> {
   bool _obscurePassword = true;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -96,7 +96,7 @@ class _SignInState extends State<SignIn> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Sign In to your account',
+                        'Masuk ke akun Anda',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -105,9 +105,14 @@ class _SignInState extends State<SignIn> {
                       const SizedBox(height: 24),
                       const SizedBox(height: 16),
                       TextFormField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
+                        controller: _emailController,                        decoration: InputDecoration(
                           hintText: 'Email',
+                          labelText: 'Email',
+                          labelStyle: const TextStyle(color: Color(0xFF627D2C)),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Color(0xFF627D2C)),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -129,9 +134,14 @@ class _SignInState extends State<SignIn> {
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _passwordController,
-                        obscureText: _obscurePassword,
-                        decoration: InputDecoration(
+                        obscureText: _obscurePassword,                        decoration: InputDecoration(
                           hintText: 'Password',
+                          labelText: 'Password',
+                          labelStyle: const TextStyle(color: Color(0xFF627D2C)),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Color(0xFF627D2C)),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -162,7 +172,7 @@ class _SignInState extends State<SignIn> {
                         text: TextSpan(
                           style: const TextStyle(color: Colors.black54),
                           children: [
-                            const TextSpan(text: 'Forgot your password? '),
+                            const TextSpan(text: 'Lupa kata sandi Anda? '),
                             WidgetSpan(
                               child: GestureDetector(
                                 onTap: () {
@@ -174,7 +184,7 @@ class _SignInState extends State<SignIn> {
                                   );
                                 },
                                 child: Text(
-                                  'Reset here',
+                                  'Atur ulang di sini',
                                   style: const TextStyle(
                                     color: Color(0xFF566D3D),
                                     fontWeight: FontWeight.bold,
@@ -206,7 +216,7 @@ class _SignInState extends State<SignIn> {
                                   ? const CircularProgressIndicator(
                                       color: Colors.white)
                                   : const Text(
-                                      'SIGN IN',
+                                      'MASUK',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,

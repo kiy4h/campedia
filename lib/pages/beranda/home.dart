@@ -15,12 +15,10 @@ import '../all_items/category.dart';
 import '../detail_items/detailItem.dart';
 import 'recommendedGearTrip.dart';
 import '../components/navbar.dart';
-import 'trendingGear.dart';
+import '../components/product_card.dart';
 import 'notification.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/barang_provider.dart';
-import '../../models/models.dart';
-import '../beranda/recommendedGearTrip.dart';
 
 // Fungsi main untuk menjalankan aplikasi sebagai contoh
 void main() {
@@ -67,7 +65,7 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
 /// State untuk widget HomePage
@@ -75,7 +73,7 @@ class HomePage extends StatefulWidget {
 /// - Mengelola state, data, dan logika untuk halaman beranda.
 /// - Memuat data barang dari API melalui provider saat state diinisialisasi.
 /// - Berisi data statis sebagai fallback jika data dari API gagal dimuat.
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   /* Fungsi ini dijalankan saat state widget pertama kali dibuat.
    * * Menggunakan addPostFrameCallback untuk memastikan _loadData() dipanggil setelah frame pertama selesai dirender.
    */
@@ -175,14 +173,14 @@ class _HomePageState extends State<HomePage> {
       "title": "Recommended\nGear Trip",
       "image":
           "http://localhost:8000/images/assets_DestinationCamp/gunung1.jpg",
-      "color": Colors.black.withOpacity(0.6),
+      "color": Colors.black.withValues(alpha: 0.6),
     },
     {
       "key": "2",
       "title": "Fresh Trending\nGear",
       "image":
           "http://localhost:8000/images/assets_DestinationCamp/gunung2.jpg",
-      "color": Colors.black.withOpacity(0.6),
+      "color": Colors.black.withValues(alpha: 0.6),
     },
   ];
 
@@ -247,7 +245,7 @@ class _HomePageState extends State<HomePage> {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -261,7 +259,7 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: TextField(
                   decoration: const InputDecoration(
-                    hintText: 'Search camping gear...',
+                    hintText: 'Cari kebutuhan Kemah...',
                     border: InputBorder.none,
                   ),
                   // Navigasi ke halaman daftar semua item saat pencarian di-submit
@@ -280,7 +278,7 @@ class _HomePageState extends State<HomePage> {
         const SizedBox(height: 16),
         // Widget Text untuk salam pagi
         Text(
-          'Good Morning',
+          'Selamat Datang',
           style: TextStyle(
             color: Colors.grey.shade600,
             fontSize: 14,
@@ -318,7 +316,7 @@ class _HomePageState extends State<HomePage> {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -355,53 +353,54 @@ class _HomePageState extends State<HomePage> {
    * * Return: Widget SizedBox berisi ListView horizontal.
    */
   Widget _buildMountainSection() {
-  return GestureDetector(
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const GunungDestinationPage()),
-      );
-    },
-    child: Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.green[600]!, Colors.green[400]!],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.landscape, color: Colors.white, size: 32),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Mountain Destinations',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Explore gear for specific mountains',
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
-                ),
-              ],
-            ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const GunungDestinationPage()),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.green[600]!, Colors.green[400]!],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
-        ],
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.landscape, color: Colors.white, size: 32),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Destinasi Gunung',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'Jelajahi perlengkapan untuk pegunungan tertentu',
+                    style: TextStyle(color: Colors.white70, fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   /* Fungsi ini membangun bagian kategori.
    * * Parameter:
@@ -417,7 +416,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             // Judul bagian
             const Text(
-              'Categories',
+              'Kategori',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -477,7 +476,7 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.circular(18),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -518,7 +517,7 @@ class _HomePageState extends State<HomePage> {
       children: [
         // Judul bagian
         const Text(
-          'Trending Deals',
+          'Penawaran Terpopuler',
           style: TextStyle(
               fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
         ),
@@ -555,9 +554,9 @@ class _HomePageState extends State<HomePage> {
                 ? barangProvider.barangBeranda.length
                 : trendingItems.length,
             itemBuilder: (context, index) {
-              // Jika data API tersedia, gunakan _buildApiBarangItem
+              // Jika data API tersedia, gunakan ProductCard
               if (barangProvider.barangBeranda.isNotEmpty) {
-                return _buildApiBarangItem(barangProvider.barangBeranda[index]);
+                return ProductCard(barang: barangProvider.barangBeranda[index]);
               } else {
                 // Jika tidak, gunakan data statis dengan _buildTrendingItem
                 return _buildTrendingItem(trendingItems[index]);
@@ -591,7 +590,7 @@ class _HomePageState extends State<HomePage> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -631,124 +630,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const Spacer(),
                     Text(
-                      item['price'] ?? 'Rp 0',
+                      item['price'] != null
+                          ? NumberFormat.currency(
+                                  locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                              .format(item['price'])
+                          : 'Rp 0',
                       style: const TextStyle(
                           fontSize: 12,
                           color: Colors.black87,
                           fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /* Fungsi ini membangun satu kartu produk dari data API (model Barang).
-   * * Parameter:
-   * - barang: Objek model Barang dari API.
-   * * Return: Widget GestureDetector yang berisi kartu produk dinamis.
-   */
-  Widget _buildApiBarangItem(Barang barang) {
-    return GestureDetector(
-      onTap: () {
-        // Navigasi ke halaman detail saat kartu diklik dengan barangId
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DetailItem(barangId: barang.id),
-          ),
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Bagian gambar produk
-            Expanded(
-              flex: 3,
-              child: Container(
-                width: double.infinity,
-                // Menampilkan gambar dari URL atau placeholder jika null/error
-                child: barang.foto != null
-                    ? ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(12)),
-                        child: Image.network(
-                          barang.foto!,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Icon(Icons.camera_alt,
-                                  size: 40, color: Colors.grey),
-                        ),
-                      )
-                    : Container(
-                        color: Colors.grey[200],
-                        child: const Icon(Icons.camera_alt,
-                            size: 40, color: Colors.grey)),
-              ),
-            ),
-            // Bagian informasi produk
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Widget Text untuk nama barang
-                    Text(
-                      barang.namaBarang,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const Spacer(), // Memberi ruang fleksibel
-                    // Row untuk harga dan rating
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Widget Text untuk harga, diformat ke Rupiah
-                        Text(
-                          NumberFormat.currency(
-                                  locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                              .format(barang.hargaPerhari),
-                          style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.black87,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        // Row untuk ikon bintang dan nilai rating
-                        Row(
-                          children: [
-                            const Icon(Icons.star,
-                                color: Colors.amber, size: 14),
-                            const SizedBox(width: 2),
-                            Text(
-                              barang.meanReview.toStringAsFixed(1),
-                              style: const TextStyle(
-                                  fontSize: 11, color: Colors.black87),
-                            ),
-                          ],
-                        ),
-                      ],
                     ),
                   ],
                 ),
@@ -780,7 +670,7 @@ class _HomePageState extends State<HomePage> {
         ),
         child: const Center(
           child: Text(
-            'More',
+            'Lihat Lainnya',
             style: TextStyle(
                 color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
           ),

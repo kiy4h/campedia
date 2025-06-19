@@ -10,14 +10,16 @@ class GunungDestinationPage extends StatefulWidget {
   const GunungDestinationPage({super.key});
 
   @override
-  State<GunungDestinationPage> createState() => _GunungDestinationPageState();
+  State<GunungDestinationPage> createState() => GunungDestinationPageState();
 }
 
-class _GunungDestinationPageState extends State<GunungDestinationPage> {
+class GunungDestinationPageState extends State<GunungDestinationPage> {
   @override
   void initState() {
     super.initState();
-    _loadGunung();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadGunung();
+    });
   }
 
   void _loadGunung() {
@@ -33,7 +35,7 @@ class _GunungDestinationPageState extends State<GunungDestinationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mountain Destinations'),
+        title: const Text('Destinasi Pegunungan'),
         backgroundColor: Colors.white,
         elevation: 0,
         foregroundColor: Colors.black,
@@ -61,7 +63,7 @@ class _GunungDestinationPageState extends State<GunungDestinationPage> {
 
           if (gunungProvider.gunungList.isEmpty) {
             return const Center(
-              child: Text('No mountains available'),
+              child: Text('Tidak ada pegunungan yang tersedia'),
             );
           }
 
@@ -90,7 +92,9 @@ class _GunungDestinationPageState extends State<GunungDestinationPage> {
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
             child: Image.network(
-              gunung.foto.isNotEmpty ? gunung.foto : 'https://via.placeholder.com/400x200',
+              gunung.foto.isNotEmpty
+                  ? gunung.foto
+                  : 'https://via.placeholder.com/400x200',
               height: 200,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -103,7 +107,7 @@ class _GunungDestinationPageState extends State<GunungDestinationPage> {
               },
             ),
           ),
-          
+
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -118,7 +122,7 @@ class _GunungDestinationPageState extends State<GunungDestinationPage> {
                   ),
                 ),
                 const SizedBox(height: 4),
-                
+
                 // Location
                 Row(
                   children: [
@@ -131,7 +135,7 @@ class _GunungDestinationPageState extends State<GunungDestinationPage> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                
+
                 // Description
                 Text(
                   gunung.deskripsi,
@@ -140,21 +144,23 @@ class _GunungDestinationPageState extends State<GunungDestinationPage> {
                   style: const TextStyle(fontSize: 14),
                 ),
                 const SizedBox(height: 12),
-                
+
                 // Items count badge
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
+                    color: Colors.green.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.shopping_bag_outlined, size: 16, color: Colors.green[700]),
+                      Icon(Icons.shopping_bag_outlined,
+                          size: 16, color: Colors.green[700]),
                       const SizedBox(width: 4),
                       Text(
-                        "${gunung.barangList.length} Items Available",
+                        "${gunung.barangList.length} Item Tersedia",
                         style: TextStyle(
                           color: Colors.green[700],
                           fontWeight: FontWeight.bold,
@@ -165,11 +171,11 @@ class _GunungDestinationPageState extends State<GunungDestinationPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                
+
                 // Available Items Grid
                 if (gunung.barangList.isNotEmpty) ...[
                   const Text(
-                    'Available Gear:',
+                    'Perlengkapan Tersedia:',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
@@ -217,7 +223,8 @@ class _GunungDestinationPageState extends State<GunungDestinationPage> {
             // Item Image
             Expanded(
               child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(8)),
                 child: Image.network(
                   barang.foto ?? 'https://via.placeholder.com/100x60',
                   width: double.infinity,
@@ -231,7 +238,7 @@ class _GunungDestinationPageState extends State<GunungDestinationPage> {
                 ),
               ),
             ),
-            
+
             Padding(
               padding: const EdgeInsets.all(8),
               child: Column(

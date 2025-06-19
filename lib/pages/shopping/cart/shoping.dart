@@ -57,22 +57,24 @@ class Shoping extends StatefulWidget {
   const Shoping({super.key});
 
   @override
-  State<Shoping> createState() => _ShopingState();
+  State<Shoping> createState() => ShopingState();
 }
 
 /*
-* Class : _ShopingState
+* Class : ShopingState
 * Deskripsi : State untuk widget Shoping
 * Bagian Layar : Mengelola state dan tampilan halaman keranjang belanja
 */
-class _ShopingState extends State<Shoping> {
+class ShopingState extends State<Shoping> {
   // Track which item is currently expanded
   int? expandedItemIndex;
-
   @override
   void initState() {
     super.initState();
-    _loadCart();
+    // Schedule cart loading after the current frame is complete
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadCart();
+    });
   }
 
   /*
@@ -152,7 +154,7 @@ class _ShopingState extends State<Shoping> {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'Your cart is empty',
+                    'Keranjang Anda kosong',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.grey,
@@ -199,11 +201,11 @@ class _ShopingState extends State<Shoping> {
                             setState(() {
                               expandedItemIndex = null;
                             });
-                          } else {
+                          } else if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(cartProvider.error ??
-                                    'Failed to remove item'),
+                                    'Gagal menghapus item'),
                                 backgroundColor: Colors.red,
                               ),
                             );
@@ -226,7 +228,7 @@ class _ShopingState extends State<Shoping> {
                 ),
               ),
 
-              // Place Order Button
+              // Lakukan Pemesanan Button
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
@@ -266,7 +268,7 @@ class _ShopingState extends State<Shoping> {
                         const Row(
                           children: [
                             Text(
-                              'Place Order',
+                              'Lakukan Pemesanan',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -312,10 +314,10 @@ class SlidableDeleteItem extends StatefulWidget {
   });
 
   @override
-  State<SlidableDeleteItem> createState() => _SlidableDeleteItemState();
+  State<SlidableDeleteItem> createState() => SlidableDeleteItemState();
 }
 
-class _SlidableDeleteItemState extends State<SlidableDeleteItem> {
+class SlidableDeleteItemState extends State<SlidableDeleteItem> {
   // For tracking manual drag
   double _dragDistance = 0;
   final double _dragThreshold = 120; // Distance to consider a successful drag
@@ -391,7 +393,7 @@ class _SlidableDeleteItemState extends State<SlidableDeleteItem> {
                             ),
                             SizedBox(height: 4),
                             Text(
-                              'Delete',
+                              'Hapus',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
@@ -571,7 +573,7 @@ class _SlidableDeleteItemState extends State<SlidableDeleteItem> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const Text(
-                              'QTY',
+                              'Jumlah',
                               style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 12,
@@ -654,7 +656,7 @@ PreferredSizeWidget buildAppBar({
   // Tentukan judul dan aksi berdasarkan currentIndex
   switch (currentIndex) {
     case 0:
-      title = 'Home';
+      title = 'Beranda';
       actions = [
         IconButton(
           onPressed: () {},
@@ -663,12 +665,12 @@ PreferredSizeWidget buildAppBar({
       ];
       break;
     case 1:
-      title = 'Category';
+      title = 'Kategori';
       actions = [
         TextButton(
           onPressed: () {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Order placed!')),
+              const SnackBar(content: Text('Pesanan berhasil dilakukan!')),
             );
           },
           style: TextButton.styleFrom(
@@ -678,21 +680,21 @@ PreferredSizeWidget buildAppBar({
               fontSize: 16,
             ),
           ),
-          child: const Text('Place Order'),
+          child: const Text('Lakukan Pemesanan'),
         ),
       ];
       break;
     case 2:
-      title = 'Shopping Cart';
-      // Removed the "Place Order" action from here
+      title = 'Keranjang Belanja';
+      // Removed the "Lakukan Pemesanan" action from here
       break;
     case 3:
-      title = 'Favorite';
+      title = 'Favorit';
       actions = [
         TextButton(
           onPressed: () {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Order placed!')),
+              const SnackBar(content: Text('Pesanan berhasil dilakukan!')),
             );
           },
           style: TextButton.styleFrom(
@@ -702,12 +704,12 @@ PreferredSizeWidget buildAppBar({
               fontSize: 16,
             ),
           ),
-          child: const Text('Place Order'),
+          child: const Text('Lakukan Pemesanan'),
         ),
       ];
       break;
     case 4:
-      title = 'Profile';
+      title = 'Profil';
       actions = [
         IconButton(
           onPressed: () {},

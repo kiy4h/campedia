@@ -22,7 +22,7 @@ class Checkout2 extends StatefulWidget {
   const Checkout2({super.key});
 
   @override
-  _Checkout2State createState() => _Checkout2State();
+  Checkout2State createState() => Checkout2State();
 }
 
 /// State [Checkout2State]
@@ -30,7 +30,7 @@ class Checkout2 extends StatefulWidget {
 /// Deskripsi:
 /// - Mengelola state untuk widget Checkout2, termasuk metode pembayaran yang dipilih.
 /// - Bertanggung jawab untuk membangun UI berdasarkan state saat ini.
-class _Checkout2State extends State<Checkout2> {
+class Checkout2State extends State<Checkout2> {
   // Menyimpan metode pembayaran yang saat ini dipilih oleh pengguna.
   String selectedPayment = 'QRIS';
   // Kunci global untuk form, digunakan untuk validasi jika diperlukan.
@@ -361,7 +361,7 @@ class _Checkout2State extends State<Checkout2> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 3),
                 ),
@@ -870,8 +870,7 @@ class _Checkout2State extends State<Checkout2> {
                             totalPembayaran:
                                 checkoutProvider.storedTotalAmount!,
                           );
-
-                          if (success) {
+                          if (success && mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content:
@@ -884,11 +883,12 @@ class _Checkout2State extends State<Checkout2> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ThankYouPage(
-                                  transactionId: checkoutProvider.storedTransactionId,
+                                  transactionId:
+                                      checkoutProvider.storedTransactionId,
                                 ),
                               ),
                             );
-                          } else {
+                          } else if (!success && mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(

@@ -57,16 +57,15 @@ class DetailItem extends StatefulWidget {
   final int barangId;
 
   const DetailItem({super.key, required this.barangId});
-
   @override
-  State<DetailItem> createState() => _DetailItemState();
+  State<DetailItem> createState() => DetailItemState();
 }
 
 /// State untuk widget DetailItem
 /// * Deskripsi:
 /// - Mengelola semua state dan logika interaktif untuk halaman detail barang.
 /// - Menggunakan `SingleTickerProviderStateMixin` untuk menyediakan Ticker yang dibutuhkan oleh `TabController` untuk animasi perpindahan tab.
-class _DetailItemState extends State<DetailItem>
+class DetailItemState extends State<DetailItem>
     with SingleTickerProviderStateMixin {
   // Controller untuk mengelola state dan animasi TabBar.
   late TabController _tabController;
@@ -91,7 +90,9 @@ class _DetailItemState extends State<DetailItem>
         length: 3, vsync: this); // Inisialisasi TabController untuk 3 tab.
     _pageController = PageController(
         initialPage: _currentImage); // Inisialisasi PageController.
-    _loadItemDetail();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadItemDetail();
+    });
   }
 
   /* Fungsi ini memuat detail barang dari API.
@@ -260,7 +261,7 @@ class _DetailItemState extends State<DetailItem>
                                     decoration: BoxDecoration(
                                       color: index == _currentImage
                                           ? Colors.white
-                                          : Colors.white.withOpacity(0.5),
+                                          : Colors.white.withValues(alpha: 0.5),
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                   ),
@@ -277,9 +278,9 @@ class _DetailItemState extends State<DetailItem>
                             indicatorColor: Colors.amber,
                             indicatorWeight: 3,
                             tabs: const [
-                              Tab(text: 'Description'),
-                              Tab(text: 'Review'),
-                              Tab(text: 'Discussion'),
+                              Tab(text: 'Deskripsi'),
+                              Tab(text: 'Ulasan'),
+                              Tab(text: 'Panduan'),
                             ],
                           ),
                         ],
@@ -296,7 +297,7 @@ class _DetailItemState extends State<DetailItem>
                         child: Text(
                           barang.deskripsi.isNotEmpty
                               ? barang.deskripsi
-                              : 'No description available.',
+                              : 'Tidak ada deskripsi yang tersedia.',
                           style: const TextStyle(fontSize: 15, height: 1.5),
                         ),
                       ),
@@ -305,7 +306,7 @@ class _DetailItemState extends State<DetailItem>
                       // Konten tab "Discussion".
                       const SingleChildScrollView(
                         padding: EdgeInsets.all(20),
-                        child: Text('Belum ada diskusi untuk produk ini.'),
+                        child: Text('Belum ada Panduan untuk produk ini.'),
                       ),
                     ],
                   ),
@@ -373,7 +374,7 @@ class _DetailItemState extends State<DetailItem>
                     const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               Text(
-                ' (${barang.totalReview} reviews)',
+                ' (${barang.totalReview} ulasan)',
                 style: const TextStyle(fontSize: 14, color: Colors.black54),
               ),
               const Spacer(), // Tombol favorit
@@ -406,7 +407,7 @@ class _DetailItemState extends State<DetailItem>
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content:
-                                  Text('Please login first to add to wishlist'),
+                                  Text('Silakan masuk terlebih dahulu untuk menambahkan ke daftar keinginan.'),
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -423,16 +424,17 @@ class _DetailItemState extends State<DetailItem>
                             authProvider.user!.userId,
                             widget.barangId,
                           );
-
                           if (success) {
                             setState(() => _isFavorite = false);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: const Text('Removed from wishlist'),
-                                backgroundColor: Colors.orange,
-                                duration: const Duration(seconds: 2),
-                              ),
-                            );
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text('Removed from wishlist'),
+                                  backgroundColor: Colors.orange,
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                            }
                           }
                         } else {
                           // Add to wishlist
@@ -440,24 +442,24 @@ class _DetailItemState extends State<DetailItem>
                             authProvider.user!.userId,
                             widget.barangId,
                           );
-
                           if (success) {
                             setState(() => _isFavorite = true);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: const Text('Added to wishlist!'),
-                                backgroundColor: Colors.green,
-                                duration: const Duration(seconds: 2),
-                              ),
-                            );
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text('Added to wishlist!'),
+                                  backgroundColor: Colors.green,
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                            }
                           }
                         }
 
                         // Hide loading state
-                        setState(() => _isWishlistLoading = false);
-
-                        // If operation failed, show error
-                        if (!success) {
+                        setState(() => _isWishlistLoading =
+                            false); // If operation failed, show error
+                        if (!success && mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -482,8 +484,8 @@ class _DetailItemState extends State<DetailItem>
               const SizedBox(width: 4),
               Text(
                 barang.stok > 0
-                    ? 'Available · ${barang.stok} items'
-                    : 'Out of stock',
+                    ? 'Tersedia · ${barang.stok} item'
+                    : 'Stok habis',
                 style: const TextStyle(fontSize: 14, color: Colors.black54),
               ),
             ],
@@ -564,7 +566,7 @@ class _DetailItemState extends State<DetailItem>
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, -5),
           ),
@@ -572,13 +574,13 @@ class _DetailItemState extends State<DetailItem>
       ),
       child: Row(
         children: [
-          const Text('QTY',
+          const Text('Jumlah',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
           const SizedBox(width: 10),
           // Widget untuk menambah dan mengurangi kuantitas (stepper).
           Container(
             decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -639,8 +641,7 @@ class _DetailItemState extends State<DetailItem>
                         widget.barangId,
                         _quantity,
                       );
-
-                      if (success) {
+                      if (success && mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
@@ -648,11 +649,11 @@ class _DetailItemState extends State<DetailItem>
                             backgroundColor: Colors.green,
                           ),
                         );
-                      } else {
+                      } else if (!success && mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
-                                cartProvider.error ?? 'Failed to add to cart'),
+                                cartProvider.error ?? 'Gagal menambahkan ke keranjang.'),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -666,7 +667,7 @@ class _DetailItemState extends State<DetailItem>
                     borderRadius: BorderRadius.circular(12)),
               ),
               child: const Text(
-                'ADD TO CART',
+                'TAMBAHKAN KE KERANJANG',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),

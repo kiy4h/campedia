@@ -40,7 +40,7 @@ Widget buildBottomNavBar(
       // Efek bayangan (shadow) untuk memberikan kesan terangkat.
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.05),
+          color: Colors.black.withValues(alpha: 0.05),
           blurRadius: 10,
           offset: const Offset(0, -5),
         ),
@@ -171,33 +171,43 @@ Widget _buildProfileNavItem(BuildContext context, int index, int currentIndex) {
 /* Fungsi helper untuk menangani logika navigasi.
  * * Deskripsi:
  * - Fungsi pribadi (_) yang memusatkan semua logika perpindahan halaman.
+ * - Menggunakan PageRouteBuilder inline untuk navigasi instant tanpa animasi.
  * - Menggunakan switch statement untuk menentukan halaman tujuan berdasarkan indeks yang diklik.
  * * Parameter:
  * - context: BuildContext untuk mengakses Navigator.
  * - index: Indeks halaman tujuan.
  */
 void _navigateToPage(BuildContext context, int index) {
+  Widget targetPage;
+
   // Switch untuk memilih halaman tujuan berdasarkan indeks.
   switch (index) {
     case 0: // Halaman Beranda
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+      targetPage = HomePage();
       break;
     case 1: // Halaman Semua Item/Katalog
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const AllItemList()));
+      targetPage = const AllItemList();
       break;
     case 2: // Halaman Keranjang Belanja
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const Shoping()));
+      targetPage = const Shoping();
       break;
     case 3: // Halaman Wishlist/Favorit
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const FavoritePage()));
+      targetPage = const FavoritePage();
       break;
     case 4: // Halaman Profil
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const ProfilePage()));
+      targetPage = const ProfilePage();
       break;
+    default:
+      return;
   }
+
+  // Navigasi dengan PageRouteBuilder inline tanpa animasi
+  Navigator.pushReplacement(
+    context,
+    PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => targetPage,
+      transitionDuration: Duration.zero,
+      reverseTransitionDuration: Duration.zero,
+    ),
+  );
 }

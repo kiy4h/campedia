@@ -26,7 +26,7 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<SplashScreen> createState() => SplashScreenState();
 }
 
 /// State [ _SplashScreenState]
@@ -35,7 +35,7 @@ class SplashScreen extends StatefulWidget {
 /// - Mengelola state internal untuk [SplashScreen].
 /// - Bertanggung jawab untuk memicu navigasi otomatis setelah durasi tertentu
 /// saat widget pertama kali dibuat.
-class _SplashScreenState extends State<SplashScreen> {
+class SplashScreenState extends State<SplashScreen> {
   /* Fungsi ini diinisialisasi saat State objek dibuat.
    *
    * Deskripsi:

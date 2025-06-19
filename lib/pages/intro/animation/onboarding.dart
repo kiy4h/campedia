@@ -29,7 +29,7 @@ class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
   @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
+  State<OnboardingScreen> createState() => OnboardingScreenState();
 }
 
 /// State [ _OnboardingScreenState]
@@ -38,7 +38,7 @@ class OnboardingScreen extends StatefulWidget {
 /// - Mengelola state dan logika untuk [OnboardingScreen].
 /// - Mengontrol [PageController] untuk carousel, indeks halaman saat ini, dan timer auto-slide.
 /// - Mendefinisikan konten untuk setiap halaman onboarding.
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class OnboardingScreenState extends State<OnboardingScreen> {
   // PageController untuk mengontrol perpindahan halaman pada PageView.
   final PageController _pageController = PageController();
   // Indeks halaman yang sedang aktif pada carousel.
@@ -50,25 +50,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final List<OnboardingPage> _pages = [
     OnboardingPage(
       image: 'images/assets_OnBoarding0/kompas_bg.png',
-      title: 'Welcome to Campedia',
-      subtitle: 'Your Ultimate Camping Companion',
+      title: 'Selamat Datang di Campedia',
+      subtitle: 'Teman Berkemah Terbaik Anda',
       description:
           'Sewa perlengkapan kemah terbaik, dari tenda hingga kompor. Berkemah jadi mudah dan seru bersama Campedia',
       backgroundColor: Colors.white,
     ),
     OnboardingPage(
       image: 'images/assets_OnBoarding0/tenda_bg.png',
-      title: 'Quality camping gear for every adventure',
+      title: 'Perlengkapan berkemah berkualitas untuk setiap petualangan',
       subtitle: '', // Subtitle kosong untuk halaman ini.
       description:
-          'Planning your next camping trip? We\'ve got the gear you need — tents, cook sets, lights, and more!',
+          'Merencanakan perjalanan berkemah berikutnya? Kami punya semua perlengkapan yang Anda butuhkan — tenda, peralatan masak, lampu, dan masih banyak lagi!',
       backgroundColor: Colors.white,
     ),
     OnboardingPage(
       image: 'images/assets_OnBoarding0/onboarding4image.png',
-      title: 'Efficient, In-Store Pickup for Your Camping Rentals',
+      title: 'Layanan Pengambilan di Toko yang Efisien untuk Sewa Perlengkapan Berkemah Anda',
       subtitle:
-          'Simply reserve online and pick up your equipment at our store at your convenience.',
+          'Cukup pesan secara online dan ambil perlengkapan Anda di toko kami sesuai kenyamanan Anda.',
       description: '', // Deskripsi kosong untuk halaman ini.
       backgroundColor: Colors.white,
     ),
@@ -262,7 +262,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                        * - Gaya teks dengan ukuran 16, warna putih, dan tebal.
                        */
                       child: const Text(
-                        'CREATE AN ACCOUNT',
+                        'BUAT AKUN',
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.white,
@@ -306,7 +306,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                        * - Gaya teks dengan ukuran 16, warna putih, dan tebal.
                        */
                       child: const Text(
-                        'LOGIN',
+                        'MASUK',
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.white,

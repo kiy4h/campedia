@@ -13,10 +13,10 @@ class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
 
   @override
-  State<ForgotPassword> createState() => _ForgotPasswordState();
+  State<ForgotPassword> createState() => ForgotPasswordState();
 }
 
-class _ForgotPasswordState extends State<ForgotPassword> {
+class ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController _emailController = TextEditingController(); // Mengontrol teks yang dimasukkan di TextField
 
   @override
@@ -57,7 +57,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   crossAxisAlignment: CrossAxisAlignment.start, // Teks rata kiri
                   children: [
                     const Text(
-                      'Forgot Password?', // Judul halaman
+                      'Lupa Kata Sandi?', // Judul halaman
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
@@ -65,7 +65,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'Enter your email address below and we\'ll send you a link to reset your password.',
+                      'Masukkan alamat email Anda di bawah ini dan kami akan mengirimkan tautan untuk mengatur ulang kata sandi Anda.',
                       // Penjelasan singkat untuk user
                       style: TextStyle(
                         fontSize: 16,
@@ -76,7 +76,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     TextField(
                       controller: _emailController, // Menghubungkan input dengan controller
                       decoration: InputDecoration(
-                        hintText: 'Enter your email', // Teks placeholder
+                        hintText: 'Masukkan email Anda', // Teks placeholder
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20), // Border dengan ujung melengkung
                         ),
@@ -110,7 +110,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           });
                         },
                         child: const Text(
-                          'SEND RESET LINK', // Teks pada tombol
+                          'KIRIM LINK PERBARUAN PASSWORD', // Teks pada tombol
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -126,7 +126,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           Navigator.pop(context); // Kembali ke halaman login
                         },
                         child: const Text(
-                          'Back to Login', // Teks tombol untuk kembali
+                          'Kembali ke Halaman Masuk', // Teks tombol untuk kembali
                           style: TextStyle(
                             color: Color(0xFF566D3D), // Warna teks hijau
                             fontWeight: FontWeight.bold,

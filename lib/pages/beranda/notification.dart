@@ -26,10 +26,10 @@ class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
 
   @override
-  State<NotificationPage> createState() => _NotificationPageState();
+  State<NotificationPage> createState() => NotificationPageState();
 }
 
-class _NotificationPageState extends State<NotificationPage> {
+class NotificationPageState extends State<NotificationPage> {
   late NotificationProvider _notificationProvider;
   late AuthProvider _authProvider;
 
@@ -102,7 +102,7 @@ class _NotificationPageState extends State<NotificationPage> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),
@@ -270,7 +270,7 @@ class _NotificationPageState extends State<NotificationPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Notifications",
+          "Notifikasi",
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,

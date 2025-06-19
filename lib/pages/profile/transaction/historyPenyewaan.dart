@@ -33,18 +33,19 @@ class ModernTransactionPage extends StatefulWidget {
   const ModernTransactionPage({super.key});
 
   @override
-  State<ModernTransactionPage> createState() => _ModernTransactionPageState();
+  State<ModernTransactionPage> createState() => ModernTransactionPageState();
 }
 
-class _ModernTransactionPageState extends State<ModernTransactionPage>
+class ModernTransactionPageState extends State<ModernTransactionPage>
     with TickerProviderStateMixin {
   late TabController _tabController;
-
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _loadTransactions();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadTransactions();
+    });
     _startPeriodicRefresh(); // Start periodic refresh for ongoing transactions
   }
 
@@ -144,7 +145,7 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text(
-          'Transaction History',
+          'Histori Transaksi',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black,
@@ -162,9 +163,9 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
           unselectedLabelColor: Colors.grey,
           indicatorColor: const Color(0xFF5D6D3E),
           tabs: const [
-            Tab(text: 'All'),
-            Tab(text: 'Ongoing'),
-            Tab(text: 'Completed'),
+            Tab(text: 'Semua'),
+            Tab(text: 'Sedang Berlangsung'),
+            Tab(text: 'Selesai'),
           ],
         ),
       ),
@@ -183,7 +184,7 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: _loadTransactions,
-                    child: const Text('Retry'),
+                    child: const Text('Ulangi'),
                   ),
                 ],
               ),
@@ -192,7 +193,7 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
 
           if (!authProvider.isAuthenticated) {
             return const Center(
-              child: Text('Please login to view transactions'),
+              child: Text('Silahkan masuk untuk melihat riwayat transaksi.'),
             );
           }
 
@@ -222,7 +223,7 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
             ),
             SizedBox(height: 16),
             Text(
-              'No transactions found',
+              'Transaksi tidak ditemukan',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.grey,
@@ -255,7 +256,7 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -268,7 +269,7 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Transaction #${transaction.transaksiId}',
+                'Transaksi #${transaction.transaksiId}',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -279,7 +280,7 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: getStatusColor(transaction.statusTransaksi)
-                      .withOpacity(0.1),
+                      .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -338,7 +339,7 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
                       ),
                     ),
                     child: const Text(
-                      'View Details',
+                      'Lihat Rincian',
                       style: TextStyle(color: Color(0xFF5D6D3E)),
                     ),
                   ),
@@ -380,25 +381,22 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
   String _getActionButtonText(String status) {
     switch (status) {
       case 'Belum Dibayar':
-        return 'Pay Now';
+        return 'Bayar Sekarang';
       case 'Belum Diambil':
-        return 'Track Order';
+        return 'Lacak Penyewaan';
       case 'Belum Dikembalikan':
-        return 'Track Return';
+        return 'Lacak Pengembalian';
       case 'Sudah Dikembalikan':
-        return 'Leave Review';
+        return 'Berikan Ulasan';
       default:
-        return 'View Details';
+        return 'Lihat Rincian';
     }
   }
-  
-
 
   void _handleTransactionAction(
-    
-    UserTransaction transaction, BuildContext context) async {
+      UserTransaction transaction, BuildContext context) async {
     final checkoutProvider =
-    Provider.of<CheckoutProvider>(context, listen: false);
+        Provider.of<CheckoutProvider>(context, listen: false);
     // Di history_transaksi.dart
     checkoutProvider.setTransactionData(
       transactionId: transaction.transaksiId,
@@ -420,7 +418,8 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
       case 'Belum Diambil':
       case 'Belum Dikembalikan':
         // Navigate to tracking page
-        debugPrint('DEBUG: Updating transaksi_id: \\${transaction.transaksiId}');
+        debugPrint(
+            'DEBUG: Updating transaksi_id: \\${transaction.transaksiId}');
         final result = await Navigator.push(
           context,
           MaterialPageRoute(
@@ -434,7 +433,7 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
           // Show brief loading indicator
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Refreshing transaction list...'),
+              content: Text('Memuat ulang daftar transaksi...'),
               duration: Duration(milliseconds: 1500),
               backgroundColor: Colors.blue,
             ),

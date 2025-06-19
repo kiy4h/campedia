@@ -56,13 +56,13 @@ class CategoryPage extends StatelessWidget {
 /// - Tampilan utama menggunakan layout GridView untuk menyusun kartu-kartu kategori.
 /// - Sekarang menggunakan StatefulWidget untuk mengelola state loading dan data dari API.
 class CategoriesPage extends StatefulWidget {
-  CategoriesPage({super.key});
+  const CategoriesPage({super.key});
 
   @override
-  State<CategoriesPage> createState() => _CategoriesPageState();
+  State<CategoriesPage> createState() => CategoriesPageState();
 }
 
-class _CategoriesPageState extends State<CategoriesPage> {
+class CategoriesPageState extends State<CategoriesPage> {
   @override
   void initState() {
     super.initState();
@@ -115,7 +115,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF5D7052),
                     ),
-                    child: const Text('Retry', style: TextStyle(color: Colors.white)),
+                    child: const Text('Retry',
+                        style: TextStyle(color: Colors.white)),
                   ),
                 ],
               ),
@@ -147,9 +148,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
               // Fungsi yang dipanggil untuk membangun setiap kartu kategori dalam grid
               itemBuilder: (context, index) {
                 return _buildCategoryCard(
-                  kategoriProvider.kategoriList[index], 
-                  context
-                );
+                    kategoriProvider.kategoriList[index], context);
               },
             ),
           );
@@ -190,7 +189,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),

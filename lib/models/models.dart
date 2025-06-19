@@ -50,6 +50,34 @@ class User {
   }
 }
 
+class Brand {
+  final int id;
+  final String namaBrand;
+  final int totalBarang;
+
+  Brand({
+    required this.id,
+    required this.namaBrand,
+    required this.totalBarang,
+  });
+
+  factory Brand.fromJson(Map<String, dynamic> json) {
+    return Brand(
+      id: json['id'] ?? 0,
+      namaBrand: json['nama_brand'] ?? '',
+      totalBarang: json['total_barang'] ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'nama_brand': namaBrand,
+      'total_barang': totalBarang,
+    };
+  }
+}
+
 class Kategori {
   final int id;
   final String namaKategori;
@@ -290,7 +318,8 @@ class Gunung {
 
   factory Gunung.fromJson(Map<String, dynamic> json) {
     List<Barang> barangList = [];
-    if (json['rekomendasi_barang'] != null && json['rekomendasi_barang'] is List) {
+    if (json['rekomendasi_barang'] != null &&
+        json['rekomendasi_barang'] is List) {
       barangList = (json['rekomendasi_barang'] as List)
           .map((item) => Barang.fromJson(item))
           .toList();

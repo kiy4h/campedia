@@ -10,10 +10,10 @@ class DateSelectionDialog extends StatefulWidget {
   const DateSelectionDialog({super.key});
 
   @override
-  State<DateSelectionDialog> createState() => _DateSelectionDialogState();
+  State<DateSelectionDialog> createState() => DateSelectionDialogState();
 }
 
-class _DateSelectionDialogState extends State<DateSelectionDialog> {
+class DateSelectionDialogState extends State<DateSelectionDialog> {
   DateTime? _pickupDate;
   DateTime? _returnDate;
   int _rentalDays = 1;
@@ -170,7 +170,7 @@ class _DateSelectionDialogState extends State<DateSelectionDialog> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  'Select Rental Dates',
+                  'Pilih Tanggal Sewa',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -201,7 +201,7 @@ class _DateSelectionDialogState extends State<DateSelectionDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Pickup Date',
+                          'Tanggal Pengambilan',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey,
@@ -209,7 +209,7 @@ class _DateSelectionDialogState extends State<DateSelectionDialog> {
                         ),
                         Text(
                           _pickupDate == null
-                              ? 'Select pickup date'
+                              ? 'Pilih tanggal pengambilan'
                               : DateFormat('dd MMM yyyy').format(_pickupDate!),
                           style: const TextStyle(
                             fontSize: 16,
@@ -241,7 +241,7 @@ class _DateSelectionDialogState extends State<DateSelectionDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Return Date',
+                          'Tanggal Pengembalian',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey,
@@ -249,7 +249,7 @@ class _DateSelectionDialogState extends State<DateSelectionDialog> {
                         ),
                         Text(
                           _returnDate == null
-                              ? 'Select return date'
+                              ? 'Pilih tanggal pengembalian'
                               : DateFormat('dd MMM yyyy').format(_returnDate!),
                           style: const TextStyle(
                             fontSize: 16,
@@ -276,9 +276,9 @@ class _DateSelectionDialogState extends State<DateSelectionDialog> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Rental Duration:'),
+                        const Text('Durasi Sewa:'),
                         Text(
-                          '$_rentalDays day${_rentalDays > 1 ? 's' : ''}',
+                          '$_rentalDays Hari',
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -287,7 +287,7 @@ class _DateSelectionDialogState extends State<DateSelectionDialog> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Total Amount:'),
+                        const Text('Jumlah Total:'),
                         Text(
                           _formatToRupiah(_totalPrice),
                           style: const TextStyle(
@@ -328,7 +328,7 @@ class _DateSelectionDialogState extends State<DateSelectionDialog> {
                           ),
                         )
                       : const Text(
-                          'Proceed to Payment',
+                          'Lanjut ke Pembayaran',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

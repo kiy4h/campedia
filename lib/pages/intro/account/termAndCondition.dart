@@ -8,7 +8,7 @@ class TermsConditionPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F9F1),
       appBar: AppBar(
-        title: const Text('Terms & Conditions'),
+        title: const Text('Syarat & Ketentuan'),
         backgroundColor: const Color(0xFF566D3D),
         foregroundColor: Colors.white,
         centerTitle: true,
@@ -19,28 +19,32 @@ class TermsConditionPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              sectionHeader(Icons.gavel, 'Terms'),
+              sectionHeader(Icons.gavel, 'Syarat'),
               const SizedBox(height: 12),
-              termPoint('Users must be at least 18 years old to create an account.'),
-              termPoint('All information provided must be accurate and up-to-date.'),
-              termPoint('Users agree not to misuse the app for illegal activities.'),
-              termPoint('We may update our terms at any time with prior notice.'),
+              termPoint('Pengguna harus berusia minimal 18 tahun untuk membuat akun.'),
+              termPoint('Semua informasi yang diberikan harus akurat dan terkini.'),
+              termPoint('Pengguna setuju untuk tidak menyalahgunakan aplikasi untuk aktivitas ilegal.'),
+              termPoint('Kami dapat memperbarui syarat kapan saja dengan pemberitahuan sebelumnya.'),
               const SizedBox(height: 24),
               Divider(color: Colors.grey.shade400, thickness: 1),
               const SizedBox(height: 24),
-              sectionHeader(Icons.verified_user, 'Conditions'),
+              sectionHeader(Icons.verified_user, 'Ketentuan'),
               const SizedBox(height: 12),
-              termPoint('Your data will be stored securely and only used within the app context.'),
-              termPoint('You agree to receive important updates related to your account.'),
-              termPoint('If you violate any terms, your account may be suspended or removed.'),
-              termPoint('Continued use of the app signifies acceptance of these conditions.'),
+              termPoint('Data Anda akan disimpan dengan aman dan hanya digunakan dalam konteks aplikasi.'),
+              termPoint('Anda setuju untuk menerima pembaruan penting terkait akun Anda.'),
+              termPoint('Jika melanggar syarat, akun Anda dapat ditangguhkan atau dihapus.'),
+              termPoint('Penggunaan aplikasi secara berkelanjutan berarti Anda menerima ketentuan ini.'),
               const SizedBox(height: 40),
-             Center(
+              Center(
                 child: ElevatedButton.icon(
                   onPressed: () => Navigator.pop(context),
-                  label: const Text('Understand and Accept'),
+                  icon: const Icon(Icons.check_circle_outline, color: Color(0xFF566D3D)),
+                  label: const Text(
+                    'Saya Mengerti dan Menyetujui',
+                    style: TextStyle(color: Color(0xFF566D3D)),
+                  ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 224, 223, 223),
+                    backgroundColor: const Color(0xFFE0DFDF),
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                   ),

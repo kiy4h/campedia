@@ -56,7 +56,7 @@ class ShippingAddressPage extends StatefulWidget {
   const ShippingAddressPage({super.key});
 
   @override
-  _ShippingAddressPageState createState() => _ShippingAddressPageState();
+  ShippingAddressPageState createState() => ShippingAddressPageState();
 }
 
 /// State [ShippingAddressPageState]
@@ -65,7 +65,7 @@ class ShippingAddressPage extends StatefulWidget {
 /// - Mengelola state internal untuk `ShippingAddressPage`, termasuk data yang dimasukkan pengguna
 /// dan status validasi form.
 /// - Bertanggung jawab untuk membangun UI form alamat pengiriman.
-class _ShippingAddressPageState extends State<ShippingAddressPage> {
+class ShippingAddressPageState extends State<ShippingAddressPage> {
   // Kunci global untuk form, digunakan untuk mengakses state form dan melakukan validasi.
   final _formKey = GlobalKey<FormState>();
 
@@ -145,17 +145,17 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
               buildStepIndicator(),
               const SizedBox(height: 24),
               // Field input untuk nama lengkap pengguna.
-              buildTextField('Full Name'),
+              buildTextField('Nama Lengkap'),
               const SizedBox(height: 16),
               // Field input untuk alamat email, dengan keyboard khusus email.
-              buildTextField('Email Address',
+              buildTextField('Alamat Email',
                   keyboardType: TextInputType.emailAddress),
               const SizedBox(height: 16),
               // Field input untuk nomor telepon, dengan keyboard khusus angka telepon.
-              buildTextField('Phone', keyboardType: TextInputType.phone),
+              buildTextField('Nomor Telepon', keyboardType: TextInputType.phone),
               const SizedBox(height: 16),
               // Field input untuk alamat lengkap, dengan multiple baris.
-              buildTextField('Address', maxLines: 2),
+              buildTextField('Alamat', maxLines: 2),
               const SizedBox(height: 16),
               // Field input untuk NIK (Nomor Induk Kependudukan).
               buildTextField('NIK'),
@@ -172,7 +172,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                    * Deskripsi:
                    * - Memungkinkan field ZIP Code mengisi ruang yang tersedia.
                    */
-                  Expanded(child: buildTextField('ZIP Code')),
+                  Expanded(child: buildTextField('Kode Pos')),
                   const SizedBox(width: 16),
                   /** Widget [Expanded]
                    *
@@ -421,7 +421,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
       decoration: InputDecoration(
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        hintText: 'Choose your city',
+        hintText: 'Pilih Kota Anda',
         hintStyle: const TextStyle(color: Colors.grey),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
@@ -490,7 +490,7 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
       decoration: InputDecoration(
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        hintText: 'Choose Branch Booth',
+        hintText: 'Pilih Cabang Booth',
         hintStyle: const TextStyle(color: Colors.grey),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
@@ -589,11 +589,11 @@ class ShippingAddressPageWithData extends StatefulWidget {
   });
 
   @override
-  _ShippingAddressPageWithDataState createState() =>
-      _ShippingAddressPageWithDataState();
+  ShippingAddressPageWithDataState createState() =>
+      ShippingAddressPageWithDataState();
 }
 
-class _ShippingAddressPageWithDataState
+class ShippingAddressPageWithDataState
     extends State<ShippingAddressPageWithData> {
   // Kunci global untuk form, digunakan untuk mengakses state form dan melakukan validasi.
   final _formKey = GlobalKey<FormState>();
@@ -644,7 +644,7 @@ class _ShippingAddressPageWithDataState
          * Deskripsi:
          * - Judul halaman yang menampilkan 'Checkout'.
          */
-        title: const Text('Checkout', style: TextStyle(color: Colors.black)),
+        title: const Text('Konfirmasi Penyewaan', style: TextStyle(color: Colors.black)),
         centerTitle: true,
       ),
       /** Widget [Padding]
@@ -716,7 +716,7 @@ class _ShippingAddressPageWithDataState
               buildBoothDropdown(),
               const SizedBox(height: 16),
               // Field input untuk pesan tambahan, dengan multiple baris.
-              buildTextField('Message', maxLines: 6),
+              buildTextField('Pesan Tambahan', maxLines: 6),
               const SizedBox(height: 24),
               /** Widget [SizedBox]
                *
@@ -758,7 +758,7 @@ class _ShippingAddressPageWithDataState
                    * - Teks "NEXT" pada tombol.
                    */
                   child: const Text(
-                    'NEXT',
+                    'Selanjutnya',
                     style: TextStyle(
                       fontSize: 16,
                       letterSpacing: 1.5,
@@ -827,7 +827,7 @@ class _ShippingAddressPageWithDataState
              * - Label teks di bawah lingkaran untuk 'Rent Confirmation'.
              */
             const Text(
-              'Rent Confirmation',
+              'Konfirmasi Sewa',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
@@ -872,7 +872,7 @@ class _ShippingAddressPageWithDataState
              * - Label teks di bawah lingkaran untuk 'Payment Method'.
              */
             const Text(
-              'Payment Method',
+              'Metode Pembayaran',
               style: TextStyle(color: Colors.grey),
             ),
           ],

@@ -1,3 +1,9 @@
+// File: register.dart
+// Deskripsi: File ini berisi implementasi halaman registrasi pengguna baru
+// dengan formulir untuk mengisi data diri, validasi input, dan proses pendaftaran
+// Dibuat oleh: Kelompok 4
+// Tanggal: Mei 2023
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'termAndCondition.dart'
@@ -14,22 +20,30 @@ void main() {
   ));
 }
 
+/// Widget Register
+/// Widget ini bertanggung jawab untuk menampilkan antarmuka registrasi pengguna baru
+/// dengan form untuk input nama depan, nama belakang, email, dan password
 class Register extends StatefulWidget {
   const Register({super.key});
 
   @override
-  State<Register> createState() => _RegisterState();
+  State<Register> createState() => RegisterState();
 }
 
-class _RegisterState extends State<Register> {
-  bool _obscurePassword = true;
-  bool isChecked = false;
+/// State untuk widget Register
+/// Mengelola state form registrasi dan proses pendaftaran pengguna
+class RegisterState extends State<Register> {
+  bool _obscurePassword = true; // State untuk menampilkan/menyembunyikan password
+  bool isChecked = false; // State untuk checkbox syarat dan ketentuan
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>(); // Key untuk validasi form
 
+  /// Metode dispose
+  /// Membersihkan controller ketika widget tidak digunakan lagi
+  /// untuk mencegah memory leak
   @override
   void dispose() {
     _firstNameController.dispose();
@@ -39,6 +53,10 @@ class _RegisterState extends State<Register> {
     super.dispose();
   }
 
+  /// Metode _handleRegister
+  /// Menangani proses registrasi pengguna baru
+  /// Melakukan validasi form terlebih dahulu, kemudian memanggil provider
+  /// untuk melakukan registrasi ke backend
   Future<void> _handleRegister() async {
     if (_formKey.currentState?.validate() ?? false) {
       if (!isChecked) {
@@ -82,6 +100,8 @@ class _RegisterState extends State<Register> {
     }
   }
 
+  /// Metode build
+  /// Membangun tampilan UI halaman registrasi dengan form input
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,7 +140,7 @@ class _RegisterState extends State<Register> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Create your account',
+                        'Buat Akun Anda',
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
@@ -131,7 +151,13 @@ class _RegisterState extends State<Register> {
                             child: TextFormField(
                               controller: _firstNameController,
                               decoration: InputDecoration(
-                                hintText: 'First Name',
+                                hintText: 'Nama Depan',
+                                labelText: 'Nama Depan',
+                                labelStyle: const TextStyle(color: Color(0xFF627D2C)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(color: Color(0xFF627D2C)),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
@@ -151,7 +177,13 @@ class _RegisterState extends State<Register> {
                             child: TextFormField(
                               controller: _lastNameController,
                               decoration: InputDecoration(
-                                hintText: 'Last Name',
+                                hintText: 'Nama Belakang',
+                                labelText: 'Nama Belakang',
+                                labelStyle: const TextStyle(color: Color(0xFF627D2C)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(color: Color(0xFF627D2C)),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
@@ -160,7 +192,7 @@ class _RegisterState extends State<Register> {
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter your last name';
+                                  return 'Silakan masukkan nama belakang Anda';
                                 }
                                 return null;
                               },
@@ -173,6 +205,12 @@ class _RegisterState extends State<Register> {
                         controller: _emailController,
                         decoration: InputDecoration(
                           hintText: 'Email',
+                          labelText: 'Email',
+                          labelStyle: const TextStyle(color: Color(0xFF627D2C)),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Color(0xFF627D2C)),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -197,6 +235,12 @@ class _RegisterState extends State<Register> {
                         obscureText: _obscurePassword,
                         decoration: InputDecoration(
                           hintText: 'Password',
+                          labelText: 'Password',
+                          labelStyle: const TextStyle(color: Color(0xFF627D2C)),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Color(0xFF627D2C)),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -215,10 +259,10 @@ class _RegisterState extends State<Register> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
+                            return 'Silakan masukkan kata sandi Anda';
                           }
                           if (value.length < 6) {
-                            return 'Password must be at least 6 characters';
+                            return 'Kata sandi harus terdiri dari minimal 6 karakter';
                           }
                           return null;
                         },
@@ -238,11 +282,11 @@ class _RegisterState extends State<Register> {
                           Expanded(
                             child: RichText(
                               text: TextSpan(
-                                text: 'By tapping Sign up you accept all ',
+                                text: 'Dengan mengetuk Daftar, Anda menyetujui semua ',
                                 style: const TextStyle(color: Colors.black54),
                                 children: [
                                   TextSpan(
-                                    text: 'terms',
+                                    text: 'syarat',
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
@@ -258,9 +302,9 @@ class _RegisterState extends State<Register> {
                                         );
                                       },
                                   ),
-                                  const TextSpan(text: ' and '),
+                                  const TextSpan(text: ' dan '),
                                   TextSpan(
-                                    text: 'conditions',
+                                    text: 'ketentuan',
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
@@ -303,7 +347,7 @@ class _RegisterState extends State<Register> {
                                   ? const CircularProgressIndicator(
                                       color: Colors.white)
                                   : const Text(
-                                      'CREATE AN ACCOUNT',
+                                      'BUAT AKUN',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -327,7 +371,13 @@ class _RegisterState extends State<Register> {
   }
 }
 
-// Cara menampilkan popup
+/// Fungsi showCongratulationsPopup
+/// Menampilkan dialog popup ucapan selamat setelah registrasi berhasil
+/// dengan tombol navigasi ke halaman sign in
+/// 
+/// Parameter:
+/// - context: BuildContext untuk menampilkan dialog
+/// - name: String nama pengguna yang berhasil mendaftar
 void showCongratulationsPopup(BuildContext context, String name) {
   showDialog(
     context: context,

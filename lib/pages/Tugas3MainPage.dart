@@ -85,15 +85,15 @@ class Tugas3ProvisPage extends StatefulWidget {
   const Tugas3ProvisPage({super.key});
 
   @override
-  _Tugas3ProvisPageState createState() => _Tugas3ProvisPageState();
+  Tugas3ProvisPageState createState() => Tugas3ProvisPageState();
 }
 
 /*
-* Class : _Tugas3ProvisPageState
+* Class : Tugas3ProvisPageState
 * Deskripsi : State untuk widget Tugas3ProvisPage
 * Bagian Layar : Mengelola state dan tampilan daftar navigasi halaman
 */
-class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
+class Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
   final List<Map<String, dynamic>> pageSections = [
     {
       'title': 'App Introduction',

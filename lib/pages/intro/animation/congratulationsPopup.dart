@@ -26,7 +26,7 @@ class CongratulationsPopup extends StatefulWidget {
   });
 
   @override
-  State<CongratulationsPopup> createState() => _CongratulationsPopupState();
+  State<CongratulationsPopup> createState() => CongratulationsPopupState();
 }
 
 /*
@@ -34,7 +34,7 @@ class CongratulationsPopup extends StatefulWidget {
 * Deskripsi : State untuk widget CongratulationsPopup dengan SingleTickerProviderStateMixin untuk animasi
 * Bagian Layar : Mengatur state dan animasi popup ucapan selamat
 */
-class _CongratulationsPopupState extends State<CongratulationsPopup> with SingleTickerProviderStateMixin {
+class CongratulationsPopupState extends State<CongratulationsPopup> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   /*

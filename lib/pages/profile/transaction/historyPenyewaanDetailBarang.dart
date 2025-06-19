@@ -31,14 +31,16 @@ class TransactionDetailPage extends StatefulWidget {
   });
 
   @override
-  State<TransactionDetailPage> createState() => _TransactionDetailPageState();
+  State<TransactionDetailPage> createState() => TransactionDetailPageState();
 }
 
-class _TransactionDetailPageState extends State<TransactionDetailPage> {
+class TransactionDetailPageState extends State<TransactionDetailPage> {
   @override
   void initState() {
     super.initState();
-    _loadTransactionDetail();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadTransactionDetail();
+    });
   }
 
   void _loadTransactionDetail() {
@@ -108,7 +110,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text(
-          'Transaction Details',
+          'Rincian Transaksi',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black,
@@ -138,7 +140,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: _loadTransactionDetail,
-                    child: const Text('Retry'),
+                    child: const Text('Ulangi'),
                   ),
                 ],
               ),
@@ -147,7 +149,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
 
           if (provider.transactionDetail == null) {
             return const Center(
-              child: Text('No transaction data found'),
+              child: Text('Tidak ada detail transaksi ditemukan.'),
             );
           }
 
@@ -176,7 +178,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Transaction #${transaction.transaksiId}',
+                                'Transaksi #${transaction.transaksiId}',
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -190,7 +192,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                                 decoration: BoxDecoration(
                                   color: _getStatusColor(
                                           transaction.statusTransaksi)
-                                      .withOpacity(0.1),
+                                      .withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
@@ -206,23 +208,23 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                             ],
                           ),
                           const SizedBox(height: 16),
-                          _buildInfoRow('Created',
+                          _buildInfoRow('Pesanan Dibuat',
                               _formatDate(transaction.waktuPembuatan)),
-                          _buildInfoRow('Pickup Date',
+                          _buildInfoRow('Tanggal Pengambilan',
                               _formatDate(transaction.tanggalPengambilan)),
-                          _buildInfoRow('Return Date',
+                          _buildInfoRow('Tanggal Pengembalian',
                               _formatDate(transaction.tanggalPengembalian)),
                           if (transaction.tanggalPengembalianAktual != null)
                             _buildInfoRow(
-                                'Actual Return',
+                                'Tanggal Pengembalian Aktual',
                                 _formatDate(
                                     transaction.tanggalPengembalianAktual)),
                           const Divider(height: 24),
-                          _buildInfoRow('Daily Cost',
+                          _buildInfoRow('Biaya Harian',
                               _formatCurrency(transaction.totalBiayaHari)),
                           _buildInfoRow('Deposit',
                               _formatCurrency(transaction.totalBiayaDeposito)),
-                          _buildInfoRow('Total Cost',
+                          _buildInfoRow('Total Biaya',
                               _formatCurrency(transaction.totalBiaya),
                               isTotal: true),
                         ],
@@ -233,7 +235,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
 
                   // Items Section
                   const Text(
-                    'Rented Items',
+                    'Barang Disewa',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -406,7 +408,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                   ),
                 ),
                 child: const Text(
-                  'Review',
+                  'Ulasan',
                   style: TextStyle(fontSize: 12, color: Colors.white),
                 ),
               )
@@ -415,11 +417,11 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
+                  color: Colors.green.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: const Text(
-                  'Reviewed',
+                  'Sudah Diulas',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.green,

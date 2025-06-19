@@ -13,12 +13,11 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
-import '../detail_items/detailItem.dart';
+// import 'package:intl/intl.dart';
 import '../components/navbar.dart';
+import '../components/product_card.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/wishlist_provider.dart';
-import '../../models/models.dart';
 
 /// Widget FavoritePage
 class FavoritePage extends StatelessWidget {
@@ -42,14 +41,16 @@ class ItemCategory extends StatefulWidget {
   const ItemCategory({super.key});
 
   @override
-  _ItemCategoryState createState() => _ItemCategoryState();
+  ItemCategoryState createState() => ItemCategoryState();
 }
 
-class _ItemCategoryState extends State<ItemCategory> {
+class ItemCategoryState extends State<ItemCategory> {
   @override
   void initState() {
     super.initState();
-    _loadWishlist();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadWishlist();
+    });
   }
 
   Future<void> _loadWishlist() async {
@@ -193,8 +194,10 @@ class _ItemCategoryState extends State<ItemCategory> {
     return SliverGrid(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          return _buildTrendingItem(
-              wishlistProvider.wishlistItems[index], context, index);
+          return ProductCard(
+            barang: wishlistProvider.wishlistItems[index],
+            onWishlistToggle: _loadWishlist,
+          );
         },
         childCount: wishlistProvider.wishlistItems.length,
       ),
@@ -203,157 +206,6 @@ class _ItemCategoryState extends State<ItemCategory> {
         childAspectRatio: 0.75,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-      ),
-    );
-  }
-
-  Widget _buildTrendingItem(Barang barang, BuildContext context, int index) {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final wishlistProvider =
-        Provider.of<WishlistProvider>(context, listen: false);
-
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => DetailItem(barangId: barang.id),
-          ),
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.grey[200],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Stack(
-            children: [
-              // Image or placeholder
-              if (barang.foto != null)
-                Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  child: Image.network(
-                    barang.foto!,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: Colors.grey[200],
-                        child: Center(
-                          child: Icon(
-                            Icons.image,
-                            color: Colors.grey[400],
-                            size: 40,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                )
-              else
-                Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: Colors.grey[200],
-                  child: Center(
-                    child: Icon(
-                      Icons.image,
-                      color: Colors.grey[400],
-                      size: 40,
-                    ),
-                  ),
-                ),
-
-              // Tombol remove dari wishlist
-              Positioned(
-                top: 10,
-                right: 10,
-                child: GestureDetector(
-                  onTap: () async {
-                    if (authProvider.isAuthenticated) {
-                      await wishlistProvider.removeFromWishlist(
-                          authProvider.user!.userId, barang.id);
-                    }
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                      size: 24,
-                    ),
-                  ),
-                ),
-              ),
-
-              // Overlay informasi barang
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    ),
-                    color: Colors.black.withOpacity(0.5),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        barang.namaBarang,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        'Rp ${NumberFormat('#,###', 'id_ID').format(barang.hargaPerhari)}/hari',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      Row(
-                        children: [
-                          const Icon(Icons.star, size: 16, color: Colors.amber),
-                          const SizedBox(width: 5),
-                          Text(
-                            barang.meanReview.toStringAsFixed(1),
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            '(${barang.totalReview})',
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
