@@ -21,6 +21,7 @@ import '../transaction/historyPenyewaan.dart'; // Import halaman riwayat penyewa
 import '../../../providers/auth_provider.dart'; // Import AuthProvider
 import '../../../providers/profile_provider.dart'; // Import ProfileProvider
 import '../../../models/models.dart'; // Import models
+import '../../intro/animation/onboarding.dart'; // Import OnboardingScreen untuk navigasi logout
 
 /* Fungsi utama untuk menjalankan aplikasi Flutter yang menampilkan halaman profil.
  *
@@ -205,8 +206,9 @@ class ProfilePageState extends State<ProfilePage> {
                     profileProvider.userProfile), // Detail informasi dinamis
                 const SizedBox(height: 24), // Spasi vertikal.
                 _buildHistorySection(context), // Tombol riwayat transaksi
+                const SizedBox(height: 24), // Spasi vertikal.
+                _buildLogoutSection(context), // Tombol logout
                 const SizedBox(height: 32), // Spasi vertikal.
-                _buildSettingsButton(), // Tombol pengaturan profil.
               ],
             );
           },
@@ -425,36 +427,140 @@ class ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  /* Fungsi ini membangun tombol "Edit Profile" yang navigasi ke halaman pengaturan.
+  /* Fungsi ini membangun tombol logout dengan ikon dan konfirmasi.
    *
-   * Return: Widget [ElevatedButton.icon] untuk mengedit profil.
+   * Parameter:
+   * - [context]: BuildContext dari widget, digunakan untuk menampilkan dialog konfirmasi.
+   *
+   * Return: Widget [ElevatedButton] untuk logout.
    */
-  Widget _buildSettingsButton() {
-    return ElevatedButton.icon(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(
-            0xFF2E7D32), // Warna latar belakang tombol (hijau gelap).
-        padding: const EdgeInsets.symmetric(
-            vertical: 16), // Padding vertikal tombol.
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30)), // Sudut tombol membulat.
-      ),
-      onPressed: () {
-        // TODO: Logika navigasi ke halaman pengaturan atau edit profil akan ditambahkan di sini.
-        // Misalnya: Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
+  Widget _buildLogoutSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment:
+          CrossAxisAlignment.stretch, // Membuat tombol memenuhi lebar
+      children: [
+        /** Widget [ElevatedButton]
+         * * Deskripsi:
+         * - Tombol logout dengan warna merah untuk menunjukkan aksi yang signifikan.
+         */
+        ElevatedButton.icon(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.white, // Warna latar belakang putih
+            foregroundColor: Colors.red[600], // Warna teks dan ikon merah
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(
+                  color: Colors.red[600]!, width: 1.5), // Border merah
+            ),
+            elevation: 2, // Sedikit bayangan
+          ),
+          onPressed: () {
+            _showLogoutDialog(context);
+          },
+          /** Widget [Icon]
+           * * Deskripsi:
+           * - Ikon logout di sebelah kiri teks tombol.
+           */
+          icon: const Icon(Icons.logout, size: 24),
+          /** Widget [Text]
+           * * Deskripsi:
+           * - Teks tombol "Logout".
+           * - Gaya teks dengan ukuran 16 dan semi-bold.
+           */
+          label: const Text(
+            'Logout',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /* Fungsi ini menampilkan dialog konfirmasi logout.
+   *
+   * Parameter:
+   * - [context]: BuildContext dari widget, digunakan untuk menampilkan dialog.
+   *
+   * Return: Tidak ada (void).
+   */
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        /** Widget [AlertDialog]
+         * * Deskripsi:
+         * - Dialog konfirmasi logout.
+         */
+        return AlertDialog(
+          /** Widget [Text]
+           * * Deskripsi:
+           * - Judul dialog konfirmasi logout.
+           */
+          title: const Text('Logout'),
+          /** Widget [Text]
+           * * Deskripsi:
+           * - Pesan konfirmasi yang menanyakan apakah pengguna yakin ingin keluar.
+           */
+          content:
+              const Text('Are you sure you want to logout from your account?'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16), // Sudut dialog membulat
+          ),
+          actions: [
+            /** Widget [TextButton]
+             * * Deskripsi:
+             * - Tombol "Cancel" untuk menutup dialog tanpa logout.
+             */
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Menutup dialog.
+              },
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+            /** Widget [TextButton]
+             * * Deskripsi:
+             * - Tombol "Logout" untuk melanjutkan proses logout.
+             */
+            TextButton(
+              onPressed: () async {
+                // Ambil AuthProvider dan ProfileProvider untuk logout
+                final authProvider =
+                    Provider.of<AuthProvider>(context, listen: false);
+                final profileProvider =
+                    Provider.of<ProfileProvider>(context, listen: false);
+
+                // Lakukan logout
+                await authProvider.logout();
+
+                // Clear profile data
+                profileProvider.clearProfile();
+
+                // Tutup dialog
+                Navigator.pop(context);
+
+                // Navigasi ke OnboardingScreen dan hapus semua rute sebelumnya
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const OnboardingScreen()),
+                  (route) => false, // Menghapus semua rute sebelumnya
+                );
+              },
+              child: Text(
+                'Logout',
+                style: TextStyle(
+                  color: Colors.red[600],
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        );
       },
-      /** Widget [Icon]
-       * * Deskripsi:
-       * - Ikon pengaturan di sebelah kiri teks tombol.
-       */
-      icon: const Icon(Icons.settings, color: Colors.white),
-      /** Widget [Text]
-       * * Deskripsi:
-       * - Teks tombol "Edit Profile".
-       * - Gaya teks dengan warna putih dan ukuran 16.
-       */
-      label: const Text('Edit Profile',
-          style: TextStyle(color: Colors.white, fontSize: 16)),
     );
   }
 }
