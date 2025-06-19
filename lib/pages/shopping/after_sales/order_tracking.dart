@@ -377,7 +377,7 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
                       ),
               ),
             ), // Bottom Navigation Bar
-            buildBottomNavBar(context, currentIndex: 2), // Shopping cart index
+            
           ],
         ),
       ),
