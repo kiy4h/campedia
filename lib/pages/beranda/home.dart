@@ -15,10 +15,10 @@ import '../all_items/category.dart';
 import '../detail_items/detailItem.dart';
 import 'recommendedGearTrip.dart';
 import '../components/navbar.dart';
+import '../components/product_card.dart';
 import 'notification.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/barang_provider.dart';
-import '../../models/models.dart';
 
 // Fungsi main untuk menjalankan aplikasi sebagai contoh
 void main() {
@@ -554,9 +554,9 @@ class HomePageState extends State<HomePage> {
                 ? barangProvider.barangBeranda.length
                 : trendingItems.length,
             itemBuilder: (context, index) {
-              // Jika data API tersedia, gunakan _buildApiBarangItem
+              // Jika data API tersedia, gunakan ProductCard
               if (barangProvider.barangBeranda.isNotEmpty) {
-                return _buildApiBarangItem(barangProvider.barangBeranda[index]);
+                return ProductCard(barang: barangProvider.barangBeranda[index]);
               } else {
                 // Jika tidak, gunakan data statis dengan _buildTrendingItem
                 return _buildTrendingItem(trendingItems[index]);
@@ -639,119 +639,6 @@ class HomePageState extends State<HomePage> {
                           fontSize: 12,
                           color: Colors.black87,
                           fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /* Fungsi ini membangun satu kartu produk dari data API (model Barang).
-   * * Parameter:
-   * - barang: Objek model Barang dari API.
-   * * Return: Widget GestureDetector yang berisi kartu produk dinamis.
-   */
-  Widget _buildApiBarangItem(Barang barang) {
-    return GestureDetector(
-      onTap: () {
-        // Navigasi ke halaman detail saat kartu diklik dengan barangId
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DetailItem(barangId: barang.id),
-          ),
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Bagian gambar produk
-            Expanded(
-              flex: 3,
-              child: Container(
-                width: double.infinity,
-                // Menampilkan gambar dari URL atau placeholder jika null/error
-                child: barang.foto != null
-                    ? ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(12)),
-                        child: Image.network(
-                          barang.foto!,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Icon(Icons.camera_alt,
-                                  size: 40, color: Colors.grey),
-                        ),
-                      )
-                    : Container(
-                        color: Colors.grey[200],
-                        child: const Icon(Icons.camera_alt,
-                            size: 40, color: Colors.grey)),
-              ),
-            ),
-            // Bagian informasi produk
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Widget Text untuk nama barang
-                    Text(
-                      barang.namaBarang,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const Spacer(), // Memberi ruang fleksibel
-                    // Row untuk harga dan rating
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Widget Text untuk harga, diformat ke Rupiah
-                        Text(
-                          NumberFormat.currency(
-                                  locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                              .format(barang.hargaPerhari),
-                          style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.black87,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        // Row untuk ikon bintang dan nilai rating
-                        Row(
-                          children: [
-                            const Icon(Icons.star,
-                                color: Colors.amber, size: 14),
-                            const SizedBox(width: 2),
-                            Text(
-                              barang.meanReview.toStringAsFixed(1),
-                              style: const TextStyle(
-                                  fontSize: 11, color: Colors.black87),
-                            ),
-                          ],
-                        ),
-                      ],
                     ),
                   ],
                 ),

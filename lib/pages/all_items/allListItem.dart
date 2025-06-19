@@ -9,12 +9,11 @@ library;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
-import '../detail_items/detailItem.dart';
+// import 'package:intl/intl.dart';
 import '../components/navbar.dart';
+import '../components/product_card.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/barang_provider.dart';
-import '../../providers/wishlist_provider.dart';
 import '../../providers/brand_provider.dart';
 import '../../models/models.dart';
 
@@ -476,9 +475,9 @@ class ItemCategoryState extends State<ItemCategory> {
                             // Tampilan grid untuk daftar barang
                             delegate: SliverChildBuilderDelegate(
                               (context, index) {
-                                // Membangun setiap item barang
-                                return _buildBarangItem(
-                                    filteredItems[index], context, index);
+                                // Membangun setiap item barang dengan ProductCard
+                                return ProductCard(
+                                    barang: filteredItems[index]);
                               },
                               childCount: filteredItems.length,
                             ),
@@ -1042,211 +1041,6 @@ class ItemCategoryState extends State<ItemCategory> {
     );
   }
 
-  /* Fungsi ini membangun widget item barang yang ditampilkan dalam grid.
-   * * Parameter:
-   * - barang: Objek Barang yang berisi data barang.
-   * - context: Konteks build dari Flutter.
-   * - index: Indeks barang dalam list.
-   * * Return: Widget berisi tampilan kartu barang.
-   */
-  Widget _buildBarangItem(Barang barang, BuildContext context, int index) {
-    // Mendapatkan provider yang diperlukan
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final wishlistProvider =
-        Provider.of<WishlistProvider>(context, listen: false);
-    // Widget GestureDetector agar kartu bisa diklik
-    return GestureDetector(
-      // Navigasi ke halaman detail barang saat diklik dengan barangId
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => DetailItem(barangId: barang.id),
-          ),
-        );
-      },
-      // Widget Container sebagai card
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 5,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Bagian gambar barang
-            Expanded(
-              flex: 3,
-              child: Stack(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                      ),
-                      color: Colors.grey[200],
-                    ),
-                    // Menampilkan gambar dari URL jika ada, jika tidak, tampilkan placeholder
-                    child: barang.foto != null
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                            ),
-                            child: Image.network(
-                              barang.foto!,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return _buildPlaceholderImage();
-                              },
-                            ),
-                          )
-                        : _buildPlaceholderImage(),
-                  ),
-                  // Tombol Wishlist/Favorite
-                  Positioned(
-                    top: 10,
-                    right: 10,
-                    child: GestureDetector(
-                      onTap: () async {
-                        // Logika untuk menambah/menghapus dari wishlist
-                        if (authProvider.isAuthenticated) {
-                          if (barang.isWishlist == true) {
-                            // Hapus dari wishlist
-                            await wishlistProvider.removeFromWishlist(
-                                authProvider.user!.userId, barang.id);
-                          } else {
-                            // Tambah ke wishlist
-                            await wishlistProvider.addToWishlist(
-                                authProvider.user!.userId, barang.id);
-                          }
-                          if (mounted) {
-                            _loadAllItems(); // Refresh daftar barang untuk update status wishlist
-                          }
-                        }
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.9),
-                          shape: BoxShape.circle,
-                        ),
-                        // Ikon berubah tergantung status wishlist barang
-                        child: Icon(
-                          barang.isWishlist == true
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: Colors.red,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Bagian informasi barang (nama, harga, rating)
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Widget Text untuk nama barang
-                    Text(
-                      barang.namaBarang,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Widget Text untuk harga barang per hari
-                        Text(
-                          NumberFormat.currency(
-                                  locale: 'id', symbol: 'Rp', decimalDigits: 0)
-                              .format(barang.hargaPerhari),
-                          style: TextStyle(
-                            color: Color(0xFFA0B25E),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        // Widget Row untuk menampilkan rating
-                        Row(
-                          children: [
-                            Icon(Icons.star, color: Colors.amber, size: 14),
-                            const SizedBox(width: 2),
-                            // Teks untuk rata-rata rating
-                            Text(
-                              barang.meanReview.toStringAsFixed(1),
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                            // Teks untuk jumlah total review
-                            Text(
-                              ' (${barang.totalReview})',
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /* Fungsi ini membuat placeholder gambar untuk item yang tidak memiliki foto.
-   * * Return: Widget container dengan icon placeholder.
-   */
-  Widget _buildPlaceholderImage() {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        // Membuat container dengan sudut melengkung atas
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10),
-        ),
-        color: Colors.grey[200], // Warna abu-abu muda
-      ),
-      // Menampilkan ikon gambar sebagai placeholder
-      child: Icon(
-        Icons.image,
-        color: Colors.grey[400],
-        size: 40,
-      ),
-    );
-  }
-
   /* Fungsi ini mengambil data brand dari API melalui provider.
    * * Menggunakan BrandProvider untuk mendapatkan daftar brand yang tersedia.
    */
@@ -1254,9 +1048,8 @@ class ItemCategoryState extends State<ItemCategory> {
     final brandProvider = Provider.of<BrandProvider>(context, listen: false);
 
     // Fetch brand data from API
-    await brandProvider.fetchBrand();
-
-    // Update state dengan data brand yang didapat
+    await brandProvider
+        .fetchBrand(); // Update state dengan data brand yang didapat
     setState(() {
       availableBrands = List.from(brandProvider.brandList);
     });
