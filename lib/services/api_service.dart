@@ -182,6 +182,35 @@ class ApiService {
     }
   }
 
+  static Future<ApiResponse<List<Brand>>> getBrand() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiConfig.baseUrl}/api/brand'),
+        headers: ApiConfig.headers,
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        if (responseData['data'] != null) {
+          final List<dynamic> dataList = responseData['data'];
+          final List<Brand> brandList =
+              dataList.map((json) => Brand.fromJson(json)).toList();
+          return ApiResponse.success(brandList, 'Brands loaded successfully');
+        } else {
+          return ApiResponse.error('No brands found');
+        }
+      } else {
+        final error = responseData['error'] ??
+            responseData['detail'] ??
+            'Failed to load brands';
+        return ApiResponse.error(error);
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: ${e.toString()}');
+    }
+  }
+
   static Future<ApiResponse<List<Kategori>>> getKategori() async {
     try {
       final response = await http.get(
@@ -196,14 +225,15 @@ class ApiService {
           final List<dynamic> dataList = responseData['data'];
           final List<Kategori> kategoriList =
               dataList.map((json) => Kategori.fromJson(json)).toList();
-          return ApiResponse.success(kategoriList, 'Categories loaded successfully');
+          return ApiResponse.success(
+              kategoriList, 'Categories loaded successfully');
         } else {
           return ApiResponse.error('No categories found');
         }
       } else {
-        final error = responseData['error'] ?? 
-                     responseData['detail'] ?? 
-                     'Failed to load categories';
+        final error = responseData['error'] ??
+            responseData['detail'] ??
+            'Failed to load categories';
         return ApiResponse.error(error);
       }
     } catch (e) {
@@ -212,27 +242,27 @@ class ApiService {
   }
 
   static Future<ApiResponse<List<Gunung>>> getAllGunung(int userId) async {
-  try {
-    final response = await http.get(
-      Uri.parse('${ApiConfig.baseUrl}/api/destinasi_rekomendasi'),
-      headers: ApiConfig.headers,
-    );
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiConfig.baseUrl}/api/destinasi_rekomendasi'),
+        headers: ApiConfig.headers,
+      );
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseMap = jsonDecode(response.body);
-      final List<dynamic> responseData = responseMap['data'];
-      final List<Gunung> gunungList =
-          responseData.map((json) => Gunung.fromJson(json)).toList();
-      return ApiResponse.success(gunungList, 'Mountains loaded successfully');
-    } else {
-      final responseData = jsonDecode(response.body);
-      return ApiResponse.error(
-          responseData['detail'] ?? 'Failed to load mountains');
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseMap = jsonDecode(response.body);
+        final List<dynamic> responseData = responseMap['data'];
+        final List<Gunung> gunungList =
+            responseData.map((json) => Gunung.fromJson(json)).toList();
+        return ApiResponse.success(gunungList, 'Mountains loaded successfully');
+      } else {
+        final responseData = jsonDecode(response.body);
+        return ApiResponse.error(
+            responseData['detail'] ?? 'Failed to load mountains');
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: $e');
     }
-  } catch (e) {
-    return ApiResponse.error('Network error: $e');
   }
-}
 
   // Add to wishlist
   static Future<ApiResponse<String>> addToWishlist(

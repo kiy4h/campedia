@@ -15,6 +15,7 @@ import '../components/navbar.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/barang_provider.dart';
 import '../../providers/wishlist_provider.dart';
+import '../../providers/brand_provider.dart';
 import '../../models/models.dart';
 
 // Fungsi main untuk menjalankan aplikasi sebagai contoh
@@ -87,6 +88,9 @@ class ItemCategoryState extends State<ItemCategory> {
   bool _isLoading = false; // Status loading
   String? _error; // Pesan error jika ada
 
+  // Data untuk dropdown filter
+  List<Brand> availableBrands = []; // Brand yang tersedia dari database
+
   // Daftar kategori barang yang tersedia
   final List<String> categories = [
     "All", // Semua kategori
@@ -96,14 +100,13 @@ class ItemCategoryState extends State<ItemCategory> {
     "Tas", // Kategori 4
     "Aksesoris", // Kategori 5
     "Pakaian" // Kategori 6
-  ];
-  // Variabel untuk menyimpan status filter
+  ]; // Variabel untuk menyimpan status filter
   List<String> selectedCategories = []; // Kategori yang dipilih
   int? minPrice; // Harga minimum
   int? maxPrice; // Harga maksimum
   List<int> selectedRatings = []; // Rating yang dipilih
   List<String> selectedLocations = []; // Lokasi yang dipilih
-  List<String> selectedBrands = []; // Brand yang dipilih
+  List<int> selectedBrands = []; // Brand ID yang dipilih
   // Controller untuk input rentang harga
   TextEditingController minPriceController =
       TextEditingController(); // Harga minimum
@@ -142,8 +145,8 @@ class ItemCategoryState extends State<ItemCategory> {
       final value = maxPriceController.text;
       maxPrice = value.isEmpty ? null : int.tryParse(value);
     });
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadBrandData(); // Memuat data brand dari database
       _loadAllItems(); // Memuat semua data barang
     });
   }
@@ -208,6 +211,7 @@ class ItemCategoryState extends State<ItemCategory> {
       await barangProvider.fetchBarangWithFilter(
         userId: authProvider.user!.userId,
         categoryIds: categoryIds,
+        brandIds: selectedBrands.isNotEmpty ? selectedBrands : null,
         hargaMin: minPrice,
         hargaMax: maxPrice,
         minRating: selectedRatings.isNotEmpty
@@ -682,7 +686,13 @@ class ItemCategoryState extends State<ItemCategory> {
                         ),
                       ),
                       IconButton(
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () {
+                          // Apply filters when close button is pressed
+                          _applyFilters();
+                          Navigator.pop(context);
+                          // Refresh state untuk menampilkan perubahan di halaman utama
+                          setState(() {});
+                        },
                         icon: const Icon(Icons.close),
                       ),
                     ],
@@ -836,31 +846,8 @@ class ItemCategoryState extends State<ItemCategory> {
                             );
                           }),
                         ),
-                        const SizedBox(height: 15),
-
-                        // Filter Section: Brand
-                        _buildFilterSection(
-                          context,
-                          "Brand",
-                          [
-                            "Eiger",
-                            "Consina",
-                            "Rei",
-                            "Avtech",
-                            "Osprey",
-                            "Deuter"
-                          ],
-                          selectedBrands,
-                          (brand, isSelected) {
-                            setModalState(() {
-                              if (isSelected) {
-                                selectedBrands.remove(brand);
-                              } else {
-                                selectedBrands.add(brand);
-                              }
-                            });
-                          },
-                        ),
+                        const SizedBox(height: 15), // Filter Section: Brand
+                        _buildBrandFilterSection(context, setModalState),
                       ],
                     ),
                   ),
@@ -936,6 +923,71 @@ class ItemCategoryState extends State<ItemCategory> {
           },
         );
       },
+    );
+  }
+
+  /* Fungsi ini membangun bagian filter brand dengan data dari database.
+   * * Parameter:
+   * - context: Konteks build dari Flutter.
+   * - setModalState: Fungsi untuk mengupdate state modal.
+   * * Return: Widget Column yang berisi bagian filter brand.
+   */
+  Widget _buildBrandFilterSection(
+      BuildContext context, StateSetter setModalState) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Judul bagian filter
+        const Text(
+          "Brand",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 10),
+
+        // Daftar pilihan filter brand yang bisa wrap ke baris baru
+        Wrap(
+          spacing: 10, // Jarak horizontal antar pilihan
+          runSpacing: 10, // Jarak vertikal antar baris
+          children: availableBrands.map((brand) {
+            // Cek apakah brand ini sedang dipilih
+            final isSelected = selectedBrands.contains(brand.id);
+
+            // Buat widget pilihan filter
+            return GestureDetector(
+              onTap: () {
+                setModalState(() {
+                  if (isSelected) {
+                    selectedBrands.remove(brand.id);
+                  } else {
+                    selectedBrands.add(brand.id);
+                  }
+                });
+              },
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  // Warna berbeda untuk item yang dipilih dan tidak dipilih
+                  color: isSelected ? const Color(0xFFA0B25E) : Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border:
+                      Border.all(color: const Color.fromARGB(255, 69, 79, 31)),
+                ),
+                child: Text(
+                  brand.namaBrand,
+                  style: TextStyle(
+                    // Warna teks berbeda untuk item yang dipilih dan tidak dipilih
+                    color: isSelected
+                        ? Colors.white
+                        : const Color.fromARGB(255, 67, 77, 29),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 
@@ -1208,5 +1260,20 @@ class ItemCategoryState extends State<ItemCategory> {
         size: 40,
       ),
     );
+  }
+
+  /* Fungsi ini mengambil data brand dari API melalui provider.
+   * * Menggunakan BrandProvider untuk mendapatkan daftar brand yang tersedia.
+   */
+  Future<void> _loadBrandData() async {
+    final brandProvider = Provider.of<BrandProvider>(context, listen: false);
+
+    // Fetch brand data from API
+    await brandProvider.fetchBrand();
+
+    // Update state dengan data brand yang didapat
+    setState(() {
+      availableBrands = List.from(brandProvider.brandList);
+    });
   }
 }
