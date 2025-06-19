@@ -167,35 +167,7 @@ class SignInState extends State<SignIn> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 16),
-                      RichText(
-                        text: TextSpan(
-                          style: const TextStyle(color: Colors.black54),
-                          children: [
-                            const TextSpan(text: 'Lupa kata sandi Anda? '),
-                            WidgetSpan(
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ForgotPassword()),
-                                  );
-                                },
-                                child: Text(
-                                  'Atur ulang di sini',
-                                  style: const TextStyle(
-                                    color: Color(0xFF566D3D),
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      
                       const SizedBox(height: 24),
                       Consumer<AuthProvider>(
                         builder: (context, authProvider, child) {
