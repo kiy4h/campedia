@@ -723,6 +723,9 @@ class ItemCategoryState extends State<ItemCategory> {
                                 selectedCategories.add(category);
                               }
                             });
+                            // Auto-apply filter when category changes
+                            _applyFilters();
+                            setState(() {});
                           },
                         ),
                         const SizedBox(
@@ -756,6 +759,9 @@ class ItemCategoryState extends State<ItemCategory> {
                                         ? null
                                         : int.tryParse(value);
                                   });
+                                  // Auto-apply filter when price changes
+                                  _applyFilters();
+                                  setState(() {});
                                 },
                               ),
                             ),
@@ -779,6 +785,9 @@ class ItemCategoryState extends State<ItemCategory> {
                                         ? null
                                         : int.tryParse(value);
                                   });
+                                  // Auto-apply filter when price changes
+                                  _applyFilters();
+                                  setState(() {});
                                 },
                               ),
                             ),
@@ -809,6 +818,9 @@ class ItemCategoryState extends State<ItemCategory> {
                                     selectedRatings.add(rating);
                                   }
                                 });
+                                // Auto-apply filter when rating changes
+                                _applyFilters();
+                                setState(() {});
                               },
                               // Tombol pilihan rating
                               child: Container(
@@ -850,71 +862,42 @@ class ItemCategoryState extends State<ItemCategory> {
                         _buildBrandFilterSection(context, setModalState),
                       ],
                     ),
-                  ),
-                  // Tombol Aksi: Reset dan Terapkan
+                  ), // Tombol Aksi: Reset
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 15),
-                    child: Row(
-                      children: [
-                        // Tombol Reset Filter
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {
-                              setModalState(() {
-                                selectedCategories.clear();
-                                selectedRatings.clear();
-                                selectedLocations.clear();
-                                selectedBrands.clear();
-                                minPrice = null;
-                                maxPrice = null;
-                                minPriceController.clear();
-                                maxPriceController.clear();
-                              });
-                            },
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: Color(0xFFA0B25E)),
-                              padding: const EdgeInsets.symmetric(vertical: 15),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            child: const Text(
-                              'Reset',
-                              style: TextStyle(
-                                color: Color(0xFFA0B25E),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          setModalState(() {
+                            selectedCategories.clear();
+                            selectedRatings.clear();
+                            selectedLocations.clear();
+                            selectedBrands.clear();
+                            minPrice = null;
+                            maxPrice = null;
+                            minPriceController.clear();
+                            maxPriceController.clear();
+                          });
+                          // Auto-apply reset filter
+                          _applyFilters();
+                          setState(() {});
+                        },
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Color(0xFFA0B25E)),
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        // Tombol Terapkan Filter
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              // Terapkan filter yang sudah dipilih
-                              _applyFilters();
-                              Navigator.pop(context);
-                              // Refresh state untuk menampilkan perubahan di halaman utama
-                              setState(() {});
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFA0B25E),
-                              padding: const EdgeInsets.symmetric(vertical: 15),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            child: const Text(
-                              'Terapkan',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                        child: const Text(
+                          'Reset Filter',
+                          style: TextStyle(
+                            color: Color(0xFFA0B25E),
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ],
@@ -950,9 +933,8 @@ class ItemCategoryState extends State<ItemCategory> {
           runSpacing: 10, // Jarak vertikal antar baris
           children: availableBrands.map((brand) {
             // Cek apakah brand ini sedang dipilih
-            final isSelected = selectedBrands.contains(brand.id);
-
-            // Buat widget pilihan filter
+            final isSelected =
+                selectedBrands.contains(brand.id); // Buat widget pilihan filter
             return GestureDetector(
               onTap: () {
                 setModalState(() {
@@ -962,6 +944,9 @@ class ItemCategoryState extends State<ItemCategory> {
                     selectedBrands.add(brand.id);
                   }
                 });
+                // Auto-apply filter when brand changes
+                _applyFilters();
+                setState(() {});
               },
               child: Container(
                 padding:
