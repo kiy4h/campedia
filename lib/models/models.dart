@@ -544,20 +544,29 @@ class UserTransaction {
   final String waktuPembuatan;
   final String statusTransaksi;
   final int jumlahBarang;
+  final String pickupDate;
+  final String returnDate;
+  final int rentalDays;
 
   UserTransaction({
     required this.transaksiId,
     required this.waktuPembuatan,
     required this.statusTransaksi,
     required this.jumlahBarang,
+    required this.pickupDate,
+    required this.returnDate,
+    required this.rentalDays,
   });
 
   factory UserTransaction.fromJson(Map<String, dynamic> json) {
     return UserTransaction(
-      transaksiId: json['transaksi_id'] ?? 0,
-      waktuPembuatan: json['waktu_pembuatan'] ?? '',
-      statusTransaksi: json['status_transaksi'] ?? '',
-      jumlahBarang: json['jumlah_barang'] ?? 0,
+      transaksiId: json['transaksi_id'],
+      waktuPembuatan: json['waktu_pembuatan'],
+      statusTransaksi: json['status_transaksi'],
+      jumlahBarang: json['jumlah_barang'],
+      pickupDate: json['tanggal_pengambilan'] ?? '',
+      returnDate: json['tanggal_pengembalian'] ?? '',
+      rentalDays: json['lama_peminjaman'] ?? 1,
     );
   }
 
@@ -567,6 +576,9 @@ class UserTransaction {
       'waktu_pembuatan': waktuPembuatan,
       'status_transaksi': statusTransaksi,
       'jumlah_barang': jumlahBarang,
+      'tanggal_pengambilan': pickupDate,
+      'tanggal_pengembalian': returnDate,
+      'lama_peminjaman': rentalDays,
     };
   }
 }

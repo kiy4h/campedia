@@ -21,6 +21,7 @@ import '../../../models/models.dart';
 import 'historyPenyewaanDetailBarang.dart';
 import '../../shopping/after_sales/order_tracking.dart';
 import '../../shopping/payment_data/checkout2.dart';
+import '../../../providers/checkout_provider.dart';
 
 /// Widget [ModernTransactionPage]
 ///
@@ -390,9 +391,22 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
         return 'View Details';
     }
   }
+  
+
 
   void _handleTransactionAction(
-      UserTransaction transaction, BuildContext context) async {
+    
+    UserTransaction transaction, BuildContext context) async {
+    final checkoutProvider =
+    Provider.of<CheckoutProvider>(context, listen: false);
+    // Di history_transaksi.dart
+    checkoutProvider.setTransactionData(
+      transactionId: transaction.transaksiId,
+      totalAmount: transaction.jumlahBarang,
+      pickupDate: transaction.pickupDate,
+      returnDate: transaction.returnDate,
+      rentalDays: transaction.rentalDays,
+    );
     switch (transaction.statusTransaksi) {
       case 'Belum Dibayar':
         // Navigate to payment page using existing checkout system
@@ -406,6 +420,7 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
       case 'Belum Diambil':
       case 'Belum Dikembalikan':
         // Navigate to tracking page
+        debugPrint('DEBUG: Updating transaksi_id: \\${transaction.transaksiId}');
         final result = await Navigator.push(
           context,
           MaterialPageRoute(
