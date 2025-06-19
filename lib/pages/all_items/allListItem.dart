@@ -92,7 +92,7 @@ class ItemCategoryState extends State<ItemCategory> {
 
   // Daftar kategori barang yang tersedia
   final List<String> categories = [
-    "All", // Semua kategori
+    "Semua", // Semua kategori
     "Tenda", // Kategori 1
     "Alat Masak", // Kategori 2
     "Sepatu", // Kategori 3
@@ -313,7 +313,7 @@ class ItemCategoryState extends State<ItemCategory> {
                     child: TextField(
                       controller: searchController,
                       decoration: InputDecoration(
-                        hintText: 'Search here',
+                        hintText: 'Cari di sini...',
                         prefixIcon:
                             const Icon(Icons.search, color: Colors.grey),
                         suffixIcon: searchController.text.isNotEmpty
@@ -686,7 +686,7 @@ class ItemCategoryState extends State<ItemCategory> {
                         ),
                       ),
                       child: const Text(
-                        'Reset',
+                        'Atur Ulang',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -865,7 +865,7 @@ class ItemCategoryState extends State<ItemCategory> {
                                 controller: minPriceController,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
-                                  labelText: "Min",
+                                  labelText: "Minimum",
                                   prefixText: "Rp. ",
                                   hintText: "0",
                                   border: OutlineInputBorder(
@@ -891,7 +891,7 @@ class ItemCategoryState extends State<ItemCategory> {
                                 controller: maxPriceController,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
-                                  labelText: "Max",
+                                  labelText: "Maksimum",
                                   prefixText: "Rp. ",
                                   hintText: "-",
                                   border: OutlineInputBorder(
@@ -916,7 +916,7 @@ class ItemCategoryState extends State<ItemCategory> {
 
                         // Filter Section: Rating
                         const Text(
-                          "Rating",
+                          "Penilaian",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -1010,7 +1010,7 @@ class ItemCategoryState extends State<ItemCategory> {
                           ),
                         ),
                         child: const Text(
-                          'Reset Filter',
+                          'Atur Ulang Filter',
                           style: TextStyle(
                             color: Color(0xFFA0B25E),
                             fontWeight: FontWeight.bold,

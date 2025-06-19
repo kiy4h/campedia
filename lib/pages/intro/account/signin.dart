@@ -96,7 +96,7 @@ class SignInState extends State<SignIn> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Sign In to your account',
+                        'Masuk ke akun Anda',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -162,7 +162,7 @@ class SignInState extends State<SignIn> {
                         text: TextSpan(
                           style: const TextStyle(color: Colors.black54),
                           children: [
-                            const TextSpan(text: 'Forgot your password? '),
+                            const TextSpan(text: 'Lupa kata sandi Anda? '),
                             WidgetSpan(
                               child: GestureDetector(
                                 onTap: () {
@@ -174,7 +174,7 @@ class SignInState extends State<SignIn> {
                                   );
                                 },
                                 child: Text(
-                                  'Reset here',
+                                  'Atur ulang di sini',
                                   style: const TextStyle(
                                     color: Color(0xFF566D3D),
                                     fontWeight: FontWeight.bold,
@@ -206,7 +206,7 @@ class SignInState extends State<SignIn> {
                                   ? const CircularProgressIndicator(
                                       color: Colors.white)
                                   : const Text(
-                                      'SIGN IN',
+                                      'MASUK',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,

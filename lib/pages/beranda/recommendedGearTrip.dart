@@ -35,7 +35,7 @@ class GunungDestinationPageState extends State<GunungDestinationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mountain Destinations'),
+        title: const Text('Destinasi Pegunungan'),
         backgroundColor: Colors.white,
         elevation: 0,
         foregroundColor: Colors.black,
@@ -63,7 +63,7 @@ class GunungDestinationPageState extends State<GunungDestinationPage> {
 
           if (gunungProvider.gunungList.isEmpty) {
             return const Center(
-              child: Text('No mountains available'),
+              child: Text('Tidak ada pegunungan yang tersedia'),
             );
           }
 
@@ -160,7 +160,7 @@ class GunungDestinationPageState extends State<GunungDestinationPage> {
                           size: 16, color: Colors.green[700]),
                       const SizedBox(width: 4),
                       Text(
-                        "${gunung.barangList.length} Items Available",
+                        "${gunung.barangList.length} Item Tersedia",
                         style: TextStyle(
                           color: Colors.green[700],
                           fontWeight: FontWeight.bold,
@@ -175,7 +175,7 @@ class GunungDestinationPageState extends State<GunungDestinationPage> {
                 // Available Items Grid
                 if (gunung.barangList.isNotEmpty) ...[
                   const Text(
-                    'Available Gear:',
+                    'Perlengkapan Tersedia:',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),

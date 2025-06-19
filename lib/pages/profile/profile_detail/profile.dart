@@ -469,7 +469,7 @@ class ProfilePageState extends State<ProfilePage> {
            * - Gaya teks dengan ukuran 16 dan semi-bold.
            */
           label: const Text(
-            'Logout',
+            'Keluar',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
         ),
@@ -497,13 +497,13 @@ class ProfilePageState extends State<ProfilePage> {
            * * Deskripsi:
            * - Judul dialog konfirmasi logout.
            */
-          title: const Text('Logout'),
+          title: const Text('Keluar'),
           /** Widget [Text]
            * * Deskripsi:
            * - Pesan konfirmasi yang menanyakan apakah pengguna yakin ingin keluar.
            */
           content:
-              const Text('Are you sure you want to logout from your account?'),
+              const Text('Apakah Anda yakin ingin keluar dari akun Anda?'),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16), // Sudut dialog membulat
           ),
@@ -517,7 +517,7 @@ class ProfilePageState extends State<ProfilePage> {
                 Navigator.pop(context); // Menutup dialog.
               },
               child: const Text(
-                'Cancel',
+                'Batal',
                 style: TextStyle(color: Colors.grey),
               ),
             ),
@@ -551,7 +551,7 @@ class ProfilePageState extends State<ProfilePage> {
                 );
               },
               child: Text(
-                'Logout',
+                'Keluar',
                 style: TextStyle(
                   color: Colors.red[600],
                   fontWeight: FontWeight.w600,
