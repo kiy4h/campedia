@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas3provis/pages/beranda/home.dart';
 import 'package:tugas3provis/providers/auth_provider.dart';
-import 'forgotPassword.dart';
+import 'register.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -199,6 +199,34 @@ class SignInState extends State<SignIn> {
                             ),
                           );
                         },
+                      ),
+                      
+                      // Teks untuk navigasi ke halaman pendaftaran
+                      const SizedBox(height: 20),
+                      Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Register()),
+                            );
+                          },
+                          child: RichText(
+                            text: const TextSpan(
+                              text: 'Belum punya akun? ',
+                              style: TextStyle(color: Colors.black54, fontSize: 14),
+                              children: [
+                                TextSpan(
+                                  text: 'Daftar disini',
+                                  style: TextStyle(
+                                    color: Color(0xFF566D3D),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),

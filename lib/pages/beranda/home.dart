@@ -331,19 +331,6 @@ class HomePageState extends State<HomePage> {
                         size: 24, color: Colors.black87),
                   ),
                 ),
-                // Badge notifikasi (titik merah)
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Container(
-                    width: 8,
-                    height: 8,
-                    decoration: const BoxDecoration(
-                      color: Colors.amber,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
               ],
             ),
           ],

@@ -15,9 +15,7 @@ import 'package:latlong2/latlong.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../beranda/home.dart'; // Import halaman Home untuk navigasi kembali setelah review selesai
-import 'review.dart';
-import '../../components/navbar.dart';
+import '../../profile/transaction/historyPenyewaan.dart';
 
 /// Enum untuk status pesanan
 enum OrderStatus {
@@ -199,13 +197,11 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
       case OrderStatus.borrowed:
         newStatus = 'Sudah Dikembalikan'; // Item has been returned
         nextStatus = OrderStatus.returned;
-        break;
-      case OrderStatus.returned:
-        // Navigate to review page without API call
-        Navigator.pushAndRemoveUntil(
+        break;      case OrderStatus.returned:
+        // Navigate to history penyewaan page instead of review page
+        Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => CampingApp()),
-          (route) => false, // Menghapus semua rute sebelumnya
+          MaterialPageRoute(builder: (context) => const ModernTransactionPage()),
         );
         return;
     } // Call API to update status
@@ -223,7 +219,6 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
       });
     }
   }
-
   String _getButtonText() {
     switch (_currentStatus) {
       case OrderStatus.pickup:
@@ -231,7 +226,7 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
       case OrderStatus.borrowed:
         return 'SIMULASIKAN KEMBALIKAN BARANG';
       case OrderStatus.returned:
-        return 'KEMBALI KE HOME';
+        return 'KEMBALI KE HISTORI TRANSAKSI';
     }
   }
 
