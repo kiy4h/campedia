@@ -902,12 +902,14 @@ class NotificationItem {
 
 class DetailDenda {
   final int id;
+  final int transaksiId;
   final int jumlahDenda;
   final String alasanDenda;
   final String statusDenda;
 
   DetailDenda({
     required this.id,
+    required this.transaksiId,
     required this.jumlahDenda,
     required this.alasanDenda,
     required this.statusDenda,
@@ -916,8 +918,9 @@ class DetailDenda {
   factory DetailDenda.fromJson(Map<String, dynamic> json) {
     return DetailDenda(
       id: json['id'] ?? 0,
-      jumlahDenda: json['jumlah_denda'] ?? 0,
-      alasanDenda: json['alasan_denda'] ?? '',
+      transaksiId: json['transaksi_id'] ?? 0,
+      jumlahDenda: json['total_denda'] ?? 0,
+      alasanDenda: json['catatan'] ?? '',
       statusDenda: json['status_denda'] ?? '',
     );
   }

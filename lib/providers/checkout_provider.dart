@@ -109,6 +109,44 @@ class CheckoutProvider with ChangeNotifier {
     }
   }
 
+  /// Process payment for denda (fine)
+  Future<bool> processDendaPayment({
+    required int transaksiId,
+    required String metodePembayaran,
+    required int totalPembayaran,
+  }) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      final paymentRequest = PaymentRequest(
+        transaksiId: transaksiId,
+        metodePembayaran: metodePembayaran,
+        tipePembayaran: 'Denda',
+        totalPembayaran: totalPembayaran,
+      );
+
+      final response = await ApiService.createPayment(paymentRequest);
+
+      if (response.success) {
+        _isLoading = false;
+        notifyListeners();
+        return true;
+      } else {
+        _error = response.error ?? 'Failed to process denda payment';
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      _error = 'Network error: $e';
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   /// Clear error message
   void clearError() {
     _error = null;
