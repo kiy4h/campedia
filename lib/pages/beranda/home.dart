@@ -173,14 +173,14 @@ class HomePageState extends State<HomePage> {
       "title": "Recommended\nGear Trip",
       "image":
           "http://localhost:8000/images/assets_DestinationCamp/gunung1.jpg",
-      "color": Colors.black.withOpacity(0.6),
+      "color": Colors.black.withValues(alpha: 0.6),
     },
     {
       "key": "2",
       "title": "Fresh Trending\nGear",
       "image":
           "http://localhost:8000/images/assets_DestinationCamp/gunung2.jpg",
-      "color": Colors.black.withOpacity(0.6),
+      "color": Colors.black.withValues(alpha: 0.6),
     },
   ];
 
@@ -245,7 +245,7 @@ class HomePageState extends State<HomePage> {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -316,7 +316,7 @@ class HomePageState extends State<HomePage> {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -476,7 +476,7 @@ class HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.circular(18),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -590,7 +590,7 @@ class HomePageState extends State<HomePage> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -672,7 +672,7 @@ class HomePageState extends State<HomePage> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),

@@ -1057,7 +1057,7 @@ class ItemCategoryState extends State<ItemCategory> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 5,
               offset: Offset(0, 2),
             ),
@@ -1114,13 +1114,15 @@ class ItemCategoryState extends State<ItemCategory> {
                             await wishlistProvider.addToWishlist(
                                 authProvider.user!.userId, barang.id);
                           }
-                          _loadAllItems(); // Refresh daftar barang untuk update status wishlist
+                          if (mounted) {
+                            _loadAllItems(); // Refresh daftar barang untuk update status wishlist
+                          }
                         }
                       },
                       child: Container(
                         padding: EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white.withValues(alpha: 0.9),
                           shape: BoxShape.circle,
                         ),
                         // Ikon berubah tergantung status wishlist barang

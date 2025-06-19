@@ -277,12 +277,16 @@ class ItemCategoryState extends State<ItemCategory> {
                     if (authProvider.isAuthenticated) {
                       await wishlistProvider.removeFromWishlist(
                           authProvider.user!.userId, barang.id);
+                      if (mounted) {
+                        // Reload the wishlist or show feedback
+                        _loadWishlist();
+                      }
                     }
                   },
                   child: Container(
                     padding: EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
+                      color: Colors.white.withValues(alpha: 0.8),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
@@ -307,7 +311,7 @@ class ItemCategoryState extends State<ItemCategory> {
                       bottomLeft: Radius.circular(10),
                       bottomRight: Radius.circular(10),
                     ),
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withValues(alpha: 0.5),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

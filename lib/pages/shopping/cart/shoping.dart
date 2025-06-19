@@ -201,7 +201,7 @@ class ShopingState extends State<Shoping> {
                             setState(() {
                               expandedItemIndex = null;
                             });
-                          } else {
+                          } else if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(cartProvider.error ??

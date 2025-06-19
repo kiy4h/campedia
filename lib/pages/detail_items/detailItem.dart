@@ -261,7 +261,7 @@ class DetailItemState extends State<DetailItem>
                                     decoration: BoxDecoration(
                                       color: index == _currentImage
                                           ? Colors.white
-                                          : Colors.white.withOpacity(0.5),
+                                          : Colors.white.withValues(alpha: 0.5),
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                   ),
@@ -424,16 +424,17 @@ class DetailItemState extends State<DetailItem>
                             authProvider.user!.userId,
                             widget.barangId,
                           );
-
                           if (success) {
                             setState(() => _isFavorite = false);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: const Text('Removed from wishlist'),
-                                backgroundColor: Colors.orange,
-                                duration: const Duration(seconds: 2),
-                              ),
-                            );
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text('Removed from wishlist'),
+                                  backgroundColor: Colors.orange,
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                            }
                           }
                         } else {
                           // Add to wishlist
@@ -441,24 +442,24 @@ class DetailItemState extends State<DetailItem>
                             authProvider.user!.userId,
                             widget.barangId,
                           );
-
                           if (success) {
                             setState(() => _isFavorite = true);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: const Text('Added to wishlist!'),
-                                backgroundColor: Colors.green,
-                                duration: const Duration(seconds: 2),
-                              ),
-                            );
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text('Added to wishlist!'),
+                                  backgroundColor: Colors.green,
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                            }
                           }
                         }
 
                         // Hide loading state
-                        setState(() => _isWishlistLoading = false);
-
-                        // If operation failed, show error
-                        if (!success) {
+                        setState(() => _isWishlistLoading =
+                            false); // If operation failed, show error
+                        if (!success && mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -565,7 +566,7 @@ class DetailItemState extends State<DetailItem>
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, -5),
           ),
@@ -579,7 +580,7 @@ class DetailItemState extends State<DetailItem>
           // Widget untuk menambah dan mengurangi kuantitas (stepper).
           Container(
             decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -640,8 +641,7 @@ class DetailItemState extends State<DetailItem>
                         widget.barangId,
                         _quantity,
                       );
-
-                      if (success) {
+                      if (success && mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
@@ -649,7 +649,7 @@ class DetailItemState extends State<DetailItem>
                             backgroundColor: Colors.green,
                           ),
                         );
-                      } else {
+                      } else if (!success && mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(

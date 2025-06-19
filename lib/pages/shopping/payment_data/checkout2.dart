@@ -361,7 +361,7 @@ class Checkout2State extends State<Checkout2> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 3),
                 ),
@@ -870,8 +870,7 @@ class Checkout2State extends State<Checkout2> {
                             totalPembayaran:
                                 checkoutProvider.storedTotalAmount!,
                           );
-
-                          if (success) {
+                          if (success && mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content:
@@ -889,7 +888,7 @@ class Checkout2State extends State<Checkout2> {
                                 ),
                               ),
                             );
-                          } else {
+                          } else if (!success && mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
