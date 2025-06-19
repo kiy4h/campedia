@@ -94,12 +94,15 @@ class ItemCategoryState extends State<ItemCategory> {
   final List<String> categories = [
     "Semua", // Semua kategori
     "Tenda", // Kategori 1
-    "Alat Masak", // Kategori 2
-    "Sepatu", // Kategori 3
-    "Tas", // Kategori 4
-    "Aksesoris", // Kategori 5
-    "Pakaian" // Kategori 6
-  ]; // Variabel untuk menyimpan status filter
+    "Tas", // Kategori 2
+    "Peralatan Tidur", // Kategori 3
+    "Peralatan Masak", // Kategori 4
+    "Pencahayaan", // Kategori 5
+    "Pakaian", // Kategori 6
+    "Aksesoris" // Kategori 6
+  ];
+
+  // Variabel untuk menyimpan status filter
   List<String> selectedCategories = []; // Kategori yang dipilih
   int? minPrice; // Harga minimum
   int? maxPrice; // Harga maksimum
