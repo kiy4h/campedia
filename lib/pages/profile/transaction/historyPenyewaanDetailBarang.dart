@@ -110,7 +110,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text(
-          'Transaction Details',
+          'Rincian Transaksi',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black,
@@ -140,7 +140,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: _loadTransactionDetail,
-                    child: const Text('Retry'),
+                    child: const Text('Ulangi'),
                   ),
                 ],
               ),
@@ -149,7 +149,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
 
           if (provider.transactionDetail == null) {
             return const Center(
-              child: Text('No transaction data found'),
+              child: Text('Tidak ada detail transaksi ditemukan.'),
             );
           }
 
@@ -178,7 +178,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Transaction #${transaction.transaksiId}',
+                                'Transaksi #${transaction.transaksiId}',
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -208,23 +208,23 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
                             ],
                           ),
                           const SizedBox(height: 16),
-                          _buildInfoRow('Created',
+                          _buildInfoRow('Pesanan Dibuat',
                               _formatDate(transaction.waktuPembuatan)),
-                          _buildInfoRow('Pickup Date',
+                          _buildInfoRow('Tanggal Pengambilan',
                               _formatDate(transaction.tanggalPengambilan)),
-                          _buildInfoRow('Return Date',
+                          _buildInfoRow('Tanggal Pengembalian',
                               _formatDate(transaction.tanggalPengembalian)),
                           if (transaction.tanggalPengembalianAktual != null)
                             _buildInfoRow(
-                                'Actual Return',
+                                'Tanggal Pengembalian Aktual',
                                 _formatDate(
                                     transaction.tanggalPengembalianAktual)),
                           const Divider(height: 24),
-                          _buildInfoRow('Daily Cost',
+                          _buildInfoRow('Biaya Harian',
                               _formatCurrency(transaction.totalBiayaHari)),
                           _buildInfoRow('Deposit',
                               _formatCurrency(transaction.totalBiayaDeposito)),
-                          _buildInfoRow('Total Cost',
+                          _buildInfoRow('Total Biaya',
                               _formatCurrency(transaction.totalBiaya),
                               isTotal: true),
                         ],
@@ -235,7 +235,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
 
                   // Items Section
                   const Text(
-                    'Rented Items',
+                    'Barang Disewa',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -408,7 +408,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
                   ),
                 ),
                 child: const Text(
-                  'Review',
+                  'Ulasan',
                   style: TextStyle(fontSize: 12, color: Colors.white),
                 ),
               )
@@ -421,7 +421,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: const Text(
-                  'Reviewed',
+                  'Sudah Diulas',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.green,

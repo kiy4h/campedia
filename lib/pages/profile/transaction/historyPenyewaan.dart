@@ -145,7 +145,7 @@ class ModernTransactionPageState extends State<ModernTransactionPage>
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text(
-          'Transaction History',
+          'Histori Transaksi',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black,
@@ -163,9 +163,9 @@ class ModernTransactionPageState extends State<ModernTransactionPage>
           unselectedLabelColor: Colors.grey,
           indicatorColor: const Color(0xFF5D6D3E),
           tabs: const [
-            Tab(text: 'All'),
-            Tab(text: 'Ongoing'),
-            Tab(text: 'Completed'),
+            Tab(text: 'Semua'),
+            Tab(text: 'Sedang Berlangsung'),
+            Tab(text: 'Selesai'),
           ],
         ),
       ),
@@ -184,7 +184,7 @@ class ModernTransactionPageState extends State<ModernTransactionPage>
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: _loadTransactions,
-                    child: const Text('Retry'),
+                    child: const Text('Ulangi'),
                   ),
                 ],
               ),
@@ -193,7 +193,7 @@ class ModernTransactionPageState extends State<ModernTransactionPage>
 
           if (!authProvider.isAuthenticated) {
             return const Center(
-              child: Text('Please login to view transactions'),
+              child: Text('Silahkan masuk untuk melihat riwayat transaksi.'),
             );
           }
 
@@ -223,7 +223,7 @@ class ModernTransactionPageState extends State<ModernTransactionPage>
             ),
             SizedBox(height: 16),
             Text(
-              'No transactions found',
+              'Transaksi tidak ditemukan',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.grey,
@@ -269,7 +269,7 @@ class ModernTransactionPageState extends State<ModernTransactionPage>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Transaction #${transaction.transaksiId}',
+                'Transaksi #${transaction.transaksiId}',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -339,7 +339,7 @@ class ModernTransactionPageState extends State<ModernTransactionPage>
                       ),
                     ),
                     child: const Text(
-                      'View Details',
+                      'Lihat Rincian',
                       style: TextStyle(color: Color(0xFF5D6D3E)),
                     ),
                   ),
@@ -381,15 +381,15 @@ class ModernTransactionPageState extends State<ModernTransactionPage>
   String _getActionButtonText(String status) {
     switch (status) {
       case 'Belum Dibayar':
-        return 'Pay Now';
+        return 'Bayar Sekarang';
       case 'Belum Diambil':
-        return 'Track Order';
+        return 'Lacak Penyewaan';
       case 'Belum Dikembalikan':
-        return 'Track Return';
+        return 'Lacak Pengembalian';
       case 'Sudah Dikembalikan':
-        return 'Leave Review';
+        return 'Berikan Ulasan';
       default:
-        return 'View Details';
+        return 'Lihat Rincian';
     }
   }
 
@@ -433,7 +433,7 @@ class ModernTransactionPageState extends State<ModernTransactionPage>
           // Show brief loading indicator
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Refreshing transaction list...'),
+              content: Text('Memuat ulang daftar transaksi...'),
               duration: Duration(milliseconds: 1500),
               backgroundColor: Colors.blue,
             ),
