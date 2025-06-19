@@ -97,18 +97,18 @@ class ItemCategoryState extends State<ItemCategory> {
     "Aksesoris", // Kategori 5
     "Pakaian" // Kategori 6
   ];
-
   // Variabel untuk menyimpan status filter
   List<String> selectedCategories = []; // Kategori yang dipilih
-  RangeValues priceRange = const RangeValues(0, 1000000); // Rentang harga
+  int? minPrice; // Harga minimum
+  int? maxPrice; // Harga maksimum
   List<int> selectedRatings = []; // Rating yang dipilih
   List<String> selectedLocations = []; // Lokasi yang dipilih
   List<String> selectedBrands = []; // Brand yang dipilih
   // Controller untuk input rentang harga
   TextEditingController minPriceController =
-      TextEditingController(text: "0"); // Harga minimum
+      TextEditingController(); // Harga minimum
   TextEditingController maxPriceController =
-      TextEditingController(text: "1000000"); // Harga maksimum
+      TextEditingController(); // Harga maksimum
 
   // Controller untuk search
   TextEditingController searchController = TextEditingController();
@@ -131,6 +131,18 @@ class ItemCategoryState extends State<ItemCategory> {
       debugPrint("Keyword: ${widget.keyword}");
       searchController.text = widget.keyword!;
     }
+
+    // Add listeners to price controllers
+    minPriceController.addListener(() {
+      final value = minPriceController.text;
+      minPrice = value.isEmpty ? null : int.tryParse(value);
+    });
+
+    maxPriceController.addListener(() {
+      final value = maxPriceController.text;
+      maxPrice = value.isEmpty ? null : int.tryParse(value);
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadAllItems(); // Memuat semua data barang
     });
@@ -192,14 +204,12 @@ class ItemCategoryState extends State<ItemCategory> {
             })
             .where((id) => id > 0)
             .toList();
-      }
-
-      // Ambil data dari API dengan filter
+      } // Ambil data dari API dengan filter
       await barangProvider.fetchBarangWithFilter(
         userId: authProvider.user!.userId,
         categoryIds: categoryIds,
-        hargaMin: priceRange.start.round(),
-        hargaMax: priceRange.end.round(),
+        hargaMin: minPrice,
+        hargaMax: maxPrice,
         minRating: selectedRatings.isNotEmpty
             ? selectedRatings.first.toDouble()
             : null,
@@ -705,9 +715,8 @@ class ItemCategoryState extends State<ItemCategory> {
                             });
                           },
                         ),
-                        const SizedBox(height: 15),
-
-                        // Filter Section: Rentang Harga
+                        const SizedBox(
+                            height: 15), // Filter Section: Rentang Harga
                         const Text(
                           "Rentang Harga",
                           style: TextStyle(
@@ -726,17 +735,16 @@ class ItemCategoryState extends State<ItemCategory> {
                                 decoration: InputDecoration(
                                   labelText: "Min",
                                   prefixText: "Rp. ",
+                                  hintText: "0",
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
                                 onChanged: (value) {
-                                  double minValue = double.tryParse(value) ?? 0;
                                   setModalState(() {
-                                    priceRange = RangeValues(
-                                      minValue,
-                                      priceRange.end,
-                                    );
+                                    minPrice = value.isEmpty
+                                        ? null
+                                        : int.tryParse(value);
                                   });
                                 },
                               ),
@@ -750,45 +758,21 @@ class ItemCategoryState extends State<ItemCategory> {
                                 decoration: InputDecoration(
                                   labelText: "Max",
                                   prefixText: "Rp. ",
+                                  hintText: "-",
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
                                 onChanged: (value) {
-                                  double maxValue =
-                                      double.tryParse(value) ?? 1000000;
                                   setModalState(() {
-                                    priceRange = RangeValues(
-                                      priceRange.start,
-                                      maxValue,
-                                    );
+                                    maxPrice = value.isEmpty
+                                        ? null
+                                        : int.tryParse(value);
                                   });
                                 },
                               ),
                             ),
                           ],
-                        ),
-                        const SizedBox(height: 10),
-                        // Slider untuk rentang harga
-                        RangeSlider(
-                          values: priceRange,
-                          min: 0,
-                          max: 1000000,
-                          divisions: 10,
-                          activeColor: const Color(0xFFA0B25E),
-                          labels: RangeLabels(
-                            "Rp.${priceRange.start.round()}",
-                            "Rp.${priceRange.end.round()}",
-                          ),
-                          onChanged: (values) {
-                            setModalState(() {
-                              priceRange = values;
-                              minPriceController.text =
-                                  values.start.round().toString();
-                              maxPriceController.text =
-                                  values.end.round().toString();
-                            });
-                          },
                         ),
                         const SizedBox(height: 15),
 
@@ -894,9 +878,10 @@ class ItemCategoryState extends State<ItemCategory> {
                                 selectedRatings.clear();
                                 selectedLocations.clear();
                                 selectedBrands.clear();
-                                priceRange = const RangeValues(0, 1000000);
-                                minPriceController.text = "0";
-                                maxPriceController.text = "1000000";
+                                minPrice = null;
+                                maxPrice = null;
+                                minPriceController.clear();
+                                maxPriceController.clear();
                               });
                             },
                             style: OutlinedButton.styleFrom(
