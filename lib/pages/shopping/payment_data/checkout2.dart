@@ -883,7 +883,10 @@ class _Checkout2State extends State<Checkout2> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const ThankYouPage()),
+                                builder: (context) => ThankYouPage(
+                                  transactionId: checkoutProvider.storedTransactionId,
+                                ),
+                              ),
                             );
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(

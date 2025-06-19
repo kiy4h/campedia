@@ -32,7 +32,7 @@ enum OrderStatus {
 /// - Menampilkan status real-time dari proses pengambilan hingga pengembalian barang.
 /// - Menggunakan Stateful karena ada perubahan status dan countdown yang dinamis.
 class OrderTrackingPage extends StatefulWidget {
-  final int transactionId;
+  final int? transactionId;
   final OrderStatus? currentStatus;
   final String? statusTransaksi; // Database status
 
@@ -140,6 +140,9 @@ class _OrderTrackingPageState extends State<OrderTrackingPage> {
       _isUpdating = true;
     });
 
+    // DEBUG: Log transaksi_id and newStatus
+    debugPrint('DEBUG: Updating transaksi_id: \\${widget.transactionId}, newStatus: \\${newStatus}');
+
     try {
       final response = await http.patch(
         Uri.parse('$baseUrl/api/update_transaction_status'),
@@ -170,7 +173,7 @@ class _OrderTrackingPageState extends State<OrderTrackingPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: ${e.toString()}'),
+            content: Text('Error: \\${e.toString()}'),
             backgroundColor: Colors.red,
           ),
         );
@@ -242,7 +245,7 @@ class _OrderTrackingPageState extends State<OrderTrackingPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'Status Penyewaan #${widget.transactionId}',
+            'Status Penyewaan #${widget.statusTransaksi}',
             style: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold),
           ),
