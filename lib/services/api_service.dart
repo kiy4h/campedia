@@ -211,6 +211,29 @@ class ApiService {
     }
   }
 
+  static Future<ApiResponse<List<Gunung>>> getAllGunung(int userId) async {
+  try {
+    final response = await http.get(
+      Uri.parse('${ApiConfig.baseUrl}/api/destinasi_rekomendasi'),
+      headers: ApiConfig.headers,
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseMap = jsonDecode(response.body);
+      final List<dynamic> responseData = responseMap['data'];
+      final List<Gunung> gunungList =
+          responseData.map((json) => Gunung.fromJson(json)).toList();
+      return ApiResponse.success(gunungList, 'Mountains loaded successfully');
+    } else {
+      final responseData = jsonDecode(response.body);
+      return ApiResponse.error(
+          responseData['detail'] ?? 'Failed to load mountains');
+    }
+  } catch (e) {
+    return ApiResponse.error('Network error: $e');
+  }
+}
+
   // Add to wishlist
   static Future<ApiResponse<String>> addToWishlist(
       int userId, int barangId) async {

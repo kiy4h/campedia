@@ -271,6 +271,42 @@ class ApiResponse<T> {
   }
 }
 
+class Gunung {
+  final int id;
+  final String namaGunung;
+  final String foto;
+  final String lokasi;
+  final String deskripsi;
+  final List<Barang> barangList;
+
+  Gunung({
+    required this.id,
+    required this.namaGunung,
+    required this.foto,
+    required this.lokasi,
+    required this.deskripsi,
+    this.barangList = const [],
+  });
+
+  factory Gunung.fromJson(Map<String, dynamic> json) {
+    List<Barang> barangList = [];
+    if (json['rekomendasi_barang'] != null && json['rekomendasi_barang'] is List) {
+      barangList = (json['rekomendasi_barang'] as List)
+          .map((item) => Barang.fromJson(item))
+          .toList();
+    }
+
+    return Gunung(
+      id: json['id'] ?? 0,
+      namaGunung: json['nama_gunung'] ?? '',
+      foto: json['foto'] ?? '',
+      lokasi: json['Lokasi'] ?? '',
+      deskripsi: json['Deskripsi'] ?? '',
+      barangList: barangList,
+    );
+  }
+}
+
 // Cart Models
 class CartItem {
   final int id;

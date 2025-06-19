@@ -20,6 +20,7 @@ import 'notification.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/barang_provider.dart';
 import '../../models/models.dart';
+import '../beranda/recommendedGearTrip.dart';
 
 // Fungsi main untuk menjalankan aplikasi sebagai contoh
 void main() {
@@ -205,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                 _buildHeader(context),
                 const SizedBox(height: 20),
                 // Bagian slider untuk fitur yang direkomendasikan
-                _buildFeaturedSlider(context),
+                _buildMountainSection(),
                 const SizedBox(height: 24),
                 // Bagian untuk menampilkan kategori produk
                 _buildCategoriesSection(context),
@@ -353,69 +354,54 @@ class _HomePageState extends State<HomePage> {
    * - context: Dibutuhkan untuk navigasi.
    * * Return: Widget SizedBox berisi ListView horizontal.
    */
-  Widget _buildFeaturedSlider(BuildContext context) {
-    return SizedBox(
-      height: 150,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: featuredSlides.length,
-        itemBuilder: (context, index) {
-          final slide = featuredSlides[index];
-          // Kartu fitur yang dapat diklik
-          return GestureDetector(
-            onTap: () {
-              // Navigasi berdasarkan key dari slide
-              if (slide["key"] == "1") {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const RecommendedGearTripPage()));
-              } else if (slide["key"] == "2") {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const TrendingGearPage()));
-              }
-            },
-            child: Container(
-              width: 240,
-              margin: const EdgeInsets.only(right: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                image: DecorationImage(
-                  image: NetworkImage(slide["image"]),
-                  fit: BoxFit.cover,
-                  // Filter warna untuk menggelapkan gambar agar teks lebih terbaca
-                  colorFilter:
-                      ColorFilter.mode(slide["color"], BlendMode.darken),
-                ),
-              ),
-              // Padding untuk menempatkan teks di dalam kartu
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    // Widget Text untuk judul fitur
-                    Text(
-                      slide["title"],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        height: 1.2,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
+  Widget _buildMountainSection() {
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const GunungDestinationPage()),
+      );
+    },
+    child: Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.green[600]!, Colors.green[400]!],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(12),
       ),
-    );
-  }
+      child: Row(
+        children: [
+          Icon(Icons.landscape, color: Colors.white, size: 32),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Mountain Destinations',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Explore gear for specific mountains',
+                  style: TextStyle(color: Colors.white70, fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+          Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+        ],
+      ),
+    ),
+  );
+}
 
   /* Fungsi ini membangun bagian kategori.
    * * Parameter:

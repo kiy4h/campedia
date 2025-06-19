@@ -12,6 +12,7 @@ import 'package:tugas3provis/providers/transaction_detail_provider.dart';
 import 'package:tugas3provis/providers/profile_provider.dart';
 import 'package:tugas3provis/providers/kategori_provider.dart';
 import 'package:tugas3provis/providers/notification_provider.dart';
+import 'package:tugas3provis/providers/gunung_provider.dart';
 // import 'Intro/splashscreen.dart';
 
 void main() {
@@ -29,6 +30,9 @@ void main() {
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => KategoriProvider()),
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => GunungProvider()), // Tambah GunungProvider
+
+        
       ],
       child: const MyApp(),
     ),

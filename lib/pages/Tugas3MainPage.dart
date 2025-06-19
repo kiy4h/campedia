@@ -143,11 +143,11 @@ class _Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
           'description': 'User notifications center',
           'page': NotificationPage()
         },
-        {
-          'title': 'Recommended Trip',
-          'description': 'Gear recommendations for trips',
-          'page': RecommendedGearTripPage()
-        },
+        // {
+        //   'title': 'Recommended Trip',
+        //   'description': 'Gear recommendations for trips',
+        //   'page': RecommendedGearTripPage()
+        // },
         {
           'title': 'Categories',
           'description': 'Browse gear by category',
