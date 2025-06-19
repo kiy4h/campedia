@@ -50,6 +50,38 @@ class User {
   }
 }
 
+class Kategori {
+  final int id;
+  final String namaKategori;
+  final String? icon;
+  final int totalBarang;
+
+  Kategori({
+    required this.id,
+    required this.namaKategori,
+    this.icon,
+    required this.totalBarang,
+  });
+
+  factory Kategori.fromJson(Map<String, dynamic> json) {
+    return Kategori(
+      id: json['id'] ?? 0,
+      namaKategori: json['nama_kategori'] ?? '',
+      icon: json['icon'],
+      totalBarang: json['total_barang'] ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'nama_kategori': namaKategori,
+      'icon': icon,
+      'total_barang': totalBarang,
+    };
+  }
+}
+
 class Barang {
   final int id;
   final String namaBarang;

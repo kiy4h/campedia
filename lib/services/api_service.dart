@@ -182,6 +182,35 @@ class ApiService {
     }
   }
 
+  static Future<ApiResponse<List<Kategori>>> getKategori() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiConfig.baseUrl}/api/kategori'),
+        headers: ApiConfig.headers,
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        if (responseData['data'] != null) {
+          final List<dynamic> dataList = responseData['data'];
+          final List<Kategori> kategoriList =
+              dataList.map((json) => Kategori.fromJson(json)).toList();
+          return ApiResponse.success(kategoriList, 'Categories loaded successfully');
+        } else {
+          return ApiResponse.error('No categories found');
+        }
+      } else {
+        final error = responseData['error'] ?? 
+                     responseData['detail'] ?? 
+                     'Failed to load categories';
+        return ApiResponse.error(error);
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: ${e.toString()}');
+    }
+  }
+
   // Add to wishlist
   static Future<ApiResponse<String>> addToWishlist(
       int userId, int barangId) async {

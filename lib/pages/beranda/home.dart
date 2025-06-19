@@ -268,7 +268,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const AllItemList()),
+                          builder: (context) => AllItemList(keyword: value)),
                     );
                   },
                 ),

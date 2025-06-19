@@ -6,12 +6,16 @@
 /// - google_fonts: digunakan untuk mengatur font Poppins pada tampilan teks.
 /// - allListItem.dart: digunakan untuk berpindah ke halaman daftar semua barang.
 /// - navbar.dart: digunakan untuk menampilkan navigasi bawah layar.
+/// - provider: untuk state management
 library;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import '../components/navbar.dart';
 import 'allListItem.dart';
+import '../../providers/kategori_provider.dart';
+import '../../models/models.dart';
 
 // Fungsi main untuk menjalankan aplikasi sebagai contoh
 void main() {
@@ -26,11 +30,6 @@ void main() {
 class CategoryPage extends StatelessWidget {
   const CategoryPage({super.key});
 
-  /* Fungsi ini membangun widget root untuk halaman kategori
-   * * Parameter:
-   * - context: Menyediakan informasi tentang lokasi widget dalam struktur widget dan akses ke fitur-fitur Flutter.
-   * * Return: Widget MaterialApp yang menampung CategoriesPage sebagai halaman utama dengan tema yang telah dikonfigurasi.
-   */
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -41,7 +40,10 @@ class CategoryPage extends StatelessWidget {
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
       // Menetapkan CategoriesPage sebagai halaman utama
-      home: CategoriesPage(),
+      home: ChangeNotifierProvider(
+        create: (_) => KategoriProvider(),
+        child: CategoriesPage(),
+      ),
       // Menyembunyikan banner debug
       debugShowCheckedModeBanner: false,
     );
@@ -52,86 +54,106 @@ class CategoryPage extends StatelessWidget {
 /// * Deskripsi:
 /// - Widget ini menampilkan halaman utama yang berisi daftar kategori produk.
 /// - Tampilan utama menggunakan layout GridView untuk menyusun kartu-kartu kategori.
-/// - Merupakan StatelessWidget karena konten kategori bersifat statis dan tidak ada perubahan state di dalam widget ini.
-class CategoriesPage extends StatelessWidget {
-  // Variabel final untuk menyimpan data kategori. Setiap kategori adalah Map yang berisi nama, path icon, dan jumlah item.
-  final List<Map<String, dynamic>> categories = [
-    {
-      "name": "Alat Masak",
-      "icon": "http://localhost:8000/images/assets_Categories/cat_Kompor.png",
-      "items": 87
-    },
-    {
-      "name": "Tenda",
-      "icon": "http://localhost:8000/images/assets_Categories/cat_Tenda.png",
-      "items": 87
-    },
-    {
-      "name": "Sepatu",
-      "icon": "http://localhost:8000/images/assets_Categories/cat_Sepatu.png",
-      "items": 87
-    },
-    {
-      "name": "Tas Gunung",
-      "icon": "http://localhost:8000/images/assets_Categories/cat_Tas.png",
-      "items": 27
-    },
-    {
-      "name": "Senter",
-      "icon": "http://localhost:8000/images/assets_Categories/cat_Senter.png",
-      "items": 87
-    },
-    {
-      "name": "Jaket Gunung",
-      "icon": "http://localhost:8000/images/assets_Categories/cat_Jaket.png",
-      "items": 87
-    },
-    {
-      "name": "Alat Pendukung",
-      "icon":
-          "http://localhost:8000/images/assets_Categories/cat_KeamananNavigasi.png",
-      "items": 87
-    },
-    {
-      "name": "Fasilitas Tambahan",
-      "icon":
-          "http://localhost:8000/images/assets_Categories/cat_FasilitasTambahan.png",
-      "items": 120
-    },
-  ];
-
+/// - Sekarang menggunakan StatefulWidget untuk mengelola state loading dan data dari API.
+class CategoriesPage extends StatefulWidget {
   CategoriesPage({super.key});
 
-  /* Fungsi ini membangun UI untuk halaman daftar kategori.
-   * * Parameter:
-   * - context: Digunakan untuk mengakses informasi tentang lokasi widget dan untuk navigasi antar halaman.
-   * * Return: Widget Scaffold yang menyusun AppBar, body dengan GridView, dan Bottom Navigation Bar.
-   */
+  @override
+  State<CategoriesPage> createState() => _CategoriesPageState();
+}
+
+class _CategoriesPageState extends State<CategoriesPage> {
+  @override
+  void initState() {
+    super.initState();
+    // Load kategori saat widget diinisialisasi
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<KategoriProvider>(context, listen: false).fetchKategori();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Scaffold sebagai kerangka utama halaman
     return Scaffold(
       // AppBar yang dibuat secara dinamis oleh fungsi buildAppBar
       appBar: buildAppBar(context: context, currentIndex: 1),
       // Body utama dengan padding
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        // GridView untuk menampilkan kategori secara dinamis
-        child: GridView.builder(
-          // Pengaturan layout grid: jumlah kolom, rasio aspek, dan jarak antar item
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // 2 kolom
-            childAspectRatio: 1.1, // Rasio lebar-tinggi setiap item
-            crossAxisSpacing: 16, // Jarak horizontal antar item
-            mainAxisSpacing: 16, // Jarak vertikal antar item
-          ),
-          // Jumlah total item dalam grid, diambil dari panjang list categories
-          itemCount: categories.length,
-          // Fungsi yang dipanggil untuk membangun setiap kartu kategori dalam grid
-          itemBuilder: (context, index) {
-            return _buildCategoryCard(categories[index], context);
-          },
-        ),
+      body: Consumer<KategoriProvider>(
+        builder: (context, kategoriProvider, child) {
+          if (kategoriProvider.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF5D7052)),
+              ),
+            );
+          }
+
+          if (kategoriProvider.error != null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 64,
+                    color: Colors.grey[400],
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Error: ${kategoriProvider.error}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      kategoriProvider.fetchKategori();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF5D7052),
+                    ),
+                    child: const Text('Retry', style: TextStyle(color: Colors.white)),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          if (kategoriProvider.kategoriList.isEmpty) {
+            return const Center(
+              child: Text(
+                'No categories available',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            );
+          }
+
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            // GridView untuk menampilkan kategori secara dinamis
+            child: GridView.builder(
+              // Pengaturan layout grid: jumlah kolom, rasio aspek, dan jarak antar item
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // 2 kolom
+                childAspectRatio: 1.1, // Rasio lebar-tinggi setiap item
+                crossAxisSpacing: 16, // Jarak horizontal antar item
+                mainAxisSpacing: 16, // Jarak vertikal antar item
+              ),
+              // Jumlah total item dalam grid, diambil dari data API
+              itemCount: kategoriProvider.kategoriList.length,
+              // Fungsi yang dipanggil untuk membangun setiap kartu kategori dalam grid
+              itemBuilder: (context, index) {
+                return _buildCategoryCard(
+                  kategoriProvider.kategoriList[index], 
+                  context
+                );
+              },
+            ),
+          );
+        },
       ),
       // Navigasi bawah yang dibuat oleh fungsi buildBottomNavBar
       bottomNavigationBar: buildBottomNavBar(
@@ -143,19 +165,22 @@ class CategoriesPage extends StatelessWidget {
 
   /* Fungsi ini membangun satu kartu kategori.
    * * Parameter:
-   * - category: Sebuah Map yang berisi data untuk satu kategori (nama, ikon, jumlah item).
+   * - kategori: Objek Kategori yang berisi data untuk satu kategori.
    * - context: Diperlukan untuk menangani navigasi saat kartu diklik.
    * * Return: Widget GestureDetector yang berisi Container (kartu) yang dapat diklik.
    */
-  Widget _buildCategoryCard(
-      Map<String, dynamic> category, BuildContext context) {
+  Widget _buildCategoryCard(Kategori kategori, BuildContext context) {
     // GestureDetector untuk membuat seluruh kartu dapat diklik
     return GestureDetector(
       onTap: () {
-        // Navigasi ke halaman AllItemList saat kartu kategori ditekan
+        // Navigasi ke halaman AllItemList dengan kategori yang dipilih
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const AllItemList()),
+          MaterialPageRoute(
+            builder: (_) => AllItemList(
+              kategori: kategori.namaKategori, // Pass nama kategori
+            ),
+          ),
         );
       },
       // Container sebagai visual dari kartu kategori
@@ -179,22 +204,28 @@ class CategoriesPage extends StatelessWidget {
             Container(
               width: 100,
               height: 100,
-              padding: const EdgeInsets.all(
-                  8), // Widget Image untuk menampilkan ikon kategori dari network
-              child: Image.network(
-                category['icon'], // Mengambil path gambar dari data Map
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) => const Icon(
-                  Icons.image_not_supported,
-                  size: 50,
-                  color: Colors.grey,
-                ),
-              ),
+              padding: const EdgeInsets.all(8),
+              // Widget Image untuk menampilkan ikon kategori dari network
+              child: kategori.icon != null
+                  ? Image.network(
+                      kategori.icon!,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) => const Icon(
+                        Icons.image_not_supported,
+                        size: 50,
+                        color: Colors.grey,
+                      ),
+                    )
+                  : const Icon(
+                      Icons.category,
+                      size: 50,
+                      color: Color(0xFF5D7052),
+                    ),
             ),
             const SizedBox(height: 10),
             // Widget Text untuk menampilkan nama kategori
             Text(
-              category['name'], // Mengambil nama dari data Map
+              kategori.namaKategori,
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -205,7 +236,7 @@ class CategoriesPage extends StatelessWidget {
             const SizedBox(height: 5),
             // Widget Text untuk menampilkan jumlah item dalam kategori
             Text(
-              "${category['items']} Items", // Mengambil jumlah item dari data Map
+              "${kategori.totalBarang} Items",
               style: const TextStyle(
                 fontSize: 12,
                 color: Colors.grey,
@@ -218,12 +249,7 @@ class CategoriesPage extends StatelessWidget {
   }
 }
 
-/* Fungsi ini membangun AppBar yang dapat disesuaikan berdasarkan halaman aktif.
- * * Parameter:
- * - context: Digunakan untuk menampilkan elemen UI seperti SnackBar.
- * - currentIndex: Indeks integer yang menentukan konten AppBar (judul dan tombol aksi) yang akan ditampilkan.
- * * Return: Widget PreferredSizeWidget (AppBar) yang sudah dikonfigurasi.
- */
+// ...existing code for buildAppBar function...
 PreferredSizeWidget buildAppBar({
   required BuildContext context,
   required int currentIndex,

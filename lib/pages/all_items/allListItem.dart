@@ -28,7 +28,9 @@ void main() {
 /// - Menyediakan konfigurasi tema dan styling untuk halaman.
 /// - Merupakan StatelessWidget karena hanya berfungsi sebagai container dan tidak menyimpan state.
 class AllItemList extends StatelessWidget {
-  const AllItemList({super.key});
+  final String? keyword;
+  final String? kategori;
+  const AllItemList({super.key, this.keyword, this.kategori});
 
   @override
   /* Fungsi ini membangun widget root untuk aplikasi
@@ -49,7 +51,10 @@ class AllItemList extends StatelessWidget {
       ),
 
       // Menampilkan halaman kategori item sebagai halaman utama
-      home: ItemCategory(),
+      home: ItemCategory(
+        keyword: keyword,
+        kategori: kategori,
+      ),
     );
   }
 }
@@ -61,7 +66,9 @@ class AllItemList extends StatelessWidget {
 /// - Merupakan StatefulWidget karena perlu menyimpan dan memperbarui status seperti
 /// kategori terpilih, filter harga, dan data barang.
 class ItemCategory extends StatefulWidget {
-  const ItemCategory({super.key});
+  final String? keyword;   // Tambahkan ini
+  final String? kategori;  // Tambahkan ini
+  const ItemCategory({super.key, this.keyword, this.kategori});
 
   @override
   /* Fungsi ini membuat state yang digunakan oleh widget ini.
@@ -117,6 +124,15 @@ class _ItemCategoryState extends State<ItemCategory> {
    */
   void initState() {
     super.initState();
+    // Jika kategori tidak null, masukkan ke selectedCategories
+    if (widget.kategori != null && widget.kategori!.isNotEmpty) {
+      selectedCategories.add(widget.kategori!);
+    }
+    // Jika keyword tidak null, masukkan ke searchController.text
+    if (widget.keyword != null && widget.keyword!.isNotEmpty) {
+      debugPrint("Keyword: ${widget.keyword}");
+      searchController.text = widget.keyword!;
+    }
     _loadAllItems(); // Memuat semua data barang
   }
 
@@ -158,16 +174,18 @@ class _ItemCategoryState extends State<ItemCategory> {
               switch (catName) {
                 case "Tenda":
                   return 1;
-                case "Alat Masak":
-                  return 2;
-                case "Sepatu":
-                  return 3;
                 case "Tas":
+                  return 2;
+                case "Peralatan Tidur":
+                  return 3;
+                case "Peralatan Masak":
                   return 4;
-                case "Aksesoris":
+                case "Pencahayaan":
                   return 5;
                 case "Pakaian":
                   return 6;
+                case "Aksesoris":
+                  return 7;
                 default:
                   return 0;
               }
