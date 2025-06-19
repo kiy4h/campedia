@@ -732,4 +732,30 @@ class ApiService {
       return ApiResponse.error('Network error: $e');
     }
   }
+
+  // Get notifications for user
+  static Future<ApiResponse<List<NotificationItem>>> getNotifications(
+      int userId) async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+            '${ApiConfig.baseUrl}${ApiConfig.notifikasi}?user_id=$userId'),
+        headers: ApiConfig.headers,
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        final notificationResponse =
+            NotificationResponse.fromJson(responseData);
+        return ApiResponse.success(
+            notificationResponse.data, 'Notifications retrieved successfully');
+      } else {
+        final error = responseData['error'] ?? 'Failed to get notifications';
+        return ApiResponse.error(error);
+      }
+    } catch (e) {
+      return ApiResponse.error('Network error: $e');
+    }
+  }
 }

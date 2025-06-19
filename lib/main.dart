@@ -11,6 +11,7 @@ import 'package:tugas3provis/providers/transaction_provider.dart';
 import 'package:tugas3provis/providers/transaction_detail_provider.dart';
 import 'package:tugas3provis/providers/profile_provider.dart';
 import 'package:tugas3provis/providers/kategori_provider.dart';
+import 'package:tugas3provis/providers/notification_provider.dart';
 // import 'Intro/splashscreen.dart';
 
 void main() {
@@ -27,6 +28,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => TransactionDetailProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => KategoriProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ],
       child: const MyApp(),
     ),
