@@ -63,7 +63,7 @@ class Checkout2State extends State<Checkout2> {
          * - Judul halaman yang menunjukkan 'Payment Method'.
          */
         title:
-            const Text('Payment Method', style: TextStyle(color: Colors.black)),
+            const Text('Metode Pembayaran', style: TextStyle(color: Colors.black)),
         centerTitle: true,
       ),
       /** Widget [Padding]
@@ -198,7 +198,7 @@ class Checkout2State extends State<Checkout2> {
          * - Teksnya berubah berdasarkan status `isActive`.
          */
         Text(
-          isActive ? 'Payment Method' : 'Rent Confirmation',
+          isActive ? 'Metode Pembayaran' : 'Konfirmasi Penyewaan',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ],
@@ -412,23 +412,7 @@ class Checkout2State extends State<Checkout2> {
          * - Saat ditekan, akan menampilkan snackbar.
          * - **Fungsi Khusus:** Logika unduh bukti transaksi perlu diimplementasikan.
          */
-        ElevatedButton.icon(
-          onPressed: () {
-            // Logic to download receipt
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Bukti transaksi diunduh')),
-            );
-          },
-          icon: const Icon(Icons.download, color: Colors.white),
-          label: const Text('Download Bukti Transaksi',
-              style: TextStyle(color: Colors.white)),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF627D2C),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          ),
-        ),
+        
       ],
     );
   }

@@ -9,6 +9,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'checkout2.dart';
+import '../cart/shoping.dart';
 
 /* Fungsi ini adalah titik masuk utama aplikasi Flutter.
  *
@@ -101,11 +102,13 @@ class ShippingAddressPageState extends State<ShippingAddressPage> {
          *
          * Deskripsi:
          * - Tombol ikon di AppBar untuk navigasi kembali ke layar sebelumnya.
-         */
-        leading: IconButton(
+         */        leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacement(
+              context, 
+              MaterialPageRoute(builder: (context) => const Shoping()),
+            );
           },
         ),
         backgroundColor: Colors.transparent,
@@ -115,7 +118,7 @@ class ShippingAddressPageState extends State<ShippingAddressPage> {
          * Deskripsi:
          * - Judul halaman yang menampilkan 'Checkout'.
          */
-        title: const Text('Checkout', style: TextStyle(color: Colors.black)),
+        title: const Text('Konfirmasi Penyewaan', style: TextStyle(color: Colors.black)),
         centerTitle: true,
       ),
       /** Widget [Padding]
@@ -298,7 +301,7 @@ class ShippingAddressPageState extends State<ShippingAddressPage> {
              * - Label teks di bawah lingkaran untuk 'Rent Confirmation'.
              */
             const Text(
-              'Rent Confirmation',
+              'Konfirmasi Penyewaan',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
@@ -343,7 +346,7 @@ class ShippingAddressPageState extends State<ShippingAddressPage> {
              * - Label teks di bawah lingkaran untuk 'Payment Method'.
              */
             const Text(
-              'Payment Method',
+              'Metode Pembayaran',
               style: TextStyle(color: Colors.grey),
             ),
           ],

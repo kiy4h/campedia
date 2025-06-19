@@ -137,7 +137,7 @@ class DetailItemState extends State<DetailItem>
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
@@ -668,7 +668,11 @@ class DetailItemState extends State<DetailItem>
               ),
               child: const Text(
                 'TAMBAHKAN KE KERANJANG',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Color(0xFF627D2C), // warna hijau
+                ),
               ),
             ),
           ),

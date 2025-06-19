@@ -383,7 +383,7 @@ class ProfilePageState extends State<ProfilePage> {
            * * Deskripsi:
            * - Ikon riwayat di sebelah kiri teks tombol.
            */
-          icon: const Icon(Icons.history, size: 24),
+          icon: const Icon(Icons.history, size: 24, color: Color(0xFF2E7D32)),
           /** Widget [Text]
            * * Deskripsi:
            * - Teks tombol "Riwayat Transaksi".
@@ -462,7 +462,7 @@ class ProfilePageState extends State<ProfilePage> {
            * * Deskripsi:
            * - Ikon logout di sebelah kiri teks tombol.
            */
-          icon: const Icon(Icons.logout, size: 24),
+          icon: const Icon(Icons.logout, size: 24, color: Color(0xFF2E7D32)),
           /** Widget [Text]
            * * Deskripsi:
            * - Teks tombol "Logout".
