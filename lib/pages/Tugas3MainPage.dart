@@ -236,14 +236,14 @@ class Tugas3ProvisPageState extends State<Tugas3ProvisPage> {
           'description': 'Detailed view of rented items',
           'page': TransactionDetailPage(transactionId: 1) // Demo transaction ID
         },
-        {
-          'title': 'Review Barang',
-          'description': 'User review page for rented items',
-          'page': ProductReviewPage(
-            productImage: '../../images/assets_ItemDetails/kompor1.png',
-            productName: 'Kompor Portable',
-          )
-        },
+        // {
+        //   'title': 'Review Barang',
+        //   'description': 'User review page for rented items',
+        //   'page': ProductReviewPage(
+        //     productImage: '../../images/assets_ItemDetails/kompor1.png',
+        //     productName: 'Kompor Portable',
+        //   )
+        // },
       ]
     },
   ];

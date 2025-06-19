@@ -395,6 +395,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
                       builder: (context) => ProductReviewPage(
                         productName: item.namaBarang,
                         productImage: item.foto ?? '',
+                        barangId: item.barangId
                       ),
                     ),
                   );
