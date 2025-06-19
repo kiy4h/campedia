@@ -113,11 +113,41 @@ class ItemCategoryState extends State<ItemCategory> {
       TextEditingController(); // Harga maksimum
 
   // Controller untuk search
-  TextEditingController searchController = TextEditingController();
-
-  // Current sort option
+  TextEditingController searchController =
+      TextEditingController(); // Current sort option
   String? currentSortBy;
   String? currentOrder;
+
+  // Helper methods to check if filters are active
+  bool get hasActiveFilters {
+    return selectedCategories.isNotEmpty ||
+        minPrice != null ||
+        maxPrice != null ||
+        selectedRatings.isNotEmpty ||
+        selectedBrands.isNotEmpty ||
+        searchController.text.isNotEmpty;
+  }
+
+  bool get hasActiveSort {
+    return currentSortBy != null;
+  }
+
+  void _resetAllFiltersAndSort() {
+    setState(() {
+      selectedCategories.clear();
+      selectedRatings.clear();
+      selectedBrands.clear();
+      minPrice = null;
+      maxPrice = null;
+      minPriceController.clear();
+      maxPriceController.clear();
+      searchController.clear();
+      currentSortBy = null;
+      currentOrder = null;
+    });
+    _applyFilters();
+  }
+
   @override
   /* Fungsi ini dijalankan saat widget pertama kali dibuat.
    * * Melakukan inisialisasi state awal dan memuat data barang dari API.
@@ -314,104 +344,194 @@ class ItemCategoryState extends State<ItemCategory> {
                 ],
               ),
             ),
-          ),
-          // Spacer
+          ), // Spacer
           SliverToBoxAdapter(
             child: SizedBox(height: 8),
-          ),
-          // Baris untuk filter kategori, tombol sort, dan filter
+          ), // Baris untuk filter kategori, tombol sort, dan filter
           SliverToBoxAdapter(
             child: Container(
               margin: const EdgeInsets.only(bottom: 10),
-              height: 40,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
                   // ListView horizontal untuk menampilkan daftar kategori
                   Expanded(
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: categories.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: 10),
-                      itemBuilder: (context, index) {
-                        // Tombol untuk setiap kategori
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              if (selectedCategories
-                                  .contains(categories[index])) {
-                                selectedCategories.remove(categories[index]);
-                              } else {
-                                selectedCategories.add(categories[index]);
-                              }
-                              _applyFilters(); // Terapkan filter saat kategori berubah
-                            });
-                          },
-                          // Container sebagai chip kategori
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            decoration: BoxDecoration(
-                              color:
-                                  selectedCategories.contains(categories[index])
-                                      ? const Color(0xFFA0B25E)
-                                      : Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              border:
-                                  Border.all(color: const Color(0xFFA0B25E)),
-                            ),
-                            // Teks nama kategori
-                            child: Text(
-                              categories[index],
-                              style: TextStyle(
+                    child: SizedBox(
+                      height: 40,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categories.length,
+                        separatorBuilder: (_, __) => const SizedBox(width: 10),
+                        itemBuilder: (context, index) {
+                          // Tombol untuk setiap kategori
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (selectedCategories
+                                    .contains(categories[index])) {
+                                  selectedCategories.remove(categories[index]);
+                                } else {
+                                  selectedCategories.add(categories[index]);
+                                }
+                                _applyFilters(); // Terapkan filter saat kategori berubah
+                              });
+                            },
+                            // Container sebagai chip kategori
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
+                              decoration: BoxDecoration(
                                 color: selectedCategories
                                         .contains(categories[index])
-                                    ? Colors.white
-                                    : const Color(0xFFA0B25E),
-                                fontWeight: FontWeight.bold,
+                                    ? const Color(0xFFA0B25E)
+                                    : Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                                border:
+                                    Border.all(color: const Color(0xFFA0B25E)),
+                              ),
+                              // Teks nama kategori
+                              child: Text(
+                                categories[index],
+                                style: TextStyle(
+                                  color: selectedCategories
+                                          .contains(categories[index])
+                                      ? Colors.white
+                                      : const Color(0xFFA0B25E),
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ),
                   const SizedBox(width: 10),
                   // Tombol untuk membuka bottom sheet 'Sort'
-                  GestureDetector(
-                    onTap: () {
-                      _showSortBottomSheet(context);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: const Color(0xFFA0B25E)),
+                  SizedBox(
+                    height: 40,
+                    child: GestureDetector(
+                      onTap: () {
+                        _showSortBottomSheet(context);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: hasActiveSort
+                              ? const Color(0xFFA0B25E)
+                              : Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: const Color(0xFFA0B25E)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.sort,
+                              size: 18,
+                              color: hasActiveSort
+                                  ? Colors.white
+                                  : const Color(0xFFA0B25E),
+                            ),
+                            if (hasActiveSort) ...[
+                              const SizedBox(width: 4),
+                              Container(
+                                width: 6,
+                                height: 6,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
                       ),
-                      child: const Icon(Icons.sort,
-                          size: 18, color: Color(0xFFA0B25E)),
                     ),
                   ),
                   const SizedBox(width: 10),
                   // Tombol untuk membuka bottom sheet 'Filter'
-                  GestureDetector(
-                    onTap: () {
-                      _showFilterBottomSheet(context);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: const Color(0xFFA0B25E)),
+                  SizedBox(
+                    height: 40,
+                    child: GestureDetector(
+                      onTap: () {
+                        _showFilterBottomSheet(context);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: hasActiveFilters
+                              ? const Color(0xFFA0B25E)
+                              : Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: const Color(0xFFA0B25E)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              FontAwesomeIcons.filter,
+                              size: 18,
+                              color: hasActiveFilters
+                                  ? Colors.white
+                                  : const Color(0xFFA0B25E),
+                            ),
+                            if (hasActiveFilters) ...[
+                              const SizedBox(width: 4),
+                              Container(
+                                width: 6,
+                                height: 6,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
                       ),
-                      child: const Icon(FontAwesomeIcons.filter,
-                          size: 18, color: Color(0xFFA0B25E)),
                     ),
                   ),
+                  // Tombol Reset (hanya tampil jika ada filter atau sort aktif)
+                  if (hasActiveFilters || hasActiveSort) ...[
+                    const SizedBox(width: 10),
+                    SizedBox(
+                      height: 40,
+                      child: GestureDetector(
+                        onTap: _resetAllFiltersAndSort,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.red[100],
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: Colors.red),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.clear,
+                                size: 16,
+                                color: Colors.red[700],
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                'Reset',
+                                style: TextStyle(
+                                  color: Colors.red[700],
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
