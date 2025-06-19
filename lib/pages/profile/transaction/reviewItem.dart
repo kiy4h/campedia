@@ -14,6 +14,7 @@ import '../../beranda/home.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../services/api_service.dart';
 import '../../../models/models.dart';
+import 'historyPenyewaan.dart';
 
 /// Widget [ProductReviewPage]
 ///
@@ -114,59 +115,68 @@ class ProductReviewPageState extends State<ProductReviewPage> {
    * Return: Tidak ada (Future<void>).
    */
   Future<void> _submitReview() async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    
-    if (!authProvider.isAuthenticated || authProvider.user == null) {
+  final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+  if (!authProvider.isAuthenticated || authProvider.user == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Silakan login terlebih dahulu'),
+        backgroundColor: Colors.red,
+      ),
+    );
+    return;
+  }
+
+  setState(() {
+    _isSubmittingReview = true;
+  });
+
+  try {
+    final reviewRequest = ReviewRequest(
+      rating: _rating.toInt(),
+      ulasan: _controller.text.trim(),
+      userId: authProvider.user!.userId,
+      barangId: widget.barangId,
+    );
+
+    final response = await ApiService.addReview(reviewRequest);
+
+    if (!mounted) return;
+
+    if (response.success) {
+
+      // Navigasi ke halaman ModernTransactionPage, dan hapus semua halaman sebelumnya
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const ModernTransactionPage()),
+        (Route<dynamic> route) => false,
+      );
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Silakan login terlebih dahulu'),
+        SnackBar(
+          content: Text(response.error ?? 'Gagal mengirim review'),
           backgroundColor: Colors.red,
         ),
       );
-      return;
     }
+  } catch (e) {
+    if (!mounted) return;
 
-    setState(() {
-      _isSubmittingReview = true;
-    });
-
-    try {
-      final reviewRequest = ReviewRequest(
-        rating: _rating.toInt(),
-        ulasan: _controller.text.trim(),
-        userId: authProvider.user!.userId,
-        barangId: widget.barangId,
-      );
-
-      final response = await ApiService.addReview(reviewRequest);
-
-      if (response.success && mounted) {
-        _showConfirmationDialog(context);
-      } else if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(response.error ?? 'Gagal mengirim review'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Terjadi kesalahan: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isSubmittingReview = false;
-        });
-      }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Terjadi kesalahan: $e'),
+        backgroundColor: Colors.red,
+      ),
+    );
+  } finally {
+    if (mounted) {
+      setState(() {
+        _isSubmittingReview = false;
+      });
     }
   }
+}
+
 
   /* Fungsi ini menampilkan dialog konfirmasi setelah ulasan berhasil dikirim.
    *
