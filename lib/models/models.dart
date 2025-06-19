@@ -556,10 +556,29 @@ class ReviewRequest {
   }
 }
 
+// Tambahkan model Panduan
+class Panduan {
+  final String isiPanduan;
+  final String? linkPanduan;
+
+  Panduan({
+    required this.isiPanduan,
+    this.linkPanduan,
+  });
+
+  factory Panduan.fromJson(Map<String, dynamic> json) {
+    return Panduan(
+      isiPanduan: json['isi_panduan'] ?? '',
+      linkPanduan: json['link_panduan'],
+    );
+  }
+}
+
 // Item Detail Models
 class DetailBarang extends Barang {
   final List<FotoBarang>? fotoList;
   final List<Review>? reviews;
+  final List<Panduan>? panduan; // Tambahkan field panduan
 
   DetailBarang({
     required super.id,
@@ -577,6 +596,7 @@ class DetailBarang extends Barang {
     super.isWishlist,
     this.fotoList,
     this.reviews,
+    this.panduan, // Tambahkan ke constructor
   });
 
   factory DetailBarang.fromJson(Map<String, dynamic> json) {
@@ -593,6 +613,15 @@ class DetailBarang extends Barang {
           .map((review) => Review.fromJson(review))
           .toList();
     }
+
+    // Tambahkan parsing untuk panduan
+    List<Panduan>? panduan;
+    if (json['panduan'] != null) {
+      panduan = (json['panduan'] as List)
+          .map((panduanItem) => Panduan.fromJson(panduanItem))
+          .toList();
+    }
+
     return DetailBarang(
       id: json['id'] ?? 0,
       namaBarang: json['nama_barang'] ?? '',
@@ -612,6 +641,7 @@ class DetailBarang extends Barang {
       isWishlist: json['is_wishlist'],
       fotoList: fotoList,
       reviews: reviews,
+      panduan: panduan, // Tambahkan ke return
     );
   }
 }
