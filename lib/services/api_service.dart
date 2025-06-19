@@ -636,6 +636,73 @@ class ApiService {
     }
   }
 
+  static Future<ApiResponse<Map<String, dynamic>>> updateUserCheckoutData({
+    required int userId,
+    required UserCheckoutDataRequest request,
+  }) async {
+    try {
+      final response = await http.patch(
+        Uri.parse('${ApiConfig.baseUrl}${ApiConfig.updateUserCheckoutData}/$userId/checkout-data'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(request.toJson()),
+      );
+
+      final responseData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        return ApiResponse(
+          success: true,
+          data: responseData['data'],
+          message: responseData['message'],
+        );
+      } else {
+        return ApiResponse(
+          success: false,
+          message: responseData['detail'] ?? 'Failed to update user data',
+        );
+      }
+    } catch (e) {
+      return ApiResponse(
+        success: false,
+        message: 'Network error: $e',
+      );
+    }
+  }
+  static Future<ApiResponse<Map<String, dynamic>>> getUserCheckoutData({
+    required int userId,
+  }) async {
+    try {
+      final response = await http.get(
+        Uri.parse('${ApiConfig.baseUrl}${ApiConfig.updateUserCheckoutData}/$userId/get-checkout-data'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      final responseData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        return ApiResponse(
+          success: true,
+          data: responseData['data'],
+          message: responseData['message'],
+        );
+      } else {
+        return ApiResponse(
+          success: false,
+          message: responseData['detail'] ?? 'Failed to get user data',
+        );
+      }
+    } catch (e) {
+      return ApiResponse(
+        success: false,
+        message: 'Network error: $e',
+      );
+    }
+  }
+
   // Add review
   static Future<ApiResponse<String>> addReview(
       ReviewRequest reviewRequest) async {

@@ -1,11 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:crypto/crypto.dart';
 import '../models/models.dart';
 import '../services/api_service.dart';
 import 'dart:convert';
 
 class AuthProvider with ChangeNotifier {
   UserData? _user;
+  User? _userDetails; // Optional: If you want to keep User details separate
   bool _isLoading = false;
   String? _error;
 
@@ -107,6 +109,72 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
       return false;
     }
+  }
+
+  // Method untuk update data checkout user
+  Future<bool> updateUserCheckoutData({
+    required String alamat,
+    required String noHp,
+    required String kota,
+    required String nik,
+  }) async {
+    if (!isAuthenticated || _user == null) {
+      return false;
+    }
+
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      
+      final request = UserCheckoutDataRequest(
+        alamat: alamat,
+        noHp: noHp,
+        kota: kota,
+        nik: nik,
+      );
+
+      final response = await ApiService.updateUserCheckoutData(
+        userId: _user!.userId,
+        request: request,
+      );
+
+      if (response.success && response.data != null) {
+        // Update user data locally
+        _userDetails = User(
+          id: _user!.userId,
+          nama: _user!.nama,
+          email: _user!.email,
+          alamat: alamat,
+          noHp: noHp,
+          kota: kota,
+          nik: nik
+        );
+        
+        _isLoading = false;
+        notifyListeners();
+        return true;
+      } else {
+        _error = response.error ?? 'Failed to update user data';
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      _error = 'Network error: $e';
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  // Method untuk cek apakah user sudah memiliki data checkout lengkap
+  bool get hasCompleteCheckoutData {
+    return _userDetails?.alamat != null && 
+           _userDetails?.noHp != null && 
+           _userDetails?.kota != null && 
+           _userDetails?.nik != null;
   }
 
   // Logout function
