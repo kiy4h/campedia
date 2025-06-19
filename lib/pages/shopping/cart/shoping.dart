@@ -274,7 +274,7 @@ class ShopingState extends State<Shoping> {
                               ),
                             ),
                             SizedBox(width: 8),
-                            Icon(Icons.arrow_forward),
+                            Icon(Icons.arrow_forward, color: Colors.white),
                           ],
                         ),
                       ],
