@@ -9,7 +9,11 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../beranda/home.dart';
+import '../../../providers/auth_provider.dart';
+import '../../../services/api_service.dart';
+import '../../../models/models.dart';
 
 /// Widget [ProductReviewPage]
 ///
@@ -22,11 +26,14 @@ class ProductReviewPage extends StatefulWidget {
   final String productName;
   // URL gambar produk yang akan diulas, diterima sebagai parameter wajib.
   final String productImage;
+  // ID barang untuk keperluan API
+  final int barangId;
 
   const ProductReviewPage({
     super.key,
     required this.productName,
     required this.productImage,
+    required this.barangId,
   });
 
   /* Fungsi ini membuat dan mengembalikan instance dari [_ProductReviewPageState].
@@ -48,6 +55,8 @@ class ProductReviewPageState extends State<ProductReviewPage> {
   double _rating = 5.0;
   // Controller untuk mengelola input teks dari kolom ulasan.
   final TextEditingController _controller = TextEditingController();
+  // State untuk loading submit review
+  bool _isSubmittingReview = false;
 
   /* Fungsi ini membangun ikon bintang individual berdasarkan indeks.
    *
@@ -64,28 +73,23 @@ class ProductReviewPageState extends State<ProductReviewPage> {
           .star; // Bintang penuh jika rating lebih besar atau sama dengan indeks + 1
     } else if (_rating > index && _rating < index + 1) {
       icon = Icons
-          .star_half; // Bintang setengah jika rating berada di antara indeks dan indeks + 1
+          .star_half; // Bintang setengah jika rating di antara indeks dan indeks + 1
     } else {
       icon = Icons
-          .star_border; // Bintang kosong jika rating lebih kecil dari indeks + 1
+          .star_border; // Bintang kosong jika rating kurang dari atau sama dengan indeks
     }
 
+    // Mengembalikan widget IconButton yang bisa ditekan untuk memberi rating.
     return IconButton(
       onPressed: () {
         setState(() {
-          _rating =
-              index + 1.0; // Memperbarui nilai rating saat bintang ditekan.
+          _rating = index + 1.0; // Set rating berdasarkan bintang yang ditekan
         });
       },
-      /** Widget [Icon]
-       * * Deskripsi:
-       * - Menampilkan ikon bintang yang sesuai dengan nilai rating yang dipilih.
-       * - Ukuran dan warna ikon diatur agar konsisten dengan tema aplikasi.
-       */
       icon: Icon(
         icon,
-        size: 36,
-        color: const Color(0xFF9BAE76), // Warna bintang (hijau zaitun)
+        color: Colors.amber, // Warna bintang amber (kuning emas)
+        size: 40, // Ukuran bintang
       ),
     );
   }
@@ -103,6 +107,67 @@ class ProductReviewPageState extends State<ProductReviewPage> {
     super.dispose();
   }
 
+  /* Fungsi ini menangani submit review ke API
+   *
+   * Parameter: Tidak ada.
+   *
+   * Return: Tidak ada (Future<void>).
+   */
+  Future<void> _submitReview() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    
+    if (!authProvider.isAuthenticated || authProvider.user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Silakan login terlebih dahulu'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _isSubmittingReview = true;
+    });
+
+    try {
+      final reviewRequest = ReviewRequest(
+        rating: _rating.toInt(),
+        ulasan: _controller.text.trim(),
+        userId: authProvider.user!.userId,
+        barangId: widget.barangId,
+      );
+
+      final response = await ApiService.addReview(reviewRequest);
+
+      if (response.success && mounted) {
+        _showConfirmationDialog(context);
+      } else if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(response.error ?? 'Gagal mengirim review'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Terjadi kesalahan: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSubmittingReview = false;
+        });
+      }
+    }
+  }
+
   /* Fungsi ini menampilkan dialog konfirmasi setelah ulasan berhasil dikirim.
    *
    * Parameter:
@@ -113,6 +178,7 @@ class ProductReviewPageState extends State<ProductReviewPage> {
   void _showConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
+      barrierDismissible: false, // Prevent dismissing by tapping outside
       builder: (context) => AlertDialog(
         /** Widget [Text]
          * * Deskripsi:
@@ -375,14 +441,10 @@ class ProductReviewPageState extends State<ProductReviewPage> {
               /** Widget [ElevatedButton]
                * * Deskripsi:
                * - Tombol utama untuk mengirimkan ulasan.
-               * - Ketika ditekan, akan memicu dialog konfirmasi.
+               * - Ketika ditekan, akan memicu submit review ke API.
                */
               child: ElevatedButton(
-                onPressed: () {
-                  // TODO: Logika untuk menyimpan ulasan ke backend akan ditambahkan di sini.
-                  _showConfirmationDialog(
-                      context); // Menampilkan dialog konfirmasi.
-                },
+                onPressed: _isSubmittingReview ? null : _submitReview,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(
                       0xFF627D2C), // Warna latar belakang tombol (hijau zaitun).
@@ -391,19 +453,28 @@ class ProductReviewPageState extends State<ProductReviewPage> {
                         BorderRadius.circular(25), // Sudut tombol membulat.
                   ),
                 ),
-                /** Widget [Text]
+                /** Widget [Text] or [CircularProgressIndicator]
                  * * Deskripsi:
-                 * - Teks pada tombol "KIRIM ULASAN".
+                 * - Teks pada tombol "KIRIM ULASAN" atau loading indicator.
                  * - Gaya teks dengan font tebal, ukuran 18, dan warna putih.
                  */
-                child: const Text(
-                  'KIRIM ULASAN',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+                child: _isSubmittingReview
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Text(
+                        'KIRIM ULASAN',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
 
