@@ -228,7 +228,7 @@ class ShopingState extends State<Shoping> {
                 ),
               ),
 
-              // Place Order Button
+              // Lakukan Pemesanan Button
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
@@ -268,7 +268,7 @@ class ShopingState extends State<Shoping> {
                         const Row(
                           children: [
                             Text(
-                              'Place Order',
+                              'Lakukan Pemesanan',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -573,7 +573,7 @@ class SlidableDeleteItemState extends State<SlidableDeleteItem> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const Text(
-                              'QTY',
+                              'Jumlah',
                               style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 12,
@@ -656,7 +656,7 @@ PreferredSizeWidget buildAppBar({
   // Tentukan judul dan aksi berdasarkan currentIndex
   switch (currentIndex) {
     case 0:
-      title = 'Home';
+      title = 'Beranda';
       actions = [
         IconButton(
           onPressed: () {},
@@ -665,12 +665,12 @@ PreferredSizeWidget buildAppBar({
       ];
       break;
     case 1:
-      title = 'Category';
+      title = 'Kategori';
       actions = [
         TextButton(
           onPressed: () {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Order placed!')),
+              const SnackBar(content: Text('Pesanan berhasil dilakukan!')),
             );
           },
           style: TextButton.styleFrom(
@@ -680,21 +680,21 @@ PreferredSizeWidget buildAppBar({
               fontSize: 16,
             ),
           ),
-          child: const Text('Place Order'),
+          child: const Text('Lakukan Pemesanan'),
         ),
       ];
       break;
     case 2:
-      title = 'Shopping Cart';
-      // Removed the "Place Order" action from here
+      title = 'Keranjang Belanja';
+      // Removed the "Lakukan Pemesanan" action from here
       break;
     case 3:
-      title = 'Favorite';
+      title = 'Favorit';
       actions = [
         TextButton(
           onPressed: () {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Order placed!')),
+              const SnackBar(content: Text('Pesanan berhasil dilakukan!')),
             );
           },
           style: TextButton.styleFrom(
@@ -704,12 +704,12 @@ PreferredSizeWidget buildAppBar({
               fontSize: 16,
             ),
           ),
-          child: const Text('Place Order'),
+          child: const Text('Lakukan Pemesanan'),
         ),
       ];
       break;
     case 4:
-      title = 'Profile';
+      title = 'Profil';
       actions = [
         IconButton(
           onPressed: () {},
