@@ -531,7 +531,6 @@ class ItemCategoryState extends State<ItemCategory> {
                   _buildSortOption(
                       context, 'Harga Terendah', Icons.arrow_downward),
                   _buildSortOption(context, 'Rating Tertinggi', Icons.star),
-                  _buildSortOption(context, 'Paling Populer', Icons.favorite),
                   const SizedBox(height: 20),
                   // Tombol reset
                   SizedBox(
@@ -599,10 +598,6 @@ class ItemCategoryState extends State<ItemCategory> {
               currentSortBy = 'rating';
               currentOrder = 'desc';
               break;
-            case 'Paling Populer':
-              currentSortBy = 'rating';
-              currentOrder = 'desc';
-              break;
           }
         });
         // Apply sorting immediately and close modal
@@ -638,8 +633,6 @@ class ItemCategoryState extends State<ItemCategory> {
       case 'Harga Terendah':
         return currentSortBy == 'harga' && currentOrder == 'asc';
       case 'Rating Tertinggi':
-        return currentSortBy == 'rating' && currentOrder == 'desc';
-      case 'Paling Populer':
         return currentSortBy == 'rating' && currentOrder == 'desc';
       default:
         return false;
