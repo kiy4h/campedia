@@ -120,7 +120,7 @@ class RegisterState extends State<Register> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Create your account',
+                        'Buat Akun Anda',
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
@@ -131,7 +131,7 @@ class RegisterState extends State<Register> {
                             child: TextFormField(
                               controller: _firstNameController,
                               decoration: InputDecoration(
-                                hintText: 'First Name',
+                                hintText: 'Nama Depan',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
@@ -151,7 +151,7 @@ class RegisterState extends State<Register> {
                             child: TextFormField(
                               controller: _lastNameController,
                               decoration: InputDecoration(
-                                hintText: 'Last Name',
+                                hintText: 'Nama Belakang',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
@@ -160,7 +160,7 @@ class RegisterState extends State<Register> {
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter your last name';
+                                  return 'Silakan masukkan nama belakang Anda';
                                 }
                                 return null;
                               },
@@ -215,10 +215,10 @@ class RegisterState extends State<Register> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
+                            return 'Silakan masukkan kata sandi Anda';
                           }
                           if (value.length < 6) {
-                            return 'Password must be at least 6 characters';
+                            return 'Kata sandi harus terdiri dari minimal 6 karakter';
                           }
                           return null;
                         },
@@ -238,11 +238,11 @@ class RegisterState extends State<Register> {
                           Expanded(
                             child: RichText(
                               text: TextSpan(
-                                text: 'By tapping Sign up you accept all ',
+                                text: 'Dengan mengetuk Daftar, Anda menyetujui semua ',
                                 style: const TextStyle(color: Colors.black54),
                                 children: [
                                   TextSpan(
-                                    text: 'terms',
+                                    text: 'syarat',
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
@@ -258,9 +258,9 @@ class RegisterState extends State<Register> {
                                         );
                                       },
                                   ),
-                                  const TextSpan(text: ' and '),
+                                  const TextSpan(text: ' dan '),
                                   TextSpan(
-                                    text: 'conditions',
+                                    text: 'ketentuan',
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
@@ -303,7 +303,7 @@ class RegisterState extends State<Register> {
                                   ? const CircularProgressIndicator(
                                       color: Colors.white)
                                   : const Text(
-                                      'CREATE AN ACCOUNT',
+                                      'BUAT AKUN',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,

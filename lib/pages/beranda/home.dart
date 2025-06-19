@@ -259,7 +259,7 @@ class HomePageState extends State<HomePage> {
               Expanded(
                 child: TextField(
                   decoration: const InputDecoration(
-                    hintText: 'Search camping gear...',
+                    hintText: 'Cari kebutuhan Kemah...',
                     border: InputBorder.none,
                   ),
                   // Navigasi ke halaman daftar semua item saat pencarian di-submit
@@ -278,7 +278,7 @@ class HomePageState extends State<HomePage> {
         const SizedBox(height: 16),
         // Widget Text untuk salam pagi
         Text(
-          'Good Morning',
+          'Selamat Datang',
           style: TextStyle(
             color: Colors.grey.shade600,
             fontSize: 14,
@@ -381,7 +381,7 @@ class HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Mountain Destinations',
+                    'Destinasi Gunung',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -389,7 +389,7 @@ class HomePageState extends State<HomePage> {
                     ),
                   ),
                   Text(
-                    'Explore gear for specific mountains',
+                    'Jelajahi perlengkapan untuk pegunungan tertentu',
                     style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],
@@ -416,7 +416,7 @@ class HomePageState extends State<HomePage> {
           children: [
             // Judul bagian
             const Text(
-              'Categories',
+              'Kategori',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -517,7 +517,7 @@ class HomePageState extends State<HomePage> {
       children: [
         // Judul bagian
         const Text(
-          'Trending Deals',
+          'Penawaran Terpopuler',
           style: TextStyle(
               fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
         ),
@@ -670,7 +670,7 @@ class HomePageState extends State<HomePage> {
         ),
         child: const Center(
           child: Text(
-            'More',
+            'Lihat Lainnya',
             style: TextStyle(
                 color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
           ),

@@ -270,7 +270,7 @@ class NotificationPageState extends State<NotificationPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Notifications",
+          "Notifikasi",
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,

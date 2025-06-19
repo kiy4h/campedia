@@ -278,9 +278,9 @@ class DetailItemState extends State<DetailItem>
                             indicatorColor: Colors.amber,
                             indicatorWeight: 3,
                             tabs: const [
-                              Tab(text: 'Description'),
-                              Tab(text: 'Review'),
-                              Tab(text: 'Discussion'),
+                              Tab(text: 'Deskripsi'),
+                              Tab(text: 'Ulasan'),
+                              Tab(text: 'Diskusi'),
                             ],
                           ),
                         ],
@@ -297,7 +297,7 @@ class DetailItemState extends State<DetailItem>
                         child: Text(
                           barang.deskripsi.isNotEmpty
                               ? barang.deskripsi
-                              : 'No description available.',
+                              : 'Tidak ada deskripsi yang tersedia.',
                           style: const TextStyle(fontSize: 15, height: 1.5),
                         ),
                       ),
@@ -374,7 +374,7 @@ class DetailItemState extends State<DetailItem>
                     const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               Text(
-                ' (${barang.totalReview} reviews)',
+                ' (${barang.totalReview} ulasan)',
                 style: const TextStyle(fontSize: 14, color: Colors.black54),
               ),
               const Spacer(), // Tombol favorit
@@ -407,7 +407,7 @@ class DetailItemState extends State<DetailItem>
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content:
-                                  Text('Please login first to add to wishlist'),
+                                  Text('Silakan masuk terlebih dahulu untuk menambahkan ke daftar keinginan.'),
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -484,8 +484,8 @@ class DetailItemState extends State<DetailItem>
               const SizedBox(width: 4),
               Text(
                 barang.stok > 0
-                    ? 'Available · ${barang.stok} items'
-                    : 'Out of stock',
+                    ? 'Tersedia · ${barang.stok} item'
+                    : 'Stok habis',
                 style: const TextStyle(fontSize: 14, color: Colors.black54),
               ),
             ],
@@ -574,7 +574,7 @@ class DetailItemState extends State<DetailItem>
       ),
       child: Row(
         children: [
-          const Text('QTY',
+          const Text('Jumlah',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
           const SizedBox(width: 10),
           // Widget untuk menambah dan mengurangi kuantitas (stepper).
@@ -653,7 +653,7 @@ class DetailItemState extends State<DetailItem>
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
-                                cartProvider.error ?? 'Failed to add to cart'),
+                                cartProvider.error ?? 'Gagal menambahkan ke keranjang.'),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -667,7 +667,7 @@ class DetailItemState extends State<DetailItem>
                     borderRadius: BorderRadius.circular(12)),
               ),
               child: const Text(
-                'ADD TO CART',
+                'TAMBAHKAN KE KERANJANG',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
