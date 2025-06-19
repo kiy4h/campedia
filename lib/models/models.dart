@@ -5,9 +5,8 @@ class User {
   final String? alamat;
   final String? noHp;
   final String? kota;
-  final String? gambar;
-  final DateTime tanggalDaftar;
-  final String statusAkun;
+  final String? nik; // akan disimpan dalam bentuk terenkripsi
+  final String? gambar; // akan disimpan dalam bentuk terenkripsi
 
   User({
     required this.id,
@@ -16,9 +15,8 @@ class User {
     this.alamat,
     this.noHp,
     this.kota,
+    this.nik,
     this.gambar,
-    required this.tanggalDaftar,
-    required this.statusAkun,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -29,23 +27,20 @@ class User {
       alamat: json['alamat'],
       noHp: json['no_hp'],
       kota: json['kota'],
+      nik: json['nik'],
       gambar: json['gambar'],
-      tanggalDaftar: DateTime.parse(json['tanggal_daftar']),
-      statusAkun: json['status_akun'],
     );
   }
-
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'nama': nama,
+      'user_id': id,
+      'username': nama,
       'email': email,
       'alamat': alamat,
       'no_hp': noHp,
       'kota': kota,
+      'nik': nik,
       'gambar': gambar,
-      'tanggal_daftar': tanggalDaftar.toIso8601String(),
-      'status_akun': statusAkun,
     };
   }
 }
@@ -106,6 +101,30 @@ class Kategori {
       'nama_kategori': namaKategori,
       'icon': icon,
       'total_barang': totalBarang,
+    };
+  }
+}
+
+// Model untuk update data checkout user
+class UserCheckoutDataRequest {
+  final String alamat;
+  final String noHp;
+  final String kota;
+  final String nik;
+
+  UserCheckoutDataRequest({
+    required this.alamat,
+    required this.noHp,
+    required this.kota,
+    required this.nik,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'alamat': alamat,
+      'no_hp': noHp,
+      'kota': kota,
+      'nik': nik,
     };
   }
 }
@@ -537,10 +556,29 @@ class ReviewRequest {
   }
 }
 
+// Tambahkan model Panduan
+class Panduan {
+  final String isiPanduan;
+  final String? linkPanduan;
+
+  Panduan({
+    required this.isiPanduan,
+    this.linkPanduan,
+  });
+
+  factory Panduan.fromJson(Map<String, dynamic> json) {
+    return Panduan(
+      isiPanduan: json['isi_panduan'] ?? '',
+      linkPanduan: json['link_panduan'],
+    );
+  }
+}
+
 // Item Detail Models
 class DetailBarang extends Barang {
   final List<FotoBarang>? fotoList;
   final List<Review>? reviews;
+  final List<Panduan>? panduan; // Tambahkan field panduan
 
   DetailBarang({
     required super.id,
@@ -558,6 +596,7 @@ class DetailBarang extends Barang {
     super.isWishlist,
     this.fotoList,
     this.reviews,
+    this.panduan, // Tambahkan ke constructor
   });
 
   factory DetailBarang.fromJson(Map<String, dynamic> json) {
@@ -574,6 +613,15 @@ class DetailBarang extends Barang {
           .map((review) => Review.fromJson(review))
           .toList();
     }
+
+    // Tambahkan parsing untuk panduan
+    List<Panduan>? panduan;
+    if (json['panduan'] != null) {
+      panduan = (json['panduan'] as List)
+          .map((panduanItem) => Panduan.fromJson(panduanItem))
+          .toList();
+    }
+
     return DetailBarang(
       id: json['id'] ?? 0,
       namaBarang: json['nama_barang'] ?? '',
@@ -593,6 +641,7 @@ class DetailBarang extends Barang {
       isWishlist: json['is_wishlist'],
       fotoList: fotoList,
       reviews: reviews,
+      panduan: panduan, // Tambahkan ke return
     );
   }
 }

@@ -488,32 +488,6 @@ class Checkout2State extends State<Checkout2> {
          * Deskripsi:
          * - Menengahkan tombol unduh bukti transaksi.
          */
-        Center(
-          /** Widget [ElevatedButton.icon]
-           *
-           * Deskripsi:
-           * - Tombol untuk mengunduh bukti transaksi.
-           * - Saat ditekan, akan menampilkan snackbar.
-           * - **Fungsi Khusus:** Logika unduh bukti transaksi perlu diimplementasikan.
-           */
-          child: ElevatedButton.icon(
-            onPressed: () {
-              // Logic to download receipt
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Bukti transaksi diunduh')),
-              );
-            },
-            icon: const Icon(Icons.download, color: Colors.white),
-            label: const Text('Download Bukti Transaksi',
-                style: TextStyle(color: Colors.white)),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF627D2C),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            ),
-          ),
-        ),
       ],
     );
   }
