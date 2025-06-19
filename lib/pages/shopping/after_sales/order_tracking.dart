@@ -15,6 +15,7 @@ import 'package:latlong2/latlong.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../../beranda/home.dart'; // Import halaman Home untuk navigasi kembali setelah review selesai
 import 'review.dart';
 import '../../components/navbar.dart';
 
@@ -201,9 +202,10 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
         break;
       case OrderStatus.returned:
         // Navigate to review page without API call
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const ReviewPage()),
+          MaterialPageRoute(builder: (_) => CampingApp()),
+          (route) => false, // Menghapus semua rute sebelumnya
         );
         return;
     } // Call API to update status
@@ -229,7 +231,7 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
       case OrderStatus.borrowed:
         return 'SIMULASIKAN KEMBALIKAN BARANG';
       case OrderStatus.returned:
-        return 'SUBMIT REVIEW';
+        return 'KEMBALI KE HOME';
     }
   }
 
