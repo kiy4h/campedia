@@ -14,7 +14,9 @@ import 'package:tugas3provis/providers/kategori_provider.dart';
 import 'package:tugas3provis/providers/brand_provider.dart';
 import 'package:tugas3provis/providers/notification_provider.dart';
 import 'package:tugas3provis/providers/gunung_provider.dart';
-// import 'Intro/splashscreen.dart';
+// import 'package:tugas3provis/intro/animation/splashscreen.dart';
+import 'pages/intro/animation/onboarding.dart';
+import 'pages/intro/animation/splashscreen.dart';
 
 void main() {
   runApp(
@@ -51,7 +53,8 @@ class MyApp extends StatelessWidget {
         primaryColor: const Color(0xFF4A5A2A),
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: Tugas3ProvisPage(),
+      // home: Tugas3ProvisPage(),
+      home: const SplashScreen(), // Ganti dengan OnboardingScreen jika ada
       debugShowCheckedModeBanner: false,
     );
   }

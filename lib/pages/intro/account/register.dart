@@ -12,6 +12,7 @@ import 'package:flutter/gestures.dart';
 import '../animation/congratulationsPopup.dart'
     as popup; // Popup ucapan selamat dengan alias
 import '../../../providers/auth_provider.dart';
+import 'signin.dart'; // Halaman sign in untuk navigasi
 
 void main() {
   runApp(const MaterialApp(
@@ -359,6 +360,34 @@ class RegisterState extends State<Register> {
                           );
                         },
                       ),
+
+                      // Teks untuk navigasi ke halaman login
+                      const SizedBox(height: 20),
+                      Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => const SignIn()),
+                            );
+                          },
+                          child: RichText(
+                            text: const TextSpan(
+                              text: 'Sudah punya akun? ',
+                              style: TextStyle(color: Colors.black54, fontSize: 14),
+                              children: [
+                                TextSpan(
+                                  text: 'Login',
+                                  style: TextStyle(
+                                    color: Color(0xFF566D3D),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -387,7 +416,11 @@ void showCongratulationsPopup(BuildContext context, String name) {
         name: name,
         onSignIn: () {
           Navigator.of(context).pop();
-          // Tambahkan navigasi ke halaman sign in di sini
+          // Navigasi ke halaman sign in
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const SignIn()),
+          );
         },
       );
     },
