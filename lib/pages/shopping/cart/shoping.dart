@@ -154,7 +154,7 @@ class ShopingState extends State<Shoping> {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'Your cart is empty',
+                    'Keranjang Anda kosong',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.grey,
@@ -205,7 +205,7 @@ class ShopingState extends State<Shoping> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(cartProvider.error ??
-                                    'Failed to remove item'),
+                                    'Gagal menghapus item'),
                                 backgroundColor: Colors.red,
                               ),
                             );
@@ -393,7 +393,7 @@ class SlidableDeleteItemState extends State<SlidableDeleteItem> {
                             ),
                             SizedBox(height: 4),
                             Text(
-                              'Delete',
+                              'Hapus',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
