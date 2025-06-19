@@ -17,7 +17,12 @@ import 'order_tracking.dart';
 /// - Ini adalah widget stateless karena tampilannya statis dan tidak ada data
 /// yang berubah secara internal di dalam widget ini.
 class ThankYouPage extends StatelessWidget {
-  const ThankYouPage({super.key});
+  final int? transactionId;
+  
+  const ThankYouPage({
+    super.key,
+    this.transactionId,
+  });
 
   /* Fungsi ini membangun antarmuka pengguna untuk halaman ThankYouPage.
    * * Parameter:
@@ -197,13 +202,13 @@ class ThankYouPage extends StatelessWidget {
                            */
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
+                            children: [
                               /** Widget [Text]
                                * * Deskripsi:
                                * - Label "Order ID".
                                */
                               Text(
-                                "Order ID",
+                                "Transaction ID",
                                 style: TextStyle(
                                   color: Color(0xFF8A8A8A),
                                 ),
@@ -214,7 +219,7 @@ class ThankYouPage extends StatelessWidget {
                                * - Diberi gaya font bold.
                                */
                               Text(
-                                "#PLT2505-001",
+                                transactionId?.toString() ?? '-',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -364,8 +369,8 @@ class ThankYouPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const OrderTrackingPage(
-                          transactionId: 2505001,
+                        builder: (context) => OrderTrackingPage(
+                          transactionId: transactionId,
                           currentStatus: OrderStatus.pickup,
                         ),
                       ),
