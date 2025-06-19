@@ -288,14 +288,19 @@ class HomePageState extends State<HomePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Widget Text untuk menampilkan nama pengguna (saat ini statis)
-            const Text(
-              'Izzuddin Azzam', // Nama pengguna bisa dibuat dinamis dari AuthProvider
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
+            // Widget Text untuk menampilkan nama pengguna (dinamis dari AuthProvider)
+            Consumer<AuthProvider>(
+              builder: (context, authProvider, child) {
+                return Text(
+                  authProvider.user?.nama ??
+                      'Pengguna', // Nama pengguna dari AuthProvider
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                );
+              },
             ),
             // Stack untuk ikon notifikasi dengan badge
             Stack(
@@ -324,19 +329,6 @@ class HomePageState extends State<HomePage> {
                     ),
                     child: const Icon(Icons.notifications_none,
                         size: 24, color: Colors.black87),
-                  ),
-                ),
-                // Badge notifikasi (titik merah)
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Container(
-                    width: 8,
-                    height: 8,
-                    decoration: const BoxDecoration(
-                      color: Colors.amber,
-                      shape: BoxShape.circle,
-                    ),
                   ),
                 ),
               ],

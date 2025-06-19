@@ -128,200 +128,352 @@ class DetailItemState extends State<DetailItem>
    * * Return: Widget Scaffold yang berisi seluruh tata letak halaman.
    */
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // Memungkinkan body (gambar) untuk berada di belakang AppBar.
-      extendBodyBehindAppBar: true,
-      // AppBar dibuat transparan agar menyatu dengan gambar di belakangnya.
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.share, color: Colors.white),
-              onPressed: () {}),
-          IconButton(
-              icon: const Icon(Icons.more_vert, color: Colors.white),
-              onPressed: () {}),
-        ],
+Widget build(BuildContext context) {
+  return Scaffold(
+    extendBodyBehindAppBar: true,
+    appBar: AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.black),
+        onPressed: () => Navigator.pop(context),
       ),
-      // Body utama halaman dengan Consumer untuk DetailBarangProvider
-      body: Consumer<DetailBarangProvider>(
-        builder: (context, detailProvider, child) {
-          if (detailProvider.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.amber,
-              ),
-            );
-          }
+      actions: [
+        IconButton(
+            icon: const Icon(Icons.share, color: Colors.white),
+            onPressed: () {}),
+        IconButton(
+            icon: const Icon(Icons.more_vert, color: Colors.white),
+            onPressed: () {}),
+      ],
+    ),
+    body: Consumer<DetailBarangProvider>(
+      builder: (context, detailProvider, child) {
+        if (detailProvider.isLoading) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Colors.amber,
+            ),
+          );
+        }
 
-          if (detailProvider.error != null) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Error: ${detailProvider.error}',
-                    style: const TextStyle(color: Colors.red),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _loadItemDetail,
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            );
-          }
+        if (detailProvider.error != null) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
+                const SizedBox(height: 16),
+                Text(
+                  'Error: ${detailProvider.error}',
+                  style: const TextStyle(color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: _loadItemDetail,
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          );
+        }
 
-          final DetailBarang? barang = detailProvider.detailBarang;
-          if (barang == null) {
-            return const Center(
-              child: Text('No item data available'),
-            );
-          } // Update favorite status from WishlistProvider and API data
-          final wishlistProvider = Provider.of<WishlistProvider>(context);
-          _isFavorite = wishlistProvider.isInWishlist(widget.barangId) ||
-              (barang.isWishlist ?? false);
+        final DetailBarang? barang = detailProvider.detailBarang;
+        if (barang == null) {
+          return const Center(
+            child: Text('No item data available'),
+          );
+        }
 
-          // Get images from API or use default placeholder
-          final List<String> images =
-              barang.fotoList?.map((foto) => foto.foto).toList() ??
-                  (barang.foto != null ? [barang.foto!] : []);
+        final wishlistProvider = Provider.of<WishlistProvider>(context);
+        _isFavorite = wishlistProvider.isInWishlist(widget.barangId) ||
+            (barang.isWishlist ?? false);
 
-          return Column(
-            children: [
-              // Expanded agar NestedScrollView mengisi ruang yang tersedia.
-              Expanded(
-                // NestedScrollView digunakan untuk membuat efek scrolling yang kompleks
-                child: NestedScrollView(
-                  headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                    SliverToBoxAdapter(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Bagian carousel gambar produk.
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.35,
-                            child: images.isNotEmpty
-                                ? PageView.builder(
-                                    controller: _pageController,
-                                    itemCount: images.length,
-                                    onPageChanged: (index) =>
-                                        setState(() => _currentImage = index),
-                                    itemBuilder: (context, index) {
-                                      return Image.network(
-                                        images[index],
-                                        fit: BoxFit.contain,
-                                        width: double.infinity,
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          return Container(
-                                            color: Colors.grey[200],
-                                            child: const Icon(
-                                              Icons.image_not_supported,
-                                              size: 64,
-                                              color: Colors.grey,
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                  )
-                                : Container(
-                                    color: Colors.grey[200],
-                                    child: const Icon(
-                                      Icons.image_not_supported,
-                                      size: 64,
-                                      color: Colors.grey,
-                                    ),
+        final List<String> images =
+            barang.fotoList?.map((foto) => foto.foto).toList() ??
+                (barang.foto != null ? [barang.foto!] : []);
+
+        return Column(
+          children: [
+            Expanded(
+              child: NestedScrollView(
+                headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                  SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Image carousel
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.35,
+                          child: images.isNotEmpty
+                              ? PageView.builder(
+                                  controller: _pageController,
+                                  itemCount: images.length,
+                                  onPageChanged: (index) =>
+                                      setState(() => _currentImage = index),
+                                  itemBuilder: (context, index) {
+                                    return Image.network(
+                                      images[index],
+                                      fit: BoxFit.contain,
+                                      width: double.infinity,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Container(
+                                          color: Colors.grey[200],
+                                          child: const Icon(
+                                            Icons.image_not_supported,
+                                            size: 64,
+                                            color: Colors.grey,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                )
+                              : Container(
+                                  color: Colors.grey[200],
+                                  child: const Icon(
+                                    Icons.image_not_supported,
+                                    size: 64,
+                                    color: Colors.grey,
                                   ),
-                          ),
-                          // Indikator halaman (titik-titik) untuk carousel gambar.
-                          if (images.isNotEmpty)
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: List.generate(
-                                  images.length,
-                                  (index) => Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 4, vertical: 8),
-                                    width: index == _currentImage ? 24 : 8,
-                                    height: 8,
-                                    decoration: BoxDecoration(
-                                      color: index == _currentImage
-                                          ? Colors.white
-                                          : Colors.white.withValues(alpha: 0.5),
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
+                                ),
+                        ),
+                        // Page indicators
+                        if (images.isNotEmpty)
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(
+                                images.length,
+                                (index) => Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 4, vertical: 8),
+                                  width: index == _currentImage ? 24 : 8,
+                                  height: 8,
+                                  decoration: BoxDecoration(
+                                    color: index == _currentImage
+                                        ? Colors.white
+                                        : Colors.white.withValues(alpha: 0.5),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                 ),
                               ),
                             ),
-                          // Bagian informasi produk (nama, harga, rating).
-                          _buildProductInfo(barang),
-                          // Widget TabBar untuk navigasi antara deskripsi, review, dan diskusi.
-                          TabBar(
-                            controller: _tabController,
-                            labelColor: Colors.black,
-                            unselectedLabelColor: Colors.black45,
-                            indicatorColor: Colors.amber,
-                            indicatorWeight: 3,
-                            tabs: const [
-                              Tab(text: 'Deskripsi'),
-                              Tab(text: 'Ulasan'),
-                              Tab(text: 'Panduan'),
-                            ],
                           ),
-                        ],
+                        _buildProductInfo(barang),
+                        TabBar(
+                          controller: _tabController,
+                          labelColor: Colors.black,
+                          unselectedLabelColor: Colors.black45,
+                          indicatorColor: Colors.amber,
+                          indicatorWeight: 3,
+                          tabs: const [
+                            Tab(text: 'Deskripsi'),
+                            Tab(text: 'Ulasan'),
+                            Tab(text: 'Panduan'),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                body: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    // Deskripsi tab
+                    SingleChildScrollView(
+                      padding: const EdgeInsets.all(20),
+                      child: Text(
+                        barang.deskripsi.isNotEmpty
+                            ? barang.deskripsi
+                            : 'Tidak ada deskripsi yang tersedia.',
+                        style: const TextStyle(fontSize: 15, height: 1.5),
                       ),
                     ),
+                    // Ulasan tab
+                    _buildReviewTab(barang),
+                    // Panduan tab - Update ini
+                    _buildPanduanTab(barang),
                   ],
-                  // Body dari NestedScrollView berisi konten dari setiap tab.
-                  body: TabBarView(
-                    controller: _tabController,
+                ),
+              ),
+            ),
+            _buildBottomSection(barang),
+          ],
+        );
+      },
+    ),
+    bottomNavigationBar: buildBottomNavBar(context, currentIndex: 5),
+  );
+}
+
+// Tambahkan method untuk membangun tab panduan
+Widget _buildPanduanTab(DetailBarang barang) {
+  if (barang.panduan == null || barang.panduan!.isEmpty) {
+    return const SingleChildScrollView(
+      padding: EdgeInsets.all(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.description_outlined,
+            size: 64,
+            color: Colors.grey,
+          ),
+          SizedBox(height: 16),
+          Text(
+            'Belum ada panduan untuk produk ini.',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  return SingleChildScrollView(
+    padding: const EdgeInsets.all(20),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Panduan Penggunaan',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 16),
+        ...barang.panduan!.asMap().entries.map((entry) {
+          final index = entry.key;
+          final panduan = entry.value;
+          
+          return Container(
+            margin: const EdgeInsets.only(bottom: 16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      // Konten tab "Description".
-                      SingleChildScrollView(
-                        padding: const EdgeInsets.all(20),
-                        child: Text(
-                          barang.deskripsi.isNotEmpty
-                              ? barang.deskripsi
-                              : 'Tidak ada deskripsi yang tersedia.',
-                          style: const TextStyle(fontSize: 15, height: 1.5),
+                      Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: Colors.amber,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${index + 1}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
                       ),
-                      // Konten tab "Review".
-                      _buildReviewTab(barang),
-                      // Konten tab "Discussion".
-                      const SingleChildScrollView(
-                        padding: EdgeInsets.all(20),
-                        child: Text('Belum ada Panduan untuk produk ini.'),
+                      const SizedBox(width: 12),
+                      const Expanded(
+                        child: Text(
+                          'Langkah Panduan',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                ),
+                  const SizedBox(height: 12),
+                  Text(
+                    panduan.isiPanduan,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      height: 1.5,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  if (panduan.linkPanduan != null && panduan.linkPanduan!.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    InkWell(
+                      onTap: () {
+                        // Implementasi untuk membuka link
+                        // Anda bisa menggunakan url_launcher package
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Membuka: ${panduan.linkPanduan}'),
+                            backgroundColor: Colors.blue,
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: Colors.blue.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.link,
+                              size: 16,
+                              color: Colors.blue,
+                            ),
+                            const SizedBox(width: 4),
+                            Flexible(
+                              child: Text(
+                                'Lihat panduan lengkap',
+                                style: const TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
               ),
-              // Bagian bawah halaman untuk kuantitas dan tombol "Add to Cart".
-              _buildBottomSection(barang),
-            ],
+            ),
           );
-        },
-      ),
-      // Menampilkan Bottom Navigation Bar.
-      bottomNavigationBar: buildBottomNavBar(context, currentIndex: 5),
-    );
-  }
+        }).toList(),
+      ],
+    ),
+  );
+}
 
   /* Fungsi ini membangun bagian informasi produk.
    */

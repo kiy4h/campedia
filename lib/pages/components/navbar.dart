@@ -49,11 +49,9 @@ Widget buildBottomNavBar(
     // Row untuk menyusun item-item navigasi secara merata.
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _buildNavItem(context, Icons.home, 0, currentIndex),
+      children: [        _buildNavItem(context, Icons.home, 0, currentIndex),
         _buildNavItem(context, Icons.swap_horiz, 1, currentIndex),
-        _buildNavItem(context, Icons.shopping_cart_outlined, 2, currentIndex,
-            hasNotification: true), // Item dengan notifikasi.
+        _buildNavItem(context, Icons.shopping_cart_outlined, 2, currentIndex), // Menghilangkan notifikasi
         _buildNavItem(context, Icons.favorite_border, 3, currentIndex),
         _buildProfileNavItem(
             context, 4, currentIndex), // Item khusus untuk profil.
