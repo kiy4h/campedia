@@ -25,8 +25,7 @@ class ReviewPage extends StatefulWidget {
    * Return: Sebuah instance dari [_ReviewPageState].
    */
   @override
-  _ReviewPageState createState() =>
-      _ReviewPageState(); // Membuat state ReviewPage
+  ReviewPageState createState() => ReviewPageState(); // Membuat state ReviewPage
 }
 
 /// Widget [_ReviewPageState]
@@ -35,7 +34,7 @@ class ReviewPage extends StatefulWidget {
 /// - Ini adalah state yang terkait dengan widget [ReviewPage].
 /// - Mengelola nilai rating yang dipilih pengguna dan input teks ulasan.
 /// - Bertanggung jawab untuk membangun dan memperbarui UI berdasarkan interaksi pengguna.
-class _ReviewPageState extends State<ReviewPage> {
+class ReviewPageState extends State<ReviewPage> {
   double _rating =
       5.0; // Menyimpan nilai rating saat ini (default 5.0), dapat berubah.
   final TextEditingController _controller =

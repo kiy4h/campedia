@@ -18,10 +18,10 @@ class Register extends StatefulWidget {
   const Register({super.key});
 
   @override
-  State<Register> createState() => _RegisterState();
+  State<Register> createState() => RegisterState();
 }
 
-class _RegisterState extends State<Register> {
+class RegisterState extends State<Register> {
   bool _obscurePassword = true;
   bool isChecked = false;
   final TextEditingController _firstNameController = TextEditingController();

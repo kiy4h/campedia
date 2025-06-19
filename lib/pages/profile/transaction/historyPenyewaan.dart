@@ -33,18 +33,19 @@ class ModernTransactionPage extends StatefulWidget {
   const ModernTransactionPage({super.key});
 
   @override
-  State<ModernTransactionPage> createState() => _ModernTransactionPageState();
+  State<ModernTransactionPage> createState() => ModernTransactionPageState();
 }
 
-class _ModernTransactionPageState extends State<ModernTransactionPage>
+class ModernTransactionPageState extends State<ModernTransactionPage>
     with TickerProviderStateMixin {
   late TabController _tabController;
-
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _loadTransactions();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadTransactions();
+    });
     _startPeriodicRefresh(); // Start periodic refresh for ongoing transactions
   }
 
@@ -391,14 +392,11 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
         return 'View Details';
     }
   }
-  
-
 
   void _handleTransactionAction(
-    
-    UserTransaction transaction, BuildContext context) async {
+      UserTransaction transaction, BuildContext context) async {
     final checkoutProvider =
-    Provider.of<CheckoutProvider>(context, listen: false);
+        Provider.of<CheckoutProvider>(context, listen: false);
     // Di history_transaksi.dart
     checkoutProvider.setTransactionData(
       transactionId: transaction.transaksiId,
@@ -420,7 +418,8 @@ class _ModernTransactionPageState extends State<ModernTransactionPage>
       case 'Belum Diambil':
       case 'Belum Dikembalikan':
         // Navigate to tracking page
-        debugPrint('DEBUG: Updating transaksi_id: \\${transaction.transaksiId}');
+        debugPrint(
+            'DEBUG: Updating transaksi_id: \\${transaction.transaksiId}');
         final result = await Navigator.push(
           context,
           MaterialPageRoute(

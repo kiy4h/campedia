@@ -57,22 +57,24 @@ class Shoping extends StatefulWidget {
   const Shoping({super.key});
 
   @override
-  State<Shoping> createState() => _ShopingState();
+  State<Shoping> createState() => ShopingState();
 }
 
 /*
-* Class : _ShopingState
+* Class : ShopingState
 * Deskripsi : State untuk widget Shoping
 * Bagian Layar : Mengelola state dan tampilan halaman keranjang belanja
 */
-class _ShopingState extends State<Shoping> {
+class ShopingState extends State<Shoping> {
   // Track which item is currently expanded
   int? expandedItemIndex;
-
   @override
   void initState() {
     super.initState();
-    _loadCart();
+    // Schedule cart loading after the current frame is complete
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadCart();
+    });
   }
 
   /*
@@ -312,10 +314,10 @@ class SlidableDeleteItem extends StatefulWidget {
   });
 
   @override
-  State<SlidableDeleteItem> createState() => _SlidableDeleteItemState();
+  State<SlidableDeleteItem> createState() => SlidableDeleteItemState();
 }
 
-class _SlidableDeleteItemState extends State<SlidableDeleteItem> {
+class SlidableDeleteItemState extends State<SlidableDeleteItem> {
   // For tracking manual drag
   double _dragDistance = 0;
   final double _dragThreshold = 120; // Distance to consider a successful drag

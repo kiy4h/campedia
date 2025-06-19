@@ -21,7 +21,7 @@ class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  State<SettingsPage> createState() => SettingsPageState();
 }
 
 /// State [ _SettingsPageState]
@@ -30,7 +30,7 @@ class SettingsPage extends StatefulWidget {
 /// - Mengelola state internal untuk [SettingsPage].
 /// - Menyimpan status _notifications (on/off) dan _selectedLanguage.
 /// - Membangun UI halaman pengaturan berdasarkan state ini.
-class _SettingsPageState extends State<SettingsPage> {
+class SettingsPageState extends State<SettingsPage> {
   // Variabel untuk mengontrol status switch notifikasi. Defaultnya aktif.
   bool _notifications = true;
   // Variabel untuk menyimpan bahasa yang dipilih. Defaultnya "Bahasa Indonesia".

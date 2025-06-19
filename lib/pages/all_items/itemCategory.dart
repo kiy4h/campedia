@@ -53,14 +53,14 @@ class ItemCategory extends StatefulWidget {
   const ItemCategory({super.key});
 
   @override
-  _ItemCategoryState createState() => _ItemCategoryState();
+  ItemCategoryState createState() => ItemCategoryState();
 }
 
 /// State untuk widget ItemCategory
 /// * Deskripsi:
 /// - Mengelola semua state dan logika untuk halaman ItemCategory.
 /// - Menyimpan data produk, nilai filter, dan mengimplementasikan fungsi untuk menerapkan filter serta menampilkan dialog.
-class _ItemCategoryState extends State<ItemCategory> {
+class ItemCategoryState extends State<ItemCategory> {
   // Variabel untuk menyimpan nilai filter
   double minPrice = 0;
   double maxPrice = 500000;

@@ -15,12 +15,10 @@ import '../all_items/category.dart';
 import '../detail_items/detailItem.dart';
 import 'recommendedGearTrip.dart';
 import '../components/navbar.dart';
-import 'trendingGear.dart';
 import 'notification.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/barang_provider.dart';
 import '../../models/models.dart';
-import '../beranda/recommendedGearTrip.dart';
 
 // Fungsi main untuk menjalankan aplikasi sebagai contoh
 void main() {
@@ -67,7 +65,7 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
 /// State untuk widget HomePage
@@ -75,7 +73,7 @@ class HomePage extends StatefulWidget {
 /// - Mengelola state, data, dan logika untuk halaman beranda.
 /// - Memuat data barang dari API melalui provider saat state diinisialisasi.
 /// - Berisi data statis sebagai fallback jika data dari API gagal dimuat.
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   /* Fungsi ini dijalankan saat state widget pertama kali dibuat.
    * * Menggunakan addPostFrameCallback untuk memastikan _loadData() dipanggil setelah frame pertama selesai dirender.
    */
@@ -355,53 +353,54 @@ class _HomePageState extends State<HomePage> {
    * * Return: Widget SizedBox berisi ListView horizontal.
    */
   Widget _buildMountainSection() {
-  return GestureDetector(
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const GunungDestinationPage()),
-      );
-    },
-    child: Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.green[600]!, Colors.green[400]!],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.landscape, color: Colors.white, size: 32),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Mountain Destinations',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Explore gear for specific mountains',
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
-                ),
-              ],
-            ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const GunungDestinationPage()),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.green[600]!, Colors.green[400]!],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
-        ],
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.landscape, color: Colors.white, size: 32),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Mountain Destinations',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'Explore gear for specific mountains',
+                    style: TextStyle(color: Colors.white70, fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   /* Fungsi ini membangun bagian kategori.
    * * Parameter:
@@ -631,7 +630,11 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const Spacer(),
                     Text(
-                      item['price'] ?? 'Rp 0',
+                      item['price'] != null
+                          ? NumberFormat.currency(
+                                  locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                              .format(item['price'])
+                          : 'Rp 0',
                       style: const TextStyle(
                           fontSize: 12,
                           color: Colors.black87,

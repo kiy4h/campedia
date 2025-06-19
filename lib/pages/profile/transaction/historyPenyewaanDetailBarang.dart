@@ -31,14 +31,16 @@ class TransactionDetailPage extends StatefulWidget {
   });
 
   @override
-  State<TransactionDetailPage> createState() => _TransactionDetailPageState();
+  State<TransactionDetailPage> createState() => TransactionDetailPageState();
 }
 
-class _TransactionDetailPageState extends State<TransactionDetailPage> {
+class TransactionDetailPageState extends State<TransactionDetailPage> {
   @override
   void initState() {
     super.initState();
-    _loadTransactionDetail();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadTransactionDetail();
+    });
   }
 
   void _loadTransactionDetail() {

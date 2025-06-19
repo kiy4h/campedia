@@ -29,7 +29,7 @@ class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
   @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
+  State<OnboardingScreen> createState() => OnboardingScreenState();
 }
 
 /// State [ _OnboardingScreenState]
@@ -38,7 +38,7 @@ class OnboardingScreen extends StatefulWidget {
 /// - Mengelola state dan logika untuk [OnboardingScreen].
 /// - Mengontrol [PageController] untuk carousel, indeks halaman saat ini, dan timer auto-slide.
 /// - Mendefinisikan konten untuk setiap halaman onboarding.
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class OnboardingScreenState extends State<OnboardingScreen> {
   // PageController untuk mengontrol perpindahan halaman pada PageView.
   final PageController _pageController = PageController();
   // Indeks halaman yang sedang aktif pada carousel.

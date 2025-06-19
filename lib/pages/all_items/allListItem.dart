@@ -66,22 +66,21 @@ class AllItemList extends StatelessWidget {
 /// - Merupakan StatefulWidget karena perlu menyimpan dan memperbarui status seperti
 /// kategori terpilih, filter harga, dan data barang.
 class ItemCategory extends StatefulWidget {
-  final String? keyword;   // Tambahkan ini
-  final String? kategori;  // Tambahkan ini
+  final String? keyword; // Tambahkan ini
+  final String? kategori; // Tambahkan ini
   const ItemCategory({super.key, this.keyword, this.kategori});
 
   @override
-  /* Fungsi ini membuat state yang digunakan oleh widget ini.
-   * * Return: Instance dari _ItemCategoryState.
+  /* Fungsi ini membuat state yang digunakan oleh widget ini.   * * Return: Instance dari ItemCategoryState.
    */
-  _ItemCategoryState createState() => _ItemCategoryState();
+  ItemCategoryState createState() => ItemCategoryState();
 }
 
 /// State untuk widget ItemCategory
 /// * Deskripsi:
 /// - Menyimpan semua data dan status yang berubah untuk halaman daftar barang.
 /// - Mengelola proses pengambilan data, pemfilteran, dan UI interaktif.
-class _ItemCategoryState extends State<ItemCategory> {
+class ItemCategoryState extends State<ItemCategory> {
   // Variabel untuk menyimpan data barang
   List<Barang> allItems = []; // Semua barang dari API
   List<Barang> filteredItems = []; // Barang yang sudah difilter
@@ -117,7 +116,6 @@ class _ItemCategoryState extends State<ItemCategory> {
   // Current sort option
   String? currentSortBy;
   String? currentOrder;
-
   @override
   /* Fungsi ini dijalankan saat widget pertama kali dibuat.
    * * Melakukan inisialisasi state awal dan memuat data barang dari API.
@@ -133,7 +131,9 @@ class _ItemCategoryState extends State<ItemCategory> {
       debugPrint("Keyword: ${widget.keyword}");
       searchController.text = widget.keyword!;
     }
-    _loadAllItems(); // Memuat semua data barang
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadAllItems(); // Memuat semua data barang
+    });
   }
 
   @override

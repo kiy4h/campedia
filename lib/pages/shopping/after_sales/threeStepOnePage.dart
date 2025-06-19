@@ -19,10 +19,10 @@ class PickupTrackingPage extends StatefulWidget {
   const PickupTrackingPage({super.key});
 
   @override
-  _PickupTrackingPageState createState() => _PickupTrackingPageState();
+  PickupTrackingPageState createState() => PickupTrackingPageState();
 }
 
-class _PickupTrackingPageState extends State<PickupTrackingPage> {
+class PickupTrackingPageState extends State<PickupTrackingPage> {
   // Menyimpan tahapan proses pengambilan: 0 = Ambil, 1 = Countdown, 2 = Selesai
   int _currentStep = 0;
 

@@ -56,7 +56,7 @@ class ShippingAddressPage extends StatefulWidget {
   const ShippingAddressPage({super.key});
 
   @override
-  _ShippingAddressPageState createState() => _ShippingAddressPageState();
+  ShippingAddressPageState createState() => ShippingAddressPageState();
 }
 
 /// State [ShippingAddressPageState]
@@ -65,7 +65,7 @@ class ShippingAddressPage extends StatefulWidget {
 /// - Mengelola state internal untuk `ShippingAddressPage`, termasuk data yang dimasukkan pengguna
 /// dan status validasi form.
 /// - Bertanggung jawab untuk membangun UI form alamat pengiriman.
-class _ShippingAddressPageState extends State<ShippingAddressPage> {
+class ShippingAddressPageState extends State<ShippingAddressPage> {
   // Kunci global untuk form, digunakan untuk mengakses state form dan melakukan validasi.
   final _formKey = GlobalKey<FormState>();
 
@@ -589,11 +589,11 @@ class ShippingAddressPageWithData extends StatefulWidget {
   });
 
   @override
-  _ShippingAddressPageWithDataState createState() =>
-      _ShippingAddressPageWithDataState();
+  ShippingAddressPageWithDataState createState() =>
+      ShippingAddressPageWithDataState();
 }
 
-class _ShippingAddressPageWithDataState
+class ShippingAddressPageWithDataState
     extends State<ShippingAddressPageWithData> {
   // Kunci global untuk form, digunakan untuk mengakses state form dan melakukan validasi.
   final _formKey = GlobalKey<FormState>();

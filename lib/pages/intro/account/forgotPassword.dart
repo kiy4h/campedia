@@ -13,10 +13,10 @@ class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
 
   @override
-  State<ForgotPassword> createState() => _ForgotPasswordState();
+  State<ForgotPassword> createState() => ForgotPasswordState();
 }
 
-class _ForgotPasswordState extends State<ForgotPassword> {
+class ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController _emailController = TextEditingController(); // Mengontrol teks yang dimasukkan di TextField
 
   @override

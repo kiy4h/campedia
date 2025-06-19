@@ -26,10 +26,10 @@ class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
 
   @override
-  State<NotificationPage> createState() => _NotificationPageState();
+  State<NotificationPage> createState() => NotificationPageState();
 }
 
-class _NotificationPageState extends State<NotificationPage> {
+class NotificationPageState extends State<NotificationPage> {
   late NotificationProvider _notificationProvider;
   late AuthProvider _authProvider;
 

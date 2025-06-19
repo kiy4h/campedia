@@ -44,10 +44,10 @@ class OrderTrackingPage extends StatefulWidget {
   });
 
   @override
-  State<OrderTrackingPage> createState() => _OrderTrackingPageState();
+  State<OrderTrackingPage> createState() => OrderTrackingPageState();
 }
 
-class _OrderTrackingPageState extends State<OrderTrackingPage> {
+class OrderTrackingPageState extends State<OrderTrackingPage> {
   late OrderStatus _currentStatus;
   late DateTime endTime;
   Timer? _timer;

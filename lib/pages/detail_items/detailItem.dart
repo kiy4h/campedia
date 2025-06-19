@@ -57,16 +57,15 @@ class DetailItem extends StatefulWidget {
   final int barangId;
 
   const DetailItem({super.key, required this.barangId});
-
   @override
-  State<DetailItem> createState() => _DetailItemState();
+  State<DetailItem> createState() => DetailItemState();
 }
 
 /// State untuk widget DetailItem
 /// * Deskripsi:
 /// - Mengelola semua state dan logika interaktif untuk halaman detail barang.
 /// - Menggunakan `SingleTickerProviderStateMixin` untuk menyediakan Ticker yang dibutuhkan oleh `TabController` untuk animasi perpindahan tab.
-class _DetailItemState extends State<DetailItem>
+class DetailItemState extends State<DetailItem>
     with SingleTickerProviderStateMixin {
   // Controller untuk mengelola state dan animasi TabBar.
   late TabController _tabController;
@@ -91,7 +90,9 @@ class _DetailItemState extends State<DetailItem>
         length: 3, vsync: this); // Inisialisasi TabController untuk 3 tab.
     _pageController = PageController(
         initialPage: _currentImage); // Inisialisasi PageController.
-    _loadItemDetail();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadItemDetail();
+    });
   }
 
   /* Fungsi ini memuat detail barang dari API.

@@ -42,14 +42,16 @@ class ItemCategory extends StatefulWidget {
   const ItemCategory({super.key});
 
   @override
-  _ItemCategoryState createState() => _ItemCategoryState();
+  ItemCategoryState createState() => ItemCategoryState();
 }
 
-class _ItemCategoryState extends State<ItemCategory> {
+class ItemCategoryState extends State<ItemCategory> {
   @override
   void initState() {
     super.initState();
-    _loadWishlist();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadWishlist();
+    });
   }
 
   Future<void> _loadWishlist() async {

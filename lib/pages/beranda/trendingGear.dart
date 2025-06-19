@@ -61,7 +61,7 @@ class TrendingGearPage extends StatefulWidget {
   const TrendingGearPage({super.key});
 
   @override
-  State<TrendingGearPage> createState() => _TrendingGearPageState();
+  State<TrendingGearPage> createState() => TrendingGearPageState();
 }
 
 /// State untuk widget TrendingGearPage
@@ -69,7 +69,7 @@ class TrendingGearPage extends StatefulWidget {
 /// - Mengelola state dan logika untuk halaman TrendingGearPage.
 /// - Menginisialisasi daftar peralatan trending (saat ini dengan data statis).
 /// - Mengatur logika untuk menampilkan detail produk dalam modal bottom sheet.
-class _TrendingGearPageState extends State<TrendingGearPage> {
+class TrendingGearPageState extends State<TrendingGearPage> {
   // List untuk menyimpan objek-objek TrendingGear.
   List<TrendingGear> trendingGears = [];
 

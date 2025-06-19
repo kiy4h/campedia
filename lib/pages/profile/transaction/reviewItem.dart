@@ -34,7 +34,7 @@ class ProductReviewPage extends StatefulWidget {
    * Return: Sebuah instance dari [_ProductReviewPageState].
    */
   @override
-  _ProductReviewPageState createState() => _ProductReviewPageState();
+  ProductReviewPageState createState() => ProductReviewPageState();
 }
 
 /// Widget [_ProductReviewPageState]
@@ -43,7 +43,7 @@ class ProductReviewPage extends StatefulWidget {
 /// - State yang terkait dengan [ProductReviewPage].
 /// - Mengelola nilai rating yang dipilih pengguna dan input teks ulasan.
 /// - Bertanggung jawab untuk membangun dan memperbarui UI berdasarkan interaksi pengguna.
-class _ProductReviewPageState extends State<ProductReviewPage> {
+class ProductReviewPageState extends State<ProductReviewPage> {
   // Variabel untuk menyimpan nilai rating saat ini, defaultnya 5.0 (bintang penuh).
   double _rating = 5.0;
   // Controller untuk mengelola input teks dari kolom ulasan.

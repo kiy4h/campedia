@@ -10,10 +10,10 @@ class DateSelectionDialog extends StatefulWidget {
   const DateSelectionDialog({super.key});
 
   @override
-  State<DateSelectionDialog> createState() => _DateSelectionDialogState();
+  State<DateSelectionDialog> createState() => DateSelectionDialogState();
 }
 
-class _DateSelectionDialogState extends State<DateSelectionDialog> {
+class DateSelectionDialogState extends State<DateSelectionDialog> {
   DateTime? _pickupDate;
   DateTime? _returnDate;
   int _rentalDays = 1;
