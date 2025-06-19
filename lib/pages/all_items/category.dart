@@ -16,6 +16,7 @@ import '../components/navbar.dart';
 import 'allListItem.dart';
 import '../../providers/kategori_provider.dart';
 import '../../models/models.dart';
+import '../beranda/home.dart';
 
 // Fungsi main untuk menjalankan aplikasi sebagai contoh
 void main() {
@@ -259,7 +260,7 @@ PreferredSizeWidget buildAppBar({
   // Switch case untuk menentukan judul dan actions berdasarkan halaman yang aktif
   switch (currentIndex) {
     case 0:
-      title = 'Home';
+      title = 'Beranda';
       actions = [
         IconButton(
             onPressed: () {},
@@ -268,11 +269,11 @@ PreferredSizeWidget buildAppBar({
       break;
     case 1:
       // Konfigurasi AppBar untuk halaman Kategori
-      title = 'Category';
+      title = 'Kategori Barang';
       actions = []; // Tidak ada tombol aksi di halaman kategori
       break;
     case 2:
-      title = 'Shopping Cart';
+      title = 'Keranjang';
       actions = [
         TextButton(
           onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
@@ -288,7 +289,7 @@ PreferredSizeWidget buildAppBar({
       ];
       break;
     case 3:
-      title = 'Favorite';
+      title = 'Favorit';
       actions = [
         TextButton(
           onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
@@ -304,7 +305,7 @@ PreferredSizeWidget buildAppBar({
       ];
       break;
     case 4:
-      title = 'Profile';
+      title = 'Profil';
       actions = [
         IconButton(
             onPressed: () {},
@@ -315,11 +316,19 @@ PreferredSizeWidget buildAppBar({
       title = 'App';
       actions = [];
   }
-
   // Mengembalikan widget AppBar yang telah dikonfigurasi
   return AppBar(
     backgroundColor: Colors.white,
-    elevation: 0,
+    elevation: 0,    // Menambahkan tombol back di sebelah kiri yang mengarah ke HomePage
+    leading: IconButton(
+      icon: const Icon(Icons.arrow_back, color: Colors.black),
+      onPressed: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
+      },
+    ),
     // Widget Text untuk judul AppBar
     title: Text(title,
         style: const TextStyle(
