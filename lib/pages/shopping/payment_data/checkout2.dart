@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 // import 'package:intl/intl.dart';
 import '../../../providers/checkout_provider.dart';
 import '../after_sales/thankyouPage.dart';
+import '../../beranda/home.dart';
 
 /// Widget [Checkout2]
 ///
@@ -59,10 +60,14 @@ class Checkout2State extends State<Checkout2> {
          *
          * Deskripsi:
          * - Tombol ikon di AppBar untuk navigasi kembali ke layar sebelumnya.
-         */
-        leading: IconButton(
+         */        leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePage()),
+            );
+          },
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
