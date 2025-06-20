@@ -534,10 +534,9 @@ class HomePageState extends State<HomePage> {
           // Tampilkan GridView jika data berhasil dimuat atau jika ada data fallback
           GridView.builder(
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            physics: const NeverScrollableScrollPhysics(),            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.75,
+              childAspectRatio: 0.65, // Adjusted from 0.75 to 0.65 to make cards taller
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
             ),
@@ -590,10 +589,9 @@ class HomePageState extends State<HomePage> {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Placeholder untuk gambar
+          children: [            // Placeholder untuk gambar
             Expanded(
-              flex: 3,
+              flex: 5, // Increased from 3 to 5 for better proportion
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -604,21 +602,25 @@ class HomePageState extends State<HomePage> {
                 child:
                     const Icon(Icons.camera_alt, size: 40, color: Colors.grey),
               ),
-            ),
-            // Placeholder untuk info produk
+            ),            // Placeholder untuk info produk
             Expanded(
-              flex: 2,
+              flex: 3, // Increased from 2 to 3 for better text space
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item['name'] ?? 'Product Name',
-                      style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.bold),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                  children: [                    Container(
+                      width: double.infinity,
+                      constraints: const BoxConstraints(minHeight: 40),
+                      child: Text(
+                        item['name'] ?? 'Product Name',
+                        style: const TextStyle(
+                          fontSize: 13, 
+                          fontWeight: FontWeight.bold
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     const Spacer(),
                     Text(

@@ -56,10 +56,9 @@ class ProductCard extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Bagian gambar barang
+          children: [            // Bagian gambar barang
             Expanded(
-              flex: 3,
+              flex: 5, // Increased from 3 to 5 for better proportion
               child: Stack(
                 children: [
                   // Gambar produk
@@ -144,28 +143,29 @@ class ProductCard extends StatelessWidget {
                     ),
                 ],
               ),
-            ),
-
-            // Bagian informasi produk
+            ),            // Bagian informasi produk
             Expanded(
-              flex: 2,
+              flex: 3, // Increased from 2 to 3 for better text space
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Nama barang
-                    Text(
-                      barang.namaBarang,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: Colors.black87,
+                  children: [                    // Nama barang dengan container yang membatasi lebar
+                    Container(
+                      width: double.infinity,
+                      constraints: const BoxConstraints(minHeight: 40),
+                      child: Text(
+                        barang.namaBarang,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                          color: Colors.black87,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
 
                     // Harga per hari
                     Text(
