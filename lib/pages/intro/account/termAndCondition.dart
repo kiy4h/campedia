@@ -35,21 +35,7 @@ class TermsConditionPage extends StatelessWidget {
               termPoint('Jika melanggar syarat, akun Anda dapat ditangguhkan atau dihapus.'),
               termPoint('Penggunaan aplikasi secara berkelanjutan berarti Anda menerima ketentuan ini.'),
               const SizedBox(height: 40),
-              Center(
-                child: ElevatedButton.icon(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.check_circle_outline, color: Color(0xFF566D3D)),
-                  label: const Text(
-                    'Saya Mengerti dan Menyetujui',
-                    style: TextStyle(color: Color(0xFF566D3D)),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFE0DFDF),
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                  ),
-                ),
-              )
+              
             ],
           ),
         ),
