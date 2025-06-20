@@ -117,6 +117,7 @@ class AuthProvider with ChangeNotifier {
     required String noHp,
     required String kota,
     required String nik,
+    required int? boothId,
   }) async {
     if (!isAuthenticated || _user == null) {
       return false;
@@ -133,6 +134,7 @@ class AuthProvider with ChangeNotifier {
         noHp: noHp,
         kota: kota,
         nik: nik,
+        boothId: boothId!,
       );
 
       final response = await ApiService.updateUserCheckoutData(

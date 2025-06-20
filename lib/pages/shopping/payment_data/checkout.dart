@@ -46,9 +46,7 @@ class Checkout extends StatelessWidget {
 /// - Halaman ini bertanggung jawab untuk mengumpulkan informasi alamat pengiriman dari pengguna.
 /// - Terintegrasi dengan AuthProvider untuk data user dan API Service untuk menyimpan data.
 /// - Ini adalah widget stateful karena mengelola state dari input form dan API calls.
-// Modified version of ShippingAddressPage that accepts transaction data
 class ShippingAddressPageWithData extends StatefulWidget {
-
   const ShippingAddressPageWithData({
     super.key,
   });
@@ -77,26 +75,16 @@ class ShippingAddressPageWithDataState
 
   // Variabel untuk menyimpan kota yang dipilih dari dropdown.
   String? selectedCity;
-  // Variabel untuk menyimpan booth yang dipilih dari dropdown.
-  String? selectedBooth;
   bool _isLoadingData = true;
   bool _hasCompleteData = false;
 
   // Daftar kota yang tersedia untuk dipilih.
   final List<String> cities = ['Bandung', 'Bekasi', 'Jakarta', 'Bogor'];
-  // Daftar booth yang tersedia untuk dipilih.
-  final List<String> booths = [
-    'Gegerkalong1',
-    'Lembang2',
-    'Tangkuban3',
-    'Cimindi4'
-  ];
 
   @override
   void initState() {
     super.initState();
     selectedCity = null; // Selalu mulai dengan null
-    selectedBooth = null; // Selalu mulai dengan null
     _loadUserData();
   }
 
@@ -113,60 +101,65 @@ class ShippingAddressPageWithDataState
   }
 
   void _loadUserData() async {
-  final authProvider = Provider.of<AuthProvider>(context, listen: false);
-  
-  if (!authProvider.isAuthenticated || authProvider.user == null) {
-    Navigator.pushReplacementNamed(context, '/login');
-    return;
-  }
-
-  try {
-    final response = await ApiService.getUserCheckoutData(
-      userId: authProvider.user!.userId
-    );
-
-    if (response.success && response.data != null) {
-      final userData = response.data!;
-      
-      _namaController.text = userData['nama']?.toString() ?? '';
-      _emailController.text = userData['email']?.toString() ?? '';
-      _phoneController.text = userData['no_hp']?.toString() ?? '';
-      _alamatController.text = userData['alamat']?.toString() ?? '';
-      
-      // JANGAN ambil kota dan booth dari database karena hardcode
-      // selectedCity dan selectedBooth tetap null atau user pilih manual
-      
-      setState(() {
-        if(userData['has_complete_checkout_data'] == 1) {
-          _hasCompleteData = true;
-        }
-        _isLoadingData = false;
-      });
-    } else {
-      final user = authProvider.user!;
-      _namaController.text = user.nama;
-      _emailController.text = user.email;
-      
-      setState(() {
-        _isLoadingData = false;
-      });
-    }
-  } catch (e) {
-    setState(() {
-      _isLoadingData = false;
-    });
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error loading user data: $e'),
-          backgroundColor: Colors.red,
-        ),
+    if (!authProvider.isAuthenticated || authProvider.user == null) {
+      Navigator.pushReplacementNamed(context, '/login');
+      return;
+    }
+
+    try {
+      final response = await ApiService.getUserCheckoutData(
+        userId: authProvider.user!.userId
       );
+
+      if (response.success && response.data != null) {
+        final userData = response.data!;
+        
+        _namaController.text = userData['nama']?.toString() ?? '';
+        _emailController.text = userData['email']?.toString() ?? '';
+        _phoneController.text = userData['no_hp']?.toString() ?? '';
+        _alamatController.text = userData['alamat']?.toString() ?? '';
+        
+        setState(() {
+          if(userData['has_complete_checkout_data'] == 1) {
+            _hasCompleteData = true;
+            // Jika sudah ada data lengkap, langsung ke checkout2
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Checkout2(),
+                ),
+              );
+            });
+          }
+          _isLoadingData = false;
+        });
+      } else {
+        final user = authProvider.user!;
+        _namaController.text = user.nama;
+        _emailController.text = user.email;
+        
+        setState(() {
+          _isLoadingData = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _isLoadingData = false;
+      });
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error loading user data: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -206,17 +199,7 @@ class ShippingAddressPageWithDataState
                 children: [
                   buildStepIndicator(),
                   const SizedBox(height: 24),
-                  if (_hasCompleteData == true) ...[
-                    // Hanya tampilkan dropdown booth saja
-                    const Text(
-                      'Pilih Cabang Pengambilan',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    const SizedBox(height: 16),
-                    buildBoothDropdown(),
-                  ] else ...[
-                    _buildFullForm(),
-                  ],
+                  _buildFullForm(),
                   const SizedBox(height: 24),
                   _buildSubmitButton(authProvider),
                 ],
@@ -225,56 +208,6 @@ class ShippingAddressPageWithDataState
           ),
         );
       },
-    );
-  }
-
-  Widget _buildSavedDataCard() {
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Data Pengiriman Tersimpan',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _hasCompleteData = false;
-                    });
-                  },
-                  child: const Text('Edit'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text('Nama: ${_namaController.text}'),
-            Text('Email: ${_emailController.text}'),
-            Text('No. HP: ${_phoneController.text}'),
-            Text('Alamat: ${_alamatController.text}'),
-            Text('Kota: ${selectedCity ?? ''}'),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBoothSelectionOnly() {
-    return Column(
-      children: [
-        const Text(
-          'Pilih Cabang Pengambilan',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
-        const SizedBox(height: 16),
-        buildBoothDropdown(),
-      ],
     );
   }
 
@@ -297,12 +230,7 @@ class ShippingAddressPageWithDataState
         const SizedBox(height: 16),
         buildTextField('NIK', controller: _nikController),
         const SizedBox(height: 16),
-        const SizedBox(height: 16),
-        buildBoothDropdown(),
-        const SizedBox(height: 16),
-        buildTextField('Pesan Tambahan', 
-          controller: _messageController,
-          maxLines: 6),
+        buildCityDropdown(),
       ],
     );
   }
@@ -316,43 +244,30 @@ class ShippingAddressPageWithDataState
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             
-            // Validasi booth selection
-            if (selectedBooth == null) {
+            // Simpan data checkout terlebih dahulu
+            final success = await authProvider.updateUserCheckoutData(
+              alamat: _alamatController.text,
+              noHp: _phoneController.text,
+              kota: selectedCity ?? "Bandung",
+              nik: _nikController.text,
+              boothId: 1, // Default booth ID, booth sudah dipilih di dialog sebelumnya
+            );
+            
+            if (!success) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Please select a booth'),
+                SnackBar(
+                  content: Text(authProvider.error ?? 'Gagal menyimpan data'),
                   backgroundColor: Colors.red,
                 ),
               );
               return;
             }
             
-            // Jika belum ada data lengkap, simpan dulu
-            if (!_hasCompleteData) {
-              final success = await authProvider.updateUserCheckoutData(
-                alamat: _alamatController.text,
-                noHp: _phoneController.text,
-                kota: "Bandung",
-                nik: _nikController.text,
-              );
-              
-              if (!success) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(authProvider.error ?? 'Gagal menyimpan data'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-                return;
-              }
-            }
-            
-            // Navigate to checkout2 dengan data transaksi
+            // Navigate to checkout2
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Checkout2(
-                ),
+                builder: (context) => Checkout2(),
               ),
             );
           }
@@ -546,63 +461,11 @@ class ShippingAddressPageWithDataState
    * Return: Sebuah widget DropdownButtonFormField<String> untuk pemilihan kota.
    */
   Widget buildCityDropdown() {
-  return DropdownButtonFormField<String>(
-    value: selectedCity, // Akan null sampai user memilih
-    decoration: InputDecoration(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      hintText: 'Pilih Kota Anda',
-      hintStyle: const TextStyle(color: Colors.grey),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Color(0xFFBCCB9F)),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Color(0xFF627D2C)),
-      ),
-    ),
-    items: cities.map<DropdownMenuItem<String>>((String city) {
-      return DropdownMenuItem<String>(
-        value: city,
-        child: Text(city),
-      );
-    }).toList(),
-    onChanged: (String? value) {
-      setState(() {
-        selectedCity = value;
-        // Reset booth ketika city berubah jika booth bergantung pada city
-        selectedBooth = null;
-      });
-    },
-    validator: (value) {
-      if (value == null || value.isEmpty) {
-        return 'Please select your city';
-      }
-      return null;
-    },
-  );
-}
-
-  /* Fungsi ini membangun widget dropdown untuk memilih booth/cabang pengambilan.
-   *
-   * Parameter: Tidak ada.
-   *
-   * Return: Sebuah widget DropdownButtonFormField<String> untuk pemilihan booth.
-   */
-  Widget buildBoothDropdown() {
-    /** Widget [DropdownButtonFormField]
-     *
-     * Deskripsi:
-     * - Widget dropdown untuk memilih lokasi booth.
-     * - Akan memicu validasi jika tidak ada booth yang dipilih.
-     * - **Data Dinamis:** Daftar booth diambil dari `booths` list.
-     */
     return DropdownButtonFormField<String>(
-      value: selectedBooth,
+      value: selectedCity,
       decoration: InputDecoration(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        hintText: 'Choose Branch Booth',
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        hintText: 'Pilih Kota Anda',
         hintStyle: const TextStyle(color: Colors.grey),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
@@ -613,40 +476,20 @@ class ShippingAddressPageWithDataState
           borderSide: const BorderSide(color: Color(0xFF627D2C)),
         ),
       ),
-      items: booths.map((booth) {
-        /** Widget [DropdownMenuItem]
-         *
-         * Deskripsi:
-         * - Setiap item dalam daftar dropdown booth.
-         * - **Data Dinamis:** Menampilkan nama booth sebagai teks.
-         */
-        return DropdownMenuItem(
-          value: booth,
-          child: Text(booth),
+      items: cities.map<DropdownMenuItem<String>>((String city) {
+        return DropdownMenuItem<String>(
+          value: city,
+          child: Text(city),
         );
       }).toList(),
-      /* Fungsi callback ketika nilai dropdown berubah.
-       *
-       * Parameter:
-       * - value: Nilai booth yang baru dipilih.
-       *
-       * Return: Tidak ada (mengupdate state `selectedBooth`).
-       */
-      onChanged: (value) {
+      onChanged: (String? value) {
         setState(() {
-          selectedBooth = value;
+          selectedCity = value;
         });
       },
-      /* Fungsi validator untuk DropdownButtonFormField booth.
-       *
-       * Parameter:
-       * - value: Nilai booth yang saat ini dipilih.
-       *
-       * Return: String pesan error jika tidak ada booth yang dipilih, atau null jika valid.
-       */
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Please select your booth';
+          return 'Please select your city';
         }
         return null;
       },
