@@ -89,11 +89,11 @@ class NotificationPageState extends State<NotificationPage> {
 
   Widget _buildNotificationCard(NotificationItem notification) {
     return GestureDetector(
-      onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Kamu membuka: ${notification.judul}")),
-        );
-      },
+      // onTap: () {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text("Kamu membuka: ${notification.judul}")),
+      //   );
+      // },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(16),
@@ -148,34 +148,76 @@ class NotificationPageState extends State<NotificationPage> {
                   ),
                 ),
               ],
-            ),
-            // Show penalty payment button if it's a penalty notification
-            if (notification.isPenalty())
+            ), // Show penalty payment button if it's a penalty notification with actual denda data
+            if (notification.isPenalty() && notification.detailDenda != null)
               Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Checkout2(),
+                  child: notification.detailDenda?.statusDenda ==
+                          'Sudah Dibayar'
+                      ? Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.green.withValues(alpha: 0.1),
+                            border: Border.all(
+                              color: Colors.green.withValues(alpha: 0.3),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                                size: 14,
+                              ),
+                              SizedBox(width: 6),
+                              Text(
+                                "Denda Telah Dibayar",
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : ElevatedButton(
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Checkout2(
+                                  isDendaPayment: true,
+                                  dendaAmount:
+                                      notification.detailDenda?.jumlahDenda ??
+                                          0,
+                                  transaksiId:
+                                      notification.detailDenda?.transaksiId ??
+                                          0,
+                                ),
+                              ),
+                            );
+                            // Auto-reload notifications when returning from payment page
+                            _refreshNotifications();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.red,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 24),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Text(
+                              "Bayar Denda (Rp${notification.detailDenda?.jumlahDenda.toString() ?? '0'})"),
                         ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.red,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 24),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Text(
-                        "Bayar Denda (Rp${notification.detailDenda?.jumlahDenda.toString() ?? '0'})"),
-                  ),
                 ),
               ),
           ],

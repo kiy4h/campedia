@@ -19,7 +19,16 @@ import '../after_sales/thankyouPage.dart';
 /// - Widget ini adalah bagian dari alur konfirmasi penyewaan dan pembayaran.
 /// - Ini adalah widget stateful karena mengelola state `selectedPayment` yang berubah berdasarkan interaksi pengguna.
 class Checkout2 extends StatefulWidget {
-  const Checkout2({super.key});
+  final bool isDendaPayment;
+  final int dendaAmount;
+  final int transaksiId;
+
+  const Checkout2({
+    super.key,
+    this.isDendaPayment = false,
+    this.dendaAmount = 0,
+    this.transaksiId = 0,
+  });
 
   @override
   Checkout2State createState() => Checkout2State();
@@ -62,8 +71,10 @@ class Checkout2State extends State<Checkout2> {
          * Deskripsi:
          * - Judul halaman yang menunjukkan 'Payment Method'.
          */
-        title:
-            const Text('Metode Pembayaran', style: TextStyle(color: Colors.black)),
+        title: Text(
+          widget.isDendaPayment ? 'Pembayaran Denda' : 'Metode Pembayaran',
+          style: const TextStyle(color: Colors.black),
+        ),
         centerTitle: true,
       ),
       /** Widget [Padding]
@@ -412,7 +423,6 @@ class Checkout2State extends State<Checkout2> {
          * - Saat ditekan, akan menampilkan snackbar.
          * - **Fungsi Khusus:** Logika unduh bukti transaksi perlu diimplementasikan.
          */
-        
       ],
     );
   }
@@ -819,52 +829,83 @@ class Checkout2State extends State<Checkout2> {
                       if (selectedPayment == 'Transfer Bank' ||
                           selectedPayment == 'QRIS' ||
                           selectedPayment == 'Cash') {
-                        // Process payment via FastAPI if transaction data is available
-                        if (checkoutProvider.storedTransactionId != null &&
-                            checkoutProvider.storedTotalAmount != null) {
-                          final success = await checkoutProvider.processPayment(
-                            transaksiId: checkoutProvider.storedTransactionId!,
+                        // Check if this is a denda payment
+                        if (widget.isDendaPayment) {
+                          final success =
+                              await checkoutProvider.processDendaPayment(
+                            transaksiId: widget.transaksiId,
                             metodePembayaran: selectedPayment,
-                            totalPembayaran:
-                                checkoutProvider.storedTotalAmount!,
+                            totalPembayaran: widget.dendaAmount,
                           );
                           if (success && mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content:
-                                    Text('Payment processed successfully!'),
+                                    Text('Pembayaran denda berhasil diproses!'),
                                 backgroundColor: Colors.green,
                               ),
                             );
-                            // Navigasi ke halaman terima kasih setelah konfirmasi.
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ThankYouPage(
-                                  transactionId:
-                                      checkoutProvider.storedTransactionId,
-                                ),
-                              ),
-                            );
+                            // Navigasi kembali ke halaman notifikasi
+                            Navigator.pop(context);
                           } else if (!success && mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(
-                                    checkoutProvider.error ?? 'Payment failed'),
+                                content: Text(checkoutProvider.error ??
+                                    'Pembayaran denda gagal'),
                                 backgroundColor: Colors.red,
                               ),
                             );
                           }
                         } else {
-                          // Fallback for existing flow without transaction data
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Order Confirmed!')),
-                          );
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const ThankYouPage()),
-                          );
+                          // Process regular transaction payment
+                          if (checkoutProvider.storedTransactionId != null &&
+                              checkoutProvider.storedTotalAmount != null) {
+                            final success =
+                                await checkoutProvider.processPayment(
+                              transaksiId:
+                                  checkoutProvider.storedTransactionId!,
+                              metodePembayaran: selectedPayment,
+                              totalPembayaran:
+                                  checkoutProvider.storedTotalAmount!,
+                            );
+                            if (success && mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content:
+                                      Text('Payment processed successfully!'),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                              // Navigasi ke halaman terima kasih setelah konfirmasi.
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ThankYouPage(
+                                    transactionId:
+                                        checkoutProvider.storedTransactionId,
+                                  ),
+                                ),
+                              );
+                            } else if (!success && mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(checkoutProvider.error ??
+                                      'Payment failed'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          } else {
+                            // Fallback for existing flow without transaction data
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Order Confirmed!')),
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const ThankYouPage()),
+                            );
+                          }
                         }
                       }
                     }
@@ -883,9 +924,11 @@ class Checkout2State extends State<Checkout2> {
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   )
-                : const Text(
-                    'CONFIRM ORDER',
-                    style: TextStyle(
+                : Text(
+                    widget.isDendaPayment
+                        ? 'BAYAR DENDA'
+                        : 'KONFIRMASI PEMBAYARAN',
+                    style: const TextStyle(
                       fontSize: 16,
                       letterSpacing: 1.5,
                       fontWeight: FontWeight.bold,
