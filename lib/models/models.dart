@@ -111,12 +111,14 @@ class UserCheckoutDataRequest {
   final String noHp;
   final String kota;
   final String nik;
+  final int? boothId; // Tambahkan field boothId jika diperlukan
 
   UserCheckoutDataRequest({
     required this.alamat,
     required this.noHp,
     required this.kota,
     required this.nik,
+    required this.boothId,
   });
 
   Map<String, dynamic> toJson() {
@@ -125,6 +127,7 @@ class UserCheckoutDataRequest {
       'no_hp': noHp,
       'kota': kota,
       'nik': nik,
+      'booth_id': boothId, // Tambahkan ke JSON jika diperlukan
     };
   }
 }

@@ -18,6 +18,15 @@ class DateSelectionDialogState extends State<DateSelectionDialog> {
   DateTime? _returnDate;
   int _rentalDays = 1;
   int _totalPrice = 0;
+  int? selectedBoothId;
+
+  // Daftar booth yang tersedia untuk dipilih
+  final Map<int, String> booths = {
+    1: 'OutdoorGear Bandung Pusat - Jl. Asia Afrika No. 123',
+    2: 'OutdoorGear Jakarta Selatan - Jl. Sudirman No. 456', 
+    3: 'OutdoorGear Yogyakarta - Jl. Malioboro No. 789',
+    4: 'OutdoorGear Surabaya - Jl. Tunjungan No. 321'
+  };
 
   final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
 
@@ -47,7 +56,6 @@ class DateSelectionDialogState extends State<DateSelectionDialog> {
     if (picked != null) {
       setState(() {
         _pickupDate = picked;
-        // If return date is before pickup date, reset it
         if (_returnDate != null && _returnDate!.isBefore(_pickupDate!)) {
           _returnDate = null;
         }
@@ -82,11 +90,61 @@ class DateSelectionDialogState extends State<DateSelectionDialog> {
     }
   }
 
+  Widget buildBoothDropdown() {
+    return DropdownButtonFormField<int>(
+      value: selectedBoothId,
+      isExpanded: true,
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        hintText: 'Pilih Cabang Pengambilan',
+        hintStyle: const TextStyle(color: Colors.grey),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Color(0xFF5D6D3E)),
+        ),
+      ),
+      items: booths.entries.map((entry) {
+        return DropdownMenuItem<int>(
+          value: entry.key,
+          child: Text(
+            entry.value,
+            style: const TextStyle(fontSize: 14),
+          ),
+        );
+      }).toList(),
+      onChanged: (int? value) {
+        setState(() {
+          selectedBoothId = value;
+        });
+      },
+      validator: (value) {
+        if (value == null) {
+          return 'Please select a booth';
+        }
+        return null;
+      },
+    );
+  }
+
   void _proceedToCheckout() async {
     if (_pickupDate == null || _returnDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please select both pickup and return dates'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (selectedBoothId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select a booth'),
           backgroundColor: Colors.red,
         ),
       );
@@ -107,18 +165,17 @@ class DateSelectionDialogState extends State<DateSelectionDialog> {
       return;
     }
 
-    // Create transaction
+    // Create transaction with selected booth
     final success = await checkoutProvider.createTransaction(
       userId: authProvider.user!.userId,
-      cabangPengambilanId: 1, // Default branch, you can make this selectable
+      cabangPengambilanId: selectedBoothId!,
       tanggalPengambilan: _dateFormat.format(_pickupDate!),
       tanggalPengembalian: _dateFormat.format(_returnDate!),
     );
 
     if (success && checkoutProvider.transactionId != null) {
-      // Close the dialog
-      Navigator.of(context)
-          .pop(); // Store transaction data in provider for use in checkout2
+      Navigator.of(context).pop();
+      
       checkoutProvider.setTransactionData(
         transactionId: checkoutProvider.transactionId!,
         totalAmount: _totalPrice,
@@ -127,7 +184,6 @@ class DateSelectionDialogState extends State<DateSelectionDialog> {
         rentalDays: _rentalDays,
       );
 
-      // Navigate to your existing checkout flow
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -170,7 +226,7 @@ class DateSelectionDialogState extends State<DateSelectionDialog> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  'Pilih Tanggal Sewa',
+                  'Pilih Tanggal & Cabang Sewa',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -262,6 +318,10 @@ class DateSelectionDialogState extends State<DateSelectionDialog> {
                 ),
               ),
             ),
+            const SizedBox(height: 12),
+
+            // Booth Selection
+            buildBoothDropdown(),
 
             if (_pickupDate != null && _returnDate != null) ...[
               const SizedBox(height: 16),
@@ -343,4 +403,3 @@ class DateSelectionDialogState extends State<DateSelectionDialog> {
     );
   }
 }
-
