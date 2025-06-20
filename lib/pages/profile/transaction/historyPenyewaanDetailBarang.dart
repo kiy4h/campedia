@@ -249,7 +249,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
                     itemCount: detail.items.length,
                     itemBuilder: (context, index) {
                       final item = detail.items[index];
-                      return _buildItemCard(item);
+                      return _buildItemCard(item, transaction);
                     },
                   ),
                 ],
@@ -286,7 +286,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
     );
   }
 
-  Widget _buildItemCard(TransactionItem item) {
+  Widget _buildItemCard(TransactionItem item, TransactionInfo transaction) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 1,
@@ -387,33 +387,34 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
 
             // Review Button
             if (!item.isReviewed)
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProductReviewPage(
-                        productName: item.namaBarang,
-                        productImage: item.foto ?? '',
-                        barangId: item.barangId
+              if(transaction.statusTransaksi == 'Sudah Dikembalikan')
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductReviewPage(
+                          productName: item.namaBarang,
+                          productImage: item.foto ?? '',
+                          barangId: item.barangId
+                        ),
                       ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF5D6D3E),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
                     ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF5D6D3E),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
                   ),
-                ),
-                child: const Text(
-                  'Ulasan',
-                  style: TextStyle(fontSize: 12, color: Colors.white),
-                ),
-              )
-            else
+                  child: const Text(
+                    'Ulasan',
+                    style: TextStyle(fontSize: 12, color: Colors.white),
+                  ),
+                )
+            else if(transaction.statusTransaksi == 'Sudah Dikembalikan')
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

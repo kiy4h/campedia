@@ -195,13 +195,6 @@ class ProductCard extends StatelessWidget {
                             color: Colors.black87,
                           ),
                         ),
-                        Text(
-                          ' (${barang.totalReview})',
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: Colors.grey[600],
-                          ),
-                        ),
                       ],
                     ),
                   ],
