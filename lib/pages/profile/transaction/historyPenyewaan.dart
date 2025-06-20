@@ -22,6 +22,7 @@ import 'historyPenyewaanDetailBarang.dart';
 import '../../shopping/after_sales/order_tracking.dart';
 import '../../shopping/payment_data/checkout2.dart';
 import '../../../providers/checkout_provider.dart';
+import '../../profile/profile_detail/profile.dart';
 
 /// Widget [ModernTransactionPage]
 ///
@@ -154,9 +155,18 @@ class ModernTransactionPageState extends State<ModernTransactionPage>
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
+        icon: const Icon(Icons.arrow_back, color: Colors.black),
+        onPressed: () {
+          // Navigate to home page with profile tab selected
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfilePage(),
+            ),
+            (route) => false,
+          );
+        },
+      ),
         bottom: TabBar(
           controller: _tabController,
           labelColor: const Color(0xFF5D6D3E),
